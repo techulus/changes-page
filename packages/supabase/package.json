@@ -1,0 +1,10 @@
+{
+  "name": "@changes-page/supabase",
+  "version": "1.0.0",
+  "exports": {
+    "types": "./types/index.ts"
+  },
+  "scripts": {
+    "generate:types": "supabase gen types typescript --project-id \"eainhsncogzypzcrwpsp\" --schema public > types/index.ts"
+  }
+}
