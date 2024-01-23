@@ -47,7 +47,7 @@ export default function Post({
 
           <div className="flex items-center -mt-0.5">
             {post?.type && PostTypeToBadge[post?.type]({})}
-            {isPinned && PostTypeToBadge.pinned({})}
+            {isPinned && <PostTypeToBadge.Pinned className="ml-2" />}
           </div>
         </span>
 

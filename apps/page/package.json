@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3001",
     "prebuild": "mkdir public/v1 && minify widget/widget.js > public/v1/widget.js",
     "build": "next build",
     "start": "next start",

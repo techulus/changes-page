@@ -1,5 +1,5 @@
 import { Stripe } from "stripe";
-import { Json } from "./../types/supabase";
+import { Json } from "@changes-page/supabase/types";
 
 import { VALID_STRIPE_PRICE_IDS } from "../pages/api/billing/jobs/report-usage";
 import { supabaseAdmin } from "./supabase/supabase-admin";

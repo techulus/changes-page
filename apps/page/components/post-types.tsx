@@ -9,7 +9,7 @@ const Alert = ({ className }: { className?: string }) => (
       className
     )}
   >
-    <span className="runcate">{PostTypeToLabel[PostType.alert]}</span>
+    <span>{PostTypeToLabel[PostType.alert]}</span>
   </div>
 );
 
@@ -21,7 +21,7 @@ const New = ({ className }: { className?: string }) => (
       className
     )}
   >
-    <span className={"truncate"}>{PostTypeToLabel[PostType.new]}</span>
+    <span>{PostTypeToLabel[PostType.new]}</span>
   </div>
 );
 
@@ -33,7 +33,7 @@ const Improvement = ({ className }: { className?: string }) => (
       className
     )}
   >
-    <span className={"truncate"}>{PostTypeToLabel[PostType.improvement]}</span>
+    <span>{PostTypeToLabel[PostType.improvement]}</span>
   </div>
 );
 
@@ -64,7 +64,6 @@ const Announcement = ({ className }: { className?: string }) => (
 const Pinned = ({ className }: { className?: string }) => (
   <div
     className={classNames(
-      "ml-2",
       "inline-flex items-center whitespace-nowrap rounded-md py-1 px-2 text-sm font-medium",
       "bg-gray-400/10 text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-400/20 text-xs",
       className
@@ -73,7 +72,7 @@ const Pinned = ({ className }: { className?: string }) => (
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className={classNames("w-3 h-3 text-red-500", "-rotate-12", className)}
+      className={classNames("w-3 h-3 text-red-500", "-rotate-12")}
     >
       <g>
         <path
@@ -92,7 +91,7 @@ const PostTypeToBadge = {
   [PostType.improvement]: Improvement,
   [PostType.announcement]: Announcement,
   [PostType.alert]: Alert,
-  pinned: Pinned,
+  Pinned,
 };
 
 export default PostTypeToBadge;

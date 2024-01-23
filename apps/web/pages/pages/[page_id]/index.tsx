@@ -542,8 +542,9 @@ export default function PageDetail({
                           <div className="flex items-center">
                             {PostTypeToBadge[post.type]({})}
 
-                            {settings?.pinned_post_id === post.id &&
-                              PostTypeToBadge.pinned({ className: "ml-2" })}
+                            {settings?.pinned_post_id === post.id && (
+                              <PostTypeToBadge.Pinned className="ml-2" />
+                            )}
 
                             {post.status === PostStatus.published && (
                               <SecondaryRouterButton
