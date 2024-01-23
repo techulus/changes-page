@@ -1,0 +1,3 @@
+# changes.page
+
+> Changelog simplified.
