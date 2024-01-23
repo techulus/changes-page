@@ -1,5 +1,5 @@
 
-## Getting Started
+## Pages App
 
 First, run the development server:
 
