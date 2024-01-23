@@ -1,0 +1,23 @@
+export const ROUTES = {
+  HOME: "/",
+  PRICING: "/pricing",
+  LOGIN: "/login",
+  LOGIN_CALLBACK: "/api/auth/callback",
+
+  // integrations
+  ZAPIER: "/integrations/zapier",
+  DOCS: "https://docs.changes.page",
+
+  // pages
+  PAGES: "/pages",
+  NEW_PAGE: "/pages/new",
+
+  // account
+  BILLING: "/account/billing",
+
+  // legal
+  BLOG: "/blog",
+  PRIVACY: "/privacy",
+  SUPPORT: "https://techulus.atlassian.net/servicedesk/customer/portal/1",
+  TERMS: "/terms",
+};
