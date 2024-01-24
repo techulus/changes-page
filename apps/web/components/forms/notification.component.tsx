@@ -1,13 +1,11 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
-import { ReactChild, ReactChildren } from "react";
 
 export function InfoMessage({
   message,
   className,
 }: {
-  message: string | ReactChild | ReactChild[] | ReactChildren | ReactChildren[];
+  message: React.ReactNode;
   className?: string;
 }) {
   return (

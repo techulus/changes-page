@@ -7,7 +7,7 @@
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "update-types": "supabase gen types typescript --project-id \"eainhsncogzypzcrwpsp\" --schema public > types/supabase.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@changes-page/supabase": "workspace:*",
