@@ -3,7 +3,7 @@ import { ArrowLeftIcon, CogIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, ReactNode } from "react";
+import React, { Fragment } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useUserData } from "../../utils/useUser";
 import BillingBanner from "../billing/billing-banner";
@@ -21,10 +21,10 @@ export default function Page({
   tabs = [],
 }: {
   title: string;
-  subtitle?: ReactNode;
-  buttons?: ReactNode;
-  menuItems?: ReactNode;
-  children?: ReactNode;
+  subtitle?: string;
+  buttons?: JSX.Element | JSX.Element[];
+  menuItems?: JSX.Element | JSX.Element[];
+  children?: JSX.Element | JSX.Element[];
   backRoute?: string;
   showBackButton?: boolean;
   fullWidth?: boolean;
