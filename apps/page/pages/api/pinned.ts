@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { IPost } from "../../data/page.interface";
+import { IPost } from "@changes-page/supabase/types/page";
 import { allowCors } from "../../lib/cors";
 import { fetchRenderData, translateHostToPageIdentifier } from "../../lib/data";
 import { getPageUrl, getPostUrl } from "../../lib/url";

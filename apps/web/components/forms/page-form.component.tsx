@@ -9,7 +9,7 @@ import {
   PageType,
   PageTypeToLabel,
   URL_SLUG_REGEX,
-} from "../../data/page.interface";
+} from "@changes-page/supabase/types/page";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
 import { Spinner, SpinnerWithSpacing } from "../core/spinner.component";
 import { InfoMessage, InlineErrorMessage } from "./notification.component";

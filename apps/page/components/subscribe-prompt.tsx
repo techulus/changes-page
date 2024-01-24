@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useFormik } from "formik";
 import { useMemo, useState } from "react";
 import * as Yup from "yup";
-import { IPage, IPageSettings } from "../data/page.interface";
+import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { getPageUrl } from "../lib/url";
 import { httpPost } from "../utils/http";
 import { Spinner } from "./spinner.component";

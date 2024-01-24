@@ -1,5 +1,8 @@
 import classNames from "classnames";
-import { PostStatus, PostStatusToLabel } from "../../data/page.interface";
+import {
+  PostStatus,
+  PostStatusToLabel,
+} from "@changes-page/supabase/types/page";
 
 const Draft = ({ className }: { className?: string }) => (
   <span

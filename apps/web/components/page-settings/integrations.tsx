@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { v4 } from "uuid";
-import { IPageSettings } from "../../data/page.interface";
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import { Spinner } from "../core/spinner.component";
 import { notifyInfo } from "../core/toast.component";
 import WarningDialog from "../dialogs/warning-dialog.component";

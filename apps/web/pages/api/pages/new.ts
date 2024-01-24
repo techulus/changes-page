@@ -8,7 +8,7 @@ import {
   getUserById,
   updateSubscriptionUsage,
 } from "../../../utils/useDatabase";
-import { IPage } from "./../../../data/page.interface";
+import { IPage } from "@changes-page/supabase/types/page";
 
 const createNewPage = async (
   req: NextApiRequest,

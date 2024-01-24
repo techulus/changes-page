@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { promptSuggestTitle } from "../../utils/useAiAssistant";
 import { LightningBoltIcon } from "@heroicons/react/solid";
-import { convertMarkdownToPlainText } from "../../utils/useMarkdown";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { SpinnerWithSpacing } from "../core/spinner.component";
 import { notifyError } from "../core/toast.component";
 
@@ -21,18 +21,18 @@ export default function AiSuggestTitlePromptDialogComponent({
       setLoading(true);
       setSuggestions([]);
 
-      convertMarkdownToPlainText(content).then((text) => {
-        promptSuggestTitle(text)
-          .then((suggestions) => {
-            setSuggestions(suggestions);
-            setLoading(false);
-          })
-          .catch(() => {
-            setLoading(false);
-            setOpen(false);
-            notifyError("Failed to suggest title, please contact support.");
-          });
-      });
+      const text = convertMarkdownToPlainText(content);
+
+      promptSuggestTitle(text)
+        .then((suggestions) => {
+          setSuggestions(suggestions);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+          setOpen(false);
+          notifyError("Failed to suggest title, please contact support.");
+        });
     }
   }, [open, content]);
 

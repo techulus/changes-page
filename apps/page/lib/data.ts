@@ -1,4 +1,4 @@
-import { IPage, IPageSettings, IPost } from "../data/page.interface";
+import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import { Database } from "@changes-page/supabase/types";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 

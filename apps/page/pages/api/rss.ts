@@ -8,7 +8,7 @@ import {
 import {
   convertMarkdownToHtml,
   convertMarkdownToPlainText,
-} from "../../lib/markdown";
+} from "@changes-page/utils";
 import { getPageUrl, getPostUrl } from "../../lib/url";
 
 async function handler(req: NextApiRequest, res: NextApiResponse<string>) {
@@ -46,11 +46,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<string>) {
     });
 
     const postsWithPlainTextContent = await Promise.all(
-      (posts ?? []).map(async (post) => ({
+      (posts ?? []).map((post) => ({
         ...post,
         url: getPostUrl(pageUrl, post),
-        content: await convertMarkdownToPlainText(post.content),
-        html: await convertMarkdownToHtml(post.content),
+        content: convertMarkdownToPlainText(post.content),
+        html: convertMarkdownToHtml(post.content),
       }))
     );
 

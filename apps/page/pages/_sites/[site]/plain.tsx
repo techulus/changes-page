@@ -7,7 +7,7 @@ import {
   IPageSettings,
   IPost,
   PostTypeToLabel,
-} from "../../../data/page.interface";
+} from "@changes-page/supabase/types/page";
 import {
   fetchPosts,
   fetchRenderData,

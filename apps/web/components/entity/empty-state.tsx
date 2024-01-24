@@ -8,7 +8,7 @@ import {
 import classNames from "classnames";
 import Link from "next/link";
 import { useMemo } from "react";
-import { IPageSettings } from "../../data/page.interface";
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import { useUserData } from "../../utils/useUser";
 
 export function EntityEmptyState({

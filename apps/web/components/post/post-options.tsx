@@ -1,7 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import classNames from "classnames";
-import { PostStatus } from "../../data/page.interface";
+import { PostStatus } from "@changes-page/supabase/types/page";
 import { MenuItem } from "../core/menu.component";
 import {
   LocationMarkerIcon as AddPinIcon,

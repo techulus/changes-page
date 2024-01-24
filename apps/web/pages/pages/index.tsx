@@ -10,7 +10,7 @@ import { EntityEmptyState } from "../../components/entity/empty-state";
 import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
-import { PageType, PageTypeToLabel } from "../../data/page.interface";
+import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
 import { ROUTES } from "../../data/routes.data";
 import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
 

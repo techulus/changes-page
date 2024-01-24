@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { notifyError } from "../../components/core/toast.component";
-import { IPage } from "../../data/page.interface";
+import { IPage } from "@changes-page/supabase/types/page";
 import { useUserData } from "../useUser";
 
 export default function usePage(pageId: string, prefetch = true) {

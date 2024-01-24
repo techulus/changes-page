@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import Image from "next/image";
-import { IPage, IPageSettings } from "../data/page.interface";
+import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import OptionalLink from "./optional-link";
 
 export default function PageHeader({

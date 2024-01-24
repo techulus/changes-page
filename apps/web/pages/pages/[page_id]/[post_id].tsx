@@ -9,7 +9,7 @@ import PostFormComponent, {
 } from "../../../components/forms/post-form.component";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
-import { IPost, PostStatus } from "../../../data/page.interface";
+import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import { ROUTES } from "../../../data/routes.data";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";

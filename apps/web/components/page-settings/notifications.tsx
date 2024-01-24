@@ -2,7 +2,7 @@ import { InformationCircleIcon } from "@heroicons/react/solid";
 import { useFormik } from "formik";
 import { useCallback, useEffect, useState } from "react";
 import * as Yup from "yup";
-import { IPageSettings } from "../../data/page.interface";
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import { httpGet, httpPut } from "../../utils/helpers";
 import { Spinner } from "../core/spinner.component";
 import { notifyError } from "../core/toast.component";

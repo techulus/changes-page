@@ -14,7 +14,7 @@ import {
   PostStatus,
   PostType,
   PostTypeToLabel,
-} from "../../data/page.interface";
+} from "@changes-page/supabase/types/page";
 import { track } from "../../utils/analytics";
 import { DateTime } from "../../utils/date";
 import { useUserData } from "../../utils/useUser";
@@ -24,12 +24,12 @@ import { notifyError, notifySuccess } from "../core/toast.component";
 import AiExpandConceptPromptDialogComponent from "../dialogs/ai-expand-concept-prompt-dialog.component";
 import AiSuggestTitlePromptDialogComponent from "../dialogs/ai-suggest-title-prompt-dialog.component";
 import DateTimePromptDialog from "../dialogs/date-time-prompt-dialog.component";
-import PostTypes from "../post/post-types";
 import SwitchComponent from "./switch.component";
 import ReactMarkdown from "react-markdown";
 import { PrimaryButton } from "../core/buttons.component";
 import { boolean, InferType, mixed, object, string } from "yup";
 import { v4 } from "uuid";
+import { PostTypeToBadge } from "@changes-page/ui";
 
 export const NewPostSchema = object().shape({
   title: string()
@@ -205,7 +205,7 @@ export default function PostFormComponent({
                   </Listbox.Label>
                   <div className="relative">
                     <Listbox.Button className="relative p-0">
-                      {PostTypes[formik.values.type ?? PostType.fix]({})}
+                      {PostTypeToBadge[formik.values.type ?? PostType.fix]({})}
                     </Listbox.Button>
 
                     <Transition

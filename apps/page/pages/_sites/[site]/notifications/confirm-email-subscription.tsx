@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import PageHeader from "../../../../components/page-header";
 import SeoTags from "../../../../components/seo-tags";
-import { IPage, IPageSettings } from "../../../../data/page.interface";
+import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { fetchRenderData } from "../../../../lib/data";
 import { verifyPageEmailToken } from "../../../../lib/notifications";
 

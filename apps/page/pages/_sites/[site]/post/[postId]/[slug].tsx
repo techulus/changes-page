@@ -9,17 +9,13 @@ import Post from "../../../../../components/post";
 import SeoTags from "../../../../../components/seo-tags";
 import SubscribePrompt from "../../../../../components/subscribe-prompt";
 import { Timeline } from "../../../../../components/timeline";
-import {
-  IPage,
-  IPageSettings,
-  IPost,
-} from "../../../../../data/page.interface";
+import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import {
   fetchPostById,
   fetchRenderData,
   isSubscriptionActive,
 } from "../../../../../lib/data";
-import { convertMarkdownToPlainText } from "../../../../../lib/markdown";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { getPageUrl, getPostUrl } from "../../../../../lib/url";
 
 export default function Index({
@@ -135,7 +131,7 @@ export async function getServerSideProps({
       page,
       post,
       settings,
-      plainTextContent: await convertMarkdownToPlainText(post.content),
+      plainTextContent: convertMarkdownToPlainText(post.content),
     },
   };
 }

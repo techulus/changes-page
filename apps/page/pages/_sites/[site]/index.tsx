@@ -7,7 +7,7 @@ import Post from "../../../components/post";
 import SeoTags from "../../../components/seo-tags";
 import SubscribePrompt from "../../../components/subscribe-prompt";
 import { Timeline } from "../../../components/timeline";
-import { IPage, IPageSettings, IPost } from "../../../data/page.interface";
+import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import {
   BLACKLISTED_SLUGS,
   fetchPosts,

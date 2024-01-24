@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { IPage } from "../../../data/page.interface";
+import { IPage } from "@changes-page/supabase/types/page";
 import { revalidatePage } from "../../../utils/revalidate";
 import {
   createOrRetrievePageSettings,

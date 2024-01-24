@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { IPageSettings } from "../../../../data/page.interface";
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import { revalidatePage } from "../../../../utils/revalidate";
 import { getPageById } from "../../../../utils/useDatabase";
 

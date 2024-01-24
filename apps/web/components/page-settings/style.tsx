@@ -2,7 +2,7 @@ import fileExtension from "file-extension";
 import { useEffect, useState } from "react";
 import { useFilePicker } from "use-file-picker";
 import { v4 } from "uuid";
-import { IPage, IPageSettings } from "../../data/page.interface";
+import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { Database } from "@changes-page/supabase/types";
 import useStorage from "../../utils/useStorage";
 import { useUserData } from "../../utils/useUser";

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { IPost, PostStatus } from "../../../data/page.interface";
+import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import { DELETE_IMAGES_JOB_EVENT } from "../../../inngest/jobs/delete-images";
 import { sendPostEmailToSubscribers } from "../../../utils/email";
 import inngestClient from "../../../utils/inngest";

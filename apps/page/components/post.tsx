@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import slugify from "slugify";
-import { IPost } from "../data/page.interface";
+import { IPost } from "@changes-page/supabase/types/page";
 import { DateTime } from "../utils/date";
 import Reactions from "./reactions";
 import { PostTypeToBadge } from "@changes-page/ui";

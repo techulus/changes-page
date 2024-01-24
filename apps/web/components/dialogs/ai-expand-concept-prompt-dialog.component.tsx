@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { LightningBoltIcon } from "@heroicons/react/solid";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { expandConcept } from "../../utils/useAiAssistant";
-import { convertMarkdownToPlainText } from "../../utils/useMarkdown";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { SpinnerWithSpacing } from "../core/spinner.component";
 import { notifyError } from "../core/toast.component";
 import { PrimaryButton } from "../core/buttons.component";
@@ -22,18 +22,18 @@ export default function AiExpandConceptPromptDialogComponent({
       setLoading(true);
       setResult(null);
 
-      convertMarkdownToPlainText(content).then((text) => {
-        expandConcept(text)
-          .then((response) => {
-            setResult(response);
-            setLoading(false);
-          })
-          .catch(() => {
-            setLoading(false);
-            setOpen(false);
-            notifyError("Failed to process request, please contact support.");
-          });
-      });
+      const text = convertMarkdownToPlainText(content);
+
+      expandConcept(text)
+        .then((response) => {
+          setResult(response);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+          setOpen(false);
+          notifyError("Failed to process request, please contact support.");
+        });
     }
   }, [open, content]);
 

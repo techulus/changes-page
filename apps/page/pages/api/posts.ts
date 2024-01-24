@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PAGINATION_LIMIT } from "../../lib/data";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IErrorResponse } from "./../../data/api.interface";
-import { IPost } from "./../../data/page.interface";
+import { IPost } from "@changes-page/supabase/types/page";
 
 async function handler(
   req: NextApiRequest,

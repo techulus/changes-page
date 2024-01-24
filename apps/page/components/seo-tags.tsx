@@ -6,7 +6,7 @@ import {
   IPageSettings,
   IPost,
   PageTypeToLabel,
-} from "../data/page.interface";
+} from "@changes-page/supabase/types/page";
 import { getOgUrl, getPageUrl } from "../lib/url";
 import logoImage from "../public/logo.png";
 

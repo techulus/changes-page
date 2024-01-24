@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { IPost } from "../../data/page.interface";
+import { IPost } from "@changes-page/supabase/types/page";
 import { useUserData } from "../useUser";
 
 const PAGINATION_LIMIT = 5;

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import slugify from "slugify";
-import { IPage, IPageSettings, IPost } from "../../data/page.interface";
+import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 
 export function createPostUrl(pageUrl, post) {
   return `${pageUrl}/post/${post.id}/${slugify(post.title, {

@@ -44,12 +44,12 @@ import {
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import PostOptions from "../../../components/post/post-options";
-import PostTypeToBadge from "../../../components/post/post-types";
+import { PostTypeToBadge } from "@changes-page/ui";
 import {
   IPost,
   PostStatus,
   PostStatusToLabel,
-} from "../../../data/page.interface";
+} from "@changes-page/supabase/types/page";
 import { ROUTES } from "../../../data/routes.data";
 import { DateTime } from "../../../utils/date";
 import usePageSettings from "../../../utils/hooks/usePageSettings";
@@ -594,7 +594,7 @@ export default function PageDetail({
                               <h2 className="sr-only">Options</h2>
                               <div className="space-y-5">
                                 <div className="flex items-center space-x-2">
-                                  {PostStatusToIcon[post.status]({
+                                  {/* {PostStatusToIcon[post.status]({
                                     className: classNames(
                                       "h-5 w-5 text-green-700 dark:text-green-500",
                                       post.status === PostStatus.draft &&
@@ -603,7 +603,7 @@ export default function PageDetail({
                                         PostStatus.publish_later &&
                                         "text-orange-700 dark:text-orange-500"
                                     ),
-                                  })}
+                                  })} */}
 
                                   <span
                                     className={classNames(

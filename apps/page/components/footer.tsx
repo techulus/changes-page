@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect } from "react";
-import { IPageSettings } from "../data/page.interface";
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import appStoreBadgeLight from "../public/badges/App_Store_Badge_US-UK_RGB_blk.svg";
 import appStoreBadgeDark from "../public/badges/App_Store_Badge_US-UK_RGB_wht.svg";
 import googlePlayBadge from "../public/badges/google-play-badge.png";

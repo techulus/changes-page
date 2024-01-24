@@ -3,7 +3,7 @@ import {
   notifyError,
   notifySuccess,
 } from "../../components/core/toast.component";
-import { IPageSettings } from "../../data/page.interface";
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import { track } from "../analytics";
 import { httpGet } from "../helpers";
 import { useUserData } from "../useUser";

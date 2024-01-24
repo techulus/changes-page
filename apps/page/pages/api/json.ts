@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { IPost } from "../../data/page.interface";
+import { IPost } from "@changes-page/supabase/types/page";
 import { allowCors } from "../../lib/cors";
 import {
   fetchPosts,
   fetchRenderData,
   translateHostToPageIdentifier,
 } from "../../lib/data";
-import { convertMarkdownToPlainText } from "../../lib/markdown";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { getPageUrl, getPostUrl } from "../../lib/url";
 
 async function handler(
@@ -34,10 +34,10 @@ async function handler(
     });
 
     const postsWithUrl = await Promise.all(
-      (posts ?? []).map(async (post) => ({
+      (posts ?? []).map((post) => ({
         ...post,
         url: getPostUrl(pageUrl, post),
-        plain_text_content: await convertMarkdownToPlainText(post.content),
+        plain_text_content: convertMarkdownToPlainText(post.content),
       }))
     );
 

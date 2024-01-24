@@ -9,7 +9,7 @@ import PageFormComponent, {
 } from "../../../components/forms/page-form.component";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
-import { IPage } from "../../../data/page.interface";
+import { IPage } from "@changes-page/supabase/types/page";
 import { ROUTES } from "../../../data/routes.data";
 import { httpPost } from "../../../utils/helpers";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";

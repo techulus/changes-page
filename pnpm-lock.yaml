@@ -16,6 +16,9 @@ importers:
       '@changes-page/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@changes-page/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@headlessui/react':
         specifier: ^1.4.0
         version: 1.7.18(react-dom@18.2.0)(react@18.2.0)
@@ -158,6 +161,12 @@ importers:
       '@changes-page/supabase':
         specifier: workspace:*
         version: link:../../packages/supabase
+      '@changes-page/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@changes-page/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@headlessui/react':
         specifier: ^1.7.8
         version: 1.7.18(react-dom@18.2.0)(react@18.2.0)
@@ -361,6 +370,31 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
+    devDependencies:
+      '@types/react':
+        specifier: '>=18'
+        version: 18.2.48
+      rimraf:
+        specifier: ^5.0.1
+        version: 5.0.5
+      typescript:
+        specifier: ^4.9.5
+        version: 4.9.5
+
+  packages/utils:
+    dependencies:
+      remark:
+        specifier: ^14.0.2
+        version: 14.0.3
+      remark-html:
+        specifier: ^15.0.1
+        version: 15.0.2
+      remark-parse:
+        specifier: ^10.0.1
+        version: 10.0.2
+      strip-markdown:
+        specifier: ^5.0.0
+        version: 5.0.1
     devDependencies:
       '@types/react':
         specifier: '>=18'

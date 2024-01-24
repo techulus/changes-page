@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { IPage, IPageSettings, IPost } from "../data/page.interface";
+import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import { createPostUrl, getPageUrl } from "./hooks/usePageUrl";
 import inngestClient from "./inngest";
 import { supabaseAdmin } from "./supabase/supabase-admin";
@@ -7,7 +7,7 @@ import { getUserById } from "./useDatabase";
 import {
   convertMarkdownToHtml,
   convertMarkdownToPlainText,
-} from "./useMarkdown";
+} from "@changes-page/utils";
 
 const BATCH_SIZE = 50;
 
@@ -94,8 +94,8 @@ export const sendPostEmailToSubscribers = async (
               settings.page_logo ?? "https://changes.page/images/logo.png",
             // post
             post_title: post.title,
-            post_content: await convertMarkdownToHtml(post.content),
-            post_content_plain: await convertMarkdownToPlainText(post.content),
+            post_content: convertMarkdownToHtml(post.content),
+            post_content_plain: convertMarkdownToPlainText(post.content),
             post_link: createPostUrl(getPageUrl(page, settings), post),
             // legal
             email_physical_address: settings?.email_physical_address,

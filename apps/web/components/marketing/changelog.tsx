@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { IPost } from "../../data/page.interface";
+import { IPost } from "@changes-page/supabase/types/page";
 import { SpeakerphoneIcon } from "@heroicons/react/outline";
 
 type IPostWithUrl = IPost & { url: string };
