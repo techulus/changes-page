@@ -8,8 +8,8 @@ import rehypeSanitize from "rehype-sanitize";
 import slugify from "slugify";
 import { IPost } from "../data/page.interface";
 import { DateTime } from "../utils/date";
-import PostTypeToBadge from "./post-types";
 import Reactions from "./reactions";
+import { PostTypeToBadge } from "@changes-page/ui";
 
 export default function Post({
   post,

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { PostType, PostTypeToLabel } from "../data/page.interface";
+import { PostTypeToLabel, PostType } from "@changes-page/supabase/types/page";
 
 const Alert = ({ className }: { className?: string }) => (
   <div
@@ -85,7 +85,7 @@ const Pinned = ({ className }: { className?: string }) => (
   </div>
 );
 
-const PostTypeToBadge = {
+export const PostTypeToBadge = {
   [PostType.fix]: Fix,
   [PostType.new]: New,
   [PostType.improvement]: Improvement,
@@ -93,5 +93,3 @@ const PostTypeToBadge = {
   [PostType.alert]: Alert,
   Pinned,
 };
-
-export default PostTypeToBadge;

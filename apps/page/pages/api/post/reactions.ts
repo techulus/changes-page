@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { supabaseAdmin } from "../../../utils/supabase/supabase-admin";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 
 export default async function getPostReactions(
   req: NextApiRequest,

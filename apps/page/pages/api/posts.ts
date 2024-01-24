@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PAGINATION_LIMIT } from "../../lib/data";
-import { supabaseAdmin } from "../../utils/supabase/supabase-admin";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IErrorResponse } from "./../../data/api.interface";
 import { IPost } from "./../../data/page.interface";
 

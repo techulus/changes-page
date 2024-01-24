@@ -5,7 +5,7 @@ import {
   fetchRenderData,
   translateHostToPageIdentifier,
 } from "../../../lib/data";
-import { supabaseAdmin } from "../../../utils/supabase/supabase-admin";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 
 async function pageAnalyticsView(
   req: NextApiRequest,

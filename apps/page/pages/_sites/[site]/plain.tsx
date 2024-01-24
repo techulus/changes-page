@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import SeoTags from "../../../components/seo-tags";
 import {
+  IPage,
   IPageSettings,
-  IPageWithSettings,
   IPost,
   PostTypeToLabel,
 } from "../../../data/page.interface";
@@ -21,7 +21,7 @@ export default function Index({
   settings,
 }: {
   posts: IPost[];
-  page: IPageWithSettings;
+  page: IPage;
   postsCount: number;
   settings: IPageSettings;
 }) {

@@ -10,8 +10,8 @@ import SeoTags from "../../../../../components/seo-tags";
 import SubscribePrompt from "../../../../../components/subscribe-prompt";
 import { Timeline } from "../../../../../components/timeline";
 import {
+  IPage,
   IPageSettings,
-  IPageWithSettings,
   IPost,
 } from "../../../../../data/page.interface";
 import {
@@ -29,7 +29,7 @@ export default function Index({
   plainTextContent,
 }: {
   post: IPost;
-  page: IPageWithSettings;
+  page: IPage;
   settings: IPageSettings;
   plainTextContent: string;
 }) {

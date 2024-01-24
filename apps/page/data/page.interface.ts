@@ -10,10 +10,6 @@ export type IPageView = Database["public"]["Tables"]["page_views"]["Row"];
 export type IPostReaction =
   Database["public"]["Tables"]["post_reactions"]["Row"];
 
-export type IPageWithSettings = IPage & {
-  page_settings: IPageSettings;
-};
-
 export enum PageType {
   changelogs = "changelogs",
   updates = "updates",

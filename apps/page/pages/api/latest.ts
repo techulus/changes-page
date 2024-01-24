@@ -3,7 +3,7 @@ import { IPost } from "../../data/page.interface";
 import { allowCors } from "../../lib/cors";
 import { fetchRenderData, translateHostToPageIdentifier } from "../../lib/data";
 import { getPageUrl, getPostUrl } from "../../lib/url";
-import { supabaseAdmin } from "../../utils/supabase/supabase-admin";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 
 type IPostWithUrl = Pick<
   IPost,

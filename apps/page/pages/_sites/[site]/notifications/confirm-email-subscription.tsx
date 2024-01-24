@@ -4,10 +4,7 @@ import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import PageHeader from "../../../../components/page-header";
 import SeoTags from "../../../../components/seo-tags";
-import {
-  IPageSettings,
-  IPageWithSettings,
-} from "../../../../data/page.interface";
+import { IPage, IPageSettings } from "../../../../data/page.interface";
 import { fetchRenderData } from "../../../../lib/data";
 import { verifyPageEmailToken } from "../../../../lib/notifications";
 
@@ -15,7 +12,7 @@ export default function Index({
   page,
   settings,
 }: {
-  page: IPageWithSettings;
+  page: IPage;
   settings: IPageSettings;
 }) {
   const { setTheme } = useTheme();

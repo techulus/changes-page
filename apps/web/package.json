@@ -10,7 +10,7 @@
     "update-types": "supabase gen types typescript --project-id \"eainhsncogzypzcrwpsp\" --schema public > types/supabase.ts"
   },
   "dependencies": {
-    "@changes-page/supabase": "../../packages/supabase",
+    "@changes-page/supabase": "workspace:*",
     "@headlessui/react": "^1.7.8",
     "@heroicons/react": "^1.0.3",
     "@json2csv/plainjs": "^6.1.3",

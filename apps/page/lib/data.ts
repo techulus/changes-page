@@ -1,6 +1,6 @@
 import { IPage, IPageSettings, IPost } from "../data/page.interface";
 import { Database } from "@changes-page/supabase/types";
-import { supabaseAdmin } from "../utils/supabase/supabase-admin";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 
 const PAGINATION_LIMIT = 50;
 
