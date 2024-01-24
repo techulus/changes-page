@@ -3,3 +3,6 @@ SELECT cron.schedule('* * * * *', $$update posts set publish_at = null, status =
 
 -- Remove all email subscribers that is not verified and created more than 1 hour ago
 SELECT cron.schedule('*/15 * * * *', $$delete from page_email_subscribers where status = 'not_verified' and now() > valid_till$$);
+
+-- Remove all page views older than 1 month
+SELECT cron.schedule('0 0 * * *', $$delete from page_views where created_at < now() - interval '1 month'$$);
