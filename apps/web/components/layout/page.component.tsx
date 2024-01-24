@@ -3,7 +3,7 @@ import { ArrowLeftIcon, CogIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, ReactChild, ReactChildren } from "react";
+import React, { Fragment, ReactNode } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useUserData } from "../../utils/useUser";
 import BillingBanner from "../billing/billing-banner";
@@ -21,10 +21,10 @@ export default function Page({
   tabs = [],
 }: {
   title: string;
-  subtitle?: ReactChild | ReactChild[] | ReactChildren | ReactChildren[];
-  buttons?: ReactChild | ReactChild[] | ReactChildren | ReactChildren[];
-  menuItems?: ReactChild | ReactChild[] | ReactChildren | ReactChildren[];
-  children?: ReactChild | ReactChild[] | ReactChildren | ReactChildren[];
+  subtitle?: ReactNode;
+  buttons?: ReactNode;
+  menuItems?: ReactNode;
+  children?: ReactNode;
   backRoute?: string;
   showBackButton?: boolean;
   fullWidth?: boolean;
