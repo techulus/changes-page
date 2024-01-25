@@ -18,7 +18,7 @@ import { MenuItem } from "../core/menu.component";
 import { createToastWrapper } from "../core/toast.component";
 
 export default function HeaderComponent() {
-  const { user, billingDetails, signOut } = useUserData();
+  const { loading, user, billingDetails, signOut } = useUserData();
   const router = useRouter();
   const prefersColorScheme = usePrefersColorScheme();
 
@@ -115,29 +115,37 @@ export default function HeaderComponent() {
                     </div>
                   </Link>
 
-                  <div className="hidden sm:block sm:ml-6">
-                    <div className="flex space-x-4">
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            item.href == router.pathname
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium"
-                          )}
-                          aria-current={
-                            item.href == router.pathname ? "page" : undefined
-                          }
-                          target={item.external ? "_blank" : null}
-                          rel={item.external ? "noopener noreferrer" : null}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
+                  {loading ? (
+                    <div className="hidden sm:flex sm:ml-6 animate-pulse flex-row items-center space-x-4">
+                      <div className="rounded-md bg-gray-700 h-6 w-14"></div>
+                      <div className="rounded-md bg-gray-700 h-6 w-14"></div>
+                      <div className="rounded-md bg-gray-700 h-6 w-14"></div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="hidden sm:block sm:ml-6">
+                      <div className="flex space-x-4">
+                        {navigation.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.href == router.pathname
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium"
+                            )}
+                            aria-current={
+                              item.href == router.pathname ? "page" : undefined
+                            }
+                            target={item.external ? "_blank" : null}
+                            rel={item.external ? "noopener noreferrer" : null}
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   {/* Profile dropdown */}
