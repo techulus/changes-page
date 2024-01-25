@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { promptSuggestTitle } from "../../utils/useAiAssistant";
 import { LightningBoltIcon } from "@heroicons/react/solid";
 import { convertMarkdownToPlainText } from "@changes-page/utils";
-import { SpinnerWithSpacing } from "../core/spinner.component";
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import { notifyError } from "../core/toast.component";
 
 export default function AiSuggestTitlePromptDialogComponent({

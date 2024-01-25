@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Stripe } from "stripe";
 import { v4 } from "uuid";
-import { IErrorResponse } from "../../../../data/api.interface";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { supabaseAdmin } from "../../../../utils/supabase/supabase-admin";
 import { getPagesCount } from "../../../../utils/useDatabase";
 

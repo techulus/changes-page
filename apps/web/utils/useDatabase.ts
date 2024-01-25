@@ -3,7 +3,7 @@ import { Json } from "@changes-page/supabase/types";
 
 import { VALID_STRIPE_PRICE_IDS } from "../pages/api/billing/jobs/report-usage";
 import { supabaseAdmin } from "./supabase/supabase-admin";
-import { IAnalyticsData } from "../data/api.interface";
+import { IAnalyticsData } from "@changes-page/supabase/types/api";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 

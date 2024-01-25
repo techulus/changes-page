@@ -7,7 +7,7 @@ import { Database } from "@changes-page/supabase/types";
 import useStorage from "../../utils/useStorage";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
-import { Spinner } from "../core/spinner.component";
+import { Spinner } from "@changes-page/ui";
 import { notifyError } from "../core/toast.component";
 import SwitchComponent from "../forms/switch.component";
 

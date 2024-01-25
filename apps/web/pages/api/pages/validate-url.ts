@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { IErrorResponse } from "../../../data/api.interface";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { URL_SLUG_REGEX } from "@changes-page/supabase/types/page";
 import { validatePageByUrl } from "../../../utils/useDatabase";
 

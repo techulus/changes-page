@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { IErrorResponse } from "../../../../data/api.interface";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPost } from "@changes-page/supabase/types/page";
 import {
   createPost,

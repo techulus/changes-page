@@ -1,5 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { SpinnerWithSpacing } from "../../components/core/spinner.component";
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import { ROUTES } from "../../data/routes.data";
 import {
   getSupabaseServerClient,

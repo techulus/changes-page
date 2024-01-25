@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { IErrorResponse } from "../../../../data/api.interface";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPageSettings } from "@changes-page/supabase/types/page";
 import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";

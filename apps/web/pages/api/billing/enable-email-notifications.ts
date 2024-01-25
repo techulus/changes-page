@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
-import { IErrorResponse } from "../../../data/api.interface";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { getUserById } from "../../../utils/useDatabase";
 

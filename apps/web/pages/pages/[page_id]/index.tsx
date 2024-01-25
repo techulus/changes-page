@@ -594,17 +594,6 @@ export default function PageDetail({
                               <h2 className="sr-only">Options</h2>
                               <div className="space-y-5">
                                 <div className="flex items-center space-x-2">
-                                  {/* {PostStatusToIcon[post.status]({
-                                    className: classNames(
-                                      "h-5 w-5 text-green-700 dark:text-green-500",
-                                      post.status === PostStatus.draft &&
-                                        "text-slate-700 dark:text-slate-500",
-                                      post.status ===
-                                        PostStatus.publish_later &&
-                                        "text-orange-700 dark:text-orange-500"
-                                    ),
-                                  })} */}
-
                                   <span
                                     className={classNames(
                                       "text-sm font-medium text-green-700 dark:text-green-500",

@@ -1,6 +1,6 @@
 import { InferGetServerSidePropsType } from "next";
 import { useMemo } from "react";
-import { SpinnerWithSpacing } from "../../../../components/core/spinner.component";
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
 import CustomDomainSettings from "../../../../components/page-settings/custom-domain";

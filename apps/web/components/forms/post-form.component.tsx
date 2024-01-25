@@ -19,7 +19,7 @@ import { track } from "../../utils/analytics";
 import { DateTime } from "../../utils/date";
 import { useUserData } from "../../utils/useUser";
 import MarkdownEditor from "../core/editor.component";
-import { Spinner, SpinnerWithSpacing } from "../core/spinner.component";
+import { Spinner, SpinnerWithSpacing } from "@changes-page/ui";
 import { notifyError, notifySuccess } from "../core/toast.component";
 import AiExpandConceptPromptDialogComponent from "../dialogs/ai-expand-concept-prompt-dialog.component";
 import AiSuggestTitlePromptDialogComponent from "../dialogs/ai-suggest-title-prompt-dialog.component";

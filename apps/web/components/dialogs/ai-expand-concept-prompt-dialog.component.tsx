@@ -3,7 +3,7 @@ import { LightningBoltIcon } from "@heroicons/react/solid";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { expandConcept } from "../../utils/useAiAssistant";
 import { convertMarkdownToPlainText } from "@changes-page/utils";
-import { SpinnerWithSpacing } from "../core/spinner.component";
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import { notifyError } from "../core/toast.component";
 import { PrimaryButton } from "../core/buttons.component";
 

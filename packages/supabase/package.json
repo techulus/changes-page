@@ -4,6 +4,7 @@
   "exports": {
     "./types": "./dist/types/index.js",
     "./types/page": "./dist/types/page.js",
+    "./types/api": "./dist/types/api.js",
     "./admin": "./dist/admin.js"
   },
   "scripts": {

@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { IBillingInfo } from "../../../data/user.interface";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { getUserById } from "../../../utils/useDatabase";
-import { IErrorResponse } from "./../../../data/api.interface";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 

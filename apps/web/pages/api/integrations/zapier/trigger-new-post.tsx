@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { IErrorResponse } from "../../../../data/api.interface";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPost } from "@changes-page/supabase/types/page";
 import { supabaseAdmin } from "../../../../utils/supabase/supabase-admin";
 import { getPageByIntegrationSecret } from "../../../../utils/useDatabase";

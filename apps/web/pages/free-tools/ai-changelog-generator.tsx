@@ -1,7 +1,7 @@
 import { LightningBoltIcon, RefreshIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { useCallback, useState } from "react";
-import { SpinnerWithSpacing } from "../../components/core/spinner.component";
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import {
   createToastWrapper,
   notifyError,

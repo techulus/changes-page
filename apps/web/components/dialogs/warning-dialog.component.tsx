@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import { Fragment, useRef } from "react";
-import { Spinner } from "../core/spinner.component";
+import { Spinner } from "@changes-page/ui";
 
 export default function WarningDialog({
   title,

@@ -3,7 +3,7 @@ import { CalendarIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { useEffect } from "react";
 import { SecondaryButton } from "../../components/core/buttons.component";
-import { SpinnerWithSpacing } from "../../components/core/spinner.component";
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import { notifyError, notifyInfo } from "../../components/core/toast.component";
 import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";

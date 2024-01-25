@@ -11,7 +11,7 @@ import {
   URL_SLUG_REGEX,
 } from "@changes-page/supabase/types/page";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
-import { Spinner, SpinnerWithSpacing } from "../core/spinner.component";
+import { Spinner, SpinnerWithSpacing } from "@changes-page/ui";
 import { InfoMessage, InlineErrorMessage } from "./notification.component";
 
 export const NewPageSchema = object().shape({

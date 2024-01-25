@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { IPageSettings } from "@changes-page/supabase/types/page";
 import { httpGet, httpPut } from "../../utils/helpers";
-import { Spinner } from "../core/spinner.component";
+import { Spinner } from "@changes-page/ui";
 import { notifyError } from "../core/toast.component";
 import { InlineErrorMessage } from "../forms/notification.component";
 import SwitchComponent from "../forms/switch.component";

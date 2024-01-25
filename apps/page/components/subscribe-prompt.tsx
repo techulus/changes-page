@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { getPageUrl } from "../lib/url";
 import { httpPost } from "../utils/http";
-import { Spinner } from "./spinner.component";
+import { Spinner } from "@changes-page/ui";
 
 export default function SubscribePrompt({
   settings,

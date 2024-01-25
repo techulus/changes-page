@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
-import { IErrorResponse } from "../../../data/api.interface";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 
 const expandConcept = async (

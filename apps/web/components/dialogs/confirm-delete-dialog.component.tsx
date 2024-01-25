@@ -4,7 +4,7 @@ import { ExclamationIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import Head from "next/head";
 import { Fragment, useRef, useState } from "react";
-import { Spinner } from "../core/spinner.component";
+import { Spinner } from "@changes-page/ui";
 
 export default function ConfirmDeleteDialog({
   itemName,
