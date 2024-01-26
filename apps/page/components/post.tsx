@@ -1,6 +1,7 @@
 import { IPost } from "@changes-page/supabase/types/page";
-import { PostDateTime, PostTypeBadge } from "@changes-page/ui";
+import { PostTypeBadge } from "@changes-page/ui";
 import classNames from "classnames";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -9,6 +10,13 @@ import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import slugify from "slugify";
 import Reactions from "./reactions";
+
+const PostDateTime = dynamic(
+  () => import("@changes-page/ui").then((mod) => mod.PostDateTime),
+  {
+    ssr: false,
+  }
+);
 
 export default function Post({
   post,
