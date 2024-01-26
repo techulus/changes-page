@@ -36,7 +36,6 @@
     "remark": "^14.0.2",
     "remark-html": "^15.0.1",
     "remark-parse": "^10.0.1",
-    "sharp": "^0.32.0",
     "sitemap": "^7.1.1",
     "slugify": "^1.6.5",
     "strip-markdown": "^5.0.0",
