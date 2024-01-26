@@ -54,7 +54,7 @@ const Announcement = ({ className }: { className?: string }) => (
   <div
     className={classNames(
       "inline-flex items-center whitespace-nowrap rounded-md py-1 px-2 text-sm font-medium",
-      "bg-gray-400/10 text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-400/20 text-xs",
+      "bg-yellow-400/10 text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-400/20 text-xs",
       className
     )}
   >
