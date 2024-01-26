@@ -1,0 +1,49 @@
+## Web App
+
+This folder contains the dashboard app for the project and all marketing pages.
+
+### Environment Variables
+
+```
+NEXT_PUBLIC_PAGES_DOMAIN=
+
+# Revalidation
+REVALIDATE_ENDPOINT=
+REVALIDATE_TOKEN=
+
+# Supabase details from https://app.supabase.io
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_WEBHOOK_KEY=
+
+# Stripe credentials from https://dashboard.stripe.com/apikeys
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PRICE_ID=
+EMAIL_NOTIFICATION_STRIPE_PRICE_ID=
+
+# Open AI
+OPENAI_API_KEY=
+
+# Custom domains
+VERCEL_AUTH_TOKEN=
+VERCEL_TEAM_ID=
+VERCEL_PROJECT_ID=
+
+# Postmark Emails
+POSTMARK_SERVER_KEY=
+POSTMARK_WEBHOOK_KEY=
+
+# Inngest
+INNGEST_EVENT_KEY=
+INNGEST_SIGNING_KEY=
+
+# Redis
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+# CMS
+SANITY_PROJECT_ID=
+```

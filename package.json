@@ -1,0 +1,10 @@
+{
+  "name": "changes-page",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "pnpm --filter './packages/*' -r build",
+    "dev": "pnpm -r dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT"
+}

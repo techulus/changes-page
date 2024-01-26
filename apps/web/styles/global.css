@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("~easymde/dist/easymde.min.css");
+
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div {
+  min-height: 100vh;
+}
+
+html,
+body,
+div#__next {
+  background-color: whitesmoke;
+}
+
+body {
+  font-family: var(--geist-font);
+}
+
+::selection {
+  color: #d0d6e0;
+  background: #4f52b4;
+}
+
+.editor-preview-full,
+.editor-preview-side {
+  @apply prose;
+  max-width: unset;
+}
+
+.EasyMDEContainer .CodeMirror,
+.editor-toolbar {
+  border: none !important;
+}
+
+.CodeMirror-fullscreen {
+  z-index: 100 !important;
+}
+
+.animate-once {
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body,
+  div#__next {
+    background-color: #171717;
+  }
+
+  .editor-preview-full,
+  .editor-preview-side {
+    @apply prose-invert;
+    max-width: unset !important;
+    background-color: #262626 !important;
+    border-color: rgba(245, 245, 245, 0.1) !important;
+  }
+
+  .CodeMirror,
+  .editor-toolbar,
+  .editor-preview-full {
+    background-color: #262626 !important;
+    color: white !important;
+  }
+
+  .CodeMirror div.CodeMirror-cursor {
+    border-left: 1px solid white !important;
+  }
+
+  .editor-toolbar {
+    color: #959694 !important;
+  }
+  .editor-toolbar button:hover {
+    background-color: #262626 !important;
+  }
+  .editor-toolbar button.active {
+    background-color: #262626 !important;
+  }
+
+  .EasyMDEContainer .CodeMirror,
+  .editor-toolbar i.separator,
+  .editor-toolbar {
+    border-color: rgba(245, 245, 245, 0.1) !important;
+  }
+}
