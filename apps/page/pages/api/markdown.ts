@@ -1,10 +1,10 @@
+import { DateTime } from "@changes-page/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   fetchPosts,
   fetchRenderData,
   translateHostToPageIdentifier,
 } from "../../lib/data";
-import { DateTime } from "../../utils/date";
 
 async function handler(
   req: NextApiRequest,

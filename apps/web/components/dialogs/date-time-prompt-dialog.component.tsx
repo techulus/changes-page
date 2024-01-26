@@ -1,10 +1,10 @@
+import { DateTime } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import { ClockIcon } from "@heroicons/react/solid";
 import * as chrono from "chrono-node";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { DateTime } from "../../utils/date";
 
 export default function DateTimePromptDialog({
   label,

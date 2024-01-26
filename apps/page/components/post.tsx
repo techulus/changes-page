@@ -1,3 +1,5 @@
+import { IPost } from "@changes-page/supabase/types/page";
+import { PostDateTime, PostTypeBadge } from "@changes-page/ui";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,10 +8,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import slugify from "slugify";
-import { IPost } from "@changes-page/supabase/types/page";
-import { DateTime } from "../utils/date";
 import Reactions from "./reactions";
-import { PostTypeToBadge } from "@changes-page/ui";
 
 export default function Post({
   post,
@@ -41,13 +40,11 @@ export default function Post({
       <div className="absolute top-3 ml-[-20px] h-[0.0725rem] w-3.5 bg-gray-700 dark:bg-gray-400"></div>
       <div className="min-w-0 w-full space-y-3">
         <span className="inline-flex text-sm space-x-2 whitespace-nowrap text-gray-500 dark:text-gray-400">
-          <time dateTime={publishedAt} suppressHydrationWarning>
-            {DateTime.fromISO(publishedAt).toRelative()}
-          </time>
+          <PostDateTime publishedAt={publishedAt} />
 
           <div className="flex items-center -mt-0.5">
-            {post?.type && PostTypeToBadge[post?.type]({})}
-            {isPinned && <PostTypeToBadge.Pinned className="ml-2" />}
+            <PostTypeBadge type={post?.type} />
+            {isPinned && <PostTypeBadge type="pinned" className="ml-2" />}
           </div>
         </span>
 

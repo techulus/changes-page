@@ -1,19 +1,19 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import ReactMarkdown from "react-markdown";
-import SeoTags from "../../../components/seo-tags";
 import {
   IPage,
   IPageSettings,
   IPost,
   PostTypeToLabel,
 } from "@changes-page/supabase/types/page";
+import { DateTime } from "@changes-page/utils";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import SeoTags from "../../../components/seo-tags";
 import {
   fetchPosts,
   fetchRenderData,
   translateHostToPageIdentifier,
 } from "../../../lib/data";
-import { DateTime } from "../../../utils/date";
 
 export default function Index({
   posts,

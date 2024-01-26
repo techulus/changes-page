@@ -1,16 +1,13 @@
 import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import { Timeline } from "@changes-page/ui";
-import { ClockIcon } from "@heroicons/react/outline";
 import {
   ChartBarIcon,
-  CheckIcon,
   CodeIcon,
   CogIcon,
   DocumentTextIcon,
   ExternalLinkIcon,
   HomeIcon,
   PencilAltIcon,
-  PencilIcon,
   PlusIcon,
   RssIcon,
   SearchIcon,
@@ -39,6 +36,7 @@ import {
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { Post } from "../../../components/post/post";
+import { PostStatusToIcon } from "../../../components/post/post-status";
 import { ROUTES } from "../../../data/routes.data";
 import usePageSettings from "../../../utils/hooks/usePageSettings";
 import usePageUrl from "../../../utils/hooks/usePageUrl";
@@ -47,12 +45,6 @@ import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin"
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 import { getPage } from "../../../utils/useSSR";
 import { useUserData } from "../../../utils/useUser";
-
-const PostStatusToIcon = {
-  [PostStatus.draft]: PencilIcon,
-  [PostStatus.publish_later]: ClockIcon,
-  [PostStatus.published]: CheckIcon,
-};
 
 export async function getServerSideProps({ req, res, params }) {
   const { page_id } = params;
@@ -281,6 +273,7 @@ export default function PageDetail({
         subtitle="Posts"
         showBackButton={true}
         backRoute={ROUTES.PAGES}
+        containerClassName="lg:pb-0"
         buttons={
           <PrimaryRouterButton
             label="New"

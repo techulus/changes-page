@@ -19,6 +19,7 @@ export default function Page({
   fullWidth = false,
   legalPage = false,
   tabs = [],
+  containerClassName,
 }: {
   title: string;
   subtitle?: string;
@@ -34,6 +35,7 @@ export default function Page({
     href: string;
     current: boolean;
   }[];
+  containerClassName?: string;
 }) {
   const router = useRouter();
   const { user } = useUserData();
@@ -196,8 +198,9 @@ export default function Page({
         <div
           className={classNames(
             "mx-auto py-6",
-            !fullWidth && "max-w-7xl sm:px-6 lg:px-8 lg:pb-0",
-            legalPage && "px-4"
+            !fullWidth && "max-w-7xl sm:px-6 lg:px-8",
+            legalPage && "px-4",
+            containerClassName
           )}
         >
           {children}
