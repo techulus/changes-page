@@ -94,29 +94,30 @@ export default function Hero() {
               </a>
             </div>
           </div>
-          <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-5xl hero">
-            {TAGLINE}
-          </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-300">
-            The ultimate solution for{" "}
-            <span className="underline decoration-pink-500 text-white">
-              keeping your customers and stakeholders informed
+          <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl hero">
+            Effortlessly{" "}
+            <span className="underline decoration-yellow-500 text-white font-semibold">
+              create compelling changelogs
             </span>{" "}
-            about the latest updates and news from your business.
+            and seamlessly{" "}
+            <span className="underline decoration-red-500 text-white font-semibold">
+              deliver product updates
+            </span>{" "}
+            with our no-code tool.
           </p>
           <div className="mt-10 flex items-center gap-x-6">
             <Link
               href={ROUTES.PAGES}
               className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
             >
-              Start free trial
+              Get Started
             </Link>
-            {/* <Link
-              href={ROUTES.PRICING}
-              className="text-base font-semibold leading-7 text-white"
+            <Link
+              href="https://github.com/techulus/changes-page"
+              className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
-              Learn more<span aria-hidden="true">→</span>
-            </Link> */}
+              Star on GitHub
+            </Link>
           </div>
         </div>
         <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mt-0 lg:mr-0 lg:max-w-none lg:flex-none xl:ml-32">

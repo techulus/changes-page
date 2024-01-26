@@ -1,4 +1,4 @@
-export const TAGLINE = "Changelog simplified.";
+export const TAGLINE = "Effortlessly create compelling changelogs";
 export const SUBTITLE =
   "The ultimate solution for keeping your customers and stakeholders informed about the latest updates and news from your business.";
 

@@ -78,19 +78,19 @@ export default function Features() {
     <div className="bg-gray-900 py-16 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl sm:text-center">
-          <h2 className="text-lg font-semibold leading-8 tracking-tight text-indigo-400">
-            Everything you need
+          <h2 className="text-xl font-semibold leading-8 tracking-tight text-indigo-400">
+            Proudly open-source
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl hero">
-            Effortlessly{" "}
+            An{" "}
             <span className="underline decoration-yellow-500 text-white font-semibold">
-              create compelling changelogs
+              open-source
             </span>{" "}
-            and seamlessly{" "}
+            solution revolutionizing{" "}
             <span className="underline decoration-red-500 text-white font-semibold">
-              deliver product updates
+              changelog
             </span>{" "}
-            with our no-code tool.
+            management.
           </p>
         </div>
       </div>

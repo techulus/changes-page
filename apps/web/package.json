@@ -1,6 +1,6 @@
 {
   "name": "@changes-page/web",
-  "version": "1.17.2",
+  "version": "1.18.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
