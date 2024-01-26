@@ -22,7 +22,7 @@ export default function CustomDomainSettings({
 }: {
   pageId: string;
   settings: IPageSettings;
-  updatePageSettings: (values) => any;
+  updatePageSettings: (values: any) => Promise<void>;
 }) {
   const [addingCustomDomain, setAddingCustomDomain] = useState(false);
 
@@ -162,7 +162,7 @@ export default function CustomDomainSettings({
           <div className="mt-5 md:mt-0 md:col-span-2">
             <form onSubmit={customDomainFormik.handleSubmit}>
               <div className="shadow overflow-hidden sm:rounded-md">
-                <div className="px-4 py-3 bg-white dark:bg-gray-900 sm:p-3">
+                <div className="px-4 py-3 bg-white dark:bg-black sm:p-3">
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6">
                       <label
@@ -198,7 +198,7 @@ export default function CustomDomainSettings({
                               mode.
                             </span>
 
-                            <div className="block lg:hidden shadow overflow-hidden border-b bg-white dark:bg-gray-900 border-gray-200 rounded-lg mt-2 p-2">
+                            <div className="block lg:hidden shadow overflow-hidden border-b bg-white dark:bg-black border-gray-200 rounded-lg mt-2 p-2">
                               <p>
                                 <b>Record Type:</b> {DNS_RECORD_TYPE}
                               </p>
@@ -237,7 +237,7 @@ export default function CustomDomainSettings({
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr className="bg-white dark:bg-gray-900">
+                                  <tr className="bg-white dark:bg-black">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-50">
                                       {DNS_RECORD_TYPE}
                                     </td>
@@ -259,7 +259,7 @@ export default function CustomDomainSettings({
                   </div>
                 </div>
 
-                <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
+                <div className="px-4 py-3 bg-gray-50 dark:bg-black text-right sm:px-6">
                   {settings?.custom_domain ? (
                     <>
                       <a

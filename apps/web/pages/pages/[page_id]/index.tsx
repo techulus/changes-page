@@ -1,4 +1,5 @@
-import { Menu } from "@headlessui/react";
+import { IPost, PostStatus } from "@changes-page/supabase/types/page";
+import { Timeline } from "@changes-page/ui";
 import { ClockIcon } from "@heroicons/react/outline";
 import {
   ChartBarIcon,
@@ -6,7 +7,6 @@ import {
   CodeIcon,
   CogIcon,
   DocumentTextIcon,
-  DotsVerticalIcon,
   ExternalLinkIcon,
   HomeIcon,
   PencilAltIcon,
@@ -23,17 +23,12 @@ import { useRouter } from "next/router";
 import Script from "next/script";
 import { useMemo, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import rehypeSanitize from "rehype-sanitize";
 import {
   PrimaryRouterButton,
   SecondaryButton,
-  SecondaryRouterButton,
   SidebarButton,
 } from "../../../components/core/buttons.component";
 import { MenuItem } from "../../../components/core/menu.component";
-import { notifyError } from "../../../components/core/toast.component";
 import ConfirmDeleteDialog from "../../../components/dialogs/confirm-delete-dialog.component";
 import WidgetCodeDialog from "../../../components/dialogs/widget-code-dialog";
 import {
@@ -43,15 +38,8 @@ import {
 } from "../../../components/entity/empty-state";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
-import PostOptions from "../../../components/post/post-options";
-import { PostTypeToBadge } from "@changes-page/ui";
-import {
-  IPost,
-  PostStatus,
-  PostStatusToLabel,
-} from "@changes-page/supabase/types/page";
+import { Post } from "../../../components/post/post";
 import { ROUTES } from "../../../data/routes.data";
-import { DateTime } from "../../../utils/date";
 import usePageSettings from "../../../utils/hooks/usePageSettings";
 import usePageUrl from "../../../utils/hooks/usePageUrl";
 import usePosts from "../../../utils/hooks/usePosts";
@@ -110,7 +98,7 @@ export default function PageDetail({
     [serverSettings, clientSettings]
   );
 
-  const { pageUrl, getPostUrl } = usePageUrl(page, settings);
+  const { pageUrl } = usePageUrl(page, settings);
   const {
     loading: loadingPosts,
     posts,
@@ -127,8 +115,6 @@ export default function PageDetail({
   );
 
   const [openDeletePage, setOpenDeletePage] = useState(false);
-  const [openDeletePost, setOpenDeletePost] = useState(false);
-  const [deletePost, setDeletePost] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [showWidgetCode, setShowWidgetCode] = useState(false);
@@ -253,21 +239,6 @@ export default function PageDetail({
     [pageUrl]
   );
 
-  async function doDeletePost(post: IPost) {
-    setIsDeleting(true);
-
-    try {
-      await supabase.from("posts").delete().eq("id", post.id);
-
-      await fetchPosts();
-      setIsDeleting(false);
-      setOpenDeletePost(false);
-    } catch (e) {
-      setIsDeleting(false);
-      notifyError();
-    }
-  }
-
   async function doDeletePage() {
     setIsDeleting(true);
 
@@ -294,14 +265,6 @@ export default function PageDetail({
         setOpen={setShowWidgetCode}
       />
       {/* End widget */}
-
-      <ConfirmDeleteDialog
-        open={openDeletePost}
-        setOpen={setOpenDeletePost}
-        itemName={deletePost?.title || ""}
-        processing={isDeleting}
-        deleteCallback={() => doDeletePost(deletePost)}
-      />
 
       <ConfirmDeleteDialog
         highRiskAction
@@ -486,220 +449,70 @@ export default function PageDetail({
 
           <div
             className={classNames(
-              "pb-20 space-y-6 lg:px-0 lg:mr-8 lg:col-span-7",
+              "relative pb-20 space-y-6 lg:px-0 lg:mr-8 lg:col-span-7",
               !loading && posts.length === 0
                 ? "lg:col-span-9 lg:mr-0"
                 : "lg:col-span-7 lg:mr-8"
             )}
           >
-            <div className="bg-white dark:bg-gray-900 shadow">
-              <ul className="relative z-0 divide-y divide-gray-200 dark:divide-gray-700 border-b border-gray-200 dark:border-gray-700">
-                {loading &&
-                  [...Array(4)].map((_, idx) => <LoadingShimmer key={idx} />)}
+            <Timeline />
+            <ul className="relative z-0">
+              {loading &&
+                [...Array(4)].map((_, idx) => <LoadingShimmer key={idx} />)}
 
-                {!loading &&
-                  !posts.length &&
-                  !status &&
-                  !search_value &&
-                  !pinnedPost && (
-                    <NewPageOnboarding page_id={page?.id} settings={settings} />
-                  )}
+              {!loading &&
+                !posts.length &&
+                !status &&
+                !search_value &&
+                !pinnedPost && (
+                  <NewPageOnboarding page_id={page?.id} settings={settings} />
+                )}
 
-                {!loading &&
-                  !posts.length &&
-                  (status || search_value) &&
-                  !pinnedPost && (
-                    <div className="text-center h-36 flex flex-col items-center justify-center">
-                      <svg
-                        className="mx-auto h-12 w-12 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          vectorEffect="non-scaling-stroke"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                        />
-                      </svg>
-                      <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                        No posts found!
-                      </h3>
-                    </div>
-                  )}
-
-                {!loading &&
-                  (pinnedPost ? [pinnedPost, ...posts] : posts).map((post) => (
-                    <li
-                      key={post.id}
-                      className="relative pl-4 pr-6 py-5 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6"
+              {!loading &&
+                !posts.length &&
+                (status || search_value) &&
+                !pinnedPost && (
+                  <div className="text-center h-36 flex flex-col items-center justify-center">
+                    <svg
+                      className="mx-auto h-12 w-12 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
                     >
-                      <div className="flex items-center justify-between space-x-4">
-                        <div className="min-w-0 w-full space-y-3">
-                          <div className="flex items-center">
-                            {PostTypeToBadge[post.type]({})}
+                      <path
+                        vectorEffect="non-scaling-stroke"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+                      />
+                    </svg>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                      No posts found!
+                    </h3>
+                  </div>
+                )}
 
-                            {settings?.pinned_post_id === post.id && (
-                              <PostTypeToBadge.Pinned className="ml-2" />
-                            )}
-
-                            {post.status === PostStatus.published && (
-                              <SecondaryRouterButton
-                                icon={
-                                  <ExternalLinkIcon
-                                    className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                    aria-hidden="true"
-                                  />
-                                }
-                                className="relative inline-block ml-auto lg:hidden"
-                                label="View"
-                                route={getPostUrl(post)}
-                                external
-                                hideLabel
-                              />
-                            )}
-
-                            <Menu
-                              as="div"
-                              className={classNames(
-                                "relative inline-block text-left lg:hidden",
-                                post.status === PostStatus.published
-                                  ? "ml-2"
-                                  : "ml-auto"
-                              )}
-                            >
-                              <div>
-                                <Menu.Button className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                  <DotsVerticalIcon
-                                    className="h-5 w-5"
-                                    aria-hidden="true"
-                                  />
-                                </Menu.Button>
-                              </div>
-
-                              <PostOptions
-                                post={post}
-                                settings={settings}
-                                page_id={page_id}
-                                updatePageSettings={updatePageSettings}
-                                setDeletePost={setDeletePost}
-                                setOpenDeletePost={setOpenDeletePost}
-                              />
-                            </Menu>
-
-                            <aside className="hidden lg:block absolute top-4 -right-52 w-48">
-                              <h2 className="sr-only">Options</h2>
-                              <div className="space-y-5">
-                                <div className="flex items-center space-x-2">
-                                  <span
-                                    className={classNames(
-                                      "text-sm font-medium text-green-700 dark:text-green-500",
-                                      post.status === PostStatus.draft &&
-                                        "text-slate-700 dark:text-slate-500",
-                                      post.status ===
-                                        PostStatus.publish_later &&
-                                        "text-orange-700 dark:text-orange-500"
-                                    )}
-                                  >
-                                    {PostStatusToLabel[post.status]}
-                                  </span>
-                                </div>
-
-                                {post.status === PostStatus.published ? (
-                                  <a
-                                    href={getPostUrl(post)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center space-x-2"
-                                  >
-                                    <ExternalLinkIcon
-                                      className="h-5 w-5 text-gray-400"
-                                      aria-hidden="true"
-                                    />
-                                    <span className="text-sm font-medium text-gray-900 dark:text-gray-400">
-                                      View Post
-                                    </span>
-                                  </a>
-                                ) : null}
-
-                                <div className="flex items-center space-x-2">
-                                  <Menu
-                                    as="div"
-                                    className={
-                                      "relative inline-block text-left"
-                                    }
-                                  >
-                                    <div>
-                                      <Menu.Button className="flex items-center space-x-2">
-                                        <DotsVerticalIcon
-                                          className="h-5 w-5 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                        <span className="text-sm font-medium text-gray-900 dark:text-gray-400">
-                                          More
-                                        </span>
-                                      </Menu.Button>
-                                    </div>
-
-                                    <PostOptions
-                                      post={post}
-                                      settings={settings}
-                                      page_id={page_id}
-                                      updatePageSettings={updatePageSettings}
-                                      setDeletePost={setDeletePost}
-                                      setOpenDeletePost={setOpenDeletePost}
-                                      floating
-                                    />
-                                  </Menu>
-                                </div>
-                              </div>
-                            </aside>
-                          </div>
-
-                          <span className="block">
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50 tracking-tight">
-                              {post.title}
-                            </h2>
-
-                            <span className="inline-flex text-sm space-x-2 whitespace-nowrap text-gray-500 dark:text-gray-400">
-                              <time
-                                dateTime={
-                                  post.publication_date ?? post.created_at
-                                }
-                                suppressHydrationWarning
-                              >
-                                {DateTime.fromISO(
-                                  post.publication_date ?? post.created_at
-                                ).toNiceFormat()}
-                              </time>
-                            </span>
-                          </span>
-
-                          <div className="prose dark:prose-invert break-words">
-                            <ReactMarkdown
-                              rehypePlugins={[
-                                rehypeRaw,
-                                // @ts-ignore
-                                rehypeSanitize({ tagNames: ["div", "iframe"] }),
-                              ]}
-                            >
-                              {post.content}
-                            </ReactMarkdown>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                {loadingMore && <LoadingShimmer />}
-              </ul>
-            </div>
+              {!loading &&
+                (pinnedPost ? [pinnedPost, ...posts] : posts).map(
+                  (post: IPost) => (
+                    <Post
+                      key={post.id}
+                      page={page}
+                      post={post}
+                      fetchPosts={fetchPosts}
+                      settings={settings}
+                      updatePageSettings={updatePageSettings}
+                    />
+                  )
+                )}
+              {loadingMore && <LoadingShimmer />}
+            </ul>
 
             {!loading && posts?.length > 0 && page?.type && allowLoadMore && (
               <SecondaryButton
-                className="my-3 ml-3 sm:ml-0 dark:bg-gray-900"
+                className="my-3 ml-6 dark:bg-gray-900"
                 disabled={loadingMore}
                 label={`View more ${page.type}`}
                 onClick={() => fetchPosts(posts.length)}

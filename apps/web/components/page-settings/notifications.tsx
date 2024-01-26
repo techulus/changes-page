@@ -112,7 +112,7 @@ export default function NotificationsSettings({
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
             <div className="shadow sm:rounded-md sm:overflow-hidden">
-              <div className="px-4 py-5 bg-white dark:bg-gray-900 space-y-6 sm:p-6">
+              <div className="px-4 py-5 bg-white dark:bg-black space-y-6 sm:p-6">
                 <form onSubmit={emailFormik.handleSubmit}>
                   {settings?.email_notifications && !loading && (
                     <div className="rounded-md bg-blue-50 dark:bg-blue-800 p-4 mb-6">
@@ -131,7 +131,7 @@ export default function NotificationsSettings({
 
                           <button
                             type="button"
-                            className="rounded bg-white dark:bg-gray-900 px-2 py-1 text-xs font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
+                            className="rounded bg-white dark:bg-black px-2 py-1 text-xs font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
                             onClick={requestCsvExport}
                           >
                             Export (CSV)
@@ -158,7 +158,7 @@ export default function NotificationsSettings({
                           return (
                             <div
                               key={key}
-                              className="bg-white dark:bg-gray-900 mb-4"
+                              className="bg-white dark:bg-black mb-4"
                             >
                               <div className="grid grid-cols-6 gap-6">
                                 <div className="col-span-6">
@@ -216,7 +216,7 @@ export default function NotificationsSettings({
 
       <div className="hidden sm:block" aria-hidden="true">
         <div className="py-5">
-          <div className="border-t border-gray-200 dark:border-gray-600" />
+          <div className="border-t border-gray-200 dark:border-gray-800" />
         </div>
       </div>
 
@@ -234,7 +234,7 @@ export default function NotificationsSettings({
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
             <div className="shadow sm:rounded-md sm:overflow-hidden">
-              <div className="px-4 py-5 bg-white dark:bg-gray-900 space-y-6 sm:p-6">
+              <div className="px-4 py-5 bg-white dark:bg-black space-y-6 sm:p-6">
                 <SwitchComponent
                   title="Allow users to subscribe to RSS feed"
                   message="Users will be able to subscribe to RSS feed and Atom feed."

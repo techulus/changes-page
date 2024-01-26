@@ -79,7 +79,7 @@ export default function EditPost({
       backRoute={`${ROUTES.PAGES}/${page_id}`}
       showBackButton={true}
     >
-      <div className="max-w-6xl mx-auto bg-gray-100 dark:bg-gray-800">
+      <div className="max-w-6xl mx-auto bg-gray-100 dark:bg-gray-900">
         <PostFormComponent
           post={post as IPost}
           pageSettings={settings}

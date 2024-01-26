@@ -8,4 +8,4 @@ SELECT cron.schedule('*/15 * * * *', $$delete from page_email_subscribers where 
 SELECT cron.schedule('0 0 * * *', $$delete from page_views where created_at < now() - interval '1 month'$$);
 
 -- Remove all cron job logs older than 1 month
-select cron.schedule('0 0 * * *', $$delete from cron.job_run_details where end_time < now() - interval '30 days'$$);
+select cron.schedule('0 0 * * *', $$delete from cron.job_run_details where end_time < now() - interval '7 days'$$);

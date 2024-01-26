@@ -11,12 +11,12 @@ import {
 import { getPageAnalytics } from "../../../utils/useDatabase";
 import { getPage } from "../../../utils/useSSR";
 
-const StatsTable = ({ data, title, total = 5 }) => {
+const StatsTable = ({ data = [], title, total = 5 }) => {
   return (
     <div className="inline-block min-w-full align-middle">
       <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
         <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-600">
-          <thead className="bg-gray-50 dark:bg-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-800">
             <tr>
               <th
                 scope="col"
@@ -32,7 +32,7 @@ const StatsTable = ({ data, title, total = 5 }) => {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-800 bg-white dark:bg-black">
             {data.map(({ data_name, data_count }) => (
               <tr key={data_name} className="relative">
                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-100 sm:pl-6 truncate overflow-hidden max-w-[240px]">
@@ -68,16 +68,18 @@ const StatsTable = ({ data, title, total = 5 }) => {
               </tr>
             ))}
 
-            {new Array(total - data.length).fill("-").map((_, idx) => (
-              <tr key={idx}>
-                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-100 sm:pl-6 truncate overflow-hidden max-w-[240px]">
-                  -
-                </td>
-                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400 w-32">
-                  -
-                </td>
-              </tr>
-            ))}
+            {new Array(Math.max(total - data?.length, 0))
+              .fill("-")
+              .map((_, idx) => (
+                <tr key={idx}>
+                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-100 sm:pl-6 truncate overflow-hidden max-w-[240px]">
+                    -
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400 w-32">
+                    -
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -175,7 +177,7 @@ export default function PageAnalytics({
           {stats.map(({ data_name, data_count }) => (
             <div
               key={data_name}
-              className="overflow-hidden rounded-lg bg-white dark:bg-gray-900 px-4 py-5 shadow sm:p-6"
+              className="overflow-hidden rounded-lg bg-white dark:bg-black px-4 py-5 shadow sm:p-6"
             >
               <dt className="truncate text-sm font-medium text-gray-500 dark:text-gray-400">
                 {data_name}

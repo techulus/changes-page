@@ -54,7 +54,7 @@ export default function IntegrationsSettings({
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
             <div className="shadow overflow-hidden sm:rounded-md">
-              <div className="px-4 py-3 bg-white dark:bg-gray-900 sm:p-3">
+              <div className="px-4 py-3 bg-white dark:bg-black sm:p-3">
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6">
                     <ErrorMessage message="Do NOT share this with anyone, this is a secret key." />
@@ -72,7 +72,7 @@ export default function IntegrationsSettings({
                 </div>
               </div>
 
-              <div className="flex justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
+              <div className="flex justify-between px-4 py-3 bg-gray-50 dark:bg-black text-right sm:px-6">
                 <button
                   type="button"
                   className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"

@@ -56,10 +56,10 @@ export default function Page({
 
   return (
     <>
-      <header className="bg-white dark:bg-gray-900 shadow dark:shadow-sm dark:shadow-gray-700/50 sticky top-0 z-10 backdrop-filter backdrop-blur-lg bg-opacity-70 dark:bg-opacity-70">
+      <header className="bg-white dark:bg-black shadow dark:shadow-sm dark:shadow-gray-700/50 sticky top-0 z-10 backdrop-filter backdrop-blur-lg bg-opacity-70 dark:bg-opacity-70">
         <div
           className={classNames(
-            "max-w-7xl mx-auto py-6 sm:py-2 px-4 sm:px-6 lg:px-8",
+            "max-w-7xl mx-auto py-4 sm:py-2 px-4 sm:px-6 lg:px-8",
             !subtitle && "py-4 sm:py-4",
             !!title && tabs.length > 0 && "relative sm:pb-0 lg:pb-2"
           )}
@@ -190,13 +190,13 @@ export default function Page({
         </div>
       </header>
 
-      <main className="bg-gray-100 dark:bg-gray-800">
+      <main className="bg-gray-100 dark:bg-gray-900">
         {user && <BillingBanner />}
 
         <div
           className={classNames(
             "mx-auto py-6",
-            !fullWidth && "max-w-7xl sm:px-6 lg:px-8",
+            !fullWidth && "max-w-7xl sm:px-6 lg:px-8 lg:pb-0",
             legalPage && "px-4"
           )}
         >

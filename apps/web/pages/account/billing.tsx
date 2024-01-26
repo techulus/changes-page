@@ -60,7 +60,7 @@ export default function Billing() {
 
             {billingDetails && (
               <div className="shadow overflow-hidden sm:rounded-md">
-                <div className="px-4 py-3 bg-white dark:bg-gray-900 sm:p-3">
+                <div className="px-4 py-3 bg-white dark:bg-black sm:p-3">
                   <h2
                     id="billing-history-heading"
                     className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
@@ -89,7 +89,7 @@ export default function Billing() {
                 </div>
 
                 {billingDetails?.subscription && billingDetails?.invoice ? (
-                  <div className="p-4 bg-white dark:bg-gray-900 overflow-hidden border-t border-gray-200 dark:border-gray-700">
+                  <div className="p-4 bg-white dark:bg-black overflow-hidden border-t border-gray-200 dark:border-gray-800">
                     <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-4">
                       Upcoming invoice
                     </h3>
@@ -124,11 +124,11 @@ export default function Billing() {
                 ) : null}
 
                 {billingDetails?.usage?.length && (
-                  <div className="p-4 bg-white dark:bg-gray-900 overflow-hidden border-t border-gray-200 dark:border-gray-700">
+                  <div className="p-4 bg-white dark:bg-black overflow-hidden border-t border-gray-200 dark:border-gray-800">
                     <h3 className="font-medium text-gray-900 dark:text-gray-100">
                       Usage
                     </h3>
-                    <dl className="mt-2 divide-y divide-gray-200 border-t border-b border-gray-200 dark:border-gray-700 dark:divide-gray-700">
+                    <dl className="mt-2 divide-y divide-gray-200 border-t border-b border-gray-200 dark:border-gray-800 dark:divide-gray-700">
                       {billingDetails?.usage.map((item, idx) => (
                         <div
                           key={idx}
@@ -143,7 +143,7 @@ export default function Billing() {
                   </div>
                 )}
 
-                <div className="flex justify-between px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
+                <div className="flex justify-between px-4 py-3 bg-gray-50 dark:bg-black text-right sm:px-6">
                   {billingDetails?.hasActiveSubscription &&
                     (!billingDetails?.subscription?.cancel_at ? (
                       <SecondaryButton

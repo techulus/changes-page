@@ -515,7 +515,7 @@ export default function PostFormComponent({
           </div>
 
           <div className="mt-6 shadow sm:rounded-md sm:overflow-hidden">
-            <div className="px-4 py-5 bg-white dark:bg-gray-900 space-y-6 sm:p-6">
+            <div className="px-4 py-5 bg-white dark:bg-gray-800 space-y-6 sm:p-6">
               <SwitchComponent
                 title="Reactions"
                 message="Allow reactions on this post"

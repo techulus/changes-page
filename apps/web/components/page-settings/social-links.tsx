@@ -101,7 +101,7 @@ export default function SocialLinksSettings({
                   return (
                     <div
                       key={key}
-                      className="px-4 py-3 bg-white dark:bg-gray-900 sm:p-3"
+                      className="px-4 py-3 bg-white dark:bg-black sm:p-3"
                     >
                       <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6">
@@ -135,7 +135,7 @@ export default function SocialLinksSettings({
                   );
                 })}
 
-                <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
+                <div className="px-4 py-3 bg-gray-50 dark:bg-black text-right sm:px-6">
                   <button
                     type="submit"
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -151,7 +151,7 @@ export default function SocialLinksSettings({
 
       <div className="hidden sm:block" aria-hidden="true">
         <div className="py-5">
-          <div className="border-t border-gray-200 dark:border-gray-600" />
+          <div className="border-t border-gray-200 dark:border-gray-800" />
         </div>
       </div>
 
@@ -174,7 +174,7 @@ export default function SocialLinksSettings({
                   return (
                     <div
                       key={key}
-                      className="px-4 py-3 bg-white dark:bg-gray-900 sm:p-3"
+                      className="px-4 py-3 bg-white dark:bg-black sm:p-3"
                     >
                       <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6">
@@ -208,7 +208,7 @@ export default function SocialLinksSettings({
                   );
                 })}
 
-                <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
+                <div className="px-4 py-3 bg-gray-50 dark:bg-black text-right sm:px-6">
                   <button
                     type="submit"
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -224,11 +224,11 @@ export default function SocialLinksSettings({
 
       <div className="hidden sm:block" aria-hidden="true">
         <div className="py-5">
-          <div className="border-t border-gray-200 dark:border-gray-600" />
+          <div className="border-t border-gray-200 dark:border-gray-800" />
         </div>
       </div>
 
-      <div className="mt-10 sm:mt-0">
+      <div className="mt-10 mb-4 sm:mt-0">
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
@@ -247,7 +247,7 @@ export default function SocialLinksSettings({
                   return (
                     <div
                       key={key}
-                      className="px-4 py-3 bg-white dark:bg-gray-900 sm:p-3"
+                      className="px-4 py-3 bg-white dark:bg-black sm:p-3"
                     >
                       <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6">
@@ -281,7 +281,7 @@ export default function SocialLinksSettings({
                   );
                 })}
 
-                <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
+                <div className="px-4 py-3 bg-gray-50 dark:bg-black text-right sm:px-6">
                   <button
                     type="submit"
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

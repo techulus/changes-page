@@ -83,7 +83,7 @@ export default function EditPage({
         showBackButton={true}
       >
         <div className="max-w-8xl mx-auto">
-          <div className="bg-white dark:bg-gray-900 rounded-lg shadow dark:shadow-gray-700 sm:border dark:border-gray-700 px-5 py-6 sm:px-6">
+          <div className="rounded-lg sm:border dark:border-gray-700 px-5 py-6 sm:px-6">
             <PageFormComponent
               page={page as IPage}
               mode="edit"

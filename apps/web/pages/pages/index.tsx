@@ -60,7 +60,7 @@ export default function Pages({
       >
         <Changelog />
 
-        <div className="bg-white dark:bg-gray-900 shadow dark:shadow-gray-700 overflow-hidden sm:rounded-md">
+        <div className="overflow-hidden sm:rounded-md">
           {!pages.length && (
             <ul className="relative z-0 divide-y divide-gray-200 dark:divide-gray-700 border-b border-gray-200 dark:border-gray-700">
               <EntityEmptyState
@@ -86,12 +86,12 @@ export default function Pages({
           )}
 
           {pages.length ? (
-            <div className="divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+            <div className="divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden rounded-lg shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
               {pages.map((page) => (
                 <div
                   key={page.id}
                   className={classNames(
-                    "relative group bg-white dark:bg-gray-900 p-6"
+                    "relative group bg-white dark:bg-black p-6"
                   )}
                 >
                   <div>
@@ -113,7 +113,7 @@ export default function Pages({
                           "text-rose-500 dark:text-rose-100",
                         page.type === PageType.updates &&
                           "text-amber-500 dark:text-amber-100",
-                        "rounded-lg inline-flex p-3 ring-4 ring-white dark:ring-gray-900 font-bold"
+                        "rounded-lg inline-flex px-2 py-1 font-bold"
                       )}
                     >
                       {PageTypeToLabel[page.type]}

@@ -120,7 +120,7 @@ export default function PageSettings({
 
                   <div className="hidden sm:block" aria-hidden="true">
                     <div className="py-5">
-                      <div className="border-t border-gray-200 dark:border-gray-600" />
+                      <div className="border-t border-gray-200 dark:border-gray-800" />
                     </div>
                   </div>
                 </>

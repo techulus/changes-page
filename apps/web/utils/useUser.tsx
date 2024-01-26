@@ -72,6 +72,8 @@ export const UserContextProvider = (props: any) => {
       fetchBilling().then(() => {
         setLoading(false);
       });
+    } else {
+      setLoading(false);
     }
   }, [user, fetchBilling]);
 

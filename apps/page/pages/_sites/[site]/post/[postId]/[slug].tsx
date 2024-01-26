@@ -8,7 +8,7 @@ import PageHeader from "../../../../../components/page-header";
 import Post from "../../../../../components/post";
 import SeoTags from "../../../../../components/seo-tags";
 import SubscribePrompt from "../../../../../components/subscribe-prompt";
-import { Timeline } from "../../../../../components/timeline";
+import { Timeline } from "@changes-page/ui";
 import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import {
   fetchPostById,
