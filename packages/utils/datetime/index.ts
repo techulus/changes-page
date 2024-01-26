@@ -62,6 +62,7 @@ class DateTimeHandler {
       year: "numeric",
       hour: "numeric",
       minute: "numeric",
+      hour12: true,
     });
   }
 }

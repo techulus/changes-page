@@ -1,5 +1,6 @@
+import { Database } from "@changes-page/supabase/types";
+import { PostType, PostTypeToLabel } from "@changes-page/supabase/types/page";
 import classNames from "classnames";
-import { PostTypeToLabel, PostType } from "@changes-page/supabase/types/page";
 
 const Alert = ({ className }: { className?: string }) => (
   <div
@@ -85,7 +86,7 @@ const Pinned = ({ className }: { className?: string }) => (
   </div>
 );
 
-export const PostTypeToBadge = {
+const PostTypeToBadge = {
   [PostType.fix]: Fix,
   [PostType.new]: New,
   [PostType.improvement]: Improvement,
@@ -93,3 +94,19 @@ export const PostTypeToBadge = {
   [PostType.alert]: Alert,
   Pinned,
 };
+
+export function PostTypeBadge({
+  type,
+  className,
+}: {
+  type: Database["public"]["Enums"]["post_type"] | "pinned";
+  className?: string;
+}) {
+  if (type === "pinned") {
+    return <Pinned className={className} />;
+  }
+
+  const Badge = PostTypeToBadge[type];
+
+  return <Badge className={className} />;
+}

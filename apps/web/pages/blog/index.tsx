@@ -1,3 +1,4 @@
+import { DateTime } from "@changes-page/utils";
 import { BookOpenIcon } from "@heroicons/react/solid";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import classNames from "classnames";
@@ -9,7 +10,6 @@ import MarketingHeaderComponent from "../../components/marketing/marketing-heade
 import StartForFreeFooter from "../../components/marketing/start-for-free-footer";
 import { TAGLINE } from "../../data/marketing.data";
 import cms, { getImageUrl } from "../../utils/cms";
-import { DateTime } from "../../utils/date";
 
 export type BlogPost = {
   _id: string;

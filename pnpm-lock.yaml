@@ -364,6 +364,9 @@ importers:
       '@changes-page/supabase':
         specifier: workspace:*
         version: link:../supabase
+      '@changes-page/utils':
+        specifier: workspace:*
+        version: link:../utils
       classnames:
         specifier: ^2.3.1
         version: 2.5.1

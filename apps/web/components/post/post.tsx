@@ -5,21 +5,20 @@ import {
   PostStatus,
   PostStatusToLabel,
 } from "@changes-page/supabase/types/page";
-import { PostTypeToBadge } from "@changes-page/ui";
+import { PostDateTime, PostTypeBadge } from "@changes-page/ui";
 import { Menu } from "@headlessui/react";
-import { ExternalLinkIcon, DotsVerticalIcon } from "@heroicons/react/solid";
+import { DotsVerticalIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
+import { useCallback, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import { DateTime } from "../../utils/date";
-import { SecondaryRouterButton } from "../core/buttons.component";
-import PostOptions from "./post-options";
+import rehypeSanitize from "rehype-sanitize";
 import usePageUrl from "../../utils/hooks/usePageUrl";
-import { useCallback, useMemo, useState } from "react";
 import { useUserData } from "../../utils/useUser";
 import { notifyError } from "../core/toast.component";
 import ConfirmDeleteDialog from "../dialogs/confirm-delete-dialog.component";
-import rehypeSanitize from "rehype-sanitize";
+import PostOptions from "./post-options";
+import { PostStatusIcon } from "./post-status";
 
 export function Post({
   page,
@@ -78,14 +77,12 @@ export function Post({
           <div className="absolute top-3 ml-[-20px] h-[0.0725rem] w-3.5 bg-gray-700 dark:bg-gray-400"></div>
           <div className="min-w-0 w-full space-y-3">
             <span className="inline-flex text-sm space-x-2 whitespace-nowrap text-gray-500 dark:text-gray-400">
-              <time dateTime={publishedAt} suppressHydrationWarning>
-                {DateTime.fromISO(publishedAt).toRelative()}
-              </time>
+              <PostDateTime publishedAt={publishedAt} startWithFullDate />
 
               <div className="flex items-center -mt-0.5">
-                {post?.type && PostTypeToBadge[post?.type]({})}
+                <PostTypeBadge type={post?.type} />
                 {settings?.pinned_post_id === post.id && (
-                  <PostTypeToBadge.Pinned className="ml-2" />
+                  <PostTypeBadge type="pinned" className="ml-2" />
                 )}
               </div>
 
@@ -125,6 +122,10 @@ export function Post({
                           "text-orange-700 dark:text-orange-500"
                       )}
                     >
+                      <PostStatusIcon
+                        status={post.status}
+                        className="w-5 h-5 inline-block mr-1.5"
+                      />
                       {PostStatusToLabel[post.status]}
                     </span>
                   </div>

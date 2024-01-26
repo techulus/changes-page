@@ -1,3 +1,4 @@
+import { DateTime } from "@changes-page/utils";
 import classNames from "classnames";
 import Head from "next/head";
 import Image from "next/image";
@@ -6,7 +7,6 @@ import ReactMarkdown from "react-markdown";
 import { ROUTES } from "../../data/routes.data";
 import { BlogPost } from "../../pages/blog";
 import { getImageUrl } from "../../utils/cms";
-import { DateTime } from "../../utils/date";
 import MarketingHeaderComponent from "../marketing/marketing-header.component";
 import StartForFreeFooter from "../marketing/start-for-free-footer";
 import FooterComponent from "./footer.component";
