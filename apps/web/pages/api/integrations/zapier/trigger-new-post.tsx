@@ -33,7 +33,7 @@ export default async function handler(
 
     console.log("Zapier: get posts for", pageDetails?.id, "input", req.query);
 
-    const offset = ((Number(page) ?? 1) - 1) * Number(per_page);
+    const offset = Number(page) * Number(per_page);
     const limit = Number(per_page) ?? 50;
 
     const { data: posts } = await supabaseAdmin
