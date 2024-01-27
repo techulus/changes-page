@@ -2,7 +2,11 @@ import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPost } from "@changes-page/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getPageByIntegrationSecret } from "../../../../utils/useDatabase";
+import { getPageUrl, getPostUrl } from "../../../../utils/hooks/usePageUrl";
+import {
+  createOrRetrievePageSettings,
+  getPageByIntegrationSecret,
+} from "../../../../utils/useDatabase";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,21 +31,36 @@ export default async function handler(
       String(page_secret_key)
     );
 
-    console.log("get posts for", pageDetails?.id, "input", req.query);
+    console.log("Zapier: get posts for", pageDetails?.id, "input", req.query);
 
-    const start = page ? Number(page) * Number(per_page) : 0;
-    const end = page ? start + Number(per_page) : Number(per_page);
+    const offset = ((Number(page) ?? 1) - 1) * Number(per_page);
+    const limit = Number(per_page) ?? 50;
 
     const { data: posts } = await supabaseAdmin
       .from("posts")
       .select("id,title,content,type,created_at")
       .eq("page_id", String(pageDetails.id))
       .eq("status", String(status))
-      .range(start, end)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(offset, limit - 1 + offset);
 
-    res.status(200).json(posts);
+    const pageSettings = await createOrRetrievePageSettings(
+      pageDetails.user_id,
+      pageDetails.id
+    );
+
+    const postsWithUrl = (posts ?? []).map((post: IPost) => ({
+      ...post,
+      url: getPostUrl(getPageUrl(pageDetails, pageSettings), post),
+    }));
+
+    res.status(200).json(postsWithUrl);
   } catch (e: Error | any) {
+    if (e.message.includes("Invalid")) {
+      return res
+        .status(400)
+        .json({ error: { statusCode: 400, message: e.message } });
+    }
     res.status(500).json({ error: { statusCode: 500, message: e.message } });
   }
 }
