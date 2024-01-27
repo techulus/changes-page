@@ -194,7 +194,7 @@ export default function PostFormComponent({
               as="div"
               value={formik.values.type}
               onChange={(type) => formik.setFieldValue("type", type)}
-              className="flex-shrink-0 bg-white dark:bg-gray-800 p-2"
+              className="flex-shrink-0 bg-white dark:bg-gray-900 p-2"
             >
               {({ open }) => (
                 <>
@@ -216,7 +216,7 @@ export default function PostFormComponent({
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white dark:bg-gray-900 py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white dark:bg-gray-950 py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {Object.keys(PostType).map((label) => (
                           <Listbox.Option
                             key={label}
@@ -224,7 +224,7 @@ export default function PostFormComponent({
                               classNames(
                                 active
                                   ? "bg-gray-100 dark:bg-gray-700"
-                                  : "bg-white dark:bg-gray-900",
+                                  : "bg-white dark:bg-gray-950",
                                 "relative cursor-default select-none py-2 px-3 dark:text-gray-100"
                               )
                             }
@@ -252,7 +252,7 @@ export default function PostFormComponent({
               name="title"
               id="title"
               className={classNames(
-                "block w-full border-0 pt-2.5 text-2xl font-medium placeholder-gray-500 focus:ring-0 dark:bg-gray-800 dark:text-gray-50",
+                "block w-full border-0 pt-2.5 text-2xl font-medium placeholder-gray-500 focus:ring-0 dark:bg-gray-900 dark:text-gray-50",
                 formik.errors.title &&
                   formik.touched.title &&
                   "placeholder-red-600 animate-pulse animate-once"
@@ -302,7 +302,7 @@ export default function PostFormComponent({
                     "relative inline-block text-left ml-auto"
                   )}
                 >
-                  <Menu.Button className="relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 dark:bg-gray-900 py-2 px-2 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 sm:px-3">
+                  <Menu.Button className="relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 dark:bg-gray-950 py-2 px-2 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 sm:px-3">
                     <LightningBoltIcon
                       className={classNames(
                         "text-gray-500 dark:text-gray-50",
@@ -330,14 +330,14 @@ export default function PostFormComponent({
                       style={{
                         top: -106,
                       }}
-                      className="absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white dark:bg-gray-900 py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      className="absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white dark:bg-gray-950 py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     >
                       <Menu.Item>
                         <button
                           type="button"
                           onClick={suggestTitle}
                           className={classNames(
-                            "block w-full text-left bg-white dark:bg-gray-900 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-700 cursor-pointer truncate font-medium"
+                            "block w-full text-left bg-white dark:bg-gray-950 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer truncate font-medium"
                           )}
                         >
                           Suggest title
@@ -348,7 +348,7 @@ export default function PostFormComponent({
                           type="button"
                           onClick={expandConcept}
                           className={classNames(
-                            "block w-full text-left bg-white dark:bg-gray-900 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-700 cursor-pointer truncate font-medium"
+                            "block w-full text-left bg-white dark:bg-gray-950 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer truncate font-medium"
                           )}
                         >
                           Expand concept
@@ -360,7 +360,7 @@ export default function PostFormComponent({
               )}
 
               <button
-                className="relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 dark:bg-gray-900 py-2 px-2 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 sm:px-3 cursor-pointer"
+                className="relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 dark:bg-gray-950 py-2 px-2 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 sm:px-3 cursor-pointer"
                 onClick={() => setPromptSchedule(true)}
                 type="button"
               >
@@ -438,7 +438,7 @@ export default function PostFormComponent({
                             style={{
                               top: -320,
                             }}
-                            className="origin-top-left absolute left-0 mt-2 -mr-1 w-72 rounded-md shadow-lg overflow-hidden bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none sm:left-auto sm:right-0 border-indigo-300 dark:border-indigo-800 border-2"
+                            className="origin-top-left absolute left-0 mt-2 -mr-1 w-72 rounded-md shadow-lg overflow-hidden bg-white dark:bg-gray-950 divide-y divide-gray-200 dark:divide-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none sm:left-auto sm:right-0 border-indigo-300 dark:border-indigo-800 border-2"
                           >
                             {publishingOptions.map((option) => (
                               <Listbox.Option
@@ -516,7 +516,7 @@ export default function PostFormComponent({
           </div>
 
           <div className="mt-6 shadow sm:rounded-md sm:overflow-hidden">
-            <div className="px-4 py-5 bg-white dark:bg-gray-800 space-y-6 sm:p-6">
+            <div className="px-4 py-5 bg-white dark:bg-gray-950 space-y-6 sm:p-6">
               <SwitchComponent
                 title="Reactions"
                 message="Allow reactions on this post"

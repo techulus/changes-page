@@ -1,10 +1,8 @@
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { SpinnerWithSpacing } from "@changes-page/ui";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { ROUTES } from "../../data/routes.data";
-import {
-  getSupabaseServerClient,
-  supabaseAdmin,
-} from "../../utils/supabase/supabase-admin";
+import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
 
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext

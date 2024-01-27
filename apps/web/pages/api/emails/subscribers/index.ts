@@ -1,8 +1,6 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  getSupabaseServerClient,
-  supabaseAdmin,
-} from "../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
 
 const getEmailSubscribers = async (
   req: NextApiRequest,

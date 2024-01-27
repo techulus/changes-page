@@ -1,7 +1,7 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import Stripe from "stripe";
 import { v4 } from "uuid";
 import inngestClient from "../../utils/inngest";
-import { supabaseAdmin } from "../../utils/supabase/supabase-admin";
 import { getPagesCount } from "../../utils/useDatabase";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);

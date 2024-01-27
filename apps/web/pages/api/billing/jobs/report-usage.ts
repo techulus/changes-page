@@ -1,8 +1,8 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Stripe } from "stripe";
 import { v4 } from "uuid";
-import { IErrorResponse } from "@changes-page/supabase/types/api";
-import { supabaseAdmin } from "../../../../utils/supabase/supabase-admin";
 import { getPagesCount } from "../../../../utils/useDatabase";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);

@@ -1,5 +1,5 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import inngestClient from "../../utils/inngest";
-import { supabaseAdmin } from "../../utils/supabase/supabase-admin";
 
 export const DELETE_IMAGES_JOB_EVENT = "job/storage.delete_in_path";
 
