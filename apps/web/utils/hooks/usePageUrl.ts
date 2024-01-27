@@ -1,13 +1,6 @@
+import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import { useCallback, useMemo } from "react";
 import slugify from "slugify";
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
-
-export function createPostUrl(pageUrl, post) {
-  return `${pageUrl}/post/${post.id}/${slugify(post.title, {
-    lower: true,
-    strict: true,
-  })}`;
-}
 
 export function getPageUrl(page, settings) {
   // return "http://localhost:3000";
@@ -17,6 +10,13 @@ export function getPageUrl(page, settings) {
   }
 
   return `https://${page.url_slug}.changes.page`;
+}
+
+export function getPostUrl(pageUrl: string, post: IPost) {
+  return `${pageUrl}/post/${post.id}/${slugify(post.title, {
+    lower: true,
+    strict: true,
+  })}`;
 }
 
 export default function usePageUrl(
@@ -33,13 +33,13 @@ export default function usePageUrl(
     return `https://${page.url_slug}.changes.page`;
   }, [page, settings]);
 
-  const getPostUrl = useCallback(
-    (post: IPost) => createPostUrl(pageUrl, post),
+  const postUrl = useCallback(
+    (post: IPost) => getPostUrl(pageUrl, post),
     [pageUrl]
   );
 
   return {
     pageUrl,
-    getPostUrl,
+    getPostUrl: postUrl,
   };
 }

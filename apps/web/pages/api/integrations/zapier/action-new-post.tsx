@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { v4 } from "uuid";
 import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPost } from "@changes-page/supabase/types/page";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { v4 } from "uuid";
 import {
   createPost,
   getPageByIntegrationSecret,
@@ -27,7 +27,11 @@ export default async function handler(
       String(page_secret_key)
     );
 
-    console.log("create posts for", pageDetails?.id, pageDetails?.title);
+    console.log(
+      "Zapier: create posts for",
+      pageDetails?.id,
+      pageDetails?.title
+    );
 
     const data = await createPost({
       user_id: pageDetails.user_id,

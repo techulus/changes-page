@@ -1,5 +1,5 @@
-import slugify from "slugify";
 import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
+import slugify from "slugify";
 
 export function getPageUrl(
   page: IPage,
@@ -27,6 +27,7 @@ export function getPostUrl(pageUrl: string, post: IPost) {
     strict: true,
   })}`;
 }
+
 export function getOgUrl(
   page: IPage,
   settings: IPageSettings,

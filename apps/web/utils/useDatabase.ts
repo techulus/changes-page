@@ -3,6 +3,7 @@ import { Stripe } from "stripe";
 
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IAnalyticsData } from "@changes-page/supabase/types/api";
+import { IPage } from "@changes-page/supabase/types/page";
 import { VALID_STRIPE_PRICE_IDS } from "../pages/api/billing/jobs/report-usage";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -215,14 +216,16 @@ export const createOrRetrievePageSettings = async (
   return newPageSettings[0];
 };
 
-export const getPageByIntegrationSecret = async (secret_key: string) => {
+export const getPageByIntegrationSecret = async (
+  secret_key: string
+): Promise<IPage> => {
   const { data: settings, error: settingsError } = await supabaseAdmin
     .from("page_settings")
     .select("page_id")
     .eq("integration_secret_key", secret_key)
     .single();
 
-  if (settingsError) throw settingsError;
+  if (settingsError) throw new Error("Invalid secret key");
 
   const { data: page, error: pageError } = await supabaseAdmin
     .from("pages")
@@ -235,7 +238,7 @@ export const getPageByIntegrationSecret = async (secret_key: string) => {
   if (page) return page;
 };
 
-export const getPageById = async (id: string) => {
+export const getPageById = async (id: string): Promise<IPage> => {
   const { error, data } = await supabaseAdmin
     .from("pages")
     .select("*")

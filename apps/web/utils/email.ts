@@ -5,7 +5,7 @@ import {
   convertMarkdownToPlainText,
 } from "@changes-page/utils";
 import Stripe from "stripe";
-import { createPostUrl, getPageUrl } from "./hooks/usePageUrl";
+import { getPageUrl, getPostUrl } from "./hooks/usePageUrl";
 import inngestClient from "./inngest";
 import { getUserById } from "./useDatabase";
 
@@ -96,7 +96,7 @@ export const sendPostEmailToSubscribers = async (
             post_title: post.title,
             post_content: convertMarkdownToHtml(post.content),
             post_content_plain: convertMarkdownToPlainText(post.content),
-            post_link: createPostUrl(getPageUrl(page, settings), post),
+            post_link: getPostUrl(getPageUrl(page, settings), post),
             // legal
             email_physical_address: settings?.email_physical_address,
           },
