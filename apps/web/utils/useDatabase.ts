@@ -1,9 +1,9 @@
-import { Stripe } from "stripe";
 import { Json } from "@changes-page/supabase/types";
+import { Stripe } from "stripe";
 
-import { VALID_STRIPE_PRICE_IDS } from "../pages/api/billing/jobs/report-usage";
-import { supabaseAdmin } from "./supabase/supabase-admin";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IAnalyticsData } from "@changes-page/supabase/types/api";
+import { VALID_STRIPE_PRICE_IDS } from "../pages/api/billing/jobs/report-usage";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 

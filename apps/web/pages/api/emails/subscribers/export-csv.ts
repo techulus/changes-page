@@ -1,9 +1,7 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { Parser } from "@json2csv/plainjs";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  getSupabaseServerClient,
-  supabaseAdmin,
-} from "../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
 
 const getSubscribersExportCsv = async (
   req: NextApiRequest,

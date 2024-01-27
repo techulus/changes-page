@@ -1,13 +1,11 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import { InferGetServerSidePropsType } from "next";
 import Image from "next/image";
-import { SpinnerWithSpacing } from "@changes-page/ui";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
-import {
-  getSupabaseServerClient,
-  supabaseAdmin,
-} from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { getPageAnalytics } from "../../../utils/useDatabase";
 import { getPage } from "../../../utils/useSSR";
 
