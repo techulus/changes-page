@@ -129,7 +129,7 @@ importers:
         specifier: ^9.0.0
         version: 9.0.7
       autoprefixer:
-        specifier: ^10.4.2
+        specifier: ^10.4.5
         version: 10.4.17(postcss@8.4.33)
       eslint:
         specifier: 7.32.0
@@ -325,8 +325,8 @@ importers:
         specifier: ^9.0.1
         version: 9.0.7
       autoprefixer:
-        specifier: ^10.4.2
-        version: 10.4.17(postcss@8.4.33)
+        specifier: ^10.4.5
+        version: 10.4.5(postcss@8.4.33)
       postcss:
         specifier: ^8.4.5
         version: 8.4.33
@@ -1483,6 +1483,22 @@ packages:
 
   /autoprefixer@10.4.17(postcss@8.4.33):
     resolution: {integrity: sha512-/cpVNRLSfhOtcGflT13P2794gVSgmPgTR+erw5ifnMLZb0UnSlkK4tquLmkd3BhA+nLo5tX8Cu0upUsGKvKbmg==}
+    engines: {node: ^10 || ^12 || >=14}
+    hasBin: true
+    peerDependencies:
+      postcss: ^8.1.0
+    dependencies:
+      browserslist: 4.22.2
+      caniuse-lite: 1.0.30001579
+      fraction.js: 4.3.7
+      normalize-range: 0.1.2
+      picocolors: 1.0.0
+      postcss: 8.4.33
+      postcss-value-parser: 4.2.0
+    dev: true
+
+  /autoprefixer@10.4.5(postcss@8.4.33):
+    resolution: {integrity: sha512-Fvd8yCoA7lNX/OUllvS+aS1I7WRBclGXsepbvT8ZaPgrH24rgXpZzF0/6Hh3ZEkwg+0AES/Osd196VZmYoEFtw==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:

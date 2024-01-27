@@ -1,3 +1,4 @@
+import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
 import { PlusIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
@@ -10,7 +11,6 @@ import { EntityEmptyState } from "../../components/entity/empty-state";
 import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
-import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
 import { ROUTES } from "../../data/routes.data";
 import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
 
@@ -62,7 +62,7 @@ export default function Pages({
 
         <div className="overflow-hidden sm:rounded-md">
           {!pages.length && (
-            <ul className="relative z-0 divide-y divide-gray-200 dark:divide-gray-700 border-b border-gray-200 dark:border-gray-700">
+            <ul className="relative z-0 divide-y divide-gray-200 dark:divide-gray-800 border-b border-gray-200 dark:border-gray-700">
               <EntityEmptyState
                 title=" No pages yet!"
                 message="Get started by creating your first page."
@@ -86,7 +86,7 @@ export default function Pages({
           )}
 
           {pages.length ? (
-            <div className="divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden rounded-lg shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+            <div className="divide-y divide-gray-200 dark:divide-gray-800 overflow-hidden rounded-lg shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
               {pages.map((page) => (
                 <div
                   key={page.id}

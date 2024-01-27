@@ -58,14 +58,14 @@ body {
   .editor-preview-side {
     @apply prose-invert;
     max-width: unset !important;
-    background-color: #262626 !important;
+    background-color: #171717 !important;
     border-color: rgba(245, 245, 245, 0.1) !important;
   }
 
   .CodeMirror,
   .editor-toolbar,
   .editor-preview-full {
-    background-color: #262626 !important;
+    background-color: #171717 !important;
     color: white !important;
   }
 
@@ -77,10 +77,10 @@ body {
     color: #959694 !important;
   }
   .editor-toolbar button:hover {
-    background-color: #262626 !important;
+    background-color: #171717 !important;
   }
   .editor-toolbar button.active {
-    background-color: #262626 !important;
+    background-color: #171717 !important;
   }
 
   .EasyMDEContainer .CodeMirror,

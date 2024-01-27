@@ -155,7 +155,7 @@ export function SidebarButton({
     return (
       <button
         className={classNames(
-          "text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200",
+          "text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 dark:hover:text-gray-200",
           "group flex items-center px-3 py-2 text-sm font-medium rounded-md w-full"
         )}
         onClick={onClick}
@@ -177,8 +177,8 @@ export function SidebarButton({
       href={href}
       className={classNames(
         current
-          ? "bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-gray-100"
-          : "text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200",
+          ? "bg-gray-200 dark:bg-gray-950 text-gray-900 dark:text-gray-100"
+          : "text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 dark:hover:text-gray-200",
         "group flex items-center px-3 py-2 text-sm font-medium rounded-md"
       )}
     >
