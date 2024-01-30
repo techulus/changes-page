@@ -1,3 +1,4 @@
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import {
   ChevronRightIcon,
   PhotographIcon,
@@ -8,8 +9,6 @@ import {
 import classNames from "classnames";
 import Link from "next/link";
 import { useMemo } from "react";
-import { IPageSettings } from "@changes-page/supabase/types/page";
-import { useUserData } from "../../utils/useUser";
 
 export function EntityEmptyState({
   title,
@@ -88,8 +87,6 @@ export const NewPageOnboarding = ({
   page_id: string;
   settings: IPageSettings;
 }) => {
-  const { billingDetails } = useUserData();
-
   const tasks = useMemo(() => {
     const defaultTasks = [
       {
@@ -113,9 +110,6 @@ export const NewPageOnboarding = ({
           settings?.facebook_url
         ),
       },
-    ];
-
-    const premiumTasks = [
       {
         name: "Setup custom domain",
         description: "Use your own domain name to publish the page.",
@@ -126,10 +120,8 @@ export const NewPageOnboarding = ({
       },
     ];
 
-    return billingDetails?.hasActiveSubscription
-      ? [...defaultTasks, ...premiumTasks]
-      : defaultTasks;
-  }, [billingDetails?.hasActiveSubscription, settings, page_id]);
+    return defaultTasks;
+  }, [settings, page_id]);
 
   return (
     <div className="max-w-lg mx-auto px-4 py-16 md:py-28">

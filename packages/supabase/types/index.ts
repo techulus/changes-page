@@ -75,6 +75,7 @@ export interface Database {
           replace_title_with_logo: boolean | null
           rss_notifications: boolean
           tiktok_url: string | null
+          trusted_ips: string | null
           twitter_url: string | null
           updated_at: string
           user_id: string
@@ -105,6 +106,7 @@ export interface Database {
           replace_title_with_logo?: boolean | null
           rss_notifications?: boolean
           tiktok_url?: string | null
+          trusted_ips?: string | null
           twitter_url?: string | null
           updated_at?: string
           user_id: string
@@ -135,6 +137,7 @@ export interface Database {
           replace_title_with_logo?: boolean | null
           rss_notifications?: boolean
           tiktok_url?: string | null
+          trusted_ips?: string | null
           twitter_url?: string | null
           updated_at?: string
           user_id?: string

@@ -6,7 +6,7 @@ export default function StartForFreeFooter() {
     <div className="bg-indigo-700">
       <div className="mx-auto max-w-2xl py-16 px-4 text-center sm:py-20 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-3xl hero">
-          <span className="block">Start using changes.page for free!</span>
+          <span className="block">Start free trial</span>
         </h2>
         <p className="mt-4 text-lg leading-6 text-indigo-200 hero">
           Effortlessly{" "}
@@ -23,7 +23,7 @@ export default function StartForFreeFooter() {
           href={ROUTES.LOGIN}
           className="mt-8 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-white px-5 py-3 text-base font-medium text-indigo-600 hover:bg-indigo-50 sm:w-auto"
         >
-          Sign up for free
+          Get Started
         </Link>
       </div>
     </div>

@@ -1,6 +1,6 @@
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import { InferGetServerSidePropsType } from "next";
 import { useMemo } from "react";
-import { SpinnerWithSpacing } from "@changes-page/ui";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
 import CustomDomainSettings from "../../../../components/page-settings/custom-domain";
@@ -13,7 +13,6 @@ import usePageSettings from "../../../../utils/hooks/usePageSettings";
 import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { getPage } from "../../../../utils/useSSR";
-import { useUserData } from "../../../../utils/useUser";
 
 export async function getServerSideProps({ req, res, params }) {
   const { page_id } = params;
@@ -38,7 +37,6 @@ export default function PageSettings({
   page_id,
   activeTab,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { billingDetails } = useUserData();
   const { settings: clientSettings, updatePageSettings } = usePageSettings(
     page_id,
     false
@@ -50,48 +48,29 @@ export default function PageSettings({
   );
 
   const tabs = useMemo(
-    () =>
-      billingDetails?.hasActiveSubscription
-        ? [
-            {
-              name: "General",
-              current: activeTab === "general",
-              href: `${ROUTES.PAGES}/${page_id}/settings/general`,
-            },
-            {
-              name: "Notifications",
-              current: activeTab === "notifications",
-              href: `${ROUTES.PAGES}/${page_id}/settings/notifications`,
-            },
-            {
-              name: "Links",
-              current: activeTab === "links",
-              href: `${ROUTES.PAGES}/${page_id}/settings/links`,
-            },
-            {
-              name: "Integrations",
-              current: activeTab === "integrations",
-              href: `${ROUTES.PAGES}/${page_id}/settings/integrations`,
-            },
-          ]
-        : [
-            {
-              name: "General",
-              current: activeTab === "general",
-              href: `${ROUTES.PAGES}/${page_id}/settings/general`,
-            },
-            {
-              name: "Links",
-              current: activeTab === "links",
-              href: `${ROUTES.PAGES}/${page_id}/settings/links`,
-            },
-            {
-              name: "Integrations",
-              current: activeTab === "integrations",
-              href: `${ROUTES.PAGES}/${page_id}/settings/integrations`,
-            },
-          ],
-    [activeTab, billingDetails?.hasActiveSubscription, page_id]
+    () => [
+      {
+        name: "General",
+        current: activeTab === "general",
+        href: `${ROUTES.PAGES}/${page_id}/settings/general`,
+      },
+      {
+        name: "Notifications",
+        current: activeTab === "notifications",
+        href: `${ROUTES.PAGES}/${page_id}/settings/notifications`,
+      },
+      {
+        name: "Links",
+        current: activeTab === "links",
+        href: `${ROUTES.PAGES}/${page_id}/settings/links`,
+      },
+      {
+        name: "Integrations",
+        current: activeTab === "integrations",
+        href: `${ROUTES.PAGES}/${page_id}/settings/integrations`,
+      },
+    ],
+    [activeTab, page_id]
   );
 
   if (!page_id) return null;
@@ -110,21 +89,18 @@ export default function PageSettings({
         <>
           {activeTab === "general" && (
             <>
-              {billingDetails?.hasActiveSubscription && (
-                <>
-                  <CustomDomainSettings
-                    pageId={String(page_id)}
-                    settings={settings}
-                    updatePageSettings={updatePageSettings}
-                  />
+              <CustomDomainSettings
+                pageId={String(page_id)}
+                settings={settings}
+                updatePageSettings={updatePageSettings}
+              />
 
-                  <div className="hidden sm:block" aria-hidden="true">
-                    <div className="py-5">
-                      <div className="border-t border-gray-200 dark:border-gray-800" />
-                    </div>
-                  </div>
-                </>
-              )}
+              <div className="hidden sm:block" aria-hidden="true">
+                <div className="py-5">
+                  <div className="border-t border-gray-200 dark:border-gray-800" />
+                </div>
+              </div>
+
               <StyleSettings
                 pageId={String(page_id)}
                 page={page}
@@ -134,13 +110,12 @@ export default function PageSettings({
             </>
           )}
 
-          {activeTab === "notifications" &&
-            billingDetails?.hasActiveSubscription && (
-              <NotificationsSettings
-                settings={settings}
-                updatePageSettings={updatePageSettings}
-              />
-            )}
+          {activeTab === "notifications" && (
+            <NotificationsSettings
+              settings={settings}
+              updatePageSettings={updatePageSettings}
+            />
+          )}
 
           {activeTab === "links" && (
             <SocialLinksSettings

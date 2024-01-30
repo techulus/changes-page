@@ -71,7 +71,7 @@ export default function PostFormComponent({
   loading?: boolean;
   onSubmit: (formik: PostFormikForm, values: any) => Promise<boolean | void>;
 }) {
-  const { user, billingDetails, supabase } = useUserData();
+  const { user, supabase } = useUserData();
   const [promptSchedule, setPromptSchedule] = useState(false);
   const [promptTitleSuggestions, setPromptTitleSuggestions] = useState(false);
   const [promptExpandConcept, setPromptExpandConcept] = useState(false);
@@ -295,69 +295,67 @@ export default function PostFormComponent({
 
           <div className="absolute inset-x-px bottom-0">
             <div className="flex flex-nowrap justify-end space-x-2 py-2 px-2 sm:px-3">
-              {billingDetails?.hasActiveSubscription && (
-                <Menu
-                  as="div"
-                  className={classNames(
-                    "relative inline-block text-left ml-auto"
-                  )}
-                >
-                  <Menu.Button className="relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 dark:bg-gray-950 py-2 px-2 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 sm:px-3">
-                    <LightningBoltIcon
-                      className={classNames(
-                        "text-gray-500 dark:text-gray-50",
-                        "h-5 w-5 flex-shrink-0 sm:-ml-1"
-                      )}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className={classNames(
-                        "text-gray-900 dark:text-gray-300",
-                        "hidden truncate sm:ml-2 sm:block"
-                      )}
-                    >
-                      AI Assistant
-                    </span>
-                  </Menu.Button>
-
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
+              <Menu
+                as="div"
+                className={classNames(
+                  "relative inline-block text-left ml-auto"
+                )}
+              >
+                <Menu.Button className="relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 dark:bg-gray-950 py-2 px-2 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 sm:px-3">
+                  <LightningBoltIcon
+                    className={classNames(
+                      "text-gray-500 dark:text-gray-50",
+                      "h-5 w-5 flex-shrink-0 sm:-ml-1"
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span
+                    className={classNames(
+                      "text-gray-900 dark:text-gray-300",
+                      "hidden truncate sm:ml-2 sm:block"
+                    )}
                   >
-                    <Menu.Items
-                      style={{
-                        top: -106,
-                      }}
-                      className="absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white dark:bg-gray-950 py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                    >
-                      <Menu.Item>
-                        <button
-                          type="button"
-                          onClick={suggestTitle}
-                          className={classNames(
-                            "block w-full text-left bg-white dark:bg-gray-950 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer truncate font-medium"
-                          )}
-                        >
-                          Suggest title
-                        </button>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <button
-                          type="button"
-                          onClick={expandConcept}
-                          className={classNames(
-                            "block w-full text-left bg-white dark:bg-gray-950 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer truncate font-medium"
-                          )}
-                        >
-                          Expand concept
-                        </button>
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
-              )}
+                    AI Assistant
+                  </span>
+                </Menu.Button>
+
+                <Transition
+                  as={Fragment}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <Menu.Items
+                    style={{
+                      top: -106,
+                    }}
+                    className="absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white dark:bg-gray-950 py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                  >
+                    <Menu.Item>
+                      <button
+                        type="button"
+                        onClick={suggestTitle}
+                        className={classNames(
+                          "block w-full text-left bg-white dark:bg-gray-950 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer truncate font-medium"
+                        )}
+                      >
+                        Suggest title
+                      </button>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <button
+                        type="button"
+                        onClick={expandConcept}
+                        className={classNames(
+                          "block w-full text-left bg-white dark:bg-gray-950 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer truncate font-medium"
+                        )}
+                      >
+                        Expand concept
+                      </button>
+                    </Menu.Item>
+                  </Menu.Items>
+                </Transition>
+              </Menu>
 
               <button
                 className="relative inline-flex items-center whitespace-nowrap rounded-full bg-gray-50 dark:bg-gray-950 py-2 px-2 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:dark:bg-gray-700 sm:px-3 cursor-pointer"
