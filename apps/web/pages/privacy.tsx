@@ -25,11 +25,7 @@ export default function Privacy() {
           for visitors to our website with regards to the information that they
           shared and/or collect in changes.page. This policy is not applicable
           to any information collected offline or via channels other than this
-          website. Our Privacy Policy was created with the help of the{" "}
-          <a href="https://www.privacypolicygenerator.info">
-            Free Privacy Policy Generator
-          </a>
-          .
+          website.
         </p>
 
         <h2 className="mt-4 text-2xl font-bold">Consent</h2>

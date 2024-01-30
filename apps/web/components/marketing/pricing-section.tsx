@@ -6,13 +6,13 @@ import background from "../../public/images/hero/pricing.jpg";
 
 export default function PricingSection({ unit_amount = 500, addons = [] }) {
   const features = [
-    "Email notifications",
     "Custom domain + SSL",
-    "Zapier Integration",
-    "Embeddable Widget",
+    "Email notifications (add-on)",
     "Post Scheduling",
     "Audience Analytics",
     "SEO Friendly",
+    "Embeddable Widget",
+    "Zapier Integration",
     "White labeling",
     "Private pages",
     "AI Assistant",
@@ -71,17 +71,17 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
               <div className="-mt-2 p-2 lg:mt-0 lg:w-full lg:max-w-md lg:flex-shrink-0">
                 <div className="rounded-2xl bg-gray-950 py-6 text-center ring-1 ring-inset ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-16">
                   <div className="mx-auto max-w-xs px-8">
-                    <p className="mt-6 flex items-baseline justify-center gap-x-2">
-                      <div className="hero mt-4 flex items-baseline text-5xl font-bold tracking-tight text-gray-100">
+                    <div className="mt-6 flex items-baseline justify-center gap-x-2">
+                      <p className="hero mt-4 flex items-baseline text-5xl font-bold tracking-tight text-gray-100">
                         ${Number(unit_amount / 100)}
                         <span className="text-lg font-semibold leading-8 tracking-normal text-gray-400">
                           /page /mo
                         </span>
-                      </div>
-                      <span className="text-sm font-semibold leading-6 tracking-wide text-gray-600">
+                      </p>
+                      <span className="text-sm font-semibold leading-6 tracking-wide text-gray-500">
                         USD
                       </span>
-                    </p>
+                    </div>
 
                     {addons?.length ? (
                       <div className="mt-4">

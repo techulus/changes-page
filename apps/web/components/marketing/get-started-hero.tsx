@@ -9,7 +9,7 @@ export default function GetStartedHero() {
           <h2 className="text-4xl font-bold tracking-tight text-white hero">
             Ready to dive in?
             <br />
-            Get started with a free account.
+            Get started with a free trial.
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
             Whether you&apos;re a small startup or a large enterprise, our
