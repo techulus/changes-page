@@ -1,24 +1,7 @@
 import { useState } from "react";
 
-declare global {
-  interface Date {
-    toNiceFormat(): string;
-    toRelative(): string;
-  }
-}
-
-Date.prototype.toNiceFormat = function () {
-  return this.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
-
-Date.prototype.toRelative = function () {
-  const seconds = Math.floor(
-    (new Date().getTime() - this.date.getTime()) / 1000
-  );
+function toRelative(date: Date) {
+  const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
   let interval = Math.floor(seconds / 31536000);
   if (interval > 1) {
     return interval + " years ago";
@@ -40,7 +23,7 @@ Date.prototype.toRelative = function () {
     return interval + " minutes ago";
   }
   return Math.floor(seconds) + " seconds ago";
-};
+}
 
 export function PostDateTime({
   publishedAt,
@@ -61,8 +44,15 @@ export function PostDateTime({
       suppressHydrationWarning
     >
       {showFullDate
-        ? new Date(publishedAt).toNiceFormat()
-        : new Date(publishedAt).toRelative()}
+        ? new Date(publishedAt).toLocaleString([], {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+          })
+        : toRelative(new Date(publishedAt))}
     </time>
   );
 }
