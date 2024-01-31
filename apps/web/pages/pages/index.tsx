@@ -65,27 +65,26 @@ export default function Pages({
 
         <div className="overflow-hidden sm:rounded-md">
           {!pages.length && (
-            <ul className="relative z-0 divide-y divide-gray-200 dark:divide-gray-800 border-b border-gray-200 dark:border-gray-700">
-              <EntityEmptyState
-                title=" No pages yet!"
-                message="Get started by creating your first page."
-                buttonLink={`/pages/new`}
-                buttonLabel={"Create New Page"}
-                footer={
-                  <div className="mt-4 text-sm">
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href="https://hey.changes.page"
-                      className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
-                    >
-                      or View our page
-                      <span aria-hidden="true"> &rarr;</span>
-                    </a>
-                  </div>
-                }
-              />
-            </ul>
+            <EntityEmptyState
+              title=" No pages yet!"
+              message="Get started by creating your first page."
+              buttonLink={`/pages/new`}
+              buttonLabel={"Create New Page"}
+              disabled={!billingDetails?.has_active_subscription}
+              footer={
+                <div className="mt-4 text-sm">
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://hey.changes.page"
+                    className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
+                  >
+                    or View our page
+                    <span aria-hidden="true"> &rarr;</span>
+                  </a>
+                </div>
+              }
+            />
           )}
 
           {pages.length ? (
