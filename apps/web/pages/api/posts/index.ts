@@ -1,5 +1,6 @@
 import { PostStatus } from "@changes-page/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
+import { apiRateLimiter } from "../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createPost, getUserById } from "../../../utils/useDatabase";
 
