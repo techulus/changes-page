@@ -49,7 +49,7 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
               <div className="p-8 sm:p-10 lg:flex-auto">
                 <div className="flex items-center gap-x-4">
                   <h4 className="flex-none text-sm font-semibold leading-6 text-indigo-500">
-                    What&apos;s included
+                    Add-ons are billed separately
                   </h4>
                   <div className="h-px flex-auto bg-gray-700" />
                 </div>
