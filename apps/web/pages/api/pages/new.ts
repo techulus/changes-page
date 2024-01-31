@@ -21,13 +21,14 @@ const createNewPage = async (
     try {
       const { user } = await getSupabaseServerClient({ req, res });
 
-      const userDetails = await getUserById(user.id);
+      const { has_active_subscription } = await getUserById(user.id);
+      if (!has_active_subscription) {
+        return res.status(403).json({
+          error: { statusCode: 403, message: "Missing subscription" },
+        });
+      }
 
       console.log("createNewPage", user?.id);
-
-      if (!userDetails.stripe_subscription_id) {
-        throw new Error("Please subscribe to create pages");
-      }
 
       const data = await createPage({
         user_id: user.id,

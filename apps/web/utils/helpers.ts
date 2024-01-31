@@ -1,3 +1,5 @@
+import { notifyError } from "../components/core/toast.component";
+
 export const getAppBaseURL = () => {
   return process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000";
 };
@@ -9,6 +11,11 @@ export const httpPost = async ({ url, data = {} }) => {
     credentials: "include",
     body: JSON.stringify(data),
   });
+
+  if (res.status == 403) {
+    notifyError("Please subscribe to use this feature");
+    throw new Error("Missing subscription");
+  }
 
   if (res.status >= 400) {
     throw new Error("Request failed");

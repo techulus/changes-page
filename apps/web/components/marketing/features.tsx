@@ -77,17 +77,17 @@ export default function Features() {
   return (
     <div className="bg-gray-900 py-16 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl sm:text-center">
-          <h2 className="text-xl font-semibold leading-8 tracking-tight text-indigo-400">
+        <div className="mx-auto max-w-2xl sm:text-center font-semibold">
+          <h2 className="text-xl leading-8 tracking-tight text-indigo-400">
             Proudly open-source
           </h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl hero">
+          <p className="mt-2 text-3xl tracking-tight text-white sm:text-4xl hero">
             An{" "}
-            <span className="underline decoration-yellow-500 text-white font-semibold">
+            <span className="underline decoration-yellow-500 text-white">
               open-source
             </span>{" "}
             solution revolutionizing{" "}
-            <span className="underline decoration-red-500 text-white font-semibold">
+            <span className="underline decoration-red-500 text-white">
               changelog
             </span>{" "}
             management.

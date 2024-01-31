@@ -13,6 +13,7 @@ import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
 import { ROUTES } from "../../data/routes.data";
 import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
+import { useUserData } from "../../utils/useUser";
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const { supabase } = await getSupabaseServerClient(ctx);
@@ -34,6 +35,7 @@ export default function Pages({
   pages,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { billingDetails } = useUserData();
   const router = useRouter();
   useHotkeys("n", () => router.push(ROUTES.NEW_PAGE), [router]);
 
@@ -55,10 +57,11 @@ export default function Pages({
             }
             route={ROUTES.NEW_PAGE}
             keyboardShortcut={"n"}
+            upgradeRequired={!billingDetails?.has_active_subscription}
           />
         }
       >
-        <Changelog />
+        {billingDetails?.has_active_subscription ? <Changelog /> : null}
 
         <div className="overflow-hidden sm:rounded-md">
           {!pages.length && (

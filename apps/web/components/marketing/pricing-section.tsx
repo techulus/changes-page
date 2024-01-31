@@ -14,8 +14,8 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
     "Embeddable Widget",
     "Zapier Integration",
     "White labeling",
-    "Private pages",
     "AI Assistant",
+    "Email Support",
   ];
 
   return (

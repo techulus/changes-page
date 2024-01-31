@@ -1,4 +1,3 @@
-import { Database } from "@changes-page/supabase/types";
 import { PostType, PostTypeToLabel } from "@changes-page/supabase/types/page";
 import classNames from "classnames";
 
@@ -99,7 +98,7 @@ export function PostTypeBadge({
   type,
   className,
 }: {
-  type: Database["public"]["Enums"]["post_type"] | "pinned";
+  type: "fix" | "new" | "improvement" | "announcement" | "alert" | "pinned";
   className?: string;
 }) {
   if (type === "pinned") {

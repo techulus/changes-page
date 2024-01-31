@@ -3,16 +3,17 @@ import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { Spinner } from "@changes-page/ui";
 import fileExtension from "file-extension";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFilePicker } from "use-file-picker";
 import { v4 } from "uuid";
 import * as Yup from "yup";
 import useStorage from "../../utils/useStorage";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
-import { notifyError } from "../core/toast.component";
+import { notifyError, notifySuccess } from "../core/toast.component";
 import { InlineErrorMessage } from "../forms/notification.component";
 import SwitchComponent from "../forms/switch.component";
+import { httpPost } from "../../utils/helpers";
 
 export default function StyleSettings({
   pageId,
@@ -37,46 +38,6 @@ export default function StyleSettings({
   const [hideSearchEngine, setHideSearchEngine] = useState(
     settings?.hide_search_engine
   );
-
-  const [trustedIps, setTrustedIps] = useState(!!settings?.trusted_ips);
-  const IpsValidationSchema = Yup.object().shape({
-    ips: Yup.string(),
-  });
-  const trustedIpsForm = useFormik({
-    initialValues: {
-      ips: settings?.trusted_ips || "",
-    },
-    validationSchema: IpsValidationSchema,
-    onSubmit: async (values) => {
-      if (!trustedIps) {
-        return;
-      }
-
-      if (!values.ips) {
-        notifyError(
-          "You must provide at least one IP address to restrict access to your page"
-        );
-        return;
-      }
-
-      const ips = values.ips.split(",").map((ip) => ip.trim());
-      const validIps = ips.every((ip) => {
-        return /^(\d{1,3}\.){3}\d{1,3}$/.test(ip);
-      });
-      if (!validIps) {
-        notifyError("Invalid IP address specified, please try again.");
-        return;
-      }
-
-      try {
-        await updatePageSettings({
-          trusted_ips: values.ips,
-        });
-      } catch (err) {
-        notifyError("Failed to update settings");
-      }
-    },
-  });
 
   const [colorScheme, setColorScheme] = useState(settings?.color_scheme);
 
@@ -404,63 +365,6 @@ export default function StyleSettings({
           <div className="mt-5 md:mt-0 md:col-span-2">
             <div className="shadow sm:rounded-md sm:overflow-hidden">
               <div className="px-4 py-5 bg-white dark:bg-black space-y-6 sm:p-6">
-                <SwitchComponent
-                  title="Trusted IPs"
-                  message="Restrict access to page to visitors from specific IP addresses only. Useful for internal changelogs."
-                  enabled={trustedIps}
-                  setEnabled={setTrustedIps}
-                  onChange={(val) => {
-                    if (!val) {
-                      updatePageSettings({ trusted_ips: null });
-                    }
-                  }}
-                />
-
-                {trustedIps && (
-                  <form onSubmit={trustedIpsForm.handleSubmit}>
-                    <div className="overflow-hidden sm:rounded-md">
-                      <div className="bg-white dark:bg-black mb-4">
-                        <div className="grid grid-cols-6 gap-6">
-                          <div className="col-span-6">
-                            <label
-                              htmlFor="twitter_url"
-                              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                            >
-                              IP addresses
-                            </label>
-                            <input
-                              type="text"
-                              name="ips"
-                              id="ips"
-                              onChange={trustedIpsForm.handleChange}
-                              value={trustedIpsForm.values["ips"]}
-                              className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded sm:text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-                            />
-                          </div>
-                        </div>
-
-                        {trustedIpsForm.errors["ips"] &&
-                          trustedIpsForm.touched["ips"] && (
-                            <div className="mt-2">
-                              <InlineErrorMessage
-                                message={trustedIpsForm.errors["ips"]}
-                              />
-                            </div>
-                          )}
-                      </div>
-
-                      <div className="text-right mt-3">
-                        <button
-                          type="submit"
-                          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                )}
-
                 <SwitchComponent
                   title="Hide from search engines"
                   message="Your public page will stop being visible to search engines. Only people with the direct link will be able to access it."

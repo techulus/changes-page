@@ -1,5 +1,5 @@
+import { redis } from "@changes-page/utils";
 import { NextApiRequest, NextApiResponse } from "next";
-import kv from "./kv";
 
 const updateRateLimit = async (
   ip: string = "local",
@@ -8,7 +8,7 @@ const updateRateLimit = async (
 ): Promise<{ limit: number; remaining: number; success: boolean }> => {
   const key = `rate_limit:${ip}`;
 
-  let currentCount = await kv.get(key);
+  let currentCount = await redis.get(key);
 
   let count = parseInt(currentCount as string, 10) || 0;
 
@@ -16,8 +16,8 @@ const updateRateLimit = async (
     return { limit, remaining: limit - count, success: false };
   }
 
-  await kv.incr(key);
-  await kv.expire(key, duration);
+  await redis.incr(key);
+  await redis.expire(key, duration);
 
   return { limit, remaining: limit - (count + 1), success: true };
 };

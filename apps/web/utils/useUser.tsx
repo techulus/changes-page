@@ -1,3 +1,4 @@
+import { Database } from "@changes-page/supabase/types";
 import { Session, SupabaseClient, User } from "@supabase/auth-helpers-nextjs";
 import {
   useSession,
@@ -15,7 +16,6 @@ import {
 import { notifyError, notifyInfo } from "../components/core/toast.component";
 import { ROUTES } from "../data/routes.data";
 import { IBillingInfo, IUser } from "../data/user.interface";
-import { Database } from "@changes-page/supabase/types";
 import { httpGet } from "./helpers";
 
 const UserContext = createContext<{
@@ -50,13 +50,6 @@ export const UserContextProvider = (props: any) => {
   const fetchBilling = useCallback(async () => {
     return httpGet({ url: `/api/billing` })
       .then((billingDetails) => {
-        billingDetails.hasActiveSubscription = ["trialing", "active"].includes(
-          billingDetails?.subscription?.status
-        );
-
-        // testing
-        // billingDetails.hasActiveSubscription = false;
-
         setBillingDetails(billingDetails);
 
         return billingDetails;

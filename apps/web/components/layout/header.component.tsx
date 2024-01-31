@@ -24,7 +24,7 @@ export default function HeaderComponent() {
 
   const navigation = useMemo(() => {
     if (user) {
-      if (billingDetails?.hasActiveSubscription) {
+      if (billingDetails?.has_active_subscription) {
         return [
           { name: "Pages", href: ROUTES.PAGES },
           { name: "Billing", href: ROUTES.BILLING },
@@ -201,7 +201,7 @@ export default function HeaderComponent() {
                                       <p className="font-semibold">
                                         {user?.user_metadata?.full_name}
 
-                                        {billingDetails?.hasActiveSubscription && (
+                                        {billingDetails?.has_active_subscription && (
                                           <BadgeCheckIcon className="inline ml-1 -mt-1 w-5 h-5 text-indigo-500 dark:text-indigo-400" />
                                         )}
                                       </p>

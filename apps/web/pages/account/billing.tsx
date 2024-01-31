@@ -144,7 +144,7 @@ export default function Billing() {
                 )}
 
                 <div className="flex justify-between px-4 py-3 bg-gray-50 dark:bg-black text-right sm:px-6">
-                  {billingDetails?.hasActiveSubscription &&
+                  {billingDetails?.has_active_subscription &&
                     (!billingDetails?.subscription?.cancel_at ? (
                       <SecondaryButton
                         label={"Cancel Subscription"}
@@ -159,7 +159,7 @@ export default function Billing() {
 
                   <SecondaryButton
                     className={classNames(
-                      billingDetails?.hasActiveSubscription && "ml-3"
+                      billingDetails?.has_active_subscription && "ml-3"
                     )}
                     label={"Update payment method"}
                     onClick={openBillingPortal}

@@ -1,10 +1,10 @@
 import { SpinnerWithSpacing } from "@changes-page/ui";
 import { InferGetServerSidePropsType } from "next";
+import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
 import CustomDomainSettings from "../../../../components/page-settings/custom-domain";
-import IntegrationsSettings from "../../../../components/page-settings/integrations";
 import NotificationsSettings from "../../../../components/page-settings/notifications";
 import SocialLinksSettings from "../../../../components/page-settings/social-links";
 import StyleSettings from "../../../../components/page-settings/style";
@@ -14,12 +14,19 @@ import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-adm
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { getPage } from "../../../../utils/useSSR";
 
+const IntegrationsSettings = dynamic(
+  () => import("../../../../components/page-settings/integrations"),
+  {
+    ssr: false,
+  }
+);
+
 export async function getServerSideProps({ req, res, params }) {
   const { page_id } = params;
 
   const { user, supabase } = await getSupabaseServerClient({ req, res });
-  const settings = await createOrRetrievePageSettings(user.id, String(page_id));
   const page = await getPage(supabase, page_id);
+  const settings = await createOrRetrievePageSettings(user.id, String(page_id));
 
   return {
     props: {
@@ -136,6 +143,6 @@ export default function PageSettings({
   );
 }
 
-PageSettings.getLayout = function getLayout(page) {
+PageSettings.getLayout = function getLayout(page: React.ReactNode) {
   return <AuthLayout>{page}</AuthLayout>;
 };

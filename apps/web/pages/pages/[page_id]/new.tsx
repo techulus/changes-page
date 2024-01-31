@@ -53,7 +53,7 @@ export default function NewPost({
       track("PostCreated");
 
       return await router.replace(`${ROUTES.PAGES}/${page_id}`);
-    } catch (e) {
+    } catch (_) {
       setSaving(false);
       notifyError();
     }

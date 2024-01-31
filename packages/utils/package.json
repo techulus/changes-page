@@ -13,8 +13,12 @@
     "remark-parse": "^10.0.1",
     "strip-markdown": "^5.0.0"
   },
+  "peerDependencies": {
+    "@upstash/redis": "^1.20.6"
+  },
   "devDependencies": {
     "@types/react": ">=18",
+    "@types/node": "18",
     "rimraf": "^5.0.1",
     "typescript": "^4.9.5"
   }
