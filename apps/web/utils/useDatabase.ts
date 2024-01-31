@@ -4,11 +4,12 @@ import { Stripe } from "stripe";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IAnalyticsData } from "@changes-page/supabase/types/api";
 import { IPage } from "@changes-page/supabase/types/page";
+import { IUser } from "../data/user.interface";
 import { VALID_STRIPE_PRICE_IDS } from "../pages/api/billing/jobs/report-usage";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-export const getUserById = async (user_id: string) => {
+export const getUserById = async (user_id: string): Promise<IUser> => {
   const { data: user, error: getUserError } = await supabaseAdmin
     .from("users")
     .select("*")
@@ -17,7 +18,12 @@ export const getUserById = async (user_id: string) => {
 
   if (getUserError) throw getUserError;
 
-  return user;
+  return {
+    ...user,
+    has_active_subscription: ["trialing", "active"].includes(
+      (user?.stripe_subscription as unknown as Stripe.Subscription)?.status
+    ),
+  } as unknown as IUser;
 };
 
 export const getPagesCount = async (user_id: string) => {

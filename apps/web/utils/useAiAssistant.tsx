@@ -1,4 +1,4 @@
-import { httpPost } from "./helpers";
+import { httpPost } from "./http";
 
 export async function promptSuggestTitle(content: string): Promise<string[]> {
   return await httpPost({

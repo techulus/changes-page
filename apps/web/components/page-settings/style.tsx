@@ -1,13 +1,13 @@
+import { Database } from "@changes-page/supabase/types";
+import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
+import { Spinner } from "@changes-page/ui";
 import fileExtension from "file-extension";
 import { useEffect, useState } from "react";
 import { useFilePicker } from "use-file-picker";
 import { v4 } from "uuid";
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
-import { Database } from "@changes-page/supabase/types";
 import useStorage from "../../utils/useStorage";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
-import { Spinner } from "@changes-page/ui";
 import { notifyError } from "../core/toast.component";
 import SwitchComponent from "../forms/switch.component";
 
@@ -22,7 +22,7 @@ export default function StyleSettings({
   settings: IPageSettings;
   updatePageSettings: (values) => any;
 }) {
-  const { user, billingDetails } = useUserData();
+  const { user } = useUserData();
   const { uploadFile, deleteFileFromUrl } = useStorage();
 
   const [uploadingLogo, setUploadingLogoLoading] = useState(false);
@@ -361,18 +361,6 @@ export default function StyleSettings({
           <div className="mt-5 md:mt-0 md:col-span-2">
             <div className="shadow sm:rounded-md sm:overflow-hidden">
               <div className="px-4 py-5 bg-white dark:bg-black space-y-6 sm:p-6">
-                {billingDetails?.hasActiveSubscription && (
-                  <SwitchComponent
-                    title="Whitelabel"
-                    message="Hide all changes.page branding your public page."
-                    enabled={whitelabel}
-                    setEnabled={setWhiteLabel}
-                    onChange={async (val) =>
-                      await updatePageSettings({ whitelabel: val })
-                    }
-                  />
-                )}
-
                 <SwitchComponent
                   title="Hide from search engines"
                   message="Your public page will stop being visible to search engines. Only people with the direct link will be able to access it."
@@ -380,6 +368,16 @@ export default function StyleSettings({
                   setEnabled={setHideSearchEngine}
                   onChange={async (val) =>
                     await updatePageSettings({ hide_search_engine: val })
+                  }
+                />
+
+                <SwitchComponent
+                  title="Whitelabel"
+                  message="Hide all changes.page branding your public page."
+                  enabled={whitelabel}
+                  setEnabled={setWhiteLabel}
+                  onChange={async (val) =>
+                    await updatePageSettings({ whitelabel: val })
                   }
                 />
               </div>

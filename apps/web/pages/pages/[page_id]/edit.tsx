@@ -1,3 +1,4 @@
+import { IPage } from "@changes-page/supabase/types/page";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -9,9 +10,8 @@ import PageFormComponent, {
 } from "../../../components/forms/page-form.component";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
-import { IPage } from "@changes-page/supabase/types/page";
 import { ROUTES } from "../../../data/routes.data";
-import { httpPost } from "../../../utils/helpers";
+import { httpPost } from "../../../utils/http";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { getPage } from "../../../utils/useSSR";
 import { useUserData } from "../../../utils/useUser";

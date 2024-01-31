@@ -1,11 +1,11 @@
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import { useEffect, useState } from "react";
 import {
   notifyError,
   notifySuccess,
 } from "../../components/core/toast.component";
-import { IPageSettings } from "@changes-page/supabase/types/page";
 import { track } from "../analytics";
-import { httpGet } from "../helpers";
+import { httpGet } from "../http";
 import { useUserData } from "../useUser";
 
 export default function usePageSettings(pageId: string, prefetch = true) {

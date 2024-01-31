@@ -10,7 +10,7 @@ import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import { ROUTES } from "../../data/routes.data";
 import { track } from "../../utils/analytics";
-import { httpPost } from "../../utils/helpers";
+import { httpPost } from "../../utils/http";
 
 export default function NewPage() {
   const router = useRouter();

@@ -75,6 +75,7 @@ export default function PageDetail({
   settings: serverSettings,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const { billingDetails } = useUserData();
   const { supabase } = useUserData();
   const { status } = router.query;
 
@@ -282,6 +283,7 @@ export default function PageDetail({
             }
             route={`/pages/${page_id}/new`}
             keyboardShortcut={"N"}
+            upgradeRequired={!billingDetails?.has_active_subscription}
           />
         }
         menuItems={

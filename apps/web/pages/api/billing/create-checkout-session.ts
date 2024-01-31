@@ -1,6 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import Stripe from "stripe";
 import { IErrorResponse } from "@changes-page/supabase/types/api";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import {
   createOrRetrieveCustomer,
@@ -20,18 +19,18 @@ const createCheckout = async (
     try {
       const { user } = await getSupabaseServerClient({ req, res });
 
-      const { stripe_customer_id, stripe_subscription } = await getUserById(
-        user.id
-      );
+      const {
+        stripe_customer_id,
+        stripe_subscription,
+        has_active_subscription,
+      } = await getUserById(user.id);
 
       const customer = await createOrRetrieveCustomer(user.id, user.email);
 
       if (
         stripe_customer_id &&
         stripe_subscription &&
-        ["trialing", "active"].includes(
-          (stripe_subscription as unknown as Stripe.Subscription).status
-        )
+        has_active_subscription
       ) {
         console.log(
           "createCheckout",

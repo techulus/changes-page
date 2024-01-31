@@ -1,9 +1,9 @@
+import { IPageSettings } from "@changes-page/supabase/types/page";
+import { Spinner } from "@changes-page/ui";
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
-import { IPageSettings } from "@changes-page/supabase/types/page";
-import { httpGet, httpPost } from "../../utils/helpers";
-import { Spinner } from "@changes-page/ui";
+import { httpGet, httpPost } from "../../utils/http";
 import { notifyError } from "../core/toast.component";
 import ConfirmDeleteDialog from "../dialogs/confirm-delete-dialog.component";
 import { InfoMessage } from "../forms/notification.component";

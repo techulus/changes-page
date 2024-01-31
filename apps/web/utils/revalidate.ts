@@ -1,4 +1,4 @@
-import { httpPost } from "./helpers";
+import { httpPost } from "./http";
 
 export const revalidatePage = async (path: string) => {
   const revalidateEndpoint =

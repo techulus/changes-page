@@ -1,9 +1,9 @@
+import { IErrorResponse } from "@changes-page/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { IBillingInfo } from "../../../data/user.interface";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { getUserById } from "../../../utils/useDatabase";
-import { IErrorResponse } from "@changes-page/supabase/types/api";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -15,9 +15,11 @@ const getBillingStatus = async (
     try {
       const { user } = await getSupabaseServerClient({ req, res });
 
-      const { stripe_customer_id, stripe_subscription } = await getUserById(
-        user.id
-      );
+      const {
+        stripe_customer_id,
+        stripe_subscription,
+        has_active_subscription,
+      } = await getUserById(user.id);
 
       const { unit_amount } = await stripe.prices.retrieve(
         process.env.STRIPE_PRICE_ID
@@ -37,6 +39,7 @@ const getBillingStatus = async (
             unit_amount,
           },
           usage: null,
+          has_active_subscription: false,
         });
       }
 
@@ -52,7 +55,7 @@ const getBillingStatus = async (
 
       let invoice = null;
 
-      if (["trialing", "active"].includes(status)) {
+      if (has_active_subscription) {
         try {
           invoice = await stripe.invoices.retrieveUpcoming({
             customer: stripe_customer_id,
@@ -84,6 +87,7 @@ const getBillingStatus = async (
             price: {
               unit_amount,
             },
+            has_active_subscription,
             usage,
           });
         } catch (e) {
@@ -105,6 +109,7 @@ const getBillingStatus = async (
         price: {
           unit_amount,
         },
+        has_active_subscription,
         usage: null,
       });
     } catch (err) {

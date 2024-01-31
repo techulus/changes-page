@@ -1,3 +1,4 @@
+import { LockClosedIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Link from "next/link";
 import { KbdPrimary, KbdSecondary } from "./kbd.component";
@@ -8,13 +9,30 @@ export function PrimaryRouterButton({
   icon,
   className,
   keyboardShortcut,
+  upgradeRequired = false,
 }: {
   label: string;
   route: string;
   icon: JSX.Element;
   className?: string;
   keyboardShortcut?: string;
+  upgradeRequired?: boolean;
 }) {
+  if (upgradeRequired) {
+    return (
+      <button
+        className={classNames(
+          "inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-400 cursor-not-allowed",
+          className
+        )}
+        disabled
+      >
+        <LockClosedIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+        {label}
+      </button>
+    );
+  }
+
   return (
     <Link
       href={route}

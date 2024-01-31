@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { httpPost } from "../../utils/helpers";
+import { httpPost } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
 import {
   notifyError,
@@ -37,7 +37,7 @@ export default function BillingBanner() {
     }
   }
 
-  if (billingDetails?.hasActiveSubscription || !billingDetails?.price) {
+  if (billingDetails?.has_active_subscription || !billingDetails?.price) {
     return null;
   }
 
@@ -46,13 +46,13 @@ export default function BillingBanner() {
   if (!billingDetails?.subscription)
     return (
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 pb-0">
-        <div className="rounded-md bg-green-50 dark:bg-green-900 p-4 my-2 border border-green-200 dark:border-green-700">
+        <div className="rounded-md bg-white dark:bg-black p-4 my-2 border-2 border-yellow-400 dark:border-yellow-700">
           <div className="flex flex-col md:flex-row">
             <div className="ml-3">
-              <h3 className="text-lg font-semibold text-green-800 dark:text-green-100">
+              <h3 className="text-lg font-bold text-black dark:text-white">
                 Upgrade your account
               </h3>
-              <div className="mt-2 text-md text-green-700 dark:text-green-200">
+              <div className="mt-2 text-md text-black dark:text-white">
                 <p className="text-md">
                   14 days free trial, then pay{" "}
                   <b>${Number(billingDetails?.price?.unit_amount) / 100}</b>{" "}

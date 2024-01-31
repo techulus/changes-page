@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import Link from "next/link";
-import { TAGLINE } from "../../data/marketing.data";
 import { ROUTES } from "../../data/routes.data";
 import capture from "../../public/images/hero/capture.png";
 import appLogo from "../../public/images/logo.png";
@@ -94,16 +93,16 @@ export default function Hero() {
               </a>
             </div>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl hero">
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl hero">
             Effortlessly{" "}
-            <span className="underline decoration-yellow-500 text-white font-semibold">
+            <span className="underline decoration-yellow-500 text-white">
               create compelling changelogs
             </span>{" "}
             and seamlessly{" "}
-            <span className="underline decoration-red-500 text-white font-semibold">
+            <span className="underline decoration-red-500 text-white">
               deliver product updates
-            </span>{" "}
-            with our no-code tool.
+            </span>
+            .
           </p>
           <div className="mt-10 flex items-center gap-x-6">
             <Link

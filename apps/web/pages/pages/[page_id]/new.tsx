@@ -11,7 +11,7 @@ import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
 import { track } from "../../../utils/analytics";
-import { httpPost } from "../../../utils/helpers";
+import { httpPost } from "../../../utils/http";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 
@@ -53,7 +53,7 @@ export default function NewPost({
       track("PostCreated");
 
       return await router.replace(`${ROUTES.PAGES}/${page_id}`);
-    } catch (e) {
+    } catch (_) {
       setSaving(false);
       notifyError();
     }

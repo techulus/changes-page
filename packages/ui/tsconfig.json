@@ -8,6 +8,7 @@
     "module": "commonjs",
     "outDir": "./dist",
     "target": "es5",
+    "skipLibCheck": true,
     "lib": ["es2015", "dom"]
   },
   "include": ["."],

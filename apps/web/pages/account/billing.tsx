@@ -10,7 +10,7 @@ import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import { ROUTES } from "../../data/routes.data";
 import { track } from "../../utils/analytics";
-import { httpPost } from "../../utils/helpers";
+import { httpPost } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
 
 export default function Billing() {
@@ -144,7 +144,7 @@ export default function Billing() {
                 )}
 
                 <div className="flex justify-between px-4 py-3 bg-gray-50 dark:bg-black text-right sm:px-6">
-                  {billingDetails?.hasActiveSubscription &&
+                  {billingDetails?.has_active_subscription &&
                     (!billingDetails?.subscription?.cancel_at ? (
                       <SecondaryButton
                         label={"Cancel Subscription"}
@@ -159,7 +159,7 @@ export default function Billing() {
 
                   <SecondaryButton
                     className={classNames(
-                      billingDetails?.hasActiveSubscription && "ml-3"
+                      billingDetails?.has_active_subscription && "ml-3"
                     )}
                     label={"Update payment method"}
                     onClick={openBillingPortal}
