@@ -16,7 +16,7 @@ import {
 import { notifyError, notifyInfo } from "../components/core/toast.component";
 import { ROUTES } from "../data/routes.data";
 import { IBillingInfo, IUser } from "../data/user.interface";
-import { httpGet } from "./helpers";
+import { httpGet } from "../utils/http";
 
 const UserContext = createContext<{
   loading: boolean;

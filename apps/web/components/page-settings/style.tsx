@@ -2,18 +2,14 @@ import { Database } from "@changes-page/supabase/types";
 import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { Spinner } from "@changes-page/ui";
 import fileExtension from "file-extension";
-import { useFormik } from "formik";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFilePicker } from "use-file-picker";
 import { v4 } from "uuid";
-import * as Yup from "yup";
 import useStorage from "../../utils/useStorage";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
-import { notifyError, notifySuccess } from "../core/toast.component";
-import { InlineErrorMessage } from "../forms/notification.component";
+import { notifyError } from "../core/toast.component";
 import SwitchComponent from "../forms/switch.component";
-import { httpPost } from "../../utils/helpers";
 
 export default function StyleSettings({
   pageId,

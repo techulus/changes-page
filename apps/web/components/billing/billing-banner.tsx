@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { httpPost } from "../../utils/helpers";
+import { httpPost } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
 import {
   notifyError,

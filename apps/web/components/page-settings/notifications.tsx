@@ -1,10 +1,10 @@
+import { IPageSettings } from "@changes-page/supabase/types/page";
+import { Spinner } from "@changes-page/ui";
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import { useFormik } from "formik";
 import { useCallback, useEffect, useState } from "react";
 import * as Yup from "yup";
-import { IPageSettings } from "@changes-page/supabase/types/page";
-import { httpGet, httpPut } from "../../utils/helpers";
-import { Spinner } from "@changes-page/ui";
+import { httpGet, httpPut } from "../../utils/http";
 import { notifyError } from "../core/toast.component";
 import { InlineErrorMessage } from "../forms/notification.component";
 import SwitchComponent from "../forms/switch.component";

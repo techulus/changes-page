@@ -42,7 +42,7 @@ export const PageTypeToLabel: {
 export const PostTypeToLabel: {
   [key in Database["public"]["Enums"]["post_type"]]: string;
 } = {
-  fix: "Bug fix",
+  fix: "Fixes",
   new: "New",
   improvement: "Improvement",
   announcement: "Announcement",

@@ -1,5 +1,5 @@
-import { redis } from "@changes-page/utils";
 import { NextApiRequest, NextApiResponse } from "next";
+import { redis } from "./redis";
 
 const updateRateLimit = async (
   ip: string = "local",

@@ -1,5 +1,6 @@
-import { PostType, PostTypeToLabel } from "@changes-page/supabase/types/page";
 import classNames from "classnames";
+
+type PostType = "fix" | "new" | "improvement" | "announcement" | "alert";
 
 const Alert = ({ className }: { className?: string }) => (
   <div
@@ -9,7 +10,7 @@ const Alert = ({ className }: { className?: string }) => (
       className
     )}
   >
-    <span>{PostTypeToLabel[PostType.alert]}</span>
+    <span>Alert</span>
   </div>
 );
 
@@ -21,7 +22,7 @@ const New = ({ className }: { className?: string }) => (
       className
     )}
   >
-    <span>{PostTypeToLabel[PostType.new]}</span>
+    <span>New</span>
   </div>
 );
 
@@ -33,7 +34,7 @@ const Improvement = ({ className }: { className?: string }) => (
       className
     )}
   >
-    <span>{PostTypeToLabel[PostType.improvement]}</span>
+    <span>Improvement</span>
   </div>
 );
 
@@ -45,7 +46,7 @@ const Fix = ({ className }: { className?: string }) => (
       className
     )}
   >
-    <span className="truncate">{PostTypeToLabel[PostType.fix]}</span>
+    <span className="truncate">Fixes</span>
   </div>
 );
 
@@ -57,7 +58,7 @@ const Announcement = ({ className }: { className?: string }) => (
       className
     )}
   >
-    <span className={"truncate"}>{PostTypeToLabel[PostType.announcement]}</span>
+    <span className={"truncate"}>Announcement</span>
   </div>
 );
 
@@ -85,27 +86,31 @@ const Pinned = ({ className }: { className?: string }) => (
   </div>
 );
 
-const PostTypeToBadge = {
-  [PostType.fix]: Fix,
-  [PostType.new]: New,
-  [PostType.improvement]: Improvement,
-  [PostType.announcement]: Announcement,
-  [PostType.alert]: Alert,
-  Pinned,
-};
-
 export function PostTypeBadge({
   type,
   className,
 }: {
-  type: "fix" | "new" | "improvement" | "announcement" | "alert" | "pinned";
+  type: PostType | "pinned";
   className?: string;
 }) {
   if (type === "pinned") {
     return <Pinned className={className} />;
   }
+  if (type === "alert") {
+    return <Alert className={className} />;
+  }
+  if (type === "new") {
+    return <New className={className} />;
+  }
+  if (type === "improvement") {
+    return <Improvement className={className} />;
+  }
+  if (type === "fix") {
+    return <Fix className={className} />;
+  }
+  if (type === "announcement") {
+    return <Announcement className={className} />;
+  }
 
-  const Badge = PostTypeToBadge[type];
-
-  return <Badge className={className} />;
+  return null;
 }

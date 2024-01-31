@@ -1,4 +1,4 @@
-import { httpPost } from "./helpers";
+import { httpPost } from "./http";
 import { useUserData } from "./useUser";
 
 export default function useStorage() {
