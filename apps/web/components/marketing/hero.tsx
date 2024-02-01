@@ -104,6 +104,14 @@ export default function Hero() {
             </span>
             .
           </p>
+
+          <p className="mt-6 text-lg leading-8 text-gray-300">
+            Our open-source platform empowers you to publish and manage your
+            changelog page. Notify users via email, encourage their feedback,
+            track analytics on page visitors, and enjoy a host of additional
+            features. Kickstart your page in just a few minutes!
+          </p>
+
           <div className="mt-10 flex items-center gap-x-6">
             <Link
               href={ROUTES.PAGES}
