@@ -50,7 +50,10 @@ export async function getServerSideProps({ req, res, params }) {
   const { page_id } = params;
 
   const { user, supabase } = await getSupabaseServerClient({ req, res });
-  const page = await getPage(supabase, page_id);
+  const page = await getPage(supabase, page_id).catch((e) => {
+    console.error("Failed to get page", e);
+    return null;
+  });
 
   if (!page) {
     return {
