@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { Configuration, OpenAIApi } from "openai";
 import { IErrorResponse } from "@changes-page/supabase/types/api";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { runWorkflow } from "../../../utils/manageprompt";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 
 const suggestTitle = async (
@@ -13,44 +13,11 @@ const suggestTitle = async (
     try {
       await getSupabaseServerClient({ req, res });
 
-      const openai = new OpenAIApi(
-        new Configuration({
-          apiKey: process.env.OPENAI_API_KEY,
-        })
-      );
-
-      const { data } = await openai.createChatCompletion({
-        model: "gpt-4-1106-preview",
-        messages: [
-          {
-            role: "user",
-            content: `Suggest few titles for this post content as a JSON array of titles: "${content}".`,
-          },
-        ],
-        temperature: 0.7,
-        max_tokens: 512,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
+      const result = await runWorkflow("wf_e1eb79b1dc017ca189506d799453caae", {
+        content,
       });
 
-      console.log("OpenAI -> ", data.choices);
-
-      if (!data.choices.length) {
-        return res.status(400).json({
-          error: {
-            statusCode: 400,
-            message: "No title suggestions found",
-          },
-        });
-      }
-
-      const titles = JSON.parse(
-        data.choices[0].message.content
-          .replaceAll("```json", "")
-          .replaceAll("```", "")
-          .trim()
-      );
+      const titles = JSON.parse(result);
 
       return res.status(200).json(titles);
     } catch (err) {
