@@ -1,7 +1,7 @@
 import { SpinnerWithSpacing } from "@changes-page/ui";
 import { LightningBoltIcon, RefreshIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
-import { InferGetStaticPropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useCallback, useState } from "react";
 import {
   createToastWrapper,
@@ -12,12 +12,13 @@ import FooterComponent from "../../components/layout/footer.component";
 import MarketingHeaderComponent from "../../components/marketing/marketing-header.component";
 import { track } from "../../utils/analytics";
 import usePrefersColorScheme from "../../utils/hooks/usePrefersColorScheme";
+import { getPubToken } from "../../utils/manageprompt";
 
 export default function AIChangelogGenerator({
   title,
   description,
   modelStreamUrl,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const theme = usePrefersColorScheme();
 
   const [content, setContent] = useState("");
@@ -297,13 +298,15 @@ export default function AIChangelogGenerator({
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
+  const token = await getPubToken();
+
   return {
     props: {
       title: "ChangeCraftAI: Free Changelog Generator",
       description:
         "Say goodbye to the tedious task of writing changelog and release notes. Our revolutionary tool powered by GPT-3 automatically generates them for you, and it's completely free!",
-      modelStreamUrl: `https://manageprompt.com/api/v1/run/${process.env.MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID}/stream`,
+      modelStreamUrl: `https://manageprompt.com/api/v1/run/${process.env.MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID}/stream?token=${token}`,
     },
   };
 }

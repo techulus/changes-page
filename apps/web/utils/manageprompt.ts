@@ -20,3 +20,21 @@ export async function runWorkflow(
 
   return result;
 }
+
+export async function getPubToken(): Promise<string> {
+  const { token, success } = await fetch(
+    `https://manageprompt.com/api/v1/token`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${process.env.MANAGEPROMPT_SECRET}`,
+      },
+    }
+  ).then((response) => response.json());
+
+  if (!success) {
+    throw new Error("Failed to get token");
+  }
+
+  return token;
+}
