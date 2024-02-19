@@ -3,7 +3,7 @@ export async function runWorkflow(
   data: any
 ): Promise<string> {
   const { success, result } = await fetch(
-    `https://manageprompt.com/api/run/${workflowId}`,
+    `https://manageprompt.com/api/v1/run/${workflowId}`,
     {
       method: "POST",
       headers: {

@@ -303,7 +303,7 @@ export async function getStaticProps() {
       title: "ChangeCraftAI: Free Changelog Generator",
       description:
         "Say goodbye to the tedious task of writing changelog and release notes. Our revolutionary tool powered by GPT-3 automatically generates them for you, and it's completely free!",
-      modelStreamUrl: `https://manageprompt.com/api/run/${process.env.MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID}/stream`,
+      modelStreamUrl: `https://manageprompt.com/api/v1/run/${process.env.MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID}/stream`,
     },
   };
 }
