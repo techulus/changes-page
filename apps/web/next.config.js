@@ -5,7 +5,7 @@ const ContentSecurityPolicy = `
   style-src 'self' data: 'unsafe-inline' maxcdn.bootstrapcdn.com;
   img-src 'self' * data: blob:;
   font-src 'self' data: maxcdn.bootstrapcdn.com;
-  connect-src 'self' wss: *.supabase.co *.changes.page;
+  connect-src 'self' wss: *.supabase.co *.changes.page manageprompt.com;
   worker-src 'self' blob:;
   report-to default
 `;
