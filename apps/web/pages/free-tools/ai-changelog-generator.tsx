@@ -1,7 +1,8 @@
+import { SpinnerWithSpacing } from "@changes-page/ui";
 import { LightningBoltIcon, RefreshIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
+import { InferGetStaticPropsType } from "next";
 import { useCallback, useState } from "react";
-import { SpinnerWithSpacing } from "@changes-page/ui";
 import {
   createToastWrapper,
   notifyError,
@@ -12,7 +13,11 @@ import MarketingHeaderComponent from "../../components/marketing/marketing-heade
 import { track } from "../../utils/analytics";
 import usePrefersColorScheme from "../../utils/hooks/usePrefersColorScheme";
 
-export default function AIChangelogGenerator({ title, description }) {
+export default function AIChangelogGenerator({
+  title,
+  description,
+  modelStreamUrl,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const theme = usePrefersColorScheme();
 
   const [content, setContent] = useState("");
@@ -33,15 +38,17 @@ export default function AIChangelogGenerator({ title, description }) {
 
     setLoading(true);
 
-    const response = await fetch("/api/free-tools/change-gpt", {
+    const response = await fetch(modelStreamUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         content,
-        addIntroOutro,
-        soundCasual,
+        intro: addIntroOutro
+          ? "Add a short intro and outro, make sure its generic and polite."
+          : "Do not add any introduction or additional content at the beginnning or end.",
+        tone: soundCasual ? "casual" : "formal",
       }),
     });
 
@@ -70,7 +77,7 @@ export default function AIChangelogGenerator({ title, description }) {
     }
 
     setCompleted(true);
-  }, [content, addIntroOutro, soundCasual]);
+  }, [content, addIntroOutro, soundCasual, modelStreamUrl]);
 
   return (
     <div className="bg-gray-800 min-h-screen">
@@ -296,6 +303,7 @@ export async function getStaticProps() {
       title: "ChangeCraftAI: Free Changelog Generator",
       description:
         "Say goodbye to the tedious task of writing changelog and release notes. Our revolutionary tool powered by GPT-3 automatically generates them for you, and it's completely free!",
+      modelStreamUrl: `https://manageprompt.com/api/run/${process.env.MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID}/stream`,
     },
   };
 }
