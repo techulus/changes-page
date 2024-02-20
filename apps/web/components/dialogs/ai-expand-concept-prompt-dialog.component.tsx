@@ -1,11 +1,11 @@
+import { SpinnerWithSpacing } from "@changes-page/ui";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { LightningBoltIcon } from "@heroicons/react/solid";
-import { Fragment, useEffect, useRef, useState } from "react";
-import { expandConcept } from "../../utils/useAiAssistant";
-import { convertMarkdownToPlainText } from "@changes-page/utils";
-import { SpinnerWithSpacing } from "@changes-page/ui";
-import { notifyError } from "../core/toast.component";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { getStreamingUrl } from "../../utils/useAiAssistant";
 import { PrimaryButton } from "../core/buttons.component";
+import { notifyError } from "../core/toast.component";
 
 export default function AiExpandConceptPromptDialogComponent({
   open,
@@ -17,23 +17,57 @@ export default function AiExpandConceptPromptDialogComponent({
   const [result, setResult] = useState<string | null>(null);
   const cancelButtonRef = useRef(null);
 
+  const expandConcept = useCallback(async (text) => {
+    setLoading(true);
+
+    const { url } = await getStreamingUrl(
+      "wf_0075a2a911339f610bcfc404051cce3e"
+    );
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: text,
+      }),
+    });
+
+    if (!response.ok) {
+      notifyError("Too many requests");
+    }
+
+    // This data is a ReadableStream
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    setLoading(false);
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setResult((prev) => (prev ?? "") + chunkValue);
+    }
+  }, []);
+
   useEffect(() => {
     if (open && content) {
       setLoading(true);
       setResult(null);
 
-      const text = convertMarkdownToPlainText(content);
-
-      expandConcept(text)
-        .then((response) => {
-          setResult(response);
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-          setOpen(false);
-          notifyError("Failed to process request, please contact support.");
-        });
+      expandConcept(convertMarkdownToPlainText(content)).catch(() => {
+        setLoading(false);
+        setOpen(false);
+        notifyError("Failed to process request, please contact support.");
+      });
     }
   }, [open, content]);
 

@@ -1,23 +1,20 @@
 import { IErrorResponse } from "@changes-page/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { runWorkflow } from "../../../utils/manageprompt";
+import { createSignedStreamingUrl } from "../../../utils/manageprompt";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 
 const expandConcept = async (
   req: NextApiRequest,
-  res: NextApiResponse<string | IErrorResponse>
+  res: NextApiResponse<{ url: string } | IErrorResponse>
 ) => {
   if (req.method === "POST") {
-    const { content } = req.body;
-
+    const { workflowId } = req.body;
     try {
       await getSupabaseServerClient({ req, res });
 
-      const result = await runWorkflow("wf_0075a2a911339f610bcfc404051cce3e", {
-        content,
-      });
+      const url = await createSignedStreamingUrl(workflowId);
 
-      return res.status(200).json(result);
+      return res.status(200).json({ url });
     } catch (err) {
       console.log("expandConcept", err?.response?.data || err?.message);
       res

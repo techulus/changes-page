@@ -9,11 +9,13 @@ export async function promptSuggestTitle(content: string): Promise<string[]> {
   });
 }
 
-export async function expandConcept(content: string): Promise<string> {
+export async function getStreamingUrl(
+  workflowId: string
+): Promise<{ url: string }> {
   return await httpPost({
-    url: `/api/ai/expand-concept`,
+    url: `/api/ai/get-streaming-url`,
     data: {
-      content,
+      workflowId,
     },
   });
 }
