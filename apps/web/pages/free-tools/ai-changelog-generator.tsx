@@ -2,6 +2,7 @@ import { SpinnerWithSpacing } from "@changes-page/ui";
 import { LightningBoltIcon, RefreshIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { InferGetServerSidePropsType } from "next";
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import {
   createToastWrapper,
@@ -12,7 +13,7 @@ import FooterComponent from "../../components/layout/footer.component";
 import MarketingHeaderComponent from "../../components/marketing/marketing-header.component";
 import { track } from "../../utils/analytics";
 import usePrefersColorScheme from "../../utils/hooks/usePrefersColorScheme";
-import { getPubToken } from "../../utils/manageprompt";
+import { createSignedStreamingUrl } from "../../utils/manageprompt";
 
 export default function AIChangelogGenerator({
   title,
@@ -26,7 +27,6 @@ export default function AIChangelogGenerator({
   const [soundCasual, setSoundCasual] = useState(true);
 
   const [loading, setLoading] = useState(false);
-  const [completed, setCompleted] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
   const generateChangelog = useCallback(async () => {
@@ -68,7 +68,6 @@ export default function AIChangelogGenerator({
     let done = false;
 
     setLoading(false);
-    setCompleted(false);
 
     while (!done) {
       const { value, done: doneReading } = await reader.read();
@@ -76,8 +75,6 @@ export default function AIChangelogGenerator({
       const chunkValue = decoder.decode(value);
       setResult((prev) => (prev ?? "") + chunkValue);
     }
-
-    setCompleted(true);
   }, [content, addIntroOutro, soundCasual, modelStreamUrl]);
 
   return (
@@ -220,16 +217,16 @@ export default function AIChangelogGenerator({
                   </div>
                 </div>
                 <div className="mt-8 flex justify-end">
-                  <button
-                    onClick={() => setResult(null)}
+                  <Link
+                    href="/free-tools/ai-changelog-generator"
                     className={classNames(
                       "rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500",
                       "disabled:bg-gray-500"
                     )}
-                    disabled={!completed}
+                    onClick={() => setResult(null)}
                   >
                     <RefreshIcon className="inline h-4 w-4 mr-2" /> Start over
-                  </button>
+                  </Link>
                   <button
                     onClick={() => {
                       navigator?.clipboard?.writeText(result);
@@ -299,14 +296,17 @@ export default function AIChangelogGenerator({
 }
 
 export async function getServerSideProps() {
-  const token = await getPubToken();
+  const modelStreamUrl = await createSignedStreamingUrl(
+    process.env.MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID,
+    300
+  );
 
   return {
     props: {
       title: "ChangeCraftAI: Free Changelog Generator",
       description:
         "Say goodbye to the tedious task of writing changelog and release notes. Our revolutionary tool powered by GPT-3 automatically generates them for you, and it's completely free!",
-      modelStreamUrl: `https://manageprompt.com/api/v1/run/${process.env.MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID}/stream?token=${token}`,
+      modelStreamUrl,
     },
   };
 }

@@ -21,9 +21,12 @@ export async function runWorkflow(
   return result;
 }
 
-export async function getPubToken(): Promise<string> {
+export async function createSignedStreamingUrl(
+  workflowId: string,
+  ttl: number = 60
+): Promise<string> {
   const { token, success } = await fetch(
-    `https://manageprompt.com/api/v1/token`,
+    `https://manageprompt.com/api/v1/token?ttl=${ttl}`,
     {
       method: "GET",
       headers: {
@@ -36,5 +39,5 @@ export async function getPubToken(): Promise<string> {
     throw new Error("Failed to get token");
   }
 
-  return token;
+  return `https://manageprompt.com/api/v1/run/${workflowId}/stream?token=${token}`;
 }
