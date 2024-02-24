@@ -50,9 +50,9 @@ export default function Blog({ posts }: { posts: BlogPost[] }) {
       <div className="bg-white dark:bg-gray-800 px-6 pt-16 pb-20 lg:px-8 lg:pt-16 lg:pb-28">
         <div className="relative mx-auto max-w-lg divide-y-2 divide-gray-200 dark:divide-gray-600 lg:max-w-6xl">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-white dark:text-gray-200 sm:text-4xl hero">
+            <h2 className="text-3xl font-bold tracking-tight text-black dark:text-gray-200 sm:text-4xl hero">
               <BookOpenIcon className="h-12 w-12 inline mr-2" />
-              Recent publications
+              Recent Posts
             </h2>
             <p className="mt-3 text-xl text-gray-500 dark:text-gray-400 sm:mt-4">
               {TAGLINE}
