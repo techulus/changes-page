@@ -26,6 +26,7 @@ import { PrimaryButton } from "../core/buttons.component";
 import MarkdownEditor from "../core/editor.component";
 import { notifyError, notifySuccess } from "../core/toast.component";
 import AiExpandConceptPromptDialogComponent from "../dialogs/ai-expand-concept-prompt-dialog.component";
+import AiProofReadDialog from "../dialogs/ai-prood-read-dialog.component";
 import AiSuggestTitlePromptDialogComponent from "../dialogs/ai-suggest-title-prompt-dialog.component";
 import DateTimePromptDialog from "../dialogs/date-time-prompt-dialog.component";
 import SwitchComponent from "./switch.component";
@@ -75,6 +76,7 @@ export default function PostFormComponent({
   const [promptSchedule, setPromptSchedule] = useState(false);
   const [promptTitleSuggestions, setPromptTitleSuggestions] = useState(false);
   const [promptExpandConcept, setPromptExpandConcept] = useState(false);
+  const [promptProofRead, setPromptProofRead] = useState(false);
   //
   // For email notifications
   const [emailNotified, setEmailNotified] = useState(false);
@@ -176,6 +178,14 @@ export default function PostFormComponent({
   const expandConcept = useCallback(() => {
     if (formik.values.content) {
       setPromptExpandConcept(true);
+    } else {
+      notifyError("Content cannot be empty");
+    }
+  }, [formik.values.content]);
+
+  const proofRead = useCallback(() => {
+    if (formik.values.content) {
+      setPromptProofRead(true);
     } else {
       notifyError("Content cannot be empty");
     }
@@ -327,7 +337,7 @@ export default function PostFormComponent({
                 >
                   <Menu.Items
                     style={{
-                      top: -106,
+                      top: -146,
                     }}
                     className="absolute right-0 z-10 mt-1 max-h-56 w-52 overflow-auto rounded-lg bg-white dark:bg-gray-950 py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                   >
@@ -351,6 +361,17 @@ export default function PostFormComponent({
                         )}
                       >
                         Expand concept
+                      </button>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <button
+                        type="button"
+                        onClick={proofRead}
+                        className={classNames(
+                          "block w-full text-left bg-white dark:bg-gray-950 select-none py-2 px-3 dark:text-gray-100 hover:bg-gray-200 hover:dark:bg-gray-800 cursor-pointer truncate font-medium"
+                        )}
+                      >
+                        Proof read
                       </button>
                     </Menu.Item>
                   </Menu.Items>
@@ -623,6 +644,15 @@ export default function PostFormComponent({
             "content",
             `${formik.values.content}\n\n${content}`
           );
+        }}
+      />
+
+      <AiProofReadDialog
+        content={formik.values.content}
+        open={promptProofRead}
+        setOpen={(open: boolean) => {
+          setPromptProofRead(open);
+          track("AiProofRead");
         }}
       />
     </div>
