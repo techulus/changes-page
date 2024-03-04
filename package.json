@@ -1,6 +1,6 @@
 {
   "name": "changes-page",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "build": "pnpm --filter './packages/*' -r build",
     "dev:page": "pnpm --filter './apps/page' -r dev",
