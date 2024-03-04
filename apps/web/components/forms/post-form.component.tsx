@@ -26,7 +26,7 @@ import { PrimaryButton } from "../core/buttons.component";
 import MarkdownEditor from "../core/editor.component";
 import { notifyError, notifySuccess } from "../core/toast.component";
 import AiExpandConceptPromptDialogComponent from "../dialogs/ai-expand-concept-prompt-dialog.component";
-import AiProofReadDialog from "../dialogs/ai-prood-read-dialog.component";
+import AiProofReadDialogComponent from "../dialogs/ai-prood-read-dialog.component";
 import AiSuggestTitlePromptDialogComponent from "../dialogs/ai-suggest-title-prompt-dialog.component";
 import DateTimePromptDialog from "../dialogs/date-time-prompt-dialog.component";
 import SwitchComponent from "./switch.component";
@@ -647,7 +647,7 @@ export default function PostFormComponent({
         }}
       />
 
-      <AiProofReadDialog
+      <AiProofReadDialogComponent
         content={formik.values.content}
         open={promptProofRead}
         setOpen={(open: boolean) => {

@@ -6,7 +6,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { getStreamingUrl } from "../../utils/useAiAssistant";
 import { notifyError } from "../core/toast.component";
 
-export default function AiProofReadDialog({ open, setOpen, content }) {
+export default function AiProofReadDialogComponent({ open, setOpen, content }) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const cancelButtonRef = useRef(null);
