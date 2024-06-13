@@ -12,6 +12,7 @@ import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
 import { ROUTES } from "../../data/routes.data";
+import { getAppBaseURL } from "../../utils/helpers";
 import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
 import { useUserData } from "../../utils/useUser";
 
@@ -68,9 +69,16 @@ export default function Pages({
             <EntityEmptyState
               title=" No pages yet!"
               message="Get started by creating your first page."
-              buttonLink={`/pages/new`}
-              buttonLabel={"Create New Page"}
-              disabled={!billingDetails?.has_active_subscription}
+              buttonLink={
+                billingDetails?.has_active_subscription
+                  ? `/pages/new`
+                  : `/api/billing/redirect-to-checkout?return_url=${getAppBaseURL()}/pages`
+              }
+              buttonLabel={
+                billingDetails?.has_active_subscription
+                  ? "Create New Page"
+                  : "Start Free Trial"
+              }
               footer={
                 <div className="mt-4 text-sm">
                   <a
