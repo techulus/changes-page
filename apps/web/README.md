@@ -5,7 +5,7 @@ This folder contains the dashboard app for the project and all marketing pages.
 ### Environment Variables
 
 ```
-NEXT_PUBLIC_PAGES_DOMAIN=
+NEXT_PUBLIC_PAGES_DOMAIN=http://localhost:3000
 
 # Revalidation
 REVALIDATE_ENDPOINT=
@@ -45,5 +45,9 @@ UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 
 # CMS
-SANITY_PROJECT_ID=
+NEXT_PUBLIC_SANITY_PROJECT_ID=
+
+# ManagePrompt
+MANAGEPROMPT_SECRET=
+MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID=
 ```

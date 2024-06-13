@@ -1,20 +1,19 @@
-import { IErrorResponse } from "@changes-page/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getAppBaseURL } from "../../../utils/helpers";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import {
   createOrRetrieveCustomer,
   getUserById,
 } from "../../../utils/useDatabase";
-import { getAppBaseURL } from "./../../../utils/helpers";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const createCheckout = async (
+const redirectToCheckout = async (
   req: NextApiRequest,
-  res: NextApiResponse<{ url: string } | IErrorResponse>
+  res: NextApiResponse
 ) => {
-  if (req.method === "POST") {
-    const { return_url } = req.body;
+  if (req.method === "GET") {
+    const { return_url } = req.query;
 
     try {
       const { user } = await getSupabaseServerClient({ req, res });
@@ -43,7 +42,7 @@ const createCheckout = async (
           return_url: return_url || `${getAppBaseURL()}/pages`,
         });
 
-        return res.status(201).json({ url });
+        return res.redirect(307, url);
       }
 
       console.log(
@@ -83,7 +82,7 @@ const createCheckout = async (
         cancel_url: return_url || getAppBaseURL(),
       });
 
-      return res.status(201).json({ url });
+      return res.redirect(307, url);
     } catch (err) {
       console.log("createCheckout", err);
       res
@@ -91,9 +90,9 @@ const createCheckout = async (
         .json({ error: { statusCode: 500, message: err.message } });
     }
   } else {
-    res.setHeader("Allow", "POST");
+    res.setHeader("Allow", "GET");
     res.status(405).end("Method Not Allowed");
   }
 };
 
-export default createCheckout;
+export default redirectToCheckout;
