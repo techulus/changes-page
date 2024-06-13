@@ -1,12 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { httpPost } from "../../utils/http";
+import { getAppBaseURL } from "../../utils/helpers";
 import { useUserData } from "../../utils/useUser";
-import {
-  notifyError,
-  notifyInfo,
-  notifySuccess,
-} from "../core/toast.component";
+import { notifyInfo, notifySuccess } from "../core/toast.component";
 
 export default function BillingBanner() {
   const router = useRouter();
@@ -21,20 +17,8 @@ export default function BillingBanner() {
   }, [payment_success]);
 
   async function startPlan() {
-    try {
-      notifyInfo("Redirecting to checkout...");
-
-      const session = await httpPost({
-        url: `/api/billing/create-checkout-session`,
-        data: {
-          return_url: window?.location?.href,
-        },
-      });
-
-      window.location.href = session.url;
-    } catch (e) {
-      notifyError();
-    }
+    notifyInfo("Redirecting to checkout...");
+    window.location.href = `/api/billing/redirect-to-checkout?return_url=${getAppBaseURL()}/pages`;
   }
 
   if (billingDetails?.has_active_subscription || !billingDetails?.price) {
