@@ -76,7 +76,7 @@ export default function Index({
               {nextPost ? (
                 <Link
                   href={getPostUrl(getPageUrl(page, settings), nextPost)}
-                  className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-400 ml-auto md:ml-0"
+                  className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-400 ml-auto md:ml-0 pl-2 md:pl-0"
                 >
                   {nextPost.title}
                   <ArrowRightIcon
