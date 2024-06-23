@@ -1,4 +1,3 @@
-import { IPost } from "@changes-page/supabase/types/page";
 import { PostTypeBadge } from "@changes-page/ui";
 import classNames from "classnames";
 import dynamic from "next/dynamic";
@@ -9,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import slugify from "slugify";
+import { IPostPublicData } from "../lib/data";
 import Reactions from "./reactions";
 
 const PostDateTime = dynamic(
@@ -23,7 +23,7 @@ export default function Post({
   isPinned = false,
   className = "",
 }: {
-  post: IPost;
+  post: IPostPublicData;
   isPinned: boolean;
   className?: string;
 }) {

@@ -1,6 +1,6 @@
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
-import { Database } from "@changes-page/supabase/types";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { Database } from "@changes-page/supabase/types";
+import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 
 const PAGINATION_LIMIT = 50;
 
@@ -268,7 +268,25 @@ async function fetchPosts(
   return { posts: (posts ?? []) as Array<IPost>, postsCount: postsCount ?? 0 };
 }
 
-async function fetchPostById(postId: string, pageId: string) {
+export type IPostPublicData = Pick<
+  IPost,
+  | "id"
+  | "title"
+  | "content"
+  | "type"
+  | "publication_date"
+  | "updated_at"
+  | "created_at"
+  | "allow_reactions"
+>;
+
+async function fetchPostById(
+  postId: string,
+  pageId: string
+): Promise<{
+  post: IPostPublicData;
+  nextPost: Pick<IPost, "id" | "title"> | null;
+}> {
   const { data: post, error: postError } = await supabaseAdmin
     .from("posts")
     .select(
@@ -279,12 +297,29 @@ async function fetchPostById(postId: string, pageId: string) {
     .eq("status", "published")
     .maybeSingle();
 
-  if (postError) {
+  if (postError || !post) {
     console.error(postError);
     throw new Error("Failed to fetch post");
   }
 
-  return post;
+  const { data: nextPost, error: nextPostError } = await supabaseAdmin
+    .from("posts")
+    .select("id,title")
+    .eq("page_id", String(pageId))
+    .eq("status", "published")
+    .gt("created_at", post.created_at)
+    .order("created_at", { ascending: true })
+    .limit(1);
+
+  if (nextPostError) {
+    console.error("Fetch next post error", nextPostError);
+    throw new Error("Failed to fetch next post");
+  }
+
+  return {
+    post,
+    nextPost: nextPost?.length ? nextPost[0] : null,
+  };
 }
 
 async function isSubscriptionActive(user_id: string): Promise<boolean> {

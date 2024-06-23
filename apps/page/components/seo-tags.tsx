@@ -1,14 +1,15 @@
-import { NextSeo } from "next-seo";
-import Head from "next/head";
-import { useMemo } from "react";
 import {
   IPage,
   IPageSettings,
   IPost,
   PageTypeToLabel,
 } from "@changes-page/supabase/types/page";
+import { NextSeo } from "next-seo";
+import Head from "next/head";
+import { useMemo } from "react";
 import { getOgUrl, getPageUrl } from "../lib/url";
 import logoImage from "../public/logo.png";
+import { IPostPublicData } from "../lib/data";
 
 const SeoTags = ({
   page,
@@ -19,7 +20,7 @@ const SeoTags = ({
 }: {
   page: IPage;
   settings: IPageSettings;
-  posts: IPost[];
+  posts: IPostPublicData[];
   content?: string;
   url?: string | null;
 }) => {

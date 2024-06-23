@@ -1,4 +1,7 @@
-import { ArrowLeftIcon } from "@heroicons/react/solid";
+import { Timeline } from "@changes-page/ui";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
+import { InferGetServerSidePropsType } from "next";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -8,27 +11,20 @@ import PageHeader from "../../../../../components/page-header";
 import Post from "../../../../../components/post";
 import SeoTags from "../../../../../components/seo-tags";
 import SubscribePrompt from "../../../../../components/subscribe-prompt";
-import { Timeline } from "@changes-page/ui";
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import {
   fetchPostById,
   fetchRenderData,
   isSubscriptionActive,
 } from "../../../../../lib/data";
-import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { getPageUrl, getPostUrl } from "../../../../../lib/url";
 
 export default function Index({
   post,
   page,
+  nextPost,
   settings,
   plainTextContent,
-}: {
-  post: IPost;
-  page: IPage;
-  settings: IPageSettings;
-  plainTextContent: string;
-}) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { setTheme } = useTheme();
 
   useEffect(() => {
@@ -65,17 +61,30 @@ export default function Index({
               </ul>
             </div>
 
-            <div className="-mt-px flex w-auto flex-1 ml-2">
+            <div className="-mt-px flex w-auto flex-1 ml-2 justify-between">
               <Link
                 href="/"
                 className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-400"
               >
                 <ArrowLeftIcon
-                  className="mr-3 h-5 w-5 text-gray-400 dark:text-gray-600"
+                  className="mr-2 h-5 w-5 text-gray-400 dark:text-gray-600"
                   aria-hidden="true"
                 />
                 Back to all
               </Link>
+
+              {nextPost ? (
+                <Link
+                  href={getPostUrl(getPageUrl(page, settings), nextPost)}
+                  className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-400"
+                >
+                  {nextPost.title}
+                  <ArrowRightIcon
+                    className="ml-2 h-5 w-5 text-gray-400 dark:text-gray-600"
+                    aria-hidden="true"
+                  />
+                </Link>
+              ) : null}
             </div>
           </div>
         </main>
@@ -118,7 +127,7 @@ export async function getServerSideProps({
     };
   }
 
-  const post = await fetchPostById(postId, String(page.id));
+  const { post, nextPost } = await fetchPostById(postId, String(page.id));
 
   if (!post || !page) {
     return {
@@ -130,6 +139,7 @@ export async function getServerSideProps({
     props: {
       page,
       post,
+      nextPost,
       settings,
       plainTextContent: convertMarkdownToPlainText(post.content),
     },
