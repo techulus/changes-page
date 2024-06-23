@@ -1,5 +1,6 @@
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
+import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import slugify from "slugify";
+import { IPostPublicData } from "./data";
 
 export function getPageUrl(
   page: IPage,
@@ -21,7 +22,10 @@ export function getPageUrl(
   return `https://${page.url_slug}.changes.page`;
 }
 
-export function getPostUrl(pageUrl: string, post: IPost) {
+export function getPostUrl(
+  pageUrl: string,
+  post: Pick<IPostPublicData, "id" | "title">
+) {
   return `${pageUrl}/post/${post.id}/${slugify(post.title, {
     lower: true,
     strict: true,
@@ -31,7 +35,7 @@ export function getPostUrl(pageUrl: string, post: IPost) {
 export function getOgUrl(
   page: IPage,
   settings: IPageSettings,
-  post: IPost | null = null,
+  post: IPostPublicData | null = null,
   content: string = ""
 ) {
   const pageUrl = getPageUrl(page, settings);
