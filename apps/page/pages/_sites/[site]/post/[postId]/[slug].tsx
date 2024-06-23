@@ -61,7 +61,7 @@ export default function Index({
               </ul>
             </div>
 
-            <div className="-mt-px flex w-auto flex-1 ml-2 justify-between">
+            <div className="-mt-px flex flex-col md:flex-row w-auto flex-1 ml-2 justify-between">
               <Link
                 href="/"
                 className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-400"
@@ -76,7 +76,7 @@ export default function Index({
               {nextPost ? (
                 <Link
                   href={getPostUrl(getPageUrl(page, settings), nextPost)}
-                  className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-400"
+                  className="inline-flex items-center pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-400 ml-auto md:ml-0"
                 >
                   {nextPost.title}
                   <ArrowRightIcon
