@@ -308,7 +308,7 @@ async function fetchPostById(
     .eq("page_id", String(pageId))
     .eq("status", "published")
     .lt("created_at", post.created_at)
-    .order("created_at", { ascending: true })
+    .order("created_at", { ascending: false })
     .limit(1);
 
   if (nextPostError) {
