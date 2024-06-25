@@ -27,6 +27,7 @@ export function sanitizeCss(cssString: string) {
     if (
       matches &&
       (matches[1].startsWith("javascript:") ||
+        matches[1].startsWith("data:") ||
         matches[1].startsWith("vbscript:"))
     ) {
       decl.remove();
