@@ -91,7 +91,9 @@ const getBillingStatus = async (
             usage,
           });
         } catch (e) {
-          console.error("Stripe: failed to fetch invoice", e?.code);
+          if (e?.code !== "invoice_upcoming_none") {
+            console.error("Stripe: failed to fetch invoice", e?.code);
+          }
         }
       }
 

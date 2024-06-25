@@ -42,6 +42,7 @@ export default function Post({
     <div
       className={classNames(
         "flex items-center justify-between space-x-4 relative",
+        "cp__post-wrapper",
         className
       )}
     >
@@ -59,12 +60,12 @@ export default function Post({
         <div className="min-w-0 w-full">
           <span className="block">
             <Link href={postUrl}>
-              <h2 className="text-xl font-bold">{post.title}</h2>
+              <h2 className="text-xl font-bold cp__post-title">{post.title}</h2>
             </Link>
           </span>
         </div>
 
-        <div className="prose dark:prose-invert text-gray-900 dark:text-gray-300 break-words">
+        <div className="prose dark:prose-invert text-gray-900 dark:text-gray-300 break-words cp__post-content">
           <ReactMarkdown
             rehypePlugins={[
               rehypeRaw,

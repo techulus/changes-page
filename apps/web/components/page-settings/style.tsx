@@ -2,7 +2,9 @@ import { Database } from "@changes-page/supabase/types";
 import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { Spinner } from "@changes-page/ui";
 import fileExtension from "file-extension";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 import { useFilePicker } from "use-file-picker";
 import { v4 } from "uuid";
 import useStorage from "../../utils/useStorage";
@@ -36,6 +38,16 @@ export default function StyleSettings({
   );
 
   const [colorScheme, setColorScheme] = useState(settings?.color_scheme);
+  const [customCss, setCustomCss] = useState(settings?.custom_css ?? "");
+  const [debouncedCustomCss] = useDebounce(customCss, 1000);
+
+  useEffect(() => {
+    if (settings?.custom_css !== debouncedCustomCss) {
+      updatePageSettings({
+        custom_css: debouncedCustomCss,
+      });
+    }
+  }, [debouncedCustomCss, settings?.custom_css]);
 
   const [
     openLogoFileSelector,
@@ -184,7 +196,13 @@ export default function StyleSettings({
                   <div className="mt-1 flex items-center">
                     <span className="inline-block overflow-hidden bg-gray-100 dark:bg-gray-600 rounded-full">
                       {settings?.page_logo ? (
-                        <img className="h-14 w-14" src={settings?.page_logo} />
+                        <Image
+                          width={56}
+                          height={56}
+                          className="h-14 w-14"
+                          src={settings?.page_logo}
+                          alt="page logo"
+                        />
                       ) : (
                         <svg
                           className="h-12 w-12 text-gray-300"
@@ -235,7 +253,11 @@ export default function StyleSettings({
                   </p>
 
                   {settings?.cover_image ? (
-                    <img className="mt-1" src={settings?.cover_image} />
+                    <img
+                      className="mt-1"
+                      src={settings?.cover_image}
+                      alt="cover image"
+                    />
                   ) : (
                     <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md">
                       <div className="space-y-1 text-center">
@@ -294,7 +316,7 @@ export default function StyleSettings({
                 <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-gray-700 sm:pt-5">
                   <label
                     htmlFor="color_scheme"
-                    className="block text-sm font-medium leading-6  text-gray-900 dark:text-gray-50 sm:pt-1.5"
+                    className="block text-sm font-semibold leading-6  text-gray-900 dark:text-gray-50 sm:pt-1.5"
                   >
                     Color scheme
                   </label>
@@ -320,6 +342,24 @@ export default function StyleSettings({
                       <option value="dark">Dark</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="sm:border-t sm:border-gray-200 dark:sm:border-gray-700 sm:pt-5">
+                  <label className="block text-sm font-semibold text-gray-900 dark:text-gray-50">
+                    Custom CSS
+                  </label>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Add custom CSS to customize the page look and feel.
+                  </p>
+                  <textarea
+                    rows={4}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-800 dark:ring-gray-700 dark:placeholder-gray-500 dark:text-gray-100 font-mono text-xs"
+                    placeholder="Add custom CSS here"
+                    onChange={async (evt) => {
+                      setCustomCss(evt.target.value ?? "");
+                    }}
+                    defaultValue={customCss}
+                  />
                 </div>
               </div>
 
