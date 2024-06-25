@@ -2,14 +2,22 @@ import { Database } from "@changes-page/supabase/types";
 import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { Spinner } from "@changes-page/ui";
 import fileExtension from "file-extension";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 import { useFilePicker } from "use-file-picker";
 import { v4 } from "uuid";
+import usePrefersColorScheme from "../../utils/hooks/usePrefersColorScheme";
 import useStorage from "../../utils/useStorage";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
 import { notifyError } from "../core/toast.component";
 import SwitchComponent from "../forms/switch.component";
+
+const Editor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+});
 
 export default function StyleSettings({
   pageId,
@@ -24,6 +32,7 @@ export default function StyleSettings({
 }) {
   const { user } = useUserData();
   const { uploadFile, deleteFileFromUrl } = useStorage();
+  const appearance = usePrefersColorScheme();
 
   const [uploadingLogo, setUploadingLogoLoading] = useState(false);
   const [deletingPageLogo, setDeletingPageLogo] = useState(false);
@@ -36,6 +45,18 @@ export default function StyleSettings({
   );
 
   const [colorScheme, setColorScheme] = useState(settings?.color_scheme);
+  const [customCss, setCustomCss] = useState(
+    settings?.custom_css ?? "/* Enter custom CSS here */"
+  );
+  const [debouncedCustomCss] = useDebounce(customCss, 1000);
+
+  useEffect(() => {
+    if (settings?.custom_css !== debouncedCustomCss) {
+      updatePageSettings({
+        custom_css: debouncedCustomCss,
+      });
+    }
+  }, [debouncedCustomCss, settings?.custom_css]);
 
   const [
     openLogoFileSelector,
@@ -184,7 +205,13 @@ export default function StyleSettings({
                   <div className="mt-1 flex items-center">
                     <span className="inline-block overflow-hidden bg-gray-100 dark:bg-gray-600 rounded-full">
                       {settings?.page_logo ? (
-                        <img className="h-14 w-14" src={settings?.page_logo} />
+                        <Image
+                          width={56}
+                          height={56}
+                          className="h-14 w-14"
+                          src={settings?.page_logo}
+                          alt="page logo"
+                        />
                       ) : (
                         <svg
                           className="h-12 w-12 text-gray-300"
@@ -235,7 +262,11 @@ export default function StyleSettings({
                   </p>
 
                   {settings?.cover_image ? (
-                    <img className="mt-1" src={settings?.cover_image} />
+                    <img
+                      className="mt-1"
+                      src={settings?.cover_image}
+                      alt="cover image"
+                    />
                   ) : (
                     <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md">
                       <div className="space-y-1 text-center">
@@ -294,7 +325,7 @@ export default function StyleSettings({
                 <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-gray-700 sm:pt-5">
                   <label
                     htmlFor="color_scheme"
-                    className="block text-sm font-medium leading-6  text-gray-900 dark:text-gray-50 sm:pt-1.5"
+                    className="block text-sm font-semibold leading-6  text-gray-900 dark:text-gray-50 sm:pt-1.5"
                   >
                     Color scheme
                   </label>
@@ -320,6 +351,27 @@ export default function StyleSettings({
                       <option value="dark">Dark</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="sm:border-t sm:border-gray-200 dark:sm:border-gray-700 sm:pt-5">
+                  <label className="block text-sm font-semibold text-gray-900 dark:text-gray-50">
+                    Custom CSS
+                  </label>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Add custom CSS to customize the page look and feel.
+                  </p>
+                  <Editor
+                    height="30vh"
+                    defaultLanguage="css"
+                    defaultValue={customCss}
+                    theme={appearance === "dark" ? "vs-dark" : "light"}
+                    onChange={(value) => {
+                      setCustomCss(value ?? "");
+                    }}
+                    options={{
+                      fontSize: 14,
+                    }}
+                  />
                 </div>
               </div>
 

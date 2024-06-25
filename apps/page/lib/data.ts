@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { Database } from "@changes-page/supabase/types";
 import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
+import { sanitizeCss } from "./css";
 
 const PAGINATION_LIMIT = 50;
 
@@ -102,7 +103,7 @@ async function fetchRenderData(
   site: string
 ): Promise<{ page: IPage | null; settings: IPageSettings | null }> {
   const pageSelect = `id,title,description,type,url_slug,user_id`;
-  const settingsSelect = `page_id,page_logo,cover_image,product_url,twitter_url,github_url,instagram_url,facebook_url,linkedin_url,youtube_url,tiktok_url,app_store_url,play_store_url,pinned_post_id,whitelabel,hide_search_engine,email_notifications,rss_notifications,color_scheme`;
+  const settingsSelect = `page_id,page_logo,cover_image,product_url,twitter_url,github_url,instagram_url,facebook_url,linkedin_url,youtube_url,tiktok_url,app_store_url,play_store_url,pinned_post_id,whitelabel,hide_search_engine,email_notifications,rss_notifications,color_scheme,custom_css`;
 
   let page = null,
     settings = null;
@@ -177,6 +178,15 @@ async function fetchRenderData(
       }
 
       settings = settingsForPage;
+    }
+
+    // Sanitize custom css
+    if (settings?.custom_css) {
+      try {
+        settings.custom_css = sanitizeCss(settings.custom_css);
+      } catch (_) {
+        settings.custom_css = "";
+      }
     }
 
     return {
