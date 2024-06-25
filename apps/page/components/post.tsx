@@ -41,8 +41,7 @@ export default function Post({
   return (
     <div
       className={classNames(
-        "flex items-center justify-between space-x-4 relative",
-        "cp__post-wrapper",
+        "flex items-center justify-between space-x-4 relative cp__post-wrapper",
         className
       )}
     >

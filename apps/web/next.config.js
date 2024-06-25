@@ -2,9 +2,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({});
 
 const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' *;
-  style-src 'self' data: 'unsafe-inline' maxcdn.bootstrapcdn.com;
+  style-src 'self' data: 'unsafe-inline' maxcdn.bootstrapcdn.com cdn.jsdelivr.net;
   img-src 'self' * data: blob:;
-  font-src 'self' data: maxcdn.bootstrapcdn.com;
+  font-src 'self' data: maxcdn.bootstrapcdn.com cdn.jsdelivr.net;
   connect-src 'self' wss: *.supabase.co *.changes.page manageprompt.com;
   worker-src 'self' blob:;
   report-to default

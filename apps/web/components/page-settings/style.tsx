@@ -2,16 +2,22 @@ import { Database } from "@changes-page/supabase/types";
 import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { Spinner } from "@changes-page/ui";
 import fileExtension from "file-extension";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useFilePicker } from "use-file-picker";
 import { v4 } from "uuid";
+import usePrefersColorScheme from "../../utils/hooks/usePrefersColorScheme";
 import useStorage from "../../utils/useStorage";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
 import { notifyError } from "../core/toast.component";
 import SwitchComponent from "../forms/switch.component";
+
+const Editor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+});
 
 export default function StyleSettings({
   pageId,
@@ -26,6 +32,7 @@ export default function StyleSettings({
 }) {
   const { user } = useUserData();
   const { uploadFile, deleteFileFromUrl } = useStorage();
+  const appearance = usePrefersColorScheme();
 
   const [uploadingLogo, setUploadingLogoLoading] = useState(false);
   const [deletingPageLogo, setDeletingPageLogo] = useState(false);
@@ -351,14 +358,17 @@ export default function StyleSettings({
                   <p className="text-sm text-gray-500 mb-2">
                     Add custom CSS to customize the page look and feel.
                   </p>
-                  <textarea
-                    rows={4}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-800 dark:ring-gray-700 dark:placeholder-gray-500 dark:text-gray-100 font-mono text-xs"
-                    placeholder="Add custom CSS here"
-                    onChange={async (evt) => {
-                      setCustomCss(evt.target.value ?? "");
-                    }}
+                  <Editor
+                    height="30vh"
+                    defaultLanguage="css"
                     defaultValue={customCss}
+                    theme={appearance === "dark" ? "vs-dark" : "light"}
+                    onChange={(value) => {
+                      setCustomCss(value ?? "");
+                    }}
+                    options={{
+                      fontSize: 14,
+                    }}
                   />
                 </div>
               </div>
