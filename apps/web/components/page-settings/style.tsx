@@ -45,7 +45,9 @@ export default function StyleSettings({
   );
 
   const [colorScheme, setColorScheme] = useState(settings?.color_scheme);
-  const [customCss, setCustomCss] = useState(settings?.custom_css ?? "");
+  const [customCss, setCustomCss] = useState(
+    settings?.custom_css ?? "/* Enter custom CSS here */"
+  );
   const [debouncedCustomCss] = useDebounce(customCss, 1000);
 
   useEffect(() => {
