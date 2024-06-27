@@ -1,9 +1,10 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ArrowLeftIcon, CogIcon } from "@heroicons/react/solid";
+import confetti from "canvas-confetti";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useUserData } from "../../utils/useUser";
 import BillingBanner from "../billing/billing-banner";
@@ -55,6 +56,20 @@ export default function Page({
     },
     [router, backRoute]
   );
+
+  useEffect(() => {
+    if (router.query?.yay && confetti) {
+      try {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.5 },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [router.query?.yay]);
 
   return (
     <>

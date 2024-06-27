@@ -1,3 +1,4 @@
+import { PostStatus } from "@changes-page/supabase/types/page";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -51,6 +52,10 @@ export default function NewPost({
       });
 
       track("PostCreated");
+
+      if (values.status !== PostStatus.draft) {
+        return await router.replace(`${ROUTES.PAGES}/${page_id}?yay=true`);
+      }
 
       return await router.replace(`${ROUTES.PAGES}/${page_id}`);
     } catch (_) {

@@ -203,6 +203,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.1
         version: 0.5.10(tailwindcss@3.4.1)
+      '@types/canvas-confetti':
+        specifier: ^1.6.4
+        version: 1.6.4
       '@upstash/redis':
         specifier: ^1.20.6
         version: 1.28.2
@@ -212,9 +215,12 @@ importers:
       '@vercel/og':
         specifier: ^0.0.20
         version: 0.0.20
+      canvas-confetti:
+        specifier: ^1.9.3
+        version: 1.9.3
       chrono-node:
-        specifier: ^2.5.0
-        version: 2.7.5
+        specifier: ^2.7.6
+        version: 2.7.6
       classnames:
         specifier: ^2.3.1
         version: 2.5.1
@@ -1304,6 +1310,10 @@ packages:
     resolution: {integrity: sha512-SYXOBTjJb05rXa2vl55TTwO40A6wKu0R5i1qQwhJYNDIqaIGF7D0HsLw+pJAyi2OvntlEIVusx3xtbbgSUi6zg==}
     dev: false
 
+  /@types/canvas-confetti@1.6.4:
+    resolution: {integrity: sha512-fNyZ/Fdw/Y92X0vv7B+BD6ysHL4xVU5dJcgzgxLdGbn8O3PezZNIJpml44lKM0nsGur+o/6+NZbZeNTt00U1uA==}
+    dev: false
+
   /@types/codemirror@5.60.15:
     resolution: {integrity: sha512-dTOvwEQ+ouKJ/rE9LT1Ue2hmP6H1mZv5+CCnNWu2qtiOe2LQa9lCprEY20HxiDmV/Bxh+dXjywmy5aKvoGjULA==}
     dependencies:
@@ -1857,6 +1867,10 @@ packages:
     resolution: {integrity: sha512-0CNTVCLZggSh7bc5VkX5WWPWO+cyZbNd07IHIsSXLia/eAq+r836hgk+8BKoEh7949Mda87VUOitx5OddVj64A==}
     dev: false
 
+  /canvas-confetti@1.9.3:
+    resolution: {integrity: sha512-rFfTURMvmVEX1gyXFgn5QMn81bYk70qa0HLzcIOSVEyl57n6o9ItHeBtUSWdvKAPY0xlvBHno4/v3QPrT83q9g==}
+    dev: false
+
   /ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
     dev: false
@@ -1910,8 +1924,8 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /chrono-node@2.7.5:
-    resolution: {integrity: sha512-VJWqFN5rWmXVvXAxOD4i0jX8Tb4cLswaslyaAFhxM45zNXPsZleygPbgiaYBD7ORb9fj07zBgJb0Q6eKL+0iJg==}
+  /chrono-node@2.7.6:
+    resolution: {integrity: sha512-yugKSRLHc6B6kXxm/DwNc94zhaddAjCSO9IOGH3w7NIWNM+gUoLl/2/XLndiw4I+XhU4H2LOhC5Ab2JjS6JWsA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       dayjs: 1.11.10
