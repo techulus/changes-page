@@ -51,7 +51,7 @@ export default function NewPage() {
         url_slug: values.url_slug,
       });
 
-      return await router.push(ROUTES.PAGES);
+      return await router.push(ROUTES.PAGES + "?yay=true");
     } catch (e) {
       notifyError();
       setSaving(false);
