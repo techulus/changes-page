@@ -1,9 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IPost } from "@changes-page/supabase/types/page";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { allowCors } from "../../lib/cors";
 import { fetchRenderData, translateHostToPageIdentifier } from "../../lib/data";
 import { getPageUrl, getPostUrl } from "../../lib/url";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
 
 type IPostWithUrl = Pick<
   IPost,
@@ -35,7 +35,7 @@ async function handler(
       .select("id,title,content,type,publication_date,updated_at,created_at")
       .eq("page_id", String(page?.id))
       .eq("status", "published")
-      .order("created_at", { ascending: false })
+      .order("publication_date", { ascending: false })
       .limit(1);
 
     if (postsError) {

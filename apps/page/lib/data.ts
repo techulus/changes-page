@@ -223,7 +223,7 @@ async function fetchPosts(
         ? Math.min(Number(limit) - 1, PAGINATION_LIMIT)
         : PAGINATION_LIMIT - 1
     )
-    .order("created_at", { ascending: false });
+    .order("publication_date", { ascending: false });
 
   if (pinned_post_id) {
     postsQuery.neq("id", pinned_post_id);
@@ -317,8 +317,8 @@ async function fetchPostById(
     .select("id,title")
     .eq("page_id", String(pageId))
     .eq("status", "published")
-    .lt("created_at", post.created_at)
-    .order("created_at", { ascending: false })
+    .lt("publication_date", post.publication_date)
+    .order("publication_date", { ascending: false })
     .limit(1);
 
   if (nextPostError) {
@@ -356,10 +356,10 @@ async function isSubscriptionActive(user_id: string): Promise<boolean> {
 }
 
 export {
-  PAGINATION_LIMIT,
   fetchPostById,
   fetchPosts,
   fetchRenderData,
   isSubscriptionActive,
+  PAGINATION_LIMIT,
   translateHostToPageIdentifier,
 };
