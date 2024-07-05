@@ -1,7 +1,7 @@
+import { IPost } from "@changes-page/supabase/types/page";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { IPost } from "@changes-page/supabase/types/page";
 import { useUserData } from "../useUser";
 
 const PAGINATION_LIMIT = 5;
@@ -37,7 +37,7 @@ export default function usePagePosts(
       .from("posts")
       .select("*", { count: "exact" })
       .eq("page_id", String(pageId))
-      .order("created_at", { ascending: false })
+      .order("publication_date", { ascending: false })
       .range(0 + offset, PAGINATION_LIMIT - 1 + offset);
 
     if (status) {

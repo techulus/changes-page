@@ -1,3 +1,4 @@
+import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -9,7 +10,6 @@ import PostFormComponent, {
 } from "../../../components/forms/post-form.component";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
-import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import { ROUTES } from "../../../data/routes.data";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
@@ -22,9 +22,7 @@ export async function getServerSideProps({ params, req, res }) {
   const settings = await createOrRetrievePageSettings(user.id, String(page_id));
   const { data: post } = await supabase
     .from("posts")
-    .select(
-      "type,title,status,content,page_id,images_folder,publish_at,allow_reactions,notes,email_notified"
-    )
+    .select("*")
     .eq("id", post_id as string)
     .single();
 
@@ -55,16 +53,12 @@ export default function EditPost({
     setSaving(true);
 
     try {
-      await supabase
-        .from("posts")
-        .update({
-          ...values,
-          publication_date:
-            values.status == PostStatus.published
-              ? new Date().toISOString()
-              : null,
-        })
-        .match({ id: post_id });
+      const newPost = { ...values };
+      if (newPost.status == PostStatus.published && !newPost.publication_date) {
+        newPost.publication_date = new Date().toISOString();
+      }
+
+      await supabase.from("posts").update(newPost).match({ id: post_id });
 
       return await router.push(`${ROUTES.PAGES}/${page_id}`);
     } catch (e) {
