@@ -8,17 +8,22 @@ import { useDebounce } from "use-debounce";
 
 export default function DateTimePromptDialog({
   label,
+  description,
   open,
   setOpen,
   initialValue = null,
   confirmCallback,
+  disablePastDate = false,
 }) {
   const cancelButtonRef = useRef(null);
 
   const [naturalDateString, setNaturalDateString] = useState("");
 
   const [value, setValue] = useState(initialValue ?? null);
-  const disabled = useMemo(() => new Date(value) < new Date(), [value]);
+  const disabled = useMemo(
+    () => disablePastDate && new Date(value) < new Date(),
+    [value, disablePastDate]
+  );
 
   const [naturalDateInput] = useDebounce(naturalDateString, 500);
 
@@ -91,20 +96,11 @@ export default function DateTimePromptDialog({
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Post will be automatically published at the specified
-                        date & time. You can re-schedule it later.
+                        {description}
                       </p>
                     </div>
 
                     <div className="mt-3">
-                      <div className="flex justify-between">
-                        <label
-                          htmlFor="natural_date_string"
-                          className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-                        >
-                          Publish at
-                        </label>
-                      </div>
                       <div className="mt-1">
                         <input
                           type="text"

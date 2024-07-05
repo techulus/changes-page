@@ -49,6 +49,7 @@ export const NewPostSchema = object().shape({
   page_id: string(),
   images_folder: string(),
   publish_at: string().optional().nullable(),
+  publication_date: string().optional().nullable(),
   allow_reactions: boolean().optional().nullable(),
   notes: string().optional().nullable(),
 });
@@ -77,7 +78,8 @@ export default function PostFormComponent({
   const [promptTitleSuggestions, setPromptTitleSuggestions] = useState(false);
   const [promptExpandConcept, setPromptExpandConcept] = useState(false);
   const [promptProofRead, setPromptProofRead] = useState(false);
-  //
+  const [customPublishDate, setCustomPublishDate] = useState(false);
+
   // For email notifications
   const [emailNotified, setEmailNotified] = useState(false);
   // Internal notes
@@ -127,6 +129,7 @@ export default function PostFormComponent({
       page_id: "",
       images_folder: "",
       publish_at: null,
+      publication_date: null,
       allow_reactions: true,
       notes: "",
     },
@@ -547,6 +550,37 @@ export default function PostFormComponent({
             </div>
           </div>
 
+          <div className="mt-2 shadow sm:rounded-md sm:overflow-hidden">
+            <div className="px-4 py-5 bg-white dark:bg-gray-950 sm:p-6 flex flex-row justify-between items-center">
+              <div className="flex flex-col">
+                <label className="text-sm font-semibold text-gray-900 dark:text-gray-50">
+                  Custom Publication Date
+                </label>
+                <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">
+                  This date will be used for the public page and RSS feed.
+                </span>
+              </div>
+
+              <button
+                type="button"
+                className="relative inline-flex items-center py-1 px-1 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={() => setCustomPublishDate(true)}
+              >
+                <CalendarIcon
+                  className="h-5 w-5 text-white"
+                  aria-hidden="true"
+                />
+                <span className="ml-3">
+                  {formik.values.publication_date
+                    ? DateTime.fromISO(
+                        formik.values.publication_date
+                      ).toNiceFormat()
+                    : "Set custom date"}
+                </span>
+              </button>
+            </div>
+          </div>
+
           <div className="mt-6 sm:overflow-hidden shadow sm:rounded-md border border-slate-300 dark:border-slate-600">
             <div className="relative bg-slate-50 dark:bg-slate-900">
               {!editNotes ? (
@@ -601,7 +635,23 @@ export default function PostFormComponent({
       </form>
 
       <DateTimePromptDialog
+        label="Custom Publication Date"
+        description="This date will be used for the public page and RSS feed."
+        open={customPublishDate}
+        setOpen={setCustomPublishDate}
+        initialValue={formik.values.publication_date}
+        confirmCallback={(publication_date: string) => {
+          formik.setFieldValue("publication_date", publication_date);
+          formik.setFieldValue("status", PostStatus.published);
+          setCustomPublishDate(false);
+          track("AddCustomPublishDate");
+        }}
+      />
+
+      <DateTimePromptDialog
+        disablePastDate
         label="Schedule post"
+        description="Post will be automatically published at the specified date & time. You can re-schedule it later."
         open={promptSchedule}
         setOpen={setPromptSchedule}
         initialValue={formik.values.publish_at}

@@ -1,0 +1,1 @@
+update posts set publication_date = created_at where publication_date is null and status = 'published';
