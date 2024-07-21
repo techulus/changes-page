@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 const font = fetch(
   new URL(
-    "../../../assets/Mona-Sans-SemiBoldWide.ttf",
+    "../../../public/fonts/Geist/Geist-SemiBold.otf",
     import.meta.url
   ).toString()
 ).then((res) => res.arrayBuffer());
@@ -83,7 +83,7 @@ export default async function handler(req: NextRequest) {
       height: 630,
       fonts: [
         {
-          name: "Mona-Sans",
+          name: "Geist",
           data: fontData,
           style: "normal",
         },
