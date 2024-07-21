@@ -6,7 +6,7 @@ export const config = {
 };
 
 const font = fetch(
-  new URL("../../assets/Mona-Sans-SemiBoldWide.ttf", import.meta.url).toString()
+  new URL("../../public/fonts/Geist-SemiBold.otf", import.meta.url).toString()
 ).then((res) => res.arrayBuffer());
 
 export default async function handler(req: NextRequest) {
@@ -76,7 +76,7 @@ export default async function handler(req: NextRequest) {
       height: 630,
       fonts: [
         {
-          name: "Mona-Sans",
+          name: "Geist",
           data: fontData,
           style: "normal",
         },
