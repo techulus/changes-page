@@ -1,4 +1,4 @@
-import arcjet, { fixedWindow, validateEmail } from "@arcjet/next";
+import arcjet, { protectSignup } from "@arcjet/next";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   fetchRenderData,
@@ -24,16 +24,21 @@ async function handler(
     if (process.env.ARCJET_KEY) {
       const aj = arcjet({
         key: process.env.ARCJET_KEY,
-        characteristics: ["ip.src"],
         rules: [
-          validateEmail({
-            mode: "LIVE",
-            block: ["DISPOSABLE", "INVALID", "NO_MX_RECORDS"],
-          }),
-          fixedWindow({
-            mode: "LIVE",
-            window: "60s",
-            max: 5,
+          protectSignup({
+            email: {
+              mode: "LIVE",
+              block: ["DISPOSABLE", "INVALID", "NO_MX_RECORDS"],
+            },
+            bots: {
+              mode: "LIVE",
+              block: ["AUTOMATED"],
+            },
+            rateLimit: {
+              mode: "LIVE",
+              interval: "1m",
+              max: 5,
+            },
           }),
         ],
       });
