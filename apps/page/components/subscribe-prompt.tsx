@@ -1,12 +1,12 @@
+import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
+import { Spinner } from "@changes-page/ui";
 import { CheckCircleIcon, InformationCircleIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { useFormik } from "formik";
 import { useMemo, useState } from "react";
 import * as Yup from "yup";
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { getPageUrl } from "../lib/url";
 import { httpPost } from "../utils/http";
-import { Spinner } from "@changes-page/ui";
 
 export default function SubscribePrompt({
   settings,
@@ -201,24 +201,6 @@ export default function SubscribePrompt({
               value={formik.values.email}
               onChange={formik.handleChange}
             />
-
-            {formik.errors.email && formik.touched.email && (
-              <div className="rounded-md bg-red-50 dark:bg-red-900 p-2">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <InformationCircleIcon
-                      className="h-5 w-5 text-red-400"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div className="ml-3 flex-1 md:flex md:justify-between">
-                    <p className="text-sm text-red-700 dark:text-red-200">
-                      {formik.errors.email}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
 
             <div className="sm:flex-shrink-0">
               <button

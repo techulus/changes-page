@@ -1,3 +1,4 @@
+import arcjet, { fixedWindow, validateEmail } from "@arcjet/next";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   fetchRenderData,
@@ -18,6 +19,39 @@ async function handler(
     if (!email) {
       res.status(400).json({ ok: false });
       return;
+    }
+
+    if (process.env.ARCJET_KEY) {
+      const aj = arcjet({
+        key: process.env.ARCJET_KEY,
+        characteristics: ["ip.src"],
+        rules: [
+          validateEmail({
+            mode: "LIVE",
+            block: ["DISPOSABLE", "INVALID", "NO_MX_RECORDS"],
+          }),
+          fixedWindow({
+            mode: "LIVE",
+            window: "60s",
+            max: 5,
+          }),
+        ],
+      });
+
+      const decision = await aj.protect(req, {
+        email,
+      });
+
+      if (decision.isDenied()) {
+        console.log(
+          "notifications/email: [Validation Error]",
+          email,
+          decision.reason
+        );
+        return res
+          .status(400)
+          .json({ ok: false, message: "Please provide a valid email address" });
+      }
     }
 
     const { domain, page: url_slug } = translateHostToPageIdentifier(hostname);
