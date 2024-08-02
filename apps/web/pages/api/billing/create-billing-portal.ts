@@ -1,5 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { IErrorResponse } from "@changes-page/supabase/types/api";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { apiRateLimiter } from "../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createOrRetrieveCustomer } from "../../../utils/useDatabase";
 import { getAppBaseURL } from "./../../../utils/helpers";
@@ -10,6 +11,7 @@ const createBillingSession = async (
   res: NextApiResponse<{ url: string } | IErrorResponse>
 ) => {
   if (req.method === "POST") {
+    await apiRateLimiter(req, res);
     const { return_url } = req.body;
 
     try {

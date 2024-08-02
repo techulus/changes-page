@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { Parser } from "@json2csv/plainjs";
 import { NextApiRequest, NextApiResponse } from "next";
+import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
 
 const getSubscribersExportCsv = async (
@@ -9,6 +10,7 @@ const getSubscribersExportCsv = async (
 ) => {
   if (req.method === "GET") {
     try {
+      await apiRateLimiter(req, res);
       const { user } = await getSupabaseServerClient({ req, res });
 
       const { page_id } = req.query;

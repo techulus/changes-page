@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
 
 async function checkDomain(req: NextApiRequest, res: NextApiResponse) {
+  await apiRateLimiter(req, res);
   const { user } = await getSupabaseServerClient({ req, res });
 
   const { domain } = req.query;
