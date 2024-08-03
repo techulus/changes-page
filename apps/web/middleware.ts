@@ -3,7 +3,6 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  console.log("middleware check", req.nextUrl.pathname);
   // We need to create a response and hand it to the supabase client to be able to modify the response headers.
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req, res });

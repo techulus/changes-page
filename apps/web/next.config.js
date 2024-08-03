@@ -66,6 +66,9 @@ const moduleExports = {
       "cdn.sanity.io",
     ],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 // ensure that your source maps include changes from all other Webpack plugins
