@@ -158,6 +158,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@arcjet/next':
+        specifier: 1.0.0-alpha.20
+        version: 1.0.0-alpha.20(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0)(next@14.1.0)
       '@changes-page/supabase':
         specifier: workspace:*
         version: link:../../packages/supabase
@@ -209,9 +212,6 @@ importers:
       '@types/canvas-confetti':
         specifier: ^1.6.4
         version: 1.6.4
-      '@upstash/redis':
-        specifier: ^1.20.6
-        version: 1.28.2
       '@vercel/analytics':
         specifier: ^1.0.1
         version: 1.1.2
@@ -352,7 +352,7 @@ importers:
         specifier: ^3.0.15
         version: 3.4.1
       typescript:
-        specifier: ^4.9.4
+        specifier: ^4
         version: 4.9.5
 
   packages/supabase:
@@ -1647,12 +1647,6 @@ packages:
       '@typescript-eslint/types': 6.19.1
       eslint-visitor-keys: 3.4.3
 
-  /@upstash/redis@1.28.2:
-    resolution: {integrity: sha512-e4HmmCji6kE6UnriU92sAVGLQcRYAB4fXSPXls08cjW7zdE/wFaDfhAGi1/T4/wUN50bAy/lpHwW4bMkI2EAcw==}
-    dependencies:
-      crypto-js: 4.2.0
-    dev: false
-
   /@vercel/analytics@1.1.2:
     resolution: {integrity: sha512-CodhkLCQ/EHzjX8k+Qg+OzTBY0UadykrcfolfSOJVZZY/ZJM5nbhztm9KdbYvMfqKlasAr1+OYy0ThZnDA/MYA==}
     dependencies:
@@ -2211,10 +2205,6 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
-
-  /crypto-js@4.2.0:
-    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
-    dev: false
 
   /css-b64-images@0.2.5:
     resolution: {integrity: sha512-TgQBEdP07adhrDfXvI5o6bHGukKBNMzp2Ngckc/6d09zpjD2gc1Hl3Ca1CKgb8FXjHi88+Phv2Uegs2kTL4zjg==}

@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getAppBaseURL } from "../../../utils/helpers";
+import { apiRateLimiter } from "../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import {
   createOrRetrieveCustomer,
@@ -13,6 +14,7 @@ const redirectToCheckout = async (
   res: NextApiResponse
 ) => {
   if (req.method === "GET") {
+    await apiRateLimiter(req, res);
     const { return_url } = req.query;
 
     try {
