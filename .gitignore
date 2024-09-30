@@ -33,8 +33,9 @@ yarn-error.log*
 # vercel
 .vercel
 
-# .env*
+.env*
 .flaskenv*
+!.env.example
 !.env.project
 !.env.vault
 

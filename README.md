@@ -54,13 +54,19 @@ If you want to learn more about this project or have any questions, send us an e
 
    From `apps/web` and `apps/page`, you will find .env.example. Create your own copy.
 
-4. Setup your Supabase instance and add the credentials.
+4. Setup your Supabase instance and add the credentials to your .env files
 
-5. Start the development server
+5. Run the build command
+
+   ```sh
+   pnpm build
+   ```
+
+6. Start the development server
 
    ```sh
     pnpm dev
    ```
 
-6. Open [http://localhost:3000](http://localhost:3000) with your browser to see
+7. Open [http://localhost:3000](http://localhost:3000) with your browser to see
    the result.
