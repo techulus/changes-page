@@ -35,6 +35,7 @@ yarn-error.log*
 
 .env*
 .flaskenv*
+!.env.example
 !.env.project
 !.env.vault
 
