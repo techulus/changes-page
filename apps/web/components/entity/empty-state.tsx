@@ -123,11 +123,11 @@ export const NewPageOnboarding = ({
 
   return (
     <div className="max-w-lg mx-auto px-4 py-16 md:py-28">
-      <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
         Welcome to your new page
       </h2>
       <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-        Get started by setting up your page or write your first post.
+        Get started by setting up your page.
       </p>
       <ul
         role="list"
