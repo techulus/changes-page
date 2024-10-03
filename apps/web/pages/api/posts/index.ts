@@ -16,6 +16,7 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
       publish_at,
       notes,
       allow_reactions,
+      publication_date,
     } = req.body;
 
     try {
@@ -42,7 +43,8 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
         images_folder,
         publish_at,
         publication_date:
-          status === PostStatus.published ? new Date().toISOString() : null,
+          publication_date ??
+          (status === PostStatus.published ? new Date().toISOString() : null),
         notes: notes ?? "",
         allow_reactions: allow_reactions ?? false,
       });
