@@ -99,7 +99,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const { page, settings } = await fetchRenderData(site);
   const { posts, postsCount } = await fetchPosts(String(page?.id), {
-    limit,
+    limit: Number(limit ?? 25),
     pinned_post_id: settings?.pinned_post_id,
   });
 
