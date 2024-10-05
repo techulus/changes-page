@@ -40,8 +40,4 @@ function FourOhFour() {
   );
 }
 
-FourOhFour.getInitialProps = () => {
-  return { statusCode: 404 };
-};
-
 export default FourOhFour;

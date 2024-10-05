@@ -186,13 +186,7 @@ export async function getServerSideProps({
 
   if (!page || !settings || !(await isSubscriptionActive(page?.user_id))) {
     return {
-      props: {
-        page,
-        settings,
-        posts: [],
-        // Returning notFound doesn't work with ISR, hence the hack
-        notFound: true,
-      },
+      notFound: true,
     };
   }
 
