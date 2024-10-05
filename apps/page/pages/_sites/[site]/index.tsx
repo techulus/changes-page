@@ -1,3 +1,5 @@
+import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
+import { Timeline } from "@changes-page/ui";
 import classNames from "classnames";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -6,8 +8,6 @@ import PageHeader from "../../../components/page-header";
 import Post from "../../../components/post";
 import SeoTags from "../../../components/seo-tags";
 import SubscribePrompt from "../../../components/subscribe-prompt";
-import { Timeline } from "@changes-page/ui";
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import {
   BLACKLISTED_SLUGS,
   fetchPosts,
@@ -156,14 +156,14 @@ export default function Index({
   );
 }
 
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-}
+// export async function getStaticPaths() {
+//   return {
+//     paths: [],
+//     fallback: "blocking",
+//   };
+// }
 
-export async function getStaticProps({
+export async function getServerSideProps({
   params: { site },
 }: {
   params: { site: string };
@@ -210,6 +210,5 @@ export async function getStaticProps({
       postsCount,
       settings,
     },
-    revalidate: 5,
   };
 }
