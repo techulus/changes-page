@@ -14,16 +14,13 @@ import {
   fetchRenderData,
   isSubscriptionActive,
 } from "../../../lib/data";
-import FourOhFour from "../../404";
 
 export default function Index({
-  notFound,
   posts: initialPosts,
   page,
   postsCount,
   settings,
 }: {
-  notFound: boolean;
   page: IPage;
   settings: IPageSettings;
   posts: IPost[];
@@ -68,10 +65,6 @@ export default function Index({
     },
     [page]
   );
-
-  if (notFound || !page || !settings) {
-    return <FourOhFour />;
-  }
 
   return (
     <>
