@@ -50,7 +50,8 @@ export const NewPostSchema = object().shape({
   images_folder: string(),
   publish_at: string().optional().nullable(),
   publication_date: string().optional().nullable(),
-  allow_reactions: boolean().optional().nullable(),
+  allow_reactions: boolean(),
+  email_notified: boolean(),
   notes: string().optional().nullable(),
 });
 
@@ -80,18 +81,13 @@ export default function PostFormComponent({
   const [promptProofRead, setPromptProofRead] = useState(false);
   const [customPublishDate, setCustomPublishDate] = useState(false);
 
-  // For email notifications
-  const [emailNotified, setEmailNotified] = useState(false);
   // Internal notes
   const [editNotes, setEditNotes] = useState(false);
 
   const publishingOptions = useMemo(
     () => [
       {
-        name:
-          settings?.email_notifications && !emailNotified
-            ? "Publish & email"
-            : "Publish",
+        name: "Publish",
         description:
           "This post will be published and can be viewed on the page.",
         value: PostStatus.published,
@@ -108,7 +104,7 @@ export default function PostFormComponent({
         value: PostStatus.draft,
       },
     ],
-    [settings?.email_notifications, emailNotified]
+    []
   );
 
   const PostStatusToAction = useMemo(
@@ -131,6 +127,7 @@ export default function PostFormComponent({
       publish_at: null,
       publication_date: null,
       allow_reactions: true,
+      email_notified: false,
       notes: "",
     },
     validationSchema: NewPostSchema,
@@ -144,7 +141,6 @@ export default function PostFormComponent({
       for (let key in post) {
         formik.setFieldValue(key, post[key]);
       }
-      setEmailNotified(post.email_notified ?? false);
     } else {
       formik.setFieldValue("page_id", pageId);
       formik.setFieldValue("images_folder", v4());
@@ -216,7 +212,7 @@ export default function PostFormComponent({
                     Add a label{" "}
                   </Listbox.Label>
                   <div className="relative">
-                    <Listbox.Button className="relative p-0">
+                    <Listbox.Button className="relative p-0 pl-1 scale-110">
                       <PostTypeBadge
                         type={formik.values.type ?? PostType.fix}
                       />
@@ -537,7 +533,22 @@ export default function PostFormComponent({
             </p>
           </div>
 
-          <div className="mt-6 shadow sm:rounded-md sm:overflow-hidden">
+          {settings?.email_notifications && !(post?.email_notified ?? false) ? (
+            <div className="mt-4 shadow sm:rounded-md sm:overflow-hidden">
+              <div className="px-4 py-5 bg-white dark:bg-gray-950 space-y-6 sm:p-6">
+                <SwitchComponent
+                  title="Email Notifications"
+                  message="Notify subscribers about this post"
+                  enabled={!formik.values.email_notified}
+                  onChange={(v: boolean) => {
+                    formik.setFieldValue("email_notified", !v);
+                  }}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          <div className="mt-2 shadow sm:rounded-md sm:overflow-hidden">
             <div className="px-4 py-5 bg-white dark:bg-gray-950 space-y-6 sm:p-6">
               <SwitchComponent
                 title="Reactions"

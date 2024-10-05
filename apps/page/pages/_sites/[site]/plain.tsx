@@ -5,6 +5,7 @@ import {
   PostTypeToLabel,
 } from "@changes-page/supabase/types/page";
 import { DateTime } from "@changes-page/utils";
+import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
@@ -82,10 +83,12 @@ export default function Index({
   );
 }
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const hostname = context?.req?.headers?.host;
   const { limit } = context?.query;
-  const { domain, page: url_slug } = translateHostToPageIdentifier(hostname);
+  const { domain, page: url_slug } = translateHostToPageIdentifier(
+    hostname ?? ""
+  );
   const site = url_slug || domain;
 
   console.log("handle site ->", site);
@@ -96,7 +99,7 @@ export async function getServerSideProps(context: any) {
 
   const { page, settings } = await fetchRenderData(site);
   const { posts, postsCount } = await fetchPosts(String(page?.id), {
-    limit,
+    limit: Number(limit ?? 25),
     pinned_post_id: settings?.pinned_post_id,
   });
 

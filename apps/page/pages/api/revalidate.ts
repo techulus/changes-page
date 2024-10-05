@@ -9,6 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{ revalidated: boolean } | { message: string } | string>
 ) {
+  return res.json({ revalidated: true });
   const { secret } = req.query;
   const { path } = req.body;
 
