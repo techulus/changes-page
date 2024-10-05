@@ -16,6 +16,7 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
       publish_at,
       notes,
       allow_reactions,
+      email_notified,
       publication_date,
     } = req.body;
 
@@ -47,6 +48,7 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
           (status === PostStatus.published ? new Date().toISOString() : null),
         notes: notes ?? "",
         allow_reactions: allow_reactions ?? false,
+        email_notified: email_notified ?? false,
       });
 
       return res.status(201).json({ post });
