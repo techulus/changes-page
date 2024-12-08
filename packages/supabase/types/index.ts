@@ -152,13 +152,6 @@ export type Database = {
             referencedRelation: "pages"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "page_settings_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       page_views: {
@@ -236,15 +229,7 @@ export type Database = {
           url_slug?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "pages_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       post_reactions: {
         Row: {
@@ -303,6 +288,7 @@ export type Database = {
           publication_date: string | null
           publish_at: string | null
           status: Database["public"]["Enums"]["post_status"]
+          tags: string[]
           title: string
           type: Database["public"]["Enums"]["post_type"]
           updated_at: string
@@ -320,6 +306,7 @@ export type Database = {
           publication_date?: string | null
           publish_at?: string | null
           status: Database["public"]["Enums"]["post_status"]
+          tags?: string[]
           title: string
           type: Database["public"]["Enums"]["post_type"]
           updated_at?: string
@@ -337,6 +324,7 @@ export type Database = {
           publication_date?: string | null
           publish_at?: string | null
           status?: Database["public"]["Enums"]["post_status"]
+          tags?: string[]
           title?: string
           type?: Database["public"]["Enums"]["post_type"]
           updated_at?: string
@@ -348,13 +336,6 @@ export type Database = {
             columns: ["page_id"]
             isOneToOne: false
             referencedRelation: "pages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "posts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -384,15 +365,7 @@ export type Database = {
           stripe_subscription?: Json | null
           stripe_subscription_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -547,4 +520,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
