@@ -4,6 +4,7 @@ import {
   IPost,
   PostStatus,
   PostStatusToLabel,
+  PostType,
 } from "@changes-page/supabase/types/page";
 import { PostDateTime, PostTypeBadge } from "@changes-page/ui";
 import { Menu } from "@headlessui/react";
@@ -80,7 +81,11 @@ export function Post({
               <PostDateTime publishedAt={publishedAt} startWithFullDate />
 
               <div className="flex items-center -mt-0.5">
-                <PostTypeBadge type={post?.type} />
+                {(post?.tags ?? []).map((tag: PostType) => (
+                  <div key={tag} className="ml-2">
+                    <PostTypeBadge type={tag} />
+                  </div>
+                ))}
                 {settings?.pinned_post_id === post.id && (
                   <PostTypeBadge type="pinned" className="ml-2" />
                 )}

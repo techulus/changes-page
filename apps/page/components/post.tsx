@@ -1,3 +1,4 @@
+import { PostType } from "@changes-page/supabase/types/page";
 import { PostTypeBadge } from "@changes-page/ui";
 import classNames from "classnames";
 import dynamic from "next/dynamic";
@@ -51,7 +52,11 @@ export default function Post({
           <PostDateTime publishedAt={publishedAt} />
 
           <div className="flex items-center -mt-0.5">
-            <PostTypeBadge type={post?.type} />
+            {(post?.tags ?? []).map((tag) => (
+              <div key={tag} className="ml-2">
+                <PostTypeBadge type={tag as PostType} />
+              </div>
+            ))}
             {isPinned && <PostTypeBadge type="pinned" className="ml-2" />}
           </div>
         </span>

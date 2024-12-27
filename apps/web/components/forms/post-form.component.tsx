@@ -19,7 +19,7 @@ import { useFormik } from "formik";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { v4 } from "uuid";
-import { InferType, boolean, mixed, object, string } from "yup";
+import { InferType, array, boolean, mixed, object, string } from "yup";
 import { track } from "../../utils/analytics";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton } from "../core/buttons.component";
@@ -40,9 +40,9 @@ export const NewPostSchema = object().shape({
     .required("Content cannot be empty")
     .min(2, "Content too Short!")
     .max(9669, "Content too Long!"),
-  type: mixed<PostType>()
-    .oneOf(Object.values(PostType))
-    .required("Enter valid type"),
+  tags: array()
+    .of(mixed<PostType>().oneOf(Object.values(PostType)))
+    .required("Enter valid tags"),
   status: mixed<PostStatus>()
     .oneOf(Object.values(PostStatus))
     .required("Enter valid status"),
@@ -120,7 +120,7 @@ export default function PostFormComponent({
     initialValues: {
       title: "",
       content: "",
-      type: Object.keys(PostType)[0] as PostType,
+      tags: [Object.keys(PostType)[0]] as PostType[],
       status: PostStatus.published,
       page_id: "",
       images_folder: "",
@@ -201,21 +201,29 @@ export default function PostFormComponent({
           <div className="overflow-hidden md:rounded-md md:border border-gray-300 dark:border-gray-700 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
             <Listbox
               as="div"
-              value={formik.values.type}
-              onChange={(type) => formik.setFieldValue("type", type)}
+              multiple
+              value={formik.values.tags}
+              onChange={(tags) => {
+                formik.setFieldValue("tags", tags);
+                if (!tags.length) {
+                  formik.setFieldValue("tags", [Object.keys(PostType)[0]]);
+                }
+              }}
               className="flex-shrink-0 bg-white dark:bg-gray-900 p-2"
             >
-              {({ open }) => (
+              {({ open, value }) => (
                 <>
                   <Listbox.Label className="sr-only">
                     {" "}
                     Add a label{" "}
                   </Listbox.Label>
                   <div className="relative">
-                    <Listbox.Button className="relative p-0 pl-1 scale-110">
-                      <PostTypeBadge
-                        type={formik.values.type ?? PostType.fix}
-                      />
+                    <Listbox.Button className="relative p-0 pl-1 scale-110 w-auto text-left">
+                      {value.map((tag: PostType) => (
+                        <div key={tag} className="inline-block ml-2">
+                          <PostTypeBadge type={tag} />
+                        </div>
+                      ))}
                     </Listbox.Button>
 
                     <Transition
@@ -241,6 +249,12 @@ export default function PostFormComponent({
                           >
                             <div className="flex items-center">
                               <span className="block truncate font-medium">
+                                {value.includes(label) ? (
+                                  <CheckIcon
+                                    className="h-5 w-5 inline mr-2"
+                                    aria-hidden="true"
+                                  />
+                                ) : null}
                                 {PostTypeToLabel[label]}
                               </span>
                             </div>
