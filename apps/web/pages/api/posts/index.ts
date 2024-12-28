@@ -10,7 +10,6 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
       page_id,
       title,
       content,
-      type,
       tags,
       status,
       images_folder,
@@ -40,7 +39,6 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
         page_id,
         title,
         content,
-        type: type ?? tags[0], // To be removed
         tags,
         status,
         images_folder,
