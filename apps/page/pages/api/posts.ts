@@ -21,7 +21,7 @@ async function handler(
   try {
     const { data: posts } = await supabaseAdmin
       .from("posts")
-      .select("id,title,content,type,publication_date,updated_at,created_at")
+      .select("id,title,content,tags,publication_date,updated_at,created_at")
       .eq("page_id", String(page_id))
       .eq("status", "published")
       .range(Number(offset), Number(PAGINATION_LIMIT - 1 + Number(offset)))
