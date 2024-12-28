@@ -290,7 +290,6 @@ export type Database = {
           status: Database["public"]["Enums"]["post_status"]
           tags: string[]
           title: string
-          type: Database["public"]["Enums"]["post_type"]
           updated_at: string
           user_id: string
         }
@@ -308,7 +307,6 @@ export type Database = {
           status: Database["public"]["Enums"]["post_status"]
           tags?: string[]
           title: string
-          type: Database["public"]["Enums"]["post_type"]
           updated_at?: string
           user_id: string
         }
@@ -326,7 +324,6 @@ export type Database = {
           status?: Database["public"]["Enums"]["post_status"]
           tags?: string[]
           title?: string
-          type?: Database["public"]["Enums"]["post_type"]
           updated_at?: string
           user_id?: string
         }
