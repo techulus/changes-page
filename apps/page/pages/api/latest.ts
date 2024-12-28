@@ -7,7 +7,7 @@ import { getPageUrl, getPostUrl } from "../../lib/url";
 
 type IPostWithUrl = Pick<
   IPost,
-  "id" | "title" | "content" | "type" | "created_at"
+  "id" | "title" | "content" | "tags" | "created_at"
 > & { url: string };
 
 async function handler(
@@ -32,7 +32,7 @@ async function handler(
     // fetch latest post for page
     const { data, error: postsError } = await supabaseAdmin
       .from("posts")
-      .select("id,title,content,type,publication_date,updated_at,created_at")
+      .select("id,title,content,tags,publication_date,updated_at,created_at")
       .eq("page_id", String(page?.id))
       .eq("status", "published")
       .order("publication_date", { ascending: false })

@@ -70,6 +70,9 @@ export const BLACKLISTED_SLUGS = [
   "press-kit",
 ];
 
+const postSelectParams =
+  "id,title,content,tags,publication_date,updated_at,created_at,allow_reactions";
+
 function translateHostToPageIdentifier(host: string): {
   page: string | null;
   domain: string | null;
@@ -209,12 +212,9 @@ async function fetchPosts(
 ): Promise<{ posts: IPost[]; postsCount: number }> {
   const postsQuery = supabaseAdmin
     .from("posts")
-    .select(
-      "id,title,content,type,publication_date,updated_at,created_at,allow_reactions",
-      {
-        count: "exact",
-      }
-    )
+    .select(postSelectParams, {
+      count: "exact",
+    })
     .eq("page_id", String(pageId))
     .eq("status", "published")
     .range(
@@ -242,9 +242,7 @@ async function fetchPosts(
     // Get pinned post
     const { data: pinnedPost, error: pinnedPostError } = await supabaseAdmin
       .from("posts")
-      .select(
-        "id,title,content,type,publication_date,updated_at,created_at,allow_reactions"
-      )
+      .select(postSelectParams)
       .eq("id", pinned_post_id)
       .eq("status", "published")
       .maybeSingle();
@@ -283,7 +281,7 @@ export type IPostPublicData = Pick<
   | "id"
   | "title"
   | "content"
-  | "type"
+  | "tags"
   | "publication_date"
   | "updated_at"
   | "created_at"
@@ -299,9 +297,7 @@ async function fetchPostById(
 }> {
   const { data: post, error: postError } = await supabaseAdmin
     .from("posts")
-    .select(
-      "id,title,content,type,publication_date,updated_at,created_at,allow_reactions"
-    )
+    .select(postSelectParams)
     .eq("id", String(postId))
     .eq("page_id", String(pageId))
     .eq("status", "published")

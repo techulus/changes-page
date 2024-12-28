@@ -2,6 +2,7 @@ import {
   IPage,
   IPageSettings,
   IPost,
+  PostType,
   PostTypeToLabel,
 } from "@changes-page/supabase/types/page";
 import { DateTime } from "@changes-page/utils";
@@ -61,7 +62,10 @@ export default function Index({
                 <h2 className="post-title text-xl font-bold">{post.title}</h2>
 
                 <div className="min-w-0 w-full">
-                  {PostTypeToLabel[post?.type]},{" "}
+                  {(post.tags ?? [])
+                    .map((tag) => PostTypeToLabel[tag as PostType])
+                    .join(", ")}
+                  {" | "}
                   <span className="inline-flex text-sm space-x-2 whitespace-nowrap">
                     <time dateTime="2020-09-20" suppressHydrationWarning>
                       {DateTime.fromISO(

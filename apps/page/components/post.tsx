@@ -1,3 +1,4 @@
+import { PostType } from "@changes-page/supabase/types/page";
 import { PostTypeBadge } from "@changes-page/ui";
 import classNames from "classnames";
 import dynamic from "next/dynamic";
@@ -47,11 +48,15 @@ export default function Post({
     >
       <div className="absolute top-3 ml-[-20px] h-[0.0725rem] w-3.5 bg-gray-700 dark:bg-gray-400"></div>
       <div className="min-w-0 w-full space-y-3">
-        <span className="inline-flex text-sm space-x-2 whitespace-nowrap text-gray-500 dark:text-gray-400">
+        <span className="inline-flex flex-col md:flex-row text-sm md:space-x-2 space-y-2 md:space-y-0 whitespace-nowrap text-gray-500 dark:text-gray-400">
           <PostDateTime publishedAt={publishedAt} />
 
           <div className="flex items-center -mt-0.5">
-            <PostTypeBadge type={post?.type} />
+            {(post?.tags ?? []).map((tag, idx) => (
+              <div key={tag} className={classNames(idx ? "ml-2" : "")}>
+                <PostTypeBadge type={tag as PostType} />
+              </div>
+            ))}
             {isPinned && <PostTypeBadge type="pinned" className="ml-2" />}
           </div>
         </span>
