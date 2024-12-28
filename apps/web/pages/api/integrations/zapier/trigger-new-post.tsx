@@ -11,7 +11,7 @@ import {
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<
-    | Pick<IPost, "id" | "title" | "content" | "type" | "created_at">[]
+    | Pick<IPost, "id" | "title" | "content" | "tags" | "created_at">[]
     | null
     | IErrorResponse
   >
@@ -38,7 +38,7 @@ export default async function handler(
 
     const { data: posts } = await supabaseAdmin
       .from("posts")
-      .select("id,title,content,type,created_at")
+      .select("id,title,content,tags,created_at")
       .eq("page_id", String(pageDetails.id))
       .eq("status", String(status))
       .order("created_at", { ascending: false })
