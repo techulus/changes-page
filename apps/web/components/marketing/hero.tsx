@@ -94,15 +94,14 @@ export default function Hero({ stars = null }: { stars?: string | null }) {
             </div>
           </div>
           <p className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl hero">
-            Effortlessly{" "}
+            Changelogs made{" "}
             <span className="underline decoration-yellow-500 text-white">
-              create compelling changelogs
+              smarter, faster,
             </span>{" "}
-            and seamlessly{" "}
+            and{" "}
             <span className="underline decoration-red-500 text-white">
-              deliver product updates
+              user-focused.
             </span>
-            .
           </p>
 
           <p className="mt-6 text-lg leading-8 text-gray-300">
