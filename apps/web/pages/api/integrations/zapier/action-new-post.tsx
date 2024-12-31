@@ -1,5 +1,5 @@
 import { IErrorResponse } from "@changes-page/supabase/types/api";
-import { IPost } from "@changes-page/supabase/types/page";
+import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
 import {
@@ -41,6 +41,11 @@ export default async function handler(
       tags,
       status,
       images_folder: v4(),
+      publication_date:
+        status === PostStatus.published ? new Date().toISOString() : null,
+      notes: "",
+      allow_reactions: false,
+      email_notified: false,
     });
 
     res.status(200).json(data);
