@@ -13,10 +13,10 @@ export default async function handler(
 ) {
   let {
     query: { page_secret_key },
-    body: { title, type, content, status },
+    body: { title, tags, content, status },
   } = req;
 
-  if (!page_secret_key || !title || !type || !content || !status) {
+  if (!page_secret_key || !title || !tags || !content || !status) {
     res
       .status(400)
       .json({ error: { statusCode: 400, message: "Invalid request" } });
@@ -38,7 +38,7 @@ export default async function handler(
       page_id: pageDetails.id,
       title,
       content,
-      type,
+      tags,
       status,
       images_folder: v4(),
     });
