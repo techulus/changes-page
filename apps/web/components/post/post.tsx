@@ -14,6 +14,7 @@ import { useCallback, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
 import usePageUrl from "../../utils/hooks/usePageUrl";
 import { useUserData } from "../../utils/useUser";
 import { notifyError } from "../core/toast.component";
@@ -180,6 +181,7 @@ export function Post({
                   rehypeRaw,
                   // @ts-ignore
                   rehypeSanitize({ tagNames: ["div", "iframe"] }),
+                  remarkGfm,
                 ]}
               >
                 {post.content}

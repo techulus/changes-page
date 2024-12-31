@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
 import slugify from "slugify";
 import { IPostPublicData } from "../lib/data";
 import Reactions from "./reactions";
@@ -75,6 +76,7 @@ export default function Post({
               rehypeRaw,
               // @ts-ignore
               rehypeSanitize({ tagNames: ["div", "iframe"] }),
+              remarkGfm,
             ]}
             components={{
               img: (props) => {
