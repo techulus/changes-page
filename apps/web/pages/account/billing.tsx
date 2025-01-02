@@ -58,7 +58,21 @@ export default function Billing() {
           <div className="mt-5 md:mt-0 md:col-span-2">
             {!billingDetails && <SpinnerWithSpacing />}
 
-            {billingDetails && (
+            {billingDetails?.has_active_subscription &&
+            !billingDetails?.subscription ? (
+              <div className="shadow overflow-hidden sm:rounded-md">
+                <div className="px-4 py-3 bg-white dark:bg-black sm:p-3">
+                  <h2
+                    id="billing-history-heading"
+                    className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100"
+                  >
+                    You have a free Pro subscription.
+                  </h2>
+                </div>
+              </div>
+            ) : null}
+
+            {billingDetails?.subscription && (
               <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="px-4 py-3 bg-white dark:bg-black sm:p-3">
                   <h2

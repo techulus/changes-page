@@ -20,7 +20,7 @@ export const getUserById = async (user_id: string): Promise<IUser> => {
 
   return {
     ...user,
-    has_active_subscription: ["trialing", "active"].includes(
+    has_active_subscription: user.pro_gifted ?? ["trialing", "active"].includes(
       (user?.stripe_subscription as unknown as Stripe.Subscription)?.status
     ),
   } as unknown as IUser;

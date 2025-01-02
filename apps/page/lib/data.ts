@@ -357,5 +357,6 @@ export {
   fetchRenderData,
   isSubscriptionActive,
   PAGINATION_LIMIT,
-  translateHostToPageIdentifier,
+  translateHostToPageIdentifier
 };
+
