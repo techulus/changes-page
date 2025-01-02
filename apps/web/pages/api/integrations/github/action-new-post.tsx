@@ -12,11 +12,17 @@ export default async function handler(
   res: NextApiResponse<Pick<IPost, "id"> | null | IErrorResponse>
 ) {
   const {
-    body: { title, type, content, status },
+    body: { title, type, tags, content, status },
   } = req;
   const page_secret_key = req.headers["page-secret-key"];
 
-  if (!page_secret_key || !title || !type || !content || !status) {
+  if (!page_secret_key || !title || !content || !status) {
+    res
+      .status(400)
+      .json({ error: { statusCode: 400, message: "Invalid request" } });
+  }
+
+  if (!tags && !type) {
     res
       .status(400)
       .json({ error: { statusCode: 400, message: "Invalid request" } });
@@ -34,7 +40,7 @@ export default async function handler(
       page_id: pageDetails.id,
       title,
       content,
-      type,
+      tags: tags ?? [type],
       status,
       images_folder: v4(),
       publication_date:
