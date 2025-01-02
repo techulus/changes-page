@@ -1,6 +1,6 @@
 /**
 * USERS
-* Note: This table contains user data. Users should only be able to view and update their own data.
+* Note: This table contains user data. Users should only be able to view their own data.
 */
 create table users (
   -- UUID from auth.users
@@ -14,7 +14,6 @@ create table users (
 );
 alter table users enable row level security;
 create policy "Can view own user data." on users for select using (auth.uid() = id);
-create policy "Can update own user data." on users for update using (auth.uid() = id);
 
 /**
 * This trigger automatically creates a user entry when a new user signs up via Supabase Auth.

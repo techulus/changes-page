@@ -16,6 +16,7 @@ const getBillingStatus = async (
       const { user } = await getSupabaseServerClient({ req, res });
 
       const {
+        pro_gifted,
         stripe_customer_id,
         stripe_subscription,
         has_active_subscription,
@@ -24,6 +25,24 @@ const getBillingStatus = async (
       const { unit_amount } = await stripe.prices.retrieve(
         process.env.STRIPE_PRICE_ID
       );
+
+      if (pro_gifted) {
+        console.log(
+          "getBillingStatus",
+          user?.id,
+          "user has gifted pro subscription"
+        );
+
+        return res.status(200).json({
+          invoice: null,
+          subscription: null,
+          price: {
+            unit_amount,
+          },
+          usage: null,
+          has_active_subscription: true,
+        });
+      }
 
       if (!stripe_customer_id || !stripe_subscription) {
         console.log(

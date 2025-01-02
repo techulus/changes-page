@@ -342,6 +342,7 @@ export type Database = {
           avatar_url: string | null
           full_name: string | null
           id: string
+          pro_gifted: boolean | null
           stripe_customer_id: string | null
           stripe_subscription: Json | null
           stripe_subscription_id: string | null
@@ -350,6 +351,7 @@ export type Database = {
           avatar_url?: string | null
           full_name?: string | null
           id: string
+          pro_gifted?: boolean | null
           stripe_customer_id?: string | null
           stripe_subscription?: Json | null
           stripe_subscription_id?: string | null
@@ -358,6 +360,7 @@ export type Database = {
           avatar_url?: string | null
           full_name?: string | null
           id?: string
+          pro_gifted?: boolean | null
           stripe_customer_id?: string | null
           stripe_subscription?: Json | null
           stripe_subscription_id?: string | null
