@@ -16,16 +16,12 @@ export default function Zapier() {
           type="module"
           src="https://cdn.zapier.com/packages/partner-sdk/v0/zapier-elements/zapier-elements.esm.js"
         ></script>
-        <link
-          rel="stylesheet"
-          href="https://cdn.zapier.com/packages/partner-sdk/v0/zapier-elements/zapier-elements.css"
-        />
       </Head>
 
       <Page title="Zapier Integration" fullWidth>
         <div className="relative pb-32 overflow-hidden">
           <div className="relative">
-            <div className="lg:mx-auto lg:max-w-7xl text-center">
+            <div className="lg:mx-auto lg:max-w-7xl text-center mx-4 md:mx-0">
               <zapier-workflow
                 client-id="rnKv828fHE7sPhcZdGhwqWbIsJkOfhUEh2RAHQw4"
                 theme="auto"

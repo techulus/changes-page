@@ -9,6 +9,7 @@ import {
   MailIcon,
   StarIcon,
 } from "@heroicons/react/solid";
+import Head from "next/head";
 import Image from "next/image";
 import { useMemo } from "react";
 import appScreenshot from "../../public/images/hero/app-screenshot.png";
@@ -76,6 +77,12 @@ export default function Features() {
 
   return (
     <div className="bg-gray-900 py-16 sm:py-32">
+      <Head>
+        <script
+          type="module"
+          src="https://cdn.zapier.com/packages/partner-sdk/v0/zapier-elements/zapier-elements.esm.js"
+        ></script>
+      </Head>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl sm:text-center font-semibold">
           <h2 className="text-xl leading-8 tracking-tight text-indigo-400">
@@ -123,6 +130,15 @@ export default function Features() {
             </div>
           ))}
         </dl>
+      </div>
+
+      <div className="mx-auto mt-16 max-w-7xl px-6 sm:mt-20 md:mt-24 lg:px-8">
+        <zapier-workflow
+          client-id="rnKv828fHE7sPhcZdGhwqWbIsJkOfhUEh2RAHQw4"
+          theme="auto"
+          intro-copy-display="show"
+          guess-zap-display="show"
+        />
       </div>
     </div>
   );
