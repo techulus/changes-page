@@ -2,10 +2,10 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({});
 
 const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: *;
-  style-src 'self' data: 'unsafe-inline' cdn.zapier.com;
+  style-src 'self' data: 'unsafe-inline';
   img-src 'self' * data:;
   font-src 'self';
-  connect-src 'self' wss: *.supabase.co *.changes.page *.intercom.io *.sentry.io vercel.live;
+  connect-src 'self' wss: *.supabase.co *.changes.page *.intercom.io *.sentry.io vercel.live *.zapier.com;
   report-to default
 `;
 
