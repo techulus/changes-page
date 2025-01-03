@@ -9,11 +9,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const { user } = await getSupabaseServerClient(ctx);
 
   return {
-    props: { email: user.email },
+    props: { email: user?.email },
   };
 }
 
-export default function Zapier({ email }: { email: string }) {
+export default function Zapier({ email }: { email?: string }) {
   return (
     <div className="h-full bg-gray-100 dark:bg-gray-800">
       <HeaderComponent />

@@ -135,7 +135,7 @@ export default function Features() {
       <div className="mx-auto mt-16 max-w-7xl px-6 sm:mt-20 md:mt-24 lg:px-8">
         <zapier-workflow
           client-id="rnKv828fHE7sPhcZdGhwqWbIsJkOfhUEh2RAHQw4"
-          theme="auto"
+          theme="dark"
           intro-copy-display="show"
           guess-zap-display="show"
           zap-create-from-scratch-display="show"
