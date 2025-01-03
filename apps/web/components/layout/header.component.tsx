@@ -27,6 +27,7 @@ export default function HeaderComponent() {
       if (billingDetails?.has_active_subscription) {
         return [
           { name: "Pages", href: ROUTES.PAGES },
+          { name: "Zapier", href: ROUTES.ZAPIER },
           { name: "Billing", href: ROUTES.BILLING },
           { name: "Support", href: ROUTES.SUPPORT, external: true },
         ];
@@ -41,7 +42,7 @@ export default function HeaderComponent() {
 
     return [
       { name: "Pricing", href: ROUTES.PRICING },
-      { name: "Zapier Integration", href: ROUTES.ZAPIER },
+      { name: "Automate using Zapier", href: ROUTES.ZAPIER },
       { name: "Knowledge base", href: ROUTES.DOCS, external: true },
       { name: "Support", href: ROUTES.SUPPORT, external: true },
     ];

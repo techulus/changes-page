@@ -138,6 +138,7 @@ export default function Features() {
           theme="auto"
           intro-copy-display="show"
           guess-zap-display="show"
+          zap-create-from-scratch-display="show"
         />
       </div>
     </div>
