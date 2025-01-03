@@ -1,4 +1,5 @@
 import { InboxIcon, SparklesIcon } from "@heroicons/react/outline";
+import Head from "next/head";
 import Image from "next/image";
 import FooterComponent from "../../components/layout/footer.component";
 import HeaderComponent from "../../components/layout/header.component";
@@ -6,10 +7,20 @@ import Page from "../../components/layout/page.component";
 import zapierGitHub from "../../public/images/zapier/github.png";
 import zapierTweet from "../../public/images/zapier/tweet.png";
 
-export default function Example() {
+export default function Zapier() {
   return (
     <div className="h-full bg-gray-100 dark:bg-gray-800">
       <HeaderComponent />
+      <Head>
+        <script
+          type="module"
+          src="https://cdn.zapier.com/packages/partner-sdk/v0/zapier-elements/zapier-elements.esm.js"
+        ></script>
+        <link
+          rel="stylesheet"
+          href="https://cdn.zapier.com/packages/partner-sdk/v0/zapier-elements/zapier-elements.css"
+        />
+      </Head>
 
       <Page title="Zapier Integration" fullWidth>
         <div className="relative pt-16 pb-32 overflow-hidden">
@@ -118,11 +129,12 @@ export default function Example() {
 
           <div className="lg:mx-auto lg:max-w-7xl text-center mt-24">
             <div className="px-4 max-w-xl mx-auto sm:px-6 py-8 lg:py-16 lg:max-w-none lg:mx-0 lg:px-0">
-              <p className="text-xl text-gray-900 dark:text-gray-50">
-                Zapier lets you connect changes.page with thousands of the most
-                popular apps, so you can automate your work and have more time
-                for what matters most—no code required.
-              </p>
+              <zapier-workflow
+                client-id="rnKv828fHE7sPhcZdGhwqWbIsJkOfhUEh2RAHQw4"
+                theme="auto"
+                intro-copy-display="show"
+                guess-zap-display="show"
+              />
             </div>
           </div>
         </div>
