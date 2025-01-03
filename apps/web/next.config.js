@@ -1,7 +1,7 @@
 const withBundleAnalyzer = require("@next/bundle-analyzer")({});
 
 const ContentSecurityPolicy = `
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *  cdn.zapier.com;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' *;
   style-src 'self' data: 'unsafe-inline' maxcdn.bootstrapcdn.com cdn.jsdelivr.net;
   img-src 'self' * data: blob:;
   font-src 'self' data: maxcdn.bootstrapcdn.com cdn.jsdelivr.net;

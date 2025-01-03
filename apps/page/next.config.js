@@ -5,7 +5,7 @@ const ContentSecurityPolicy = `
   style-src 'self' data: 'unsafe-inline';
   img-src 'self' * data:;
   font-src 'self';
-  connect-src 'self' wss: *.supabase.co *.changes.page *.intercom.io *.sentry.io vercel.live *.zapier.com;
+  connect-src 'self' wss: *.supabase.co *.changes.page *.intercom.io *.sentry.io vercel.live;
   report-to default
 `;
 
