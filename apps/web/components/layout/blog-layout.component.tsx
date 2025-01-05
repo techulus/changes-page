@@ -4,6 +4,9 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
 import { ROUTES } from "../../data/routes.data";
 import { BlogPost } from "../../pages/blog";
 import { getImageUrl } from "../../utils/cms";
@@ -196,7 +199,16 @@ export default function BlogLayout({
             ) : null}
 
             <div className="blog-content-override prose dark:prose-invert prose-indigo mx-auto mt-6">
-              <ReactMarkdown>{content}</ReactMarkdown>
+              <ReactMarkdown
+                rehypePlugins={[
+                  rehypeRaw,
+                  // @ts-ignore
+                  rehypeSanitize({ tagNames: ["div", "iframe"] }),
+                  remarkGfm,
+                ]}
+              >
+                {content}
+              </ReactMarkdown>
             </div>
           </div>
         </div>
