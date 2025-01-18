@@ -45,14 +45,16 @@ export function getOgUrl(
     const contentTruncated =
       content.length > 350 ? content.substring(0, 350) + "..." : content;
 
-    return `${pageUrl}/api/og?title=${page?.title}&body=${
-      post.title
-    }&content=${contentTruncated}${
-      settings?.page_logo ? "&logo=" + settings?.page_logo : ""
-    }`;
+    return `${pageUrl}/api/og?title=${encodeURIComponent(
+      page?.title
+    )}&body=${encodeURIComponent(post.title)}&content=${encodeURIComponent(
+      contentTruncated
+    )}${settings?.page_logo ? "&logo=" + settings?.page_logo : ""}`;
   }
 
-  return `${pageUrl}/api/og?title=${page?.title}&body=${page.description}${
+  return `${pageUrl}/api/og?title=${encodeURIComponent(
+    page?.title
+  )}&body=${encodeURIComponent(page.description ?? "")}${
     settings?.page_logo ? "&logo=" + settings?.page_logo : ""
   }`;
 }
