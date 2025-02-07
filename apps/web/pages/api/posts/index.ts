@@ -1,5 +1,6 @@
 import { PostStatus } from "@changes-page/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
+import { NewPostSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createPost, getUserById } from "../../../utils/useDatabase";
@@ -29,6 +30,26 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
       if (!has_active_subscription) {
         return res.status(403).json({
           error: { statusCode: 403, message: "Missing subscription" },
+        });
+      }
+
+      const isValid = await NewPostSchema.isValid({
+        page_id,
+        title: title.trim(),
+        content: content.trim(),
+        tags,
+        status,
+        images_folder,
+        publish_at,
+        notes,
+        allow_reactions,
+        email_notified,
+        publication_date,
+      });
+
+      if (!isValid) {
+        return res.status(400).json({
+          error: { statusCode: 400, message: "Invalid request body" },
         });
       }
 

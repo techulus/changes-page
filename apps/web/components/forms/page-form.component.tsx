@@ -1,34 +1,18 @@
+import {
+  IPage,
+  PageType,
+  PageTypeToLabel
+} from "@changes-page/supabase/types/page";
+import { Spinner, SpinnerWithSpacing } from "@changes-page/ui";
 import classNames from "classnames";
 import { FormikProps, useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import slugify from "slugify";
-import { InferType, object, string } from "yup";
-import {
-  IPage,
-  PageType,
-  PageTypeToLabel,
-  URL_SLUG_REGEX,
-} from "@changes-page/supabase/types/page";
+import { InferType } from "yup";
+import { NewPageSchema } from "../../data/schema";
 import { PrimaryButton, SecondaryButton } from "../core/buttons.component";
-import { Spinner, SpinnerWithSpacing } from "@changes-page/ui";
 import { InfoMessage, InlineErrorMessage } from "./notification.component";
-
-export const NewPageSchema = object().shape({
-  url_slug: string()
-    .min(4, "Too Short!")
-    .max(24, "Too Long!")
-    .required("Enter a valid url")
-    .matches(URL_SLUG_REGEX, "Enter a valid url"),
-  title: string()
-    .required("Enter a valid title")
-    .min(2, "Title too Short!")
-    .max(50, "Title too Long!"),
-  description: string()
-    .min(2, "Description too Short!")
-    .max(500, "Description too Long!"),
-  type: string().required("Enter a valid type"),
-});
 
 export type PageFormikForm = FormikProps<InferType<typeof NewPageSchema>>;
 

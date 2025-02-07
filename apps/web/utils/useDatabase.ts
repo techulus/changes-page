@@ -146,6 +146,10 @@ export const updateSubscriptionUsage = async (
 ) => {
   const user = await getUserById(user_id);
 
+  if (user.pro_gifted) {
+    return false;
+  }
+
   if (!user.stripe_customer_id || !user.stripe_subscription_id) {
     return false;
   }
