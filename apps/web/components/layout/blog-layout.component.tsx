@@ -1,4 +1,5 @@
 import { DateTime } from "@changes-page/utils";
+import { ArrowLeftIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Head from "next/head";
 import Image from "next/image";
@@ -146,9 +147,10 @@ export default function BlogLayout({
               <h1>
                 <Link
                   href={ROUTES.BLOG}
-                  className="block text-center text-lg font-semibold text-indigo-600 dark:text-indigo-400 uppercase"
+                  className="block text-center text-md font-semibold text-indigo-600 dark:text-indigo-400"
                 >
-                  Blog
+                  <ArrowLeftIcon className="inline w-4 h-4 -mt-1 font-semibold" />{" "}
+                  Back to blog
                 </Link>
                 <span className="mt-2 block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 dark:text-gray-50 sm:text-4xl hero">
                   {title}
@@ -198,7 +200,7 @@ export default function BlogLayout({
               />
             ) : null}
 
-            <div className="blog-content-override prose dark:prose-invert prose-indigo mx-auto mt-6">
+            <div className="blog-content-override prose dark:prose-invert prose-indigo mx-auto mt-6 max-w-[70ch]">
               <ReactMarkdown
                 rehypePlugins={[
                   rehypeRaw,

@@ -1,6 +1,7 @@
 import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPage } from "@changes-page/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { NewPageSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import {
@@ -25,6 +26,19 @@ const createNewPage = async (
       if (!has_active_subscription) {
         return res.status(403).json({
           error: { statusCode: 403, message: "Missing subscription" },
+        });
+      }
+
+      const isValid = await NewPageSchema.isValid({
+        url_slug,
+        title: title.trim(),
+        description: description.trim(),
+        type,
+      });
+
+      if (!isValid) {
+        return res.status(400).json({
+          error: { statusCode: 400, message: "Invalid request body" },
         });
       }
 

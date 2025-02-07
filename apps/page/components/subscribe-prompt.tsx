@@ -21,7 +21,7 @@ export default function SubscribePrompt({
 
   const pageUrl = useMemo(() => getPageUrl(page, settings), [page, settings]);
 
-  const NewPageSchema = Yup.object().shape({
+  const InputSchema = Yup.object().shape({
     email: Yup.string().email().required("Enter a valid email"),
   });
 
@@ -29,7 +29,7 @@ export default function SubscribePrompt({
     initialValues: {
       email: "",
     },
-    validationSchema: NewPageSchema,
+    validationSchema: InputSchema,
     onSubmit: async (values) => {
       setLoading(true);
       try {

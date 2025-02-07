@@ -19,7 +19,8 @@ import { useFormik } from "formik";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { v4 } from "uuid";
-import { InferType, array, boolean, mixed, object, string } from "yup";
+import { InferType } from "yup";
+import { NewPostSchema } from "../../data/schema";
 import { track } from "../../utils/analytics";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton } from "../core/buttons.component";
@@ -30,30 +31,6 @@ import AiProofReadDialogComponent from "../dialogs/ai-prood-read-dialog.componen
 import AiSuggestTitlePromptDialogComponent from "../dialogs/ai-suggest-title-prompt-dialog.component";
 import DateTimePromptDialog from "../dialogs/date-time-prompt-dialog.component";
 import SwitchComponent from "./switch.component";
-
-export const NewPostSchema = object().shape({
-  title: string()
-    .required("Title cannot be empty")
-    .min(2, "Title too Short!")
-    .max(75, "Title too Long!"),
-  content: string()
-    .required("Content cannot be empty")
-    .min(2, "Content too Short!")
-    .max(9669, "Content too Long!"),
-  tags: array()
-    .of(mixed<PostType>().oneOf(Object.values(PostType)))
-    .required("Enter valid tags"),
-  status: mixed<PostStatus>()
-    .oneOf(Object.values(PostStatus))
-    .required("Enter valid status"),
-  page_id: string(),
-  images_folder: string(),
-  publish_at: string().optional().nullable(),
-  publication_date: string().optional().nullable(),
-  allow_reactions: boolean(),
-  email_notified: boolean(),
-  notes: string().optional().nullable(),
-});
 
 export type PostFormikForm = InferType<typeof NewPostSchema>;
 

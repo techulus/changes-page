@@ -5,12 +5,12 @@ import { useState } from "react";
 import { InferType } from "yup";
 import { notifyError } from "../../../components/core/toast.component";
 import PostFormComponent, {
-  NewPostSchema,
   PostFormikForm,
 } from "../../../components/forms/post-form.component";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
+import { NewPostSchema } from "../../../data/schema";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 import { useUserData } from "../../../utils/useUser";

@@ -3,12 +3,12 @@ import { useState } from "react";
 import { InferType } from "yup";
 import { notifyError } from "../../components/core/toast.component";
 import PageFormComponent, {
-  NewPageSchema,
   PageFormikForm,
 } from "../../components/forms/page-form.component";
 import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import { ROUTES } from "../../data/routes.data";
+import { NewPageSchema } from "../../data/schema";
 import { track } from "../../utils/analytics";
 import { httpPost } from "../../utils/http";
 
