@@ -21,7 +21,14 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
   const { data: pages, error } = await supabase
     .from("pages")
-    .select("*")
+    .select(
+      `*,
+      teams (
+        id,
+        name
+      )
+      `
+    )
     .order("updated_at", { ascending: false });
 
   return {
@@ -147,10 +154,12 @@ export default function Pages({
                     className="pointer-events-none absolute top-6 right-6 text-gray-500 dark:text-gray-400 group-hover:text-indigo-400"
                     aria-hidden="true"
                   >
-                    {page.user_id !== user?.id ? (
+                    {page.teams && page.user_id !== user?.id ? (
                       <div className="flex items-center gap-1">
                         <UserGroupIcon className="h-4 w-4" />
-                        <span className="text-sm font-medium">Editor</span>
+                        <span className="text-sm font-medium">
+                          Editor ({page.teams.name})
+                        </span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-1">

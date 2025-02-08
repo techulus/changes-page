@@ -1,3 +1,4 @@
+-- TEAMS table
 create table teams (
   id uuid default uuid_generate_v4() primary key,
   owner_id uuid references users not null,
@@ -21,6 +22,7 @@ BEFORE UPDATE ON teams
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
+-- TEAM MEMBERS table
 create table team_members (
   id uuid default uuid_generate_v4() primary key,
   team_id uuid references teams not null,
@@ -33,13 +35,14 @@ create table team_members (
 alter table team_members enable row level security;
 create policy "Owner can view own team members." on team_members for select using (team_id in (select id from teams where owner_id = auth.uid()));
 create policy "Owner can delete own team members." on team_members for delete using (team_id in (select id from teams where owner_id = auth.uid()));
-create policy "Team members can view their membership." on team_members for select using (user_id = auth.uid());
+create policy "Team members can leave their team." on team_members for delete using (user_id = auth.uid());
 
 CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON team_members
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
+-- TEAM INVITATIONS table
 create table team_invitations (
   id uuid default uuid_generate_v4() primary key,
   team_id uuid references teams not null,
@@ -61,6 +64,17 @@ CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON team_invitations
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
+
+-- Helper function to check if a user is a member of a team
+create or replace function is_team_member(tid uuid, uid uuid) returns boolean as $$
+begin
+  return exists (select 1 from team_members where team_id = tid and user_id = uid);
+end;
+$$ language plpgsql security definer;
+
+-- Policies using the helper function
+create policy "Team members can view their membership." on team_members for select using (is_team_member(team_id, auth.uid()));
+create policy "Members can view teams." on teams for select using (is_team_member(id, auth.uid()));
 
 -- Alter pages table to add team_id
 alter table pages add column team_id uuid references teams on delete set null;
