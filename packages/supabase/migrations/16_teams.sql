@@ -67,5 +67,15 @@ alter table pages add column team_id uuid references teams on delete set null;
 
 -- Teams members can view pages in their team and posts in those pages
 create policy "Can view pages in own team." on pages for select using (team_id in (select team_id from team_members where user_id = auth.uid()));
-create policy "Can view page_settings in own team." on page_settings for select using (page_id in (select id from pages));
-create policy "Can view posts in own team." on posts for select using (page_id in (select id from pages));
+
+-- Update page_settings
+alter policy "Can view own page_settings." on page_settings using (page_id in (select id from pages));
+alter policy "Can update own page_settings." on page_settings using (page_id in (select id from pages));
+drop policy "Can delete own page_settings." on page_settings;
+
+alter table page_settings drop column user_id;
+
+-- Update posts
+alter policy "Can view own posts." on posts using (page_id in (select id from pages));
+alter policy "Can update own posts." on posts using (page_id in (select id from pages));
+alter policy "Can delete own posts." on posts using (page_id in (select id from pages));

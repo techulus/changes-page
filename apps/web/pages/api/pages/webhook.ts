@@ -1,6 +1,6 @@
+import { IPage } from "@changes-page/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { IPage } from "@changes-page/supabase/types/page";
 import { revalidatePage } from "../../../utils/revalidate";
 import {
   createOrRetrievePageSettings,
@@ -30,7 +30,7 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
       await revalidatePage(page.url_slug);
 
       try {
-        const settings = await createOrRetrievePageSettings(user_id, page.id);
+        const settings = await createOrRetrievePageSettings(page.id);
         if (settings?.custom_domain) {
           await revalidatePage(settings.custom_domain);
         }

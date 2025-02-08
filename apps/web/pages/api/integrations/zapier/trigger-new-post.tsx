@@ -44,10 +44,7 @@ export default async function handler(
       .order("created_at", { ascending: false })
       .range(offset, limit - 1 + offset);
 
-    const pageSettings = await createOrRetrievePageSettings(
-      pageDetails.user_id,
-      pageDetails.id
-    );
+    const pageSettings = await createOrRetrievePageSettings(pageDetails.id);
 
     const postsWithUrl = (posts ?? []).map((post: IPost) => ({
       ...post,

@@ -1,5 +1,5 @@
 import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
-import { PlusIcon } from "@heroicons/react/solid";
+import { PlusIcon, UserGroupIcon, UserIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
@@ -36,7 +36,7 @@ export default function Pages({
   pages,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { billingDetails } = useUserData();
+  const { billingDetails, user } = useUserData();
   const router = useRouter();
   useHotkeys("n", () => router.push(ROUTES.NEW_PAGE), [router]);
 
@@ -144,17 +144,20 @@ export default function Pages({
                     </p>
                   </div>
                   <span
-                    className="pointer-events-none absolute top-6 right-6 text-gray-300 dark:text-gray-600 group-hover:text-indigo-400"
+                    className="pointer-events-none absolute top-6 right-6 text-gray-500 dark:text-gray-400 group-hover:text-indigo-400"
                     aria-hidden="true"
                   >
-                    <svg
-                      className="h-6 w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
-                    </svg>
+                    {page.user_id !== user?.id ? (
+                      <div className="flex items-center gap-1">
+                        <UserGroupIcon className="h-4 w-4" />
+                        <span className="text-sm font-medium">Editor</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <UserIcon className="h-4 w-4" />
+                        <span className="text-sm font-medium">Owner</span>
+                      </div>
+                    )}
                   </span>
                 </div>
               ))}

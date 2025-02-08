@@ -78,7 +78,6 @@ export type Database = {
           tiktok_url: string | null
           twitter_url: string | null
           updated_at: string
-          user_id: string
           whitelabel: boolean
           youtube_url: string | null
         }
@@ -109,7 +108,6 @@ export type Database = {
           tiktok_url?: string | null
           twitter_url?: string | null
           updated_at?: string
-          user_id: string
           whitelabel?: boolean
           youtube_url?: string | null
         }
@@ -140,7 +138,6 @@ export type Database = {
           tiktok_url?: string | null
           twitter_url?: string | null
           updated_at?: string
-          user_id?: string
           whitelabel?: boolean
           youtube_url?: string | null
         }

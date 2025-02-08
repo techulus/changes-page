@@ -18,8 +18,8 @@ import { useUserData } from "../../../utils/useUser";
 export async function getServerSideProps({ params, req, res }) {
   const { page_id, post_id } = params;
 
-  const { supabase, user } = await getSupabaseServerClient({ req, res });
-  const settings = await createOrRetrievePageSettings(user.id, String(page_id));
+  const { supabase } = await getSupabaseServerClient({ req, res });
+  const settings = await createOrRetrievePageSettings(String(page_id));
   const { data: post } = await supabase
     .from("posts")
     .select("*")

@@ -207,14 +207,12 @@ export const updateSubscriptionUsage = async (
 };
 
 export const createOrRetrievePageSettings = async (
-  user_id: string,
   page_id: string
 ) => {
   const { data: pageSettings } = await supabaseAdmin
     .from("page_settings")
     .select("*")
     .eq("page_id", page_id)
-    // .eq("user_id", user_id)
     .single();
 
   if (pageSettings) return pageSettings;
@@ -222,7 +220,7 @@ export const createOrRetrievePageSettings = async (
   const { data: newPageSettings, error: createPageSettingsError } =
     await supabaseAdmin
       .from("page_settings")
-      .insert([{ user_id, page_id }])
+      .insert([{ page_id }])
       .select();
 
   if (createPageSettingsError) throw createPageSettingsError;
@@ -376,3 +374,4 @@ export async function getPageAnalytics(
 
   return data as unknown as IAnalyticsData[];
 }
+
