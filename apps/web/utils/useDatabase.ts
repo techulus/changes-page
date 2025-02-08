@@ -214,7 +214,7 @@ export const createOrRetrievePageSettings = async (
     .from("page_settings")
     .select("*")
     .eq("page_id", page_id)
-    .eq("user_id", user_id)
+    // .eq("user_id", user_id)
     .single();
 
   if (pageSettings) return pageSettings;

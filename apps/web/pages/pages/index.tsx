@@ -67,7 +67,7 @@ export default function Pages({
         <div className="overflow-hidden sm:rounded-md">
           {!pages.length && (
             <EntityEmptyState
-              title=" No pages yet!"
+              title="No pages yet!"
               message="Get started by creating your first page."
               buttonLink={
                 billingDetails?.has_active_subscription
@@ -166,5 +166,4 @@ export default function Pages({
   );
 }
 
-Pages.getLayout = (page: JSX.Element) => <AuthLayout>{page}</AuthLayout>;
 Pages.getLayout = (page: JSX.Element) => <AuthLayout>{page}</AuthLayout>;

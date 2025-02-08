@@ -16,6 +16,15 @@ export function EntityEmptyState({
   buttonLabel,
   disabled = false,
   footer = null,
+  onButtonClick,
+}: {
+  title: string;
+  message: string;
+  buttonLink?: string;
+  buttonLabel?: string;
+  disabled?: boolean;
+  footer?: React.ReactNode;
+  onButtonClick?: () => void;
 }) {
   return (
     <div className="text-center h-96 flex flex-col items-center justify-center">
@@ -38,7 +47,7 @@ export function EntityEmptyState({
         {title}
       </h3>
       <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{message}</p>
-      {!disabled && (
+      {!disabled && buttonLabel && buttonLink ? (
         <div className="mt-6">
           <Link
             href={buttonLink}
@@ -47,7 +56,18 @@ export function EntityEmptyState({
             {buttonLabel}
           </Link>
         </div>
-      )}
+      ) : null}
+      {onButtonClick && buttonLabel ? (
+        <div className="mt-6">
+          <button
+            onClick={onButtonClick}
+            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-lg font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={disabled}
+          >
+            {buttonLabel}
+          </button>
+        </div>
+      ) : null}
       {footer}
     </div>
   );

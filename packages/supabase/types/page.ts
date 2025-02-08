@@ -7,6 +7,10 @@ export type IPost = Database["public"]["Tables"]["posts"]["Row"];
 export type IPageEmailSubscriber =
   Database["public"]["Tables"]["page_email_subscribers"]["Row"];
 export type IPageView = Database["public"]["Tables"]["page_views"]["Row"];
+export type ITeam = Database["public"]["Tables"]["teams"]["Row"];
+export type ITeamMember = Database["public"]["Tables"]["team_members"]["Row"];
+export type ITeamInvitation =
+  Database["public"]["Tables"]["team_invitations"]["Row"];
 
 export enum PageType {
   changelogs = "changelogs",
