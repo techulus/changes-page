@@ -6,6 +6,11 @@ import { getSupabaseServerClient } from "../../../../../utils/supabase/supabase-
 const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const { invite_id } = req.body;
+    if (!invite_id) {
+      return res.status(400).json({
+        error: { statusCode: 400, message: "Invalid request" },
+      });
+    }
 
     try {
       await apiRateLimiter(req, res);

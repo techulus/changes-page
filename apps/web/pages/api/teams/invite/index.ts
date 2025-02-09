@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ROUTES } from "../../../../data/routes.data";
+import { getAppBaseURL } from "../../../../utils/helpers";
 import inngestClient from "../../../../utils/inngest";
 import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
@@ -9,6 +10,11 @@ import { getUserById } from "../../../../utils/useDatabase";
 const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const { team_id, email } = req.body;
+    if (!team_id || !email) {
+      return res.status(400).json({
+        error: { statusCode: 400, message: "Invalid request" },
+      });
+    }
 
     try {
       await apiRateLimiter(req, res);
@@ -56,9 +62,12 @@ const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
       await inngestClient.send({
         name: "email/team.invite",
         data: {
-          owner_name: user.user_metadata?.name ?? user.email,
-          team_name: team.name,
-          confirm_link: `${process.env.NEXT_PUBLIC_APP_URL}/${ROUTES.TEAMS}`,
+          email,
+          payload: {
+            owner_name: user.user_metadata?.name ?? user.email,
+            team_name: team.name,
+            confirm_link: `${getAppBaseURL()}/${ROUTES.TEAMS}`,
+          },
         },
       });
 
