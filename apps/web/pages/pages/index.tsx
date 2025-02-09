@@ -1,5 +1,5 @@
 import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
-import { PlusIcon, UserGroupIcon, UserIcon } from "@heroicons/react/solid";
+import { PlusIcon, UserGroupIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
@@ -161,12 +161,7 @@ export default function Pages({
                           Editor ({page.teams.name})
                         </span>
                       </div>
-                    ) : (
-                      <div className="flex items-center gap-1">
-                        <UserIcon className="h-4 w-4" />
-                        <span className="text-sm font-medium">Owner</span>
-                      </div>
-                    )}
+                    ) : null}
                   </span>
                 </div>
               ))}

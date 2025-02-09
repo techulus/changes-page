@@ -1,6 +1,13 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { Timeline } from "@changes-page/ui";
 import { DateTime } from "@changes-page/utils";
-import { ClockIcon, UserIcon } from "@heroicons/react/solid";
+import {
+  ClockIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+  UserIcon,
+} from "@heroicons/react/solid";
 import { InferGetServerSidePropsType } from "next";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
@@ -41,19 +48,25 @@ export default function PageAnalytics({
       backRoute={`${ROUTES.PAGES}/${page_id}`}
       showBackButton={true}
     >
-      <div className="max-w-3xl mx-auto">
+      <div className="relative -mt-4 max-w-3xl mx-auto">
+        <Timeline />
         {audit_logs.length > 0 ? (
           <ul role="list" className="space-y-6">
             {audit_logs.map((log) => (
-              <li
-                key={log.id}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4"
-              >
+              <li key={log.id} className="p-4">
                 <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 sm:-ml-8 sm:z-[2]">
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        <UserIcon className="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                      <div className="w-10 h-10 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-800">
+                        {log.action.toLowerCase().includes("delete") ? (
+                          <TrashIcon className="w-5 h-5 text-red-600 dark:text-red-300" />
+                        ) : log.action.toLowerCase().includes("create") ? (
+                          <PlusIcon className="w-5 h-5 text-green-600 dark:text-green-300" />
+                        ) : log.action.toLowerCase().includes("update") ? (
+                          <PencilIcon className="w-5 h-5 text-yellow-600 dark:text-yellow-300" />
+                        ) : (
+                          <UserIcon className="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                        )}
                       </div>
                     </div>
                     <div>
@@ -74,7 +87,7 @@ export default function PageAnalytics({
                 </div>
 
                 {log.changes && Object.keys(log.changes).length > 0 && (
-                  <div className="mt-4 bg-gray-50 dark:bg-gray-900 rounded-md p-3">
+                  <div className="mt-4 bg-gray-50 dark:bg-gray-950 rounded-md p-3">
                     <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
                       Changes
                     </p>
@@ -87,7 +100,7 @@ export default function PageAnalytics({
                             !key.includes("image") &&
                             !key.includes("at")
                         )
-
+                        .filter(([_, value]) => value !== null && value !== "")
                         .map(([key, value]) => (
                           <div key={key} className="flex items-start">
                             <span className="text-xs font-medium text-gray-700 dark:text-gray-300 min-w-[100px]">
