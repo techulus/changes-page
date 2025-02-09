@@ -66,7 +66,7 @@ const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
           payload: {
             owner_name: user.user_metadata?.name ?? user.email,
             team_name: team.name,
-            confirm_link: `${getAppBaseURL()}/${ROUTES.TEAMS}`,
+            confirm_link: `${getAppBaseURL()}${ROUTES.TEAMS}`,
           },
         },
       });
