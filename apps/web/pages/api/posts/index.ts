@@ -24,7 +24,7 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await apiRateLimiter(req, res);
 
-      const { user } = await getSupabaseServerClient({ req, res });
+      const { user, supabase } = await getSupabaseServerClient({ req, res });
 
       const isValid = await NewPostSchema.isValid({
         page_id,
@@ -48,7 +48,7 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
 
       console.log("createNewPost", user?.id);
 
-      const post = await createPost({
+      const postPayload = {
         user_id: user.id,
         page_id,
         title,
@@ -63,6 +63,15 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
         notes: notes ?? "",
         allow_reactions: allow_reactions ?? false,
         email_notified: email_notified ?? false,
+      };
+
+      const post = await createPost(postPayload);
+
+      await supabase.from("page_audit_logs").insert({
+        page_id,
+        actor_id: user.id,
+        action: `Created Post: ${post.title}`,
+        changes: postPayload,
       });
 
       return res.status(201).json({ post });

@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      page_audit_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          changes: Json | null
+          created_at: string
+          id: string
+          page_id: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          changes?: Json | null
+          created_at?: string
+          id?: string
+          page_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          changes?: Json | null
+          created_at?: string
+          id?: string
+          page_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_audit_logs_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_audit_logs_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_email_subscribers: {
         Row: {
           created_at: string
@@ -514,6 +556,13 @@ export type Database = {
       is_subscription_active: {
         Args: {
           user_id: string
+        }
+        Returns: boolean
+      }
+      is_team_member: {
+        Args: {
+          tid: string
+          uid: string
         }
         Returns: boolean
       }

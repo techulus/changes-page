@@ -35,7 +35,7 @@ export function Post({
   settings: IPageSettings;
   updatePageSettings: (settings: IPageSettings) => void;
 }) {
-  const { supabase } = useUserData();
+  const { supabase, user } = useUserData();
 
   const [openDeletePost, setOpenDeletePost] = useState(false);
   const [deletePost, setDeletePost] = useState(null);
@@ -53,6 +53,13 @@ export function Post({
 
       try {
         await supabase.from("posts").delete().eq("id", post.id);
+
+        await supabase.from("page_audit_logs").insert({
+          page_id: page.id,
+          actor_id: user.id,
+          action: "Deleted Post",
+          changes: post,
+        });
 
         fetchPosts();
         setIsDeleting(false);

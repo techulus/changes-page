@@ -98,3 +98,16 @@ alter table page_settings drop column user_id;
 alter policy "Can view own posts." on posts using (page_id in (select id from pages));
 alter policy "Can update own posts." on posts using (page_id in (select id from pages));
 alter policy "Can delete own posts." on posts using (page_id in (select id from pages));
+
+-- Audit logs table
+create table page_audit_logs (
+  id uuid default uuid_generate_v4() primary key,
+  page_id uuid references pages not null,
+  actor_id uuid references users not null,
+  action text not null,
+  changes jsonb,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table page_audit_logs enable row level security;
+create policy "Can insert page audit logs." on page_audit_logs for insert with check (actor_id = auth.uid());
