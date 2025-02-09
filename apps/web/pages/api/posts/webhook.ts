@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { DELETE_IMAGES_JOB_EVENT } from "../../../inngest/jobs/delete-images";
 import { sendPostEmailToSubscribers } from "../../../utils/email";
 import inngestClient from "../../../utils/inngest";
-import { revalidatePage } from "../../../utils/revalidate";
 import {
   createOrRetrievePageSettings,
   getPageById,
@@ -36,21 +35,6 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
             path: `${user_id}/${page_id}/${images_folder}`,
           },
         });
-
-        try {
-          const page = await getPageById(page_id);
-          const settings = await createOrRetrievePageSettings(page_id);
-          // Revalidate
-          await revalidatePage(page.url_slug);
-          if (settings?.custom_domain) {
-            await revalidatePage(settings.custom_domain);
-          }
-        } catch (err) {
-          console.log(
-            "Trigger databaseWebhook [Posts]: Error revalidating page, most likely its deleted:",
-            err
-          );
-        }
 
         return res.status(200).json({ ok: true });
       }
@@ -95,12 +79,6 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
             .from("posts")
             .update({ email_notified: true })
             .match({ id: post.id });
-        }
-
-        // Revalidate
-        await revalidatePage(page.url_slug);
-        if (settings?.custom_domain) {
-          await revalidatePage(settings.custom_domain);
         }
       }
 

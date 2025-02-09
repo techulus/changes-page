@@ -1,7 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { IPageSettings } from "@changes-page/supabase/types/page";
-import { revalidatePage } from "../../../../utils/revalidate";
-import { getPageById } from "../../../../utils/useDatabase";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
@@ -22,20 +20,6 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
         type,
         page_id
       );
-
-      if (page_settings?.custom_domain) {
-        await revalidatePage(page_settings.custom_domain);
-      }
-
-      try {
-        const page = await getPageById(page_id);
-        await revalidatePage(page.url_slug);
-      } catch (err) {
-        console.log(
-          "Trigger databaseWebhook [Page Settings]: Revalidation failed, most likely the page is deleted:",
-          err
-        );
-      }
 
       return res.status(200).json({ ok: true });
     } catch (err) {
