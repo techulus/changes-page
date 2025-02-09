@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { NextApiRequest, NextApiResponse } from "next";
+import { ROUTES } from "../../../../data/routes.data";
 import inngestClient from "../../../../utils/inngest";
 import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
@@ -57,7 +58,7 @@ const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
         data: {
           owner_name: user.user_metadata?.name ?? user.email,
           team_name: team.name,
-          confirm_link: `${process.env.NEXT_PUBLIC_APP_URL}/teams`,
+          confirm_link: `${process.env.NEXT_PUBLIC_APP_URL}/${ROUTES.TEAMS}`,
         },
       });
 
