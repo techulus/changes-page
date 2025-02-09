@@ -100,7 +100,6 @@ export default function PageAnalytics({
                             !key.includes("image") &&
                             !key.includes("at")
                         )
-                        .filter(([_, value]) => value !== null && value !== "")
                         .map(([key, value]) => (
                           <div key={key} className="flex items-start">
                             <span className="text-xs font-medium text-gray-700 dark:text-gray-300 min-w-[100px]">
