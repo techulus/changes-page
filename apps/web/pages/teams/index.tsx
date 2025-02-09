@@ -3,6 +3,7 @@ import { SpinnerWithSpacing } from "@changes-page/ui";
 import { CheckCircleIcon, UserIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
   PrimaryButton,
@@ -15,6 +16,7 @@ import { EntityEmptyState } from "../../components/entity/empty-state";
 import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
+import { httpPost } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
 
 export default function Teams() {
@@ -380,9 +382,87 @@ export default function Teams() {
                             Invites
                           </dt>
                           <dd className="mt-2 text-sm text-gray-900 dark:text-gray-100 sm:col-span-2 sm:mt-4">
+                            {team.team_invitations?.length > 0 ? (
+                              <ul
+                                role="list"
+                                className="divide-y divide-gray-100 dark:divide-gray-700 rounded-md border border-gray-200 dark:border-gray-700 mb-4"
+                              >
+                                {team.team_invitations?.map(
+                                  (invite: {
+                                    id: string;
+                                    email: string;
+                                    role: string;
+                                  }) => (
+                                    <li
+                                      key={invite.id}
+                                      className="flex items-center justify-between p-2 text-sm/6"
+                                    >
+                                      <div className="flex w-0 flex-1 items-center">
+                                        <UserIcon
+                                          aria-hidden="true"
+                                          className="size-5 shrink-0 text-gray-400 dark:text-gray-500"
+                                        />
+                                        <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                                          <span className="truncate font-medium">
+                                            {invite.email}
+                                          </span>
+                                          <span className="shrink-0 text-gray-400 dark:text-gray-500 uppercase font-semibold">
+                                            {invite.role}
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div className="ml-4 shrink-0">
+                                        <button
+                                          className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                          onClick={async () => {
+                                            await supabase
+                                              .from("team_invitations")
+                                              .delete()
+                                              .match({ id: invite.id });
+
+                                            fetchTeams();
+                                          }}
+                                        >
+                                          Revoke
+                                        </button>
+                                      </div>
+                                    </li>
+                                  )
+                                )}
+                              </ul>
+                            ) : null}
+
                             <PrimaryButton
                               label="Invite team member"
                               className="h-8"
+                              onClick={async () => {
+                                const email = prompt("Enter email address");
+                                if (!email) {
+                                  return;
+                                }
+
+                                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                                  notifyError("Invalid email address");
+                                  return;
+                                }
+
+                                await toast.promise(
+                                  httpPost({
+                                    url: "/api/teams/invite",
+                                    data: {
+                                      team_id: team.id,
+                                      email,
+                                    },
+                                  }),
+                                  {
+                                    loading: "Sending invitation...",
+                                    success: "Invitation sent",
+                                    error: "Failed to send invitation",
+                                  }
+                                );
+
+                                fetchTeams();
+                              }}
                             />
                           </dd>
                         </div>

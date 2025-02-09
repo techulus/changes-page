@@ -55,8 +55,9 @@ create table team_invitations (
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+alter table team_invitations add constraint unique_email_team_id unique (email, team_id);
+
 alter table team_invitations enable row level security;
-create policy "Can insert team invitations." on team_invitations for insert with check (auth.uid() = inviter_id);
 create policy "Can view own team invitations." on team_invitations for select using (auth.uid() = inviter_id);
 create policy "Can delete own team invitations." on team_invitations for delete using (auth.uid() = inviter_id);
 
