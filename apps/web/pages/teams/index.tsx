@@ -39,43 +39,44 @@ export default function Teams() {
   const fetchTeams = async () => {
     setIsLoading(true);
 
-    const { data: teams, error: fetchError } = await supabase
-      .from("teams")
-      .select(
+    const [
+      { data: teams, error: fetchError },
+      { data: pages, error: pagesError },
+    ] = await Promise.all([
+      supabase
+        .from("teams")
+        .select(
+          `
+          *,
+          pages (
+            id,
+            title,
+            created_at
+          ),
+          team_members (
+            id,
+            user_id,
+            role
+          ),
+          team_invitations (
+            id,
+            email,
+            role,
+            created_at
+          )
         `
-        *,
-        pages (
-          id,
-          title,
-          created_at
-        ),
-        team_members (
-          id,
-          user_id,
-          role
-        ),
-        team_invitations (
-          id,
-          email,
-          role,
-          created_at
         )
-      `
-      )
-      .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false }),
 
-    const { data: pages, error: pagesError } = await supabase
-      .from("pages")
-      .select("*");
+      supabase.from("pages").select("*"),
+    ]);
 
-    console.log(teams);
     setTeams(teams ?? []);
     setPages(pages ?? []);
 
     if (fetchError) {
       notifyError("Failed to fetch teams");
     }
-
     if (pagesError) {
       notifyError("Failed to fetch pages");
     }
@@ -490,32 +491,61 @@ export default function Teams() {
                         <div>
                           <h3 className="text-base/7 font-semibold text-gray-900 dark:text-gray-100">
                             {team.name} (
-                            {team.team_members?.[0]?.role?.toUpperCase()})
+                            {team.team_members?.[0]?.role
+                              ? team.team_members?.[0]?.role?.toUpperCase()
+                              : "Would you like to join?"}
+                            )
                           </h3>
                           <div className="flex space-x-4 mt-1">
-                            <button
-                              type="button"
-                              className="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/20 px-2.5 py-1.5 text-sm font-semibold text-red-700 dark:text-red-400 shadow-sm ring-1 ring-inset ring-red-600/10 dark:ring-red-500/20 hover:bg-red-100 dark:hover:bg-red-900/30"
-                              onClick={async () => {
-                                if (
-                                  confirm(
-                                    "Are you sure you want to leave this team?"
-                                  )
-                                ) {
-                                  await supabase
-                                    .from("team_members")
-                                    .delete()
-                                    .match({
-                                      team_id: team.id,
-                                      user_id: user?.id,
-                                    });
+                            {team.team_invitations?.length > 0 ? (
+                              <button
+                                type="button"
+                                className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2.5 py-1.5 text-sm font-semibold text-green-700 dark:text-green-400 shadow-sm ring-1 ring-inset ring-green-600/10 dark:ring-green-500/20 hover:bg-green-100 dark:hover:bg-green-900/30"
+                                onClick={async () => {
+                                  await toast.promise(
+                                    httpPost({
+                                      url: "/api/teams/invite/accept",
+                                      data: {
+                                        invite_id: team.team_invitations[0].id,
+                                      },
+                                    }),
+                                    {
+                                      loading: "Joining team...",
+                                      success: "Joined team",
+                                      error: "Failed to join team",
+                                    }
+                                  );
 
                                   fetchTeams();
-                                }
-                              }}
-                            >
-                              Leave
-                            </button>
+                                }}
+                              >
+                                Join
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/20 px-2.5 py-1.5 text-sm font-semibold text-red-700 dark:text-red-400 shadow-sm ring-1 ring-inset ring-red-600/10 dark:ring-red-500/20 hover:bg-red-100 dark:hover:bg-red-900/30"
+                                onClick={async () => {
+                                  if (
+                                    confirm(
+                                      "Are you sure you want to leave this team?"
+                                    )
+                                  ) {
+                                    await supabase
+                                      .from("team_members")
+                                      .delete()
+                                      .match({
+                                        team_id: team.id,
+                                        user_id: user?.id,
+                                      });
+
+                                    fetchTeams();
+                                  }
+                                }}
+                              >
+                                Leave
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>

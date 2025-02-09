@@ -16,6 +16,7 @@ create policy "Can insert teams." on teams for insert with check (auth.uid() = o
 create policy "Can view own teams." on teams for select using (auth.uid() = owner_id);
 create policy "Can update own teams." on teams for update using (auth.uid() = owner_id);
 create policy "Can delete own teams." on teams for delete using (auth.uid() = owner_id);
+create policy "Invited users can view teams." on teams for select using (id in (select team_id from team_invitations where email = auth.email()));
 
 CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON teams
@@ -31,6 +32,8 @@ create table team_members (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+alter table team_members add constraint unique_team_user unique (team_id, user_id);
 
 alter table team_members enable row level security;
 create policy "Owner can view own team members." on team_members for select using (team_id in (select id from teams where owner_id = auth.uid()));
@@ -60,6 +63,7 @@ alter table team_invitations add constraint unique_email_team_id unique (email, 
 alter table team_invitations enable row level security;
 create policy "Can view own team invitations." on team_invitations for select using (auth.uid() = inviter_id);
 create policy "Can delete own team invitations." on team_invitations for delete using (auth.uid() = inviter_id);
+create policy "Can view team invitations." on team_invitations for select using (auth.email() = email);
 
 CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON team_invitations

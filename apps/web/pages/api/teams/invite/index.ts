@@ -57,7 +57,7 @@ const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
         data: {
           owner_name: user.user_metadata?.name ?? user.email,
           team_name: team.name,
-          confirm_link: `${process.env.NEXT_PUBLIC_APP_URL}/teams/invite/join/${invitation.id}`,
+          confirm_link: `${process.env.NEXT_PUBLIC_APP_URL}/teams`,
         },
       });
 
