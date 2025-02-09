@@ -40,3 +40,8 @@ export const NewPostSchema = object().shape({
   email_notified: boolean(),
   notes: string().optional().nullable(),
 });
+
+export const NewTeamSchema = object().shape({
+  name: string().required("Name is required").min(3, "Name must be at least 3 characters long"),
+  image: string().optional().nullable(),
+});

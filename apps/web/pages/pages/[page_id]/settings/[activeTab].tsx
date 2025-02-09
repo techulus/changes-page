@@ -24,9 +24,9 @@ const IntegrationsSettings = dynamic(
 export async function getServerSideProps({ req, res, params }) {
   const { page_id } = params;
 
-  const { user, supabase } = await getSupabaseServerClient({ req, res });
+  const { supabase } = await getSupabaseServerClient({ req, res });
   const page = await getPage(supabase, page_id);
-  const settings = await createOrRetrievePageSettings(user.id, String(page_id));
+  const settings = await createOrRetrievePageSettings(String(page_id));
 
   return {
     props: {

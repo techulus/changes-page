@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPageSettings } from "@changes-page/supabase/types/page";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 
@@ -16,7 +16,7 @@ const getPageSettings = async (
 
       console.log("getPageSettings", user?.id);
 
-      const data = await createOrRetrievePageSettings(user.id, String(page_id));
+      const data = await createOrRetrievePageSettings(String(page_id));
 
       return res.status(200).json(data);
     } catch (err) {

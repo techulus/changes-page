@@ -39,7 +39,7 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
 
         try {
           const page = await getPageById(page_id);
-          const settings = await createOrRetrievePageSettings(user_id, page_id);
+          const settings = await createOrRetrievePageSettings(page_id);
           // Revalidate
           await revalidatePage(page.url_slug);
           if (settings?.custom_domain) {
@@ -56,7 +56,7 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       const page = await getPageById(page_id);
-      const settings = await createOrRetrievePageSettings(user_id, page_id);
+      const settings = await createOrRetrievePageSettings(page_id);
 
       /**
        * BE VERY CAREFUL, THIS IS A VERY IMPORTANT LOGIC

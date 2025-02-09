@@ -12,6 +12,9 @@ export const ROUTES = {
   PAGES: "/pages",
   NEW_PAGE: "/pages/new",
 
+  // teams
+  TEAMS: "/teams",
+
   // account
   BILLING: "/account/billing",
 

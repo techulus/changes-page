@@ -49,7 +49,7 @@ import { useUserData } from "../../../utils/useUser";
 export async function getServerSideProps({ req, res, params }) {
   const { page_id } = params;
 
-  const { user, supabase } = await getSupabaseServerClient({ req, res });
+  const { supabase } = await getSupabaseServerClient({ req, res });
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -61,7 +61,7 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const settings = await createOrRetrievePageSettings(user.id, String(page_id));
+  const settings = await createOrRetrievePageSettings(String(page_id));
 
   return {
     props: {
@@ -78,7 +78,6 @@ export default function PageDetail({
   settings: serverSettings,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const { billingDetails } = useUserData();
   const { supabase } = useUserData();
   const { status } = router.query;
 
@@ -286,7 +285,6 @@ export default function PageDetail({
             }
             route={`/pages/${page_id}/new`}
             keyboardShortcut={"N"}
-            upgradeRequired={!billingDetails?.has_active_subscription}
           />
         }
         menuItems={
