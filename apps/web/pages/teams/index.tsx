@@ -17,6 +17,7 @@ import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
 import { track } from "../../utils/analytics";
+import { getAppBaseURL } from "../../utils/helpers";
 import { httpPost } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
 
@@ -218,13 +219,21 @@ export default function Teams() {
             <EntityEmptyState
               title="No teams yet!"
               message="Get started by creating your first team."
-              disabled={!billingDetails?.has_active_subscription}
               buttonLabel={
                 billingDetails?.has_active_subscription
                   ? "Create New Team"
                   : "Start Free Trial"
               }
-              onButtonClick={() => setShowTeamModal(true)}
+              onButtonClick={() => {
+                if (!billingDetails?.has_active_subscription) {
+                  router.push(
+                    `/api/billing/redirect-to-checkout?return_url=${getAppBaseURL()}/teams`
+                  );
+                  return;
+                }
+
+                setShowTeamModal(true);
+              }}
             />
           ) : (
             <div>
