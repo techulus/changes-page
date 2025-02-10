@@ -81,7 +81,7 @@ export default function Page({
             !!title && tabs.length > 0 && "relative sm:pb-0 lg:pb-2"
           )}
         >
-          <div className="flex flex-row justify-between items-center h-[100px]">
+          <div className="flex flex-row justify-between items-center sm:h-[100px]">
             <div className="flex items-start min-w-0">
               {showBackButton && (
                 <button
