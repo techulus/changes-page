@@ -15,7 +15,7 @@ import { track } from "../../../utils/analytics";
 import { httpPost } from "../../../utils/http";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params }) {
   const { page_id } = params;
 
   const settings = await createOrRetrievePageSettings(String(page_id));

@@ -7,6 +7,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { InferType } from "yup";
 import { ROUTES } from "../../data/routes.data";
 import { NewTeamSchema } from "../../data/schema";
+import { track } from "../../utils/analytics";
 import { useUserData } from "../../utils/useUser";
 import { InlineErrorMessage } from "../forms/notification.component";
 
@@ -65,6 +66,7 @@ export default function ManageTeamDialog({
             image: values.image,
           })
           .match({ id: team.id });
+        track("EditTeam");
         onSuccess();
       } else {
         await supabase
@@ -77,6 +79,7 @@ export default function ManageTeamDialog({
             },
           ])
           .select();
+        track("CreateTeam");
         onSuccess();
       }
 

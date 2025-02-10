@@ -1,6 +1,6 @@
 import { IPage } from "@changes-page/supabase/types/page";
 import { SpinnerWithSpacing } from "@changes-page/ui";
-import { CheckCircleIcon, UserIcon } from "@heroicons/react/solid";
+import { CheckCircleIcon, PlusIcon, UserIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ import { EntityEmptyState } from "../../components/entity/empty-state";
 import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
+import { track } from "../../utils/analytics";
 import { httpPost } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
 
@@ -109,9 +110,87 @@ export default function Teams() {
       return;
     }
 
+    track("DeleteTeam");
     fetchTeams();
     setTeamToDelete(null);
     setIsDeleting(false);
+  };
+
+  const handleAssignPage = async (teamId: string, pageId: string) => {
+    setAssigningPage(true);
+
+    await supabase
+      .from("pages")
+      .update({
+        team_id: teamId,
+      })
+      .match({ id: pageId });
+
+    track("AssignPageToTeam");
+    fetchTeams();
+    setAssigningPage(false);
+    setShowAssignPage(null);
+    setSelectedPage(null);
+  };
+
+  const handleRemovePage = async (pageId: string) => {
+    await supabase
+      .from("pages")
+      .update({
+        team_id: null,
+      })
+      .match({ id: pageId });
+
+    track("RemovePageFromTeam");
+    fetchTeams();
+  };
+
+  const handleRemoveMember = async (teamId: string, userId: string) => {
+    await supabase.from("team_members").delete().match({
+      team_id: teamId,
+      user_id: userId,
+    });
+
+    track("RemoveTeamMember");
+    fetchTeams();
+  };
+
+  const handleRevokeInvite = async (inviteId: string) => {
+    await supabase.from("team_invitations").delete().match({ id: inviteId });
+
+    track("RevokeTeamInvitation");
+    fetchTeams();
+  };
+
+  const handleAcceptInvite = async (inviteId: string) => {
+    await toast.promise(
+      httpPost({
+        url: "/api/teams/invite/accept",
+        data: {
+          invite_id: inviteId,
+        },
+      }),
+      {
+        loading: "Joining team...",
+        success: "Joined team",
+        error: "Failed to join team",
+      }
+    );
+
+    track("AcceptTeamInvitation");
+    fetchTeams();
+  };
+
+  const handleLeaveTeam = async (teamId: string) => {
+    if (confirm("Are you sure you want to leave this team?")) {
+      await supabase.from("team_members").delete().match({
+        team_id: teamId,
+        user_id: user?.id,
+      });
+
+      track("LeaveTeam");
+      fetchTeams();
+    }
   };
 
   return (
@@ -121,9 +200,12 @@ export default function Teams() {
         buttons={
           <PrimaryButton
             keyboardShortcut="N"
-            label="New"
+            label="Team"
             onClick={() => setShowTeamModal(true)}
             disabled={!billingDetails?.has_active_subscription}
+            icon={
+              <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            }
           />
         }
       >
@@ -224,16 +306,9 @@ export default function Teams() {
                                         <div className="ml-4 shrink-0">
                                           <button
                                             className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-                                            onClick={async () => {
-                                              await supabase
-                                                .from("pages")
-                                                .update({
-                                                  team_id: null,
-                                                })
-                                                .match({ id: page.id });
-
-                                              fetchTeams();
-                                            }}
+                                            onClick={() =>
+                                              handleRemovePage(page.id)
+                                            }
                                           >
                                             Remove
                                           </button>
@@ -289,25 +364,9 @@ export default function Teams() {
                                       }
                                       disabled={assigningPage}
                                       className="ml-2 h-8"
-                                      onClick={async () => {
-                                        if (!selectedPage) {
-                                          return;
-                                        }
-
-                                        setAssigningPage(true);
-
-                                        await supabase
-                                          .from("pages")
-                                          .update({
-                                            team_id: team.id,
-                                          })
-                                          .match({ id: selectedPage });
-
-                                        fetchTeams();
-                                        setAssigningPage(null);
-                                        setShowAssignPage(null);
-                                        setSelectedPage(null);
-                                      }}
+                                      onClick={() =>
+                                        handleAssignPage(team.id, selectedPage)
+                                      }
                                     />
 
                                     <SecondaryButton
@@ -364,6 +423,12 @@ export default function Teams() {
                                         <a
                                           href="#"
                                           className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                          onClick={() =>
+                                            handleRemoveMember(
+                                              team.id,
+                                              member.user_id
+                                            )
+                                          }
                                         >
                                           Remove
                                         </a>
@@ -415,14 +480,9 @@ export default function Teams() {
                                       <div className="ml-4 shrink-0">
                                         <button
                                           className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-                                          onClick={async () => {
-                                            await supabase
-                                              .from("team_invitations")
-                                              .delete()
-                                              .match({ id: invite.id });
-
-                                            fetchTeams();
-                                          }}
+                                          onClick={() =>
+                                            handleRevokeInvite(invite.id)
+                                          }
                                         >
                                           Revoke
                                         </button>
@@ -501,23 +561,11 @@ export default function Teams() {
                               <button
                                 type="button"
                                 className="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2.5 py-1.5 text-sm font-semibold text-green-700 dark:text-green-400 shadow-sm ring-1 ring-inset ring-green-600/10 dark:ring-green-500/20 hover:bg-green-100 dark:hover:bg-green-900/30"
-                                onClick={async () => {
-                                  await toast.promise(
-                                    httpPost({
-                                      url: "/api/teams/invite/accept",
-                                      data: {
-                                        invite_id: team.team_invitations[0].id,
-                                      },
-                                    }),
-                                    {
-                                      loading: "Joining team...",
-                                      success: "Joined team",
-                                      error: "Failed to join team",
-                                    }
-                                  );
-
-                                  fetchTeams();
-                                }}
+                                onClick={() =>
+                                  handleAcceptInvite(
+                                    team.team_invitations[0].id
+                                  )
+                                }
                               >
                                 Join
                               </button>
@@ -525,23 +573,7 @@ export default function Teams() {
                               <button
                                 type="button"
                                 className="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/20 px-2.5 py-1.5 text-sm font-semibold text-red-700 dark:text-red-400 shadow-sm ring-1 ring-inset ring-red-600/10 dark:ring-red-500/20 hover:bg-red-100 dark:hover:bg-red-900/30"
-                                onClick={async () => {
-                                  if (
-                                    confirm(
-                                      "Are you sure you want to leave this team?"
-                                    )
-                                  ) {
-                                    await supabase
-                                      .from("team_members")
-                                      .delete()
-                                      .match({
-                                        team_id: team.id,
-                                        user_id: user?.id,
-                                      });
-
-                                    fetchTeams();
-                                  }
-                                }}
+                                onClick={() => handleLeaveTeam(team.id)}
                               >
                                 Leave
                               </button>

@@ -59,7 +59,7 @@ export default function Pages({
         title={"My Pages"}
         buttons={
           <PrimaryRouterButton
-            label="New"
+            label="Page"
             icon={
               <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             }
@@ -71,7 +71,7 @@ export default function Pages({
       >
         {billingDetails?.has_active_subscription ? <Changelog /> : null}
 
-        <div className="overflow-hidden sm:rounded-md">
+        <div className="overflow-hidden">
           {!pages.length && (
             <EntityEmptyState
               title="No pages yet!"
@@ -103,7 +103,7 @@ export default function Pages({
           )}
 
           {pages.length ? (
-            <div className="divide-y divide-gray-200 dark:divide-gray-800 overflow-hidden rounded-lg shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+            <div className="divide-y divide-gray-200 dark:divide-gray-800 overflow-hidden shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
               {pages.map((page) => (
                 <div
                   key={page.id}
@@ -130,7 +130,7 @@ export default function Pages({
                           "text-rose-500 dark:text-rose-100",
                         page.type === PageType.updates &&
                           "text-amber-500 dark:text-amber-100",
-                        "rounded-lg inline-flex px-2 py-1 font-bold"
+                        "inline-flex px-2 py-1 font-bold"
                       )}
                     >
                       {PageTypeToLabel[page.type]}
