@@ -469,7 +469,9 @@ export default function Teams({
                                       <div className="ml-4 flex min-w-0 flex-1 gap-2">
                                         <span className="truncate font-medium">
                                           {/* @ts-ignore */}
-                                          {member.user.full_name}
+                                          {member.user.full_name ??
+                                            /* @ts-ignore */
+                                            member.user.id}
                                         </span>
                                         <span className="shrink-0 text-gray-400 dark:text-gray-500 uppercase font-semibold">
                                           {member.role}

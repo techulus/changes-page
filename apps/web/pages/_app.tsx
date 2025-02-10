@@ -1,11 +1,19 @@
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { Analytics } from "@vercel/analytics/react";
+import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import Head from "next/head";
 import { useState } from "react";
 import "../styles/global.css";
 import { UserContextProvider } from "../utils/useUser";
+
+const ProgressBar = dynamic(
+  () => import("../components/core/progress-bar.component"),
+  {
+    ssr: false,
+  }
+);
 
 const geist = localFont({
   src: [
@@ -44,6 +52,7 @@ export default function App({ Component, pageProps }) {
         <UserContextProvider>
           {getLayout(<Component {...pageProps} />)}
           <Analytics />
+          <ProgressBar />
         </UserContextProvider>
       </SessionContextProvider>
     </>
