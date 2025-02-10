@@ -203,23 +203,6 @@ export default function ManageTeamDialog({
                                   />
                                 </div>
                               )}
-
-                              {formik.values.image && !formik.errors.image && (
-                                <div className="mt-2">
-                                  <img
-                                    src={formik.values.image}
-                                    alt="Team Avatar Preview"
-                                    className="h-20 w-20 rounded-full object-cover"
-                                    onError={(e) => {
-                                      e.currentTarget.onerror = null;
-                                      formik.setFieldError(
-                                        "image",
-                                        "Failed to load image"
-                                      );
-                                    }}
-                                  />
-                                </div>
-                              )}
                             </div>
                           </div>
                         </div>

@@ -96,9 +96,7 @@ export default function PageAnalytics({
                         .filter(([key]) => key !== "created_at")
                         .filter(
                           ([key]) =>
-                            !key.includes("id") &&
-                            !key.includes("image") &&
-                            !key.includes("at")
+                            !key.includes("id") && !key.includes("image")
                         )
                         .map(([key, value]) => (
                           <div key={key} className="flex items-start">

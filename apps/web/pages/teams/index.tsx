@@ -1,6 +1,13 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IPage } from "@changes-page/supabase/types/page";
 import { SpinnerWithSpacing } from "@changes-page/ui";
-import { CheckCircleIcon, PlusIcon, UserIcon } from "@heroicons/react/solid";
+import {
+  CheckCircleIcon,
+  OfficeBuildingIcon,
+  PlusIcon,
+  UserIcon,
+} from "@heroicons/react/solid";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -19,14 +26,57 @@ import Changelog from "../../components/marketing/changelog";
 import { track } from "../../utils/analytics";
 import { getAppBaseURL } from "../../utils/helpers";
 import { httpPost } from "../../utils/http";
+import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
 import { useUserData } from "../../utils/useUser";
 
-export default function Teams() {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const { user } = await getSupabaseServerClient(ctx);
+
+  const { data: teams, error } = await supabaseAdmin
+    .from("teams")
+    .select(
+      `
+      *,
+      pages (
+        id,
+        title,
+        created_at
+      ),
+      team_members (
+        id,
+        user:user_id(
+          id,
+          full_name
+        ),
+        role
+      ),
+      team_invitations (
+        id,
+        email,
+        role,
+        created_at
+      )
+    `
+    )
+    .eq("owner_id", user?.id);
+
+  return {
+    props: { teams, error },
+  };
+}
+
+export default function Teams({
+  teams,
+  error,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { billingDetails } = useUserData();
   const router = useRouter();
   const { user, supabase } = useUserData();
 
-  const [teams, setTeams] = useState([]);
+  const revalidate = () => {
+    router.replace(router.asPath);
+  };
+
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,47 +88,20 @@ export default function Teams() {
   const [selectedPage, setSelectedPage] = useState(null);
   const [assigningPage, setAssigningPage] = useState(false);
 
-  const fetchTeams = async () => {
+  const fetchData = async () => {
+    if (error) {
+      notifyError("Failed to fetch teams");
+      return;
+    }
+
     setIsLoading(true);
 
-    const [
-      { data: teams, error: fetchError },
-      { data: pages, error: pagesError },
-    ] = await Promise.all([
-      supabase
-        .from("teams")
-        .select(
-          `
-          *,
-          pages (
-            id,
-            title,
-            created_at
-          ),
-          team_members (
-            id,
-            user_id,
-            role
-          ),
-          team_invitations (
-            id,
-            email,
-            role,
-            created_at
-          )
-        `
-        )
-        .order("created_at", { ascending: false }),
+    const { data: pages, error: pagesError } = await supabase
+      .from("pages")
+      .select("*");
 
-      supabase.from("pages").select("*"),
-    ]);
-
-    setTeams(teams ?? []);
     setPages(pages ?? []);
 
-    if (fetchError) {
-      notifyError("Failed to fetch teams");
-    }
     if (pagesError) {
       notifyError("Failed to fetch pages");
     }
@@ -87,7 +110,7 @@ export default function Teams() {
   };
 
   useEffect(() => {
-    fetchTeams();
+    fetchData();
   }, []);
 
   useHotkeys(
@@ -112,7 +135,7 @@ export default function Teams() {
     }
 
     track("DeleteTeam");
-    fetchTeams();
+    revalidate();
     setTeamToDelete(null);
     setIsDeleting(false);
   };
@@ -128,7 +151,7 @@ export default function Teams() {
       .match({ id: pageId });
 
     track("AssignPageToTeam");
-    fetchTeams();
+    revalidate();
     setAssigningPage(false);
     setShowAssignPage(null);
     setSelectedPage(null);
@@ -143,7 +166,7 @@ export default function Teams() {
       .match({ id: pageId });
 
     track("RemovePageFromTeam");
-    fetchTeams();
+    revalidate();
   };
 
   const handleRemoveMember = async (teamId: string, userId: string) => {
@@ -153,14 +176,14 @@ export default function Teams() {
     });
 
     track("RemoveTeamMember");
-    fetchTeams();
+    revalidate();
   };
 
   const handleRevokeInvite = async (inviteId: string) => {
     await supabase.from("team_invitations").delete().match({ id: inviteId });
 
     track("RevokeTeamInvitation");
-    fetchTeams();
+    revalidate();
   };
 
   const handleAcceptInvite = async (inviteId: string) => {
@@ -179,7 +202,7 @@ export default function Teams() {
     );
 
     track("AcceptTeamInvitation");
-    fetchTeams();
+    revalidate();
   };
 
   const handleLeaveTeam = async (teamId: string) => {
@@ -190,8 +213,37 @@ export default function Teams() {
       });
 
       track("LeaveTeam");
-      fetchTeams();
+      revalidate();
     }
+  };
+
+  const handleInviteTeamMember = async (teamId: string) => {
+    const email = prompt("Enter email address");
+    if (!email) {
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      notifyError("Invalid email address");
+      return;
+    }
+
+    await toast.promise(
+      httpPost({
+        url: "/api/teams/invite",
+        data: {
+          team_id: teamId,
+          email,
+        },
+      }),
+      {
+        loading: "Sending invitation...",
+        success: "Invitation sent",
+        error: "Failed to send invitation",
+      }
+    );
+
+    revalidate();
   };
 
   return (
@@ -253,7 +305,7 @@ export default function Teams() {
                           />
                         ) : (
                           <div className="h-12 w-12 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                            <UserIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
+                            <OfficeBuildingIcon className="h-6 w-6 text-indigo-400 dark:text-indigo-500" />
                           </div>
                         )}
                         <div>
@@ -404,47 +456,43 @@ export default function Teams() {
                                 role="list"
                                 className="divide-y divide-gray-100 dark:divide-gray-700 rounded-md border border-gray-200 dark:border-gray-700"
                               >
-                                {team.team_members?.map(
-                                  (member: {
-                                    id: string;
-                                    user_id: string;
-                                    role: string;
-                                  }) => (
-                                    <li
-                                      key={member.id}
-                                      className="flex items-center justify-between p-2 text-sm/6"
-                                    >
-                                      <div className="flex w-0 flex-1 items-center">
-                                        <UserIcon
-                                          aria-hidden="true"
-                                          className="size-5 shrink-0 text-gray-400 dark:text-gray-500"
-                                        />
-                                        <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                                          <span className="truncate font-medium">
-                                            {member.user_id}
-                                          </span>
-                                          <span className="shrink-0 text-gray-400 dark:text-gray-500 uppercase font-semibold">
-                                            {member.role}
-                                          </span>
-                                        </div>
+                                {team.team_members?.map((member) => (
+                                  <li
+                                    key={member.id}
+                                    className="flex items-center justify-between p-2 text-sm/6"
+                                  >
+                                    <div className="flex w-0 flex-1 items-center">
+                                      <UserIcon
+                                        aria-hidden="true"
+                                        className="size-5 shrink-0 text-gray-400 dark:text-gray-500"
+                                      />
+                                      <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                                        <span className="truncate font-medium">
+                                          {/* @ts-ignore */}
+                                          {member.user.full_name}
+                                        </span>
+                                        <span className="shrink-0 text-gray-400 dark:text-gray-500 uppercase font-semibold">
+                                          {member.role}
+                                        </span>
                                       </div>
-                                      <div className="ml-4 shrink-0">
-                                        <a
-                                          href="#"
-                                          className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-                                          onClick={() =>
-                                            handleRemoveMember(
-                                              team.id,
-                                              member.user_id
-                                            )
-                                          }
-                                        >
-                                          Remove
-                                        </a>
-                                      </div>
-                                    </li>
-                                  )
-                                )}
+                                    </div>
+                                    <div className="ml-4 shrink-0">
+                                      <a
+                                        href="#"
+                                        className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                        onClick={() =>
+                                          handleRemoveMember(
+                                            team.id,
+                                            /* @ts-ignore */
+                                            member.user.id
+                                          )
+                                        }
+                                      >
+                                        Remove
+                                      </a>
+                                    </div>
+                                  </li>
+                                ))}
                               </ul>
                             </dd>
                           ) : (
@@ -505,34 +553,7 @@ export default function Teams() {
                             <PrimaryButton
                               label="Invite team member"
                               className="h-8"
-                              onClick={async () => {
-                                const email = prompt("Enter email address");
-                                if (!email) {
-                                  return;
-                                }
-
-                                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                                  notifyError("Invalid email address");
-                                  return;
-                                }
-
-                                await toast.promise(
-                                  httpPost({
-                                    url: "/api/teams/invite",
-                                    data: {
-                                      team_id: team.id,
-                                      email,
-                                    },
-                                  }),
-                                  {
-                                    loading: "Sending invitation...",
-                                    success: "Invitation sent",
-                                    error: "Failed to send invitation",
-                                  }
-                                );
-
-                                fetchTeams();
-                              }}
+                              onClick={() => handleInviteTeamMember(team.id)}
                             />
                           </dd>
                         </div>
@@ -604,7 +625,7 @@ export default function Teams() {
         setOpen={setShowTeamModal}
         team={selectedTeam}
         onSuccess={() => {
-          fetchTeams();
+          revalidate();
           setShowTeamModal(false);
           setSelectedTeam(null);
         }}
