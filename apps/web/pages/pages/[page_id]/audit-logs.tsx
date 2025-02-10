@@ -123,7 +123,9 @@ export default function PageAnalytics({
             ))}
           </ul>
         ) : (
-          <div className="text-center text-gray-500">No audit logs found</div>
+          <div className="text-center text-gray-500 p-12">
+            No audit logs found
+          </div>
         )}
       </div>
     </Page>

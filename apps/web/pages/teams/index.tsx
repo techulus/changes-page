@@ -202,10 +202,10 @@ export default function Teams() {
             keyboardShortcut="N"
             label="Team"
             onClick={() => setShowTeamModal(true)}
-            disabled={!billingDetails?.has_active_subscription}
             icon={
               <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             }
+            upgradeRequired={!billingDetails?.has_active_subscription}
           />
         }
       >
