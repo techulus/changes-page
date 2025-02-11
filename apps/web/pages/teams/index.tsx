@@ -1,4 +1,3 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IPage } from "@changes-page/supabase/types/page";
 import { SpinnerWithSpacing } from "@changes-page/ui";
 import {
@@ -7,9 +6,8 @@ import {
   PlusIcon,
   UserIcon,
 } from "@heroicons/react/solid";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
@@ -23,60 +21,18 @@ import { EntityEmptyState } from "../../components/entity/empty-state";
 import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
+import MemeberDetails from "../../components/teams/memeber-details";
 import { track } from "../../utils/analytics";
 import { getAppBaseURL } from "../../utils/helpers";
 import { httpPost } from "../../utils/http";
-import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
 import { useUserData } from "../../utils/useUser";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const { user } = await getSupabaseServerClient(ctx);
-
-  const { data: teams, error } = await supabaseAdmin
-    .from("teams")
-    .select(
-      `
-      *,
-      pages (
-        id,
-        title,
-        created_at
-      ),
-      team_members (
-        id,
-        user:user_id(
-          id,
-          full_name
-        ),
-        role
-      ),
-      team_invitations (
-        id,
-        email,
-        role,
-        created_at
-      )
-    `
-    )
-    .eq("owner_id", user?.id);
-
-  return {
-    props: { teams, error },
-  };
-}
-
-export default function Teams({
-  teams,
-  error,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Teams() {
   const { billingDetails } = useUserData();
   const router = useRouter();
   const { user, supabase } = useUserData();
 
-  const revalidate = () => {
-    router.replace(router.asPath);
-  };
-
+  const [teams, setTeams] = useState([]);
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -88,30 +44,56 @@ export default function Teams({
   const [selectedPage, setSelectedPage] = useState(null);
   const [assigningPage, setAssigningPage] = useState(false);
 
-  const fetchData = async () => {
-    if (error) {
-      notifyError("Failed to fetch teams");
-      return;
-    }
-
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
 
-    const { data: pages, error: pagesError } = await supabase
-      .from("pages")
-      .select("*");
+    const [
+      { data: pages, error: pagesError },
+      { data: teams, error: teamsError },
+    ] = await Promise.all([
+      supabase.from("pages").select("*"),
+      supabase
+        .from("teams")
+        .select(
+          `
+      *,
+      pages (
+        id,
+        title,
+        created_at
+      ),
+      team_members (
+        id,
+        role
+      ),
+      team_invitations(
+        id,
+        email,
+        role,
+        created_at
+      )
+    `
+        )
+        .eq("team_invitations.status", "pending"),
+    ]);
 
     setPages(pages ?? []);
+    setTeams(teams ?? []);
 
     if (pagesError) {
       notifyError("Failed to fetch pages");
     }
 
+    if (teamsError) {
+      notifyError("Failed to fetch teams");
+    }
+
     setIsLoading(false);
-  };
+  }, [supabase]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   useHotkeys(
     "n",
@@ -135,7 +117,7 @@ export default function Teams({
     }
 
     track("DeleteTeam");
-    revalidate();
+    fetchData();
     setTeamToDelete(null);
     setIsDeleting(false);
   };
@@ -151,7 +133,7 @@ export default function Teams({
       .match({ id: pageId });
 
     track("AssignPageToTeam");
-    revalidate();
+    fetchData();
     setAssigningPage(false);
     setShowAssignPage(null);
     setSelectedPage(null);
@@ -166,7 +148,7 @@ export default function Teams({
       .match({ id: pageId });
 
     track("RemovePageFromTeam");
-    revalidate();
+    fetchData();
   };
 
   const handleRemoveMember = async (teamId: string, userId: string) => {
@@ -176,14 +158,14 @@ export default function Teams({
     });
 
     track("RemoveTeamMember");
-    revalidate();
+    fetchData();
   };
 
   const handleRevokeInvite = async (inviteId: string) => {
     await supabase.from("team_invitations").delete().match({ id: inviteId });
 
     track("RevokeTeamInvitation");
-    revalidate();
+    fetchData();
   };
 
   const handleAcceptInvite = async (inviteId: string) => {
@@ -202,7 +184,7 @@ export default function Teams({
     );
 
     track("AcceptTeamInvitation");
-    revalidate();
+    fetchData();
   };
 
   const handleLeaveTeam = async (teamId: string) => {
@@ -213,7 +195,7 @@ export default function Teams({
       });
 
       track("LeaveTeam");
-      revalidate();
+      fetchData();
     }
   };
 
@@ -243,7 +225,7 @@ export default function Teams({
       }
     );
 
-    revalidate();
+    fetchData();
   };
 
   return (
@@ -467,12 +449,7 @@ export default function Teams({
                                         className="size-5 shrink-0 text-gray-400 dark:text-gray-500"
                                       />
                                       <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                                        <span className="truncate font-medium">
-                                          {/* @ts-ignore */}
-                                          {member.user.full_name ??
-                                            /* @ts-ignore */
-                                            member.user.id}
-                                        </span>
+                                        <MemeberDetails id={member.id} />
                                         <span className="shrink-0 text-gray-400 dark:text-gray-500 uppercase font-semibold">
                                           {member.role}
                                         </span>
@@ -485,8 +462,7 @@ export default function Teams({
                                         onClick={() =>
                                           handleRemoveMember(
                                             team.id,
-                                            /* @ts-ignore */
-                                            member.user.id
+                                            member.user?.id
                                           )
                                         }
                                       >
@@ -627,7 +603,7 @@ export default function Teams({
         setOpen={setShowTeamModal}
         team={selectedTeam}
         onSuccess={() => {
-          revalidate();
+          fetchData();
           setShowTeamModal(false);
           setSelectedTeam(null);
         }}

@@ -9,3 +9,6 @@ SELECT cron.schedule('0 0 * * *', $$delete from page_views where created_at < no
 
 -- Remove all cron job logs older than 1 month
 select cron.schedule('0 0 * * *', $$delete from cron.job_run_details where end_time < now() - interval '7 days'$$);
+
+-- Remove all expired team invitations
+select cron.schedule('*/15 * * * *', $$delete from team_invitations where expires_at < now() and status = 'pending'$$);

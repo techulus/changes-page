@@ -48,8 +48,8 @@ const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
 
       await supabaseAdmin
         .from("team_invitations")
-        .delete()
-        .match({ id: invite_id });
+        .update({ status: "accepted" })
+        .eq("id", invite_id);
 
       return res.status(201).json({ ok: true });
     } catch (err) {
