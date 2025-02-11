@@ -28,6 +28,12 @@ const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
 
+      if (user.email === email) {
+        return res.status(400).json({
+          error: { statusCode: 400, message: "You cannot invite yourself" },
+        });
+      }
+
       const { data: team } = await supabase
         .from("teams")
         .select("*")
