@@ -15,7 +15,7 @@ export default function MemeberDetails({ id }: { id: string }) {
 
   if (!memberDetails) {
     return (
-      <div className="animate-pulse h-4 bg-gray-200 dark:bg-gray-600 col-span-2 rounded"></div>
+      <div className="animate-pulse w-24 h-6 bg-gray-200 dark:bg-gray-600 rounded"></div>
     );
   }
 

@@ -64,6 +64,7 @@ export default function Teams() {
       ),
       team_members (
         id,
+        user_id,
         role
       ),
       team_invitations(
@@ -319,7 +320,7 @@ export default function Teams() {
                     <div className="border-t border-gray-100 dark:border-gray-700">
                       <dl className="divide-y divide-gray-100 dark:divide-gray-700">
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm/6 font-semibold text-gray-900 dark:text-gray-100">
+                          <dt className="text-md/6 font-semibold text-gray-900 dark:text-gray-100">
                             Pages
                           </dt>
                           <dd className="mt-2 text-sm text-gray-900 dark:text-gray-100 sm:col-span-2 sm:mt-0">
@@ -375,7 +376,7 @@ export default function Teams() {
                                     <select
                                       id="type"
                                       name="type"
-                                      className="block w-full pl-3 pr-10 py-2 text-base dark:text-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md max-w-sm"
+                                      className="block w-full pl-3 pr-10 py-2 text-base dark:text-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md max-w-xs"
                                       onChange={(e) =>
                                         setSelectedPage(e.target.value)
                                       }
@@ -420,7 +421,7 @@ export default function Teams() {
                                   </div>
                                 ) : (
                                   <PrimaryButton
-                                    label="Add page to team"
+                                    label="Assign page"
                                     className="h-8"
                                     onClick={() => setShowAssignPage(team.id)}
                                   />
@@ -429,7 +430,7 @@ export default function Teams() {
                             </div>
                           </dd>
 
-                          <dt className="text-sm/6 font-semibold text-gray-900 dark:text-gray-100 mt-4">
+                          <dt className="text-md/6 font-semibold text-gray-900 dark:text-gray-100 mt-4">
                             Members
                           </dt>
                           {team.team_members?.length > 0 ? (
@@ -462,7 +463,7 @@ export default function Teams() {
                                         onClick={() =>
                                           handleRemoveMember(
                                             team.id,
-                                            member.user?.id
+                                            member.user_id
                                           )
                                         }
                                       >
@@ -479,7 +480,7 @@ export default function Teams() {
                             </dd>
                           )}
 
-                          <dt className="text-sm/6 font-semibold text-gray-900 dark:text-gray-100 mt-4">
+                          <dt className="text-md/6 font-semibold text-gray-900 dark:text-gray-100 mt-4">
                             Invites
                           </dt>
                           <dd className="mt-2 text-sm text-gray-900 dark:text-gray-100 sm:col-span-2 sm:mt-4">
@@ -558,11 +559,11 @@ export default function Teams() {
                         )}
                         <div>
                           <h3 className="text-base/7 font-semibold text-gray-900 dark:text-gray-100">
-                            {team.name} (
                             {team.team_members?.[0]?.role
-                              ? team.team_members?.[0]?.role?.toUpperCase()
-                              : "Would you like to join?"}
-                            )
+                              ? `${
+                                  team.name
+                                } (${team.team_members[0].role.toUpperCase()})`
+                              : `You've been invited to join ${team.name} team, would you like to join?`}
                           </h3>
                           <div className="flex space-x-4 mt-1">
                             {team.team_invitations?.length > 0 ? (

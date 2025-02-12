@@ -5,7 +5,6 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
 import { useUserData } from "../../utils/useUser";
 import BillingBanner from "../billing/billing-banner";
 
@@ -40,22 +39,6 @@ export default function Page({
 }) {
   const router = useRouter();
   const { user } = useUserData();
-
-  useHotkeys(
-    "esc",
-    () => {
-      if (router.pathname === "/") return;
-      if (router.pathname === "/pages") return;
-
-      if (backRoute) {
-        void router.replace(backRoute);
-        return;
-      }
-
-      router.back();
-    },
-    [router, backRoute]
-  );
 
   useEffect(() => {
     if (router.query?.yay && confetti) {

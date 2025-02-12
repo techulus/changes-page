@@ -47,7 +47,7 @@ const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
 
-      const { data: invitation } = await supabaseAdmin
+      const { data: invitation, error: invitationError } = await supabaseAdmin
         .from("team_invitations")
         .insert({
           team_id,
