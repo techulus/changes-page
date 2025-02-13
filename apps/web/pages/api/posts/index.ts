@@ -46,6 +46,15 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
 
+      const { data: page, error: pageError } = await supabase
+        .from("pages")
+        .select("*")
+        .eq("id", page_id)
+        .single();
+
+      if (pageError) throw pageError;
+      if (!page) throw new Error("User does not have access to this page");
+
       console.log("createNewPost", user?.id);
 
       const postPayload = {
