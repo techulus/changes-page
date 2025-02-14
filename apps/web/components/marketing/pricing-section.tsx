@@ -15,7 +15,7 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
     "Zapier Integration",
     "White labeling",
     "AI Assistant",
-    "Email Support",
+    "Email & Slack Support",
   ];
 
   return (

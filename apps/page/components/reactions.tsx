@@ -1,15 +1,8 @@
+import { IReactions } from "@changes-page/supabase/types/page";
 import { Transition } from "@headlessui/react";
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
 import { httpGet, httpPost } from "../utils/http";
-
-export type IReactions = {
-  thumbs_up?: number;
-  thumbs_down?: number;
-  rocket?: number;
-  sad?: number;
-  heart?: number;
-};
 
 const ReactionsCounter = ({
   postId,

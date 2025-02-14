@@ -18,8 +18,8 @@ import { useUserData } from "../../../utils/useUser";
 export async function getServerSideProps({ params, req, res }) {
   const { page_id, post_id } = params;
 
-  const { supabase, user } = await getSupabaseServerClient({ req, res });
-  const settings = await createOrRetrievePageSettings(user.id, String(page_id));
+  const { supabase } = await getSupabaseServerClient({ req, res });
+  const settings = await createOrRetrievePageSettings(String(page_id));
   const { data: post } = await supabase
     .from("posts")
     .select("*")
@@ -42,7 +42,7 @@ export default function EditPost({
   post,
   settings,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { supabase } = useUserData();
+  const { supabase, user } = useUserData();
   const router = useRouter();
   const [saving, setSaving] = useState<boolean>(false);
 
@@ -59,6 +59,13 @@ export default function EditPost({
       }
 
       await supabase.from("posts").update(newPost).match({ id: post_id });
+
+      await supabase.from("page_audit_logs").insert({
+        page_id: page_id,
+        actor_id: user.id,
+        action: `Updated Post: ${newPost.title}`,
+        changes: newPost,
+      });
 
       return await router.push(`${ROUTES.PAGES}/${page_id}`);
     } catch (e) {

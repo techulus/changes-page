@@ -44,6 +44,7 @@
     "next": "^14.0.4",
     "next-seo": "^6.4.0",
     "next-sitemap": "^4.2.3",
+    "nprogress": "^0.2.0",
     "openai": "^3.2.1",
     "postmark": "^3.0.15",
     "react": "^18.2.0",

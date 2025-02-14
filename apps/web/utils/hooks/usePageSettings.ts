@@ -9,7 +9,7 @@ import { httpGet } from "../http";
 import { useUserData } from "../useUser";
 
 export default function usePageSettings(pageId: string, prefetch = true) {
-  const { supabase } = useUserData();
+  const { supabase, user } = useUserData();
   const [loading, setLoading] = useState(true);
 
   const [settings, setSettings] = useState<IPageSettings>(null);
@@ -21,6 +21,13 @@ export default function usePageSettings(pageId: string, prefetch = true) {
         .update(payload)
         .match({ page_id: pageId })
         .select();
+
+      await supabase.from("page_audit_logs").insert({
+        page_id: pageId,
+        actor_id: user.id,
+        action: "Updated Page Settings",
+        changes: payload,
+      });
 
       if (settings.length) {
         setSettings(settings[0]);

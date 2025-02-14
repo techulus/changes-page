@@ -24,20 +24,13 @@ export default function HeaderComponent() {
 
   const navigation = useMemo(() => {
     if (user) {
-      if (billingDetails?.has_active_subscription) {
-        return [
-          { name: "Pages", href: ROUTES.PAGES },
-          { name: "Zapier", href: ROUTES.ZAPIER },
-          { name: "Billing", href: ROUTES.BILLING },
-          { name: "Support", href: ROUTES.SUPPORT, external: true },
-        ];
-      } else {
-        return [
-          { name: "Pages", href: ROUTES.PAGES },
-          { name: "Pricing", href: ROUTES.PRICING },
-          { name: "Support", href: ROUTES.SUPPORT, external: true },
-        ];
-      }
+      return [
+        { name: "Pages", href: ROUTES.PAGES },
+        { name: "Teams", href: ROUTES.TEAMS },
+        { name: "Zapier", href: ROUTES.ZAPIER },
+        { name: "Billing", href: ROUTES.BILLING },
+        { name: "Support", href: ROUTES.SUPPORT, external: true },
+      ];
     }
 
     return [
@@ -77,6 +70,7 @@ export default function HeaderComponent() {
           ],
           siteName: "changes.page",
         }}
+        canonical={`https://changes.page${router.asPath}`}
         twitter={{
           handle: "@arjunz",
           site: "@techulus",

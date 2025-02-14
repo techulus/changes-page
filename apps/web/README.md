@@ -7,10 +7,6 @@ This folder contains the dashboard app for the project and all marketing pages.
 ```
 NEXT_PUBLIC_PAGES_DOMAIN=http://localhost:3000
 
-# Revalidation
-REVALIDATE_ENDPOINT=
-REVALIDATE_TOKEN=
-
 # Supabase details from https://app.supabase.io
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=

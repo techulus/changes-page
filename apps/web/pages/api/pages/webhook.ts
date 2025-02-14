@@ -1,7 +1,6 @@
+import { IPage } from "@changes-page/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { IPage } from "@changes-page/supabase/types/page";
-import { revalidatePage } from "../../../utils/revalidate";
 import {
   createOrRetrievePageSettings,
   updateSubscriptionUsage,
@@ -26,14 +25,8 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
       // report usage
       await updateSubscriptionUsage(user_id, `${type}-${id}-${v4()}`);
 
-      // Revalidate
-      await revalidatePage(page.url_slug);
-
       try {
-        const settings = await createOrRetrievePageSettings(user_id, page.id);
-        if (settings?.custom_domain) {
-          await revalidatePage(settings.custom_domain);
-        }
+        await createOrRetrievePageSettings(page.id);
       } catch (err) {
         console.log(
           "Trigger databaseWebhook [Page]: Revalidation failed, failed to get page settings, maybe page is deleted?:",

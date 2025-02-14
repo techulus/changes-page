@@ -1,5 +1,5 @@
 import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
-import { PlusIcon } from "@heroicons/react/solid";
+import { PlusIcon, UserGroupIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
@@ -21,7 +21,14 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
   const { data: pages, error } = await supabase
     .from("pages")
-    .select("*")
+    .select(
+      `*,
+      teams (
+        id,
+        name
+      )
+      `
+    )
     .order("updated_at", { ascending: false });
 
   return {
@@ -36,7 +43,7 @@ export default function Pages({
   pages,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { billingDetails } = useUserData();
+  const { billingDetails, user } = useUserData();
   const router = useRouter();
   useHotkeys("n", () => router.push(ROUTES.NEW_PAGE), [router]);
 
@@ -52,7 +59,7 @@ export default function Pages({
         title={"My Pages"}
         buttons={
           <PrimaryRouterButton
-            label="New"
+            label="Page"
             icon={
               <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             }
@@ -64,10 +71,10 @@ export default function Pages({
       >
         {billingDetails?.has_active_subscription ? <Changelog /> : null}
 
-        <div className="overflow-hidden sm:rounded-md">
+        <div className="overflow-hidden">
           {!pages.length && (
             <EntityEmptyState
-              title=" No pages yet!"
+              title="No pages yet!"
               message="Get started by creating your first page."
               buttonLink={
                 billingDetails?.has_active_subscription
@@ -96,13 +103,11 @@ export default function Pages({
           )}
 
           {pages.length ? (
-            <div className="divide-y divide-gray-200 dark:divide-gray-800 overflow-hidden rounded-lg shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+            <div className="overflow-hidden shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0 rounded-md bg-white dark:bg-black">
               {pages.map((page) => (
                 <div
                   key={page.id}
-                  className={classNames(
-                    "relative group bg-white dark:bg-black p-6"
-                  )}
+                  className="relative group p-6 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
                 >
                   <div>
                     <span
@@ -123,7 +128,7 @@ export default function Pages({
                           "text-rose-500 dark:text-rose-100",
                         page.type === PageType.updates &&
                           "text-amber-500 dark:text-amber-100",
-                        "rounded-lg inline-flex px-2 py-1 font-bold"
+                        "inline-flex px-2 py-1 font-bold rounded-md"
                       )}
                     >
                       {PageTypeToLabel[page.type]}
@@ -144,17 +149,17 @@ export default function Pages({
                     </p>
                   </div>
                   <span
-                    className="pointer-events-none absolute top-6 right-6 text-gray-300 dark:text-gray-600 group-hover:text-indigo-400"
+                    className="pointer-events-none absolute top-6 right-6 text-gray-500 dark:text-gray-400 group-hover:text-indigo-400"
                     aria-hidden="true"
                   >
-                    <svg
-                      className="h-6 w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
-                    </svg>
+                    {page.teams && page.user_id !== user?.id ? (
+                      <div className="flex items-center gap-1">
+                        <UserGroupIcon className="h-4 w-4" />
+                        <span className="text-sm font-medium">
+                          Editor ({page.teams.name})
+                        </span>
+                      </div>
+                    ) : null}
                   </span>
                 </div>
               ))}
@@ -166,5 +171,4 @@ export default function Pages({
   );
 }
 
-Pages.getLayout = (page: JSX.Element) => <AuthLayout>{page}</AuthLayout>;
 Pages.getLayout = (page: JSX.Element) => <AuthLayout>{page}</AuthLayout>;

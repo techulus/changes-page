@@ -5,6 +5,7 @@ import { NextSeo } from "next-seo";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { MARKETING_TITLE } from "../../data/marketing.data";
 import { ROUTES } from "../../data/routes.data";
 import logoImage from "../../public/images/logo.png";
@@ -16,6 +17,7 @@ const navigation = [
 ];
 
 export default function MarketingHeaderComponent({ title, description }) {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -40,6 +42,7 @@ export default function MarketingHeaderComponent({ title, description }) {
           ],
           siteName: "changes.page",
         }}
+        canonical={`https://changes.page${router.asPath}`}
         twitter={{
           handle: "@arjunz",
           site: "@techulus",

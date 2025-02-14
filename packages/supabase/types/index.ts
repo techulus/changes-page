@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      page_audit_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          changes: Json | null
+          created_at: string
+          id: string
+          page_id: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          changes?: Json | null
+          created_at?: string
+          id?: string
+          page_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          changes?: Json | null
+          created_at?: string
+          id?: string
+          page_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_audit_logs_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_audit_logs_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_email_subscribers: {
         Row: {
           created_at: string
@@ -78,7 +120,6 @@ export type Database = {
           tiktok_url: string | null
           twitter_url: string | null
           updated_at: string
-          user_id: string
           whitelabel: boolean
           youtube_url: string | null
         }
@@ -109,7 +150,6 @@ export type Database = {
           tiktok_url?: string | null
           twitter_url?: string | null
           updated_at?: string
-          user_id: string
           whitelabel?: boolean
           youtube_url?: string | null
         }
@@ -140,7 +180,6 @@ export type Database = {
           tiktok_url?: string | null
           twitter_url?: string | null
           updated_at?: string
-          user_id?: string
           whitelabel?: boolean
           youtube_url?: string | null
         }
@@ -203,6 +242,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          team_id: string | null
           title: string
           type: Database["public"]["Enums"]["page_type"]
           updated_at: string
@@ -213,6 +253,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          team_id?: string | null
           title: string
           type: Database["public"]["Enums"]["page_type"]
           updated_at?: string
@@ -223,13 +264,22 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          team_id?: string | null
           title?: string
           type?: Database["public"]["Enums"]["page_type"]
           updated_at?: string
           url_slug?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pages_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       post_reactions: {
         Row: {
@@ -337,6 +387,137 @@ export type Database = {
           },
         ]
       }
+      team_invitations: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          inviter_id: string
+          role: string
+          status: string
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          inviter_id: string
+          role: string
+          status: string
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          inviter_id?: string
+          role?: string
+          status?: string
+          team_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_invitations_inviter_id_fkey"
+            columns: ["inviter_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_invitations_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_members: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          team_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: string
+          team_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          team_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          created_at: string
+          id: string
+          image: string | null
+          metadata: Json | null
+          name: string
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image?: string | null
+          metadata?: Json | null
+          name: string
+          owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image?: string | null
+          metadata?: Json | null
+          name?: string
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           avatar_url: string | null
@@ -375,6 +556,13 @@ export type Database = {
       is_subscription_active: {
         Args: {
           user_id: string
+        }
+        Returns: boolean
+      }
+      is_team_member: {
+        Args: {
+          tid: string
+          uid: string
         }
         Returns: boolean
       }

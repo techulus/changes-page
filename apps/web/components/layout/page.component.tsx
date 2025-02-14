@@ -5,7 +5,6 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
 import { useUserData } from "../../utils/useUser";
 import BillingBanner from "../billing/billing-banner";
 
@@ -41,22 +40,6 @@ export default function Page({
   const router = useRouter();
   const { user } = useUserData();
 
-  useHotkeys(
-    "esc",
-    () => {
-      if (router.pathname === "/") return;
-      if (router.pathname === "/pages") return;
-
-      if (backRoute) {
-        void router.replace(backRoute);
-        return;
-      }
-
-      router.back();
-    },
-    [router, backRoute]
-  );
-
   useEffect(() => {
     if (router.query?.yay && confetti) {
       try {
@@ -81,7 +64,7 @@ export default function Page({
             !!title && tabs.length > 0 && "relative sm:pb-0 lg:pb-2"
           )}
         >
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row justify-between items-center sm:h-[100px]">
             <div className="flex items-start min-w-0">
               {showBackButton && (
                 <button
@@ -164,7 +147,7 @@ export default function Page({
           </div>
 
           {!!title && tabs?.length > 0 && (
-            <div className="mt-2 lg:absolute lg:right-8 lg:top-8 lg:pt-2">
+            <div className="mt-2 lg:absolute lg:right-8 lg:bottom-0 lg:pt-2">
               <div className="sm:hidden">
                 <label htmlFor="current-tab" className="sr-only">
                   Select a tab

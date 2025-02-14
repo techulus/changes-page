@@ -7,6 +7,10 @@ export type IPost = Database["public"]["Tables"]["posts"]["Row"];
 export type IPageEmailSubscriber =
   Database["public"]["Tables"]["page_email_subscribers"]["Row"];
 export type IPageView = Database["public"]["Tables"]["page_views"]["Row"];
+export type ITeam = Database["public"]["Tables"]["teams"]["Row"];
+export type ITeamMember = Database["public"]["Tables"]["team_members"]["Row"];
+export type ITeamInvitation =
+  Database["public"]["Tables"]["team_invitations"]["Row"];
 
 export enum PageType {
   changelogs = "changelogs",
@@ -61,3 +65,11 @@ export const PostStatusToLabel: {
 export const tagColors = ["red", "amber", "teal", "sky", "pink"];
 
 export const URL_SLUG_REGEX = new RegExp("^[a-zA-Z0-9]([w-]*[a-zA-Z0-9])*$");
+
+export type IReactions = {
+  thumbs_up?: number;
+  thumbs_down?: number;
+  rocket?: number;
+  sad?: number;
+  heart?: number;
+};

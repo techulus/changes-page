@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { NewPostSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
 import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
-import { createPost, getUserById } from "../../../utils/useDatabase";
+import { createPost } from "../../../utils/useDatabase";
 
 const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
@@ -24,14 +24,7 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await apiRateLimiter(req, res);
 
-      const { user } = await getSupabaseServerClient({ req, res });
-
-      const { has_active_subscription } = await getUserById(user.id);
-      if (!has_active_subscription) {
-        return res.status(403).json({
-          error: { statusCode: 403, message: "Missing subscription" },
-        });
-      }
+      const { user, supabase } = await getSupabaseServerClient({ req, res });
 
       const isValid = await NewPostSchema.isValid({
         page_id,
@@ -53,9 +46,18 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
 
+      const { data: page, error: pageError } = await supabase
+        .from("pages")
+        .select("*")
+        .eq("id", page_id)
+        .single();
+
+      if (pageError) throw pageError;
+      if (!page) throw new Error("User does not have access to this page");
+
       console.log("createNewPost", user?.id);
 
-      const post = await createPost({
+      const postPayload = {
         user_id: user.id,
         page_id,
         title,
@@ -70,6 +72,15 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
         notes: notes ?? "",
         allow_reactions: allow_reactions ?? false,
         email_notified: email_notified ?? false,
+      };
+
+      const post = await createPost(postPayload);
+
+      await supabase.from("page_audit_logs").insert({
+        page_id,
+        actor_id: user.id,
+        action: `Created Post: ${post.title}`,
+        changes: postPayload,
       });
 
       return res.status(201).json({ post });

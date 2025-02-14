@@ -13,14 +13,12 @@ import { ROUTES } from "../../../data/routes.data";
 import { NewPostSchema } from "../../../data/schema";
 import { track } from "../../../utils/analytics";
 import { httpPost } from "../../../utils/http";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 
-export async function getServerSideProps({ params, req, res }) {
+export async function getServerSideProps({ params }) {
   const { page_id } = params;
 
-  const { user } = await getSupabaseServerClient({ req, res });
-  const settings = await createOrRetrievePageSettings(user.id, String(page_id));
+  const settings = await createOrRetrievePageSettings(String(page_id));
 
   return {
     props: {

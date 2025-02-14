@@ -149,13 +149,6 @@ export default function Index({
   );
 }
 
-// export async function getStaticPaths() {
-//   return {
-//     paths: [],
-//     fallback: "blocking",
-//   };
-// }
-
 export async function getServerSideProps({
   params: { site },
 }: {

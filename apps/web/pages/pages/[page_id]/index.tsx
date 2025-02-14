@@ -49,7 +49,7 @@ import { useUserData } from "../../../utils/useUser";
 export async function getServerSideProps({ req, res, params }) {
   const { page_id } = params;
 
-  const { user, supabase } = await getSupabaseServerClient({ req, res });
+  const { supabase } = await getSupabaseServerClient({ req, res });
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -61,7 +61,7 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const settings = await createOrRetrievePageSettings(user.id, String(page_id));
+  const settings = await createOrRetrievePageSettings(String(page_id));
 
   return {
     props: {
@@ -78,8 +78,7 @@ export default function PageDetail({
   settings: serverSettings,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const { billingDetails } = useUserData();
-  const { supabase } = useUserData();
+  const { supabase, user } = useUserData();
   const { status } = router.query;
 
   const [search, setSearch] = useState("");
@@ -88,6 +87,8 @@ export default function PageDetail({
     page_id,
     false
   );
+
+  const isPageOwner = useMemo(() => page?.user_id === user?.id, [page, user]);
 
   const settings = useMemo(
     () => clientSettings ?? serverSettings,
@@ -176,29 +177,37 @@ export default function PageDetail({
     [router, page_id]
   );
 
-  const managePageLinks = useMemo(
-    () =>
-      pageUrl
-        ? [
-            {
-              label: "Analytics",
-              href: `${ROUTES.PAGES}/${page_id}/analytics`,
-              icon: (props) => <ChartBarIcon {...props} />,
-            },
-            {
-              label: "Settings",
-              href: `${ROUTES.PAGES}/${page_id}/settings/general`,
-              icon: (props) => <CogIcon {...props} />,
-            },
-            {
-              label: "Edit Page",
-              href: `${ROUTES.PAGES}/${page_id}/edit`,
-              icon: (props) => <PencilAltIcon {...props} />,
-            },
-          ]
-        : [],
-    [pageUrl, page_id]
-  );
+  const managePageLinks = useMemo(() => {
+    const links = pageUrl
+      ? [
+          {
+            label: "Analytics",
+            href: `${ROUTES.PAGES}/${page_id}/analytics`,
+            icon: (props) => <ChartBarIcon {...props} />,
+          },
+          {
+            label: "Settings",
+            href: `${ROUTES.PAGES}/${page_id}/settings/general`,
+            icon: (props) => <CogIcon {...props} />,
+          },
+          {
+            label: "Audit Logs",
+            href: `${ROUTES.PAGES}/${page_id}/audit-logs`,
+            icon: (props) => <DocumentTextIcon {...props} />,
+          },
+        ]
+      : [];
+
+    if (isPageOwner) {
+      links.push({
+        label: "Edit Page",
+        href: `${ROUTES.PAGES}/${page_id}/edit`,
+        icon: (props) => <PencilAltIcon {...props} />,
+      });
+    }
+
+    return links;
+  }, [pageUrl, page_id, isPageOwner]);
 
   const pageLinks = useMemo(
     () =>
@@ -265,7 +274,7 @@ export default function PageDetail({
       <ConfirmDeleteDialog
         highRiskAction
         riskVerificationText="delete page"
-        open={openDeletePage}
+        open={openDeletePage && isPageOwner}
         setOpen={setOpenDeletePage}
         itemName={page?.title}
         processing={isDeleting}
@@ -280,13 +289,12 @@ export default function PageDetail({
         containerClassName="lg:pb-0"
         buttons={
           <PrimaryRouterButton
-            label="New"
+            label="Post"
             icon={
               <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
             }
             route={`/pages/${page_id}/new`}
             keyboardShortcut={"N"}
-            upgradeRequired={!billingDetails?.has_active_subscription}
           />
         }
         menuItems={
@@ -325,18 +333,20 @@ export default function PageDetail({
                 />
               ))}
             </div>
-            <div className="py-1">
-              <MenuItem
-                label="Delete Page"
-                icon={
-                  <TrashIcon
-                    className="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
-                    aria-hidden="true"
-                  />
-                }
-                onClick={() => setOpenDeletePage(true)}
-              />
-            </div>
+            {isPageOwner && (
+              <div className="py-1">
+                <MenuItem
+                  label="Delete Page"
+                  icon={
+                    <TrashIcon
+                      className="mr-3 h-5 w-5 text-red-400 group-hover:text-red-500"
+                      aria-hidden="true"
+                    />
+                  }
+                  onClick={() => setOpenDeletePage(true)}
+                />
+              </div>
+            )}
           </>
         }
       >
