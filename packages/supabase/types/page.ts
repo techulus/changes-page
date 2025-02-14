@@ -65,3 +65,11 @@ export const PostStatusToLabel: {
 export const tagColors = ["red", "amber", "teal", "sky", "pink"];
 
 export const URL_SLUG_REGEX = new RegExp("^[a-zA-Z0-9]([w-]*[a-zA-Z0-9])*$");
+
+export type IReactions = {
+  thumbs_up?: number;
+  thumbs_down?: number;
+  rocket?: number;
+  sad?: number;
+  heart?: number;
+};

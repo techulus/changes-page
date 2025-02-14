@@ -16,6 +16,11 @@ const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
       await apiRateLimiter(req, res);
 
       const { user, supabase } = await getSupabaseServerClient({ req, res });
+      if (!user) {
+        return res.status(401).json({
+          error: { statusCode: 401, message: "Unauthorized" },
+        });
+      }
 
       const { data: invite } = await supabase
         .from("team_invitations")

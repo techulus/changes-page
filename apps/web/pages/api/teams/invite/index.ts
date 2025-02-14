@@ -20,6 +20,11 @@ const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
       await apiRateLimiter(req, res);
 
       const { user, supabase } = await getSupabaseServerClient({ req, res });
+      if (!user) {
+        return res.status(401).json({
+          error: { statusCode: 401, message: "Unauthorized" },
+        });
+      }
 
       const { has_active_subscription } = await getUserById(user.id);
       if (!has_active_subscription) {

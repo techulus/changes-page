@@ -70,6 +70,7 @@ export default function HeaderComponent() {
           ],
           siteName: "changes.page",
         }}
+        canonical={`https://changes.page${router.asPath}`}
         twitter={{
           handle: "@arjunz",
           site: "@techulus",

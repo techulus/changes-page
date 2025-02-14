@@ -103,13 +103,11 @@ export default function Pages({
           )}
 
           {pages.length ? (
-            <div className="divide-y divide-gray-200 dark:divide-gray-800 overflow-hidden shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+            <div className="overflow-hidden shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0 rounded-md bg-white dark:bg-black">
               {pages.map((page) => (
                 <div
                   key={page.id}
-                  className={classNames(
-                    "relative group bg-white dark:bg-black p-6"
-                  )}
+                  className="relative group p-6 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
                 >
                   <div>
                     <span
@@ -130,7 +128,7 @@ export default function Pages({
                           "text-rose-500 dark:text-rose-100",
                         page.type === PageType.updates &&
                           "text-amber-500 dark:text-amber-100",
-                        "inline-flex px-2 py-1 font-bold"
+                        "inline-flex px-2 py-1 font-bold rounded-md"
                       )}
                     >
                       {PageTypeToLabel[page.type]}

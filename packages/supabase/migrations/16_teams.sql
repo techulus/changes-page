@@ -16,7 +16,6 @@ create policy "Can insert teams." on teams for insert with check (auth.uid() = o
 create policy "Can view own teams." on teams for select using (auth.uid() = owner_id);
 create policy "Can update own teams." on teams for update using (auth.uid() = owner_id);
 create policy "Can delete own teams." on teams for delete using (auth.uid() = owner_id);
-create policy "Invited users can view teams." on teams for select using (id in (select team_id from team_invitations where email = auth.email()));
 
 CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON teams
@@ -64,6 +63,7 @@ alter table team_invitations enable row level security;
 create policy "Can view own team invitations." on team_invitations for select using (auth.uid() = inviter_id);
 create policy "Can delete own team invitations." on team_invitations for delete using (auth.uid() = inviter_id);
 create policy "Can view team invitations." on team_invitations for select using (auth.email() = email);
+create policy "Invited users can view teams." on teams for select using (id in (select team_id from team_invitations where email = auth.email()));
 
 CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON team_invitations
