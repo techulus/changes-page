@@ -34,6 +34,31 @@ export default function HeaderComponent() {
       .then(({ data }) => {
         setHasPendingInvites(data?.length > 0);
       });
+
+    const channel = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "team_invitations",
+          filter: `email=eq.${user.email}`,
+        },
+        (payload) => {
+          const { new: newData, old: oldData } = payload;
+          if (newData) {
+            setHasPendingInvites(true);
+          } else if (oldData) {
+            setHasPendingInvites(false);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
   }, [user]);
 
   const navigation = useMemo(() => {
