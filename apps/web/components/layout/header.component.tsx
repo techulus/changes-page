@@ -7,7 +7,7 @@ import Head from "next/head";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useMemo } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { DEFAULT_TITLE, SUBTITLE, TAGLINE } from "../../data/marketing.data";
 import { ROUTES } from "../../data/routes.data";
 import logoImage from "../../public/images/logo.png";
@@ -18,15 +18,54 @@ import { MenuItem } from "../core/menu.component";
 import { createToastWrapper } from "../core/toast.component";
 
 export default function HeaderComponent() {
-  const { loading, user, billingDetails, signOut } = useUserData();
+  const { loading, user, billingDetails, signOut, supabase } = useUserData();
   const router = useRouter();
   const prefersColorScheme = usePrefersColorScheme();
+
+  const [hasPendingInvites, setHasPendingInvites] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("team_invitations")
+      .select("id")
+      .eq("status", "pending")
+      .eq("email", user.email)
+      .then(({ data }) => {
+        setHasPendingInvites(data?.length > 0);
+      });
+
+    const channel = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "team_invitations",
+          filter: `email=eq.${user.email}`,
+        },
+        (payload) => {
+          const { new: newData, old: oldData } = payload;
+          if (newData) {
+            setHasPendingInvites(true);
+          } else if (oldData) {
+            setHasPendingInvites(false);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [user]);
 
   const navigation = useMemo(() => {
     if (user) {
       return [
         { name: "Pages", href: ROUTES.PAGES },
-        { name: "Teams", href: ROUTES.TEAMS },
+        { name: "Teams", href: ROUTES.TEAMS, pulse: hasPendingInvites },
         { name: "Zapier", href: ROUTES.ZAPIER },
         { name: "Billing", href: ROUTES.BILLING },
         { name: "Support", href: ROUTES.SUPPORT, external: true },
@@ -136,6 +175,9 @@ export default function HeaderComponent() {
                             rel={item.external ? "noopener noreferrer" : null}
                           >
                             {item.name}
+                            {item.pulse ? (
+                              <span className="inline-block w-2 h-2 bg-red-500 rounded-full ml-2 animate-pulse"></span>
+                            ) : null}
                           </Link>
                         ))}
                       </div>
@@ -246,8 +288,9 @@ export default function HeaderComponent() {
             <Disclosure.Panel className="sm:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navigation.map((item) => (
-                  <Link
+                  <Disclosure.Button
                     key={item.name}
+                    as={Link}
                     href={item.href}
                     className={classNames(
                       "text-gray-300 hover:bg-gray-700 hover:text-white",
@@ -255,7 +298,10 @@ export default function HeaderComponent() {
                     )}
                   >
                     {item.name}
-                  </Link>
+                    {item.pulse ? (
+                      <span className="inline-block w-2 h-2 bg-red-500 rounded-full ml-2 animate-pulse"></span>
+                    ) : null}
+                  </Disclosure.Button>
                 ))}
 
                 {!user && (

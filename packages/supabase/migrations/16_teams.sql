@@ -111,3 +111,5 @@ create table page_audit_logs (
 
 alter table page_audit_logs enable row level security;
 create policy "Can insert page audit logs." on page_audit_logs for insert with check (actor_id = auth.uid());
+
+alter publication supabase_realtime add table team_invitations;
