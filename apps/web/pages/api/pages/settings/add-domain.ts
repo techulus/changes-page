@@ -18,7 +18,7 @@ async function addDomain(req: NextApiRequest, res: NextApiResponse) {
   console.log("addDomain", user?.id, `domain: ${domain}`);
 
   const response = await fetch(
-    `https://api.vercel.com/v8/projects/${process.env.VERCEL_PROJECT_ID}/domains?teamId=${process.env.VERCEL_TEAM_ID}`,
+    `https://api.vercel.com/v8/projects/${process.env.VERCEL_PAGES_PROJECT_ID}/domains?teamId=${process.env.VERCEL_TEAM_ID}`,
     {
       body: `{\n  "name": "${domain}"\n}`,
       headers: {
