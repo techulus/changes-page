@@ -1,0 +1,23 @@
+---
+title: Widget
+---
+
+You can directly embed your changelog page inside your app using our widget. You can see a demo in our homepage.
+
+### Embed code
+
+Paste the code anywhere on your website (preferably HEAD or before closing BODY tag).
+
+```js
+<!-- Script for loading widget JS -->
+<script async src="https://{your-page-url}.changes.page/v1/widget.js"></script>
+
+<script>
+  // Open the widget using JS
+  window.ChangesPage.openWidget();
+</script>
+```
+
+Once the button is created and script is setup, our Javascript will load on your page and ensure that the widget is shown when user clicks on the button. It will also add a small red dot to inform the user if there is a new post that the user hasn't seen.
+
+![Widget](/images/widget.png)
