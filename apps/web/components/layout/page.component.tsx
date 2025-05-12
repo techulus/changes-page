@@ -4,7 +4,7 @@ import confetti from "canvas-confetti";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, type JSX } from "react";
 import { useUserData } from "../../utils/useUser";
 import BillingBanner from "../billing/billing-banner";
 

@@ -80,10 +80,10 @@ export default function Post({
             ]}
             components={{
               img: (props) => {
-                if (props.src?.includes("supabase.co")) {
+                if ((props.src as string)?.includes("supabase.co")) {
                   return (
                     <Image
-                      src={props.src ?? ""}
+                      src={props.src as string}
                       alt={props.alt ?? post.title}
                       width={624}
                       height={624}

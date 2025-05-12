@@ -3,7 +3,7 @@ import { PlusIcon, UserGroupIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, type JSX } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { PrimaryRouterButton } from "../../components/core/buttons.component";
 import { notifyError } from "../../components/core/toast.component";

@@ -18,7 +18,7 @@ import classNames from "classnames";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import Script from "next/script";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type JSX } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
   PrimaryRouterButton,

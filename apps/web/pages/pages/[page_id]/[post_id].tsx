@@ -1,7 +1,7 @@
 import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, type JSX } from "react";
 import { InferType } from "yup";
 import { notifyError } from "../../../components/core/toast.component";
 import PostFormComponent, {

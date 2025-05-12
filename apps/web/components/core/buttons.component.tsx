@@ -1,6 +1,7 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Link from "next/link";
+import type { JSX } from "react";
 import { KbdPrimary, KbdSecondary } from "./kbd.component";
 
 export function PrimaryRouterButton({
