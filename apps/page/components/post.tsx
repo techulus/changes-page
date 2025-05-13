@@ -83,13 +83,14 @@ export default function Post({
                 if (props.src?.includes("supabase.co")) {
                   return (
                     <Image
-                      src={props.src ?? ""}
+                      src={props.src}
                       alt={props.alt ?? post.title}
                       width={624}
                       height={624}
                     />
                   );
                 } else {
+                  // @ts-ignore
                   return <img {...props} alt={post.title} />;
                 }
               },

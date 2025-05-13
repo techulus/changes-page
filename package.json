@@ -5,6 +5,7 @@
     "build": "pnpm --filter './packages/*' -r build",
     "dev:page": "pnpm --filter './apps/page' -r dev",
     "dev:web": "pnpm --filter './apps/web' -r dev",
+    "dev:docs": "pnpm --filter './apps/docs' -r dev",
     "dev": "pnpm -r dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

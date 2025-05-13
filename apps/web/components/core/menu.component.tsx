@@ -1,6 +1,7 @@
 import { Menu } from "@headlessui/react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
+import type { JSX } from "react";
 
 export function MenuItem({
   label,

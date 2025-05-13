@@ -1,0 +1,72 @@
+---
+title: Page
+description: These are APIs that can be used to fetch page data
+---
+
+### Get the latest post
+
+This endpoint will return a JSON response of the latest post in the page.
+
+```text title="Request"
+GET https://yourpage.changes.page/latest.json
+```
+
+```json title="200 OK"
+{
+  "id": "b0cb4fde-8f17-4ee2-b292-196a6f2e748e",
+  "title": "New UI, pinned post & more!",
+  "content": "We've made several tweaks to the UI across the app and the most important change is the new editor.",
+  "type": "announcement",
+  "created_at": "2022-11-01T11:46:25.719707+00:00"
+}
+```
+
+<Callout>This can be a pinned post if its the latest one.</Callout>
+
+### Get pinned post
+
+This endpoint will return a JSON response of the pinned post in the page.
+
+```text title="Request" icon="🔍"
+GET https://yourpage.changes.page/pinned.json
+```
+
+```json title="200 OK"
+{
+  "id": "b0cb4fde-8f17-4ee2-b292-196a6f2e748e",
+  "title": "New UI, pinned post & more!",
+  "content": "We've made several tweaks to the UI across the app and the most important change is the new editor.",
+  "type": "announcement",
+  "created_at": "2022-11-01T11:46:25.719707+00:00"
+}
+```
+
+<Callout>This endpoint will return null if there is no pinned post.</Callout>
+
+### Get all posts
+
+This endpoint will return a JSON response of all posts in the page. The response will include at most 50 posts and can be paginated by passing the `offset` parameter.
+
+```text title="Request"
+GET https://yourpage.changes.page/changes.json
+
+{
+	"offset": 10 // Optional, defaults to 0
+}
+```
+
+```json title="Response: 200 OK"
+[
+  {
+    "id": "cf8c52a9-27b3-47df-9f22-0c0af15cfaca",
+    "title": "Unlock Teamwork with Our Latest Feature Update",
+    "content": "We're kicking off 2025 by introducing one of our most highly requested features!",
+    "tags": ["announcement", "new"],
+    "publication_date": "2025-02-14T12:22:16.571+00:00",
+    "updated_at": "2025-02-14T12:22:17.887817+00:00",
+    "created_at": "2025-02-14T09:42:52.934045+00:00",
+    "url": "https://hey.changes.page/post/cf8c52a9-27b3-47df-9f22-0c0af15cfaca/unlock-teamwork-with-our-latest-feature-update",
+    "plain_text_content": "We're kicking off 2025 by introducing one of our most highly requested features!"
+  }
+]
+```
