@@ -15,7 +15,7 @@ export const sendConfirmEmailNotification = inngestClient.createFunction(
 
     const result = await postmarkClient.sendEmailWithTemplate({
       MessageStream: "outbound",
-      From: "notification@changes.page",
+      From: "notification@mail.changes.page",
       To: email,
       TemplateAlias: "confirm-subscribe",
       TemplateModel: payload,
