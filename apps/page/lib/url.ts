@@ -35,26 +35,27 @@ export function getPostUrl(
 export function getOgUrl(
   page: IPage,
   settings: IPageSettings,
-  post: IPostPublicData | null = null,
-  content: string = ""
+  title: string | null,
+  description: string | null
 ) {
   const pageUrl = getPageUrl(page, settings);
 
-  if (post && content.length) {
-    // truncate content to 200 characters
+  if (title?.length && description?.length) {
     const contentTruncated =
-      content.length > 350 ? content.substring(0, 350) + "..." : content;
+      description.length > 350
+        ? description.substring(0, 350) + "..."
+        : description;
 
     return `${pageUrl}/api/og?title=${encodeURIComponent(
       page?.title
-    )}&body=${encodeURIComponent(post.title)}&content=${encodeURIComponent(
+    )}&body=${encodeURIComponent(title)}&content=${encodeURIComponent(
       contentTruncated
     )}${settings?.page_logo ? "&logo=" + settings?.page_logo : ""}`;
   }
 
   return `${pageUrl}/api/og?title=${encodeURIComponent(
     page?.title
-  )}&body=${encodeURIComponent(page.description ?? "")}${
+  )}&body=${encodeURIComponent(description ?? page.description ?? "")}${
     settings?.page_logo ? "&logo=" + settings?.page_logo : ""
   }`;
 }

@@ -1,7 +1,6 @@
 import {
   IPage,
   IPageSettings,
-  IPost,
   PageTypeToLabel,
 } from "@changes-page/supabase/types/page";
 import { NextSeo } from "next-seo";
@@ -9,26 +8,25 @@ import Head from "next/head";
 import { useMemo } from "react";
 import { getOgUrl, getPageUrl } from "../lib/url";
 import logoImage from "../public/logo.png";
-import { IPostPublicData } from "../lib/data";
 
 const SeoTags = ({
   page,
   settings,
-  posts,
-  content = "",
+  title = null,
+  description = null,
   url = null,
 }: {
   page: IPage;
   settings: IPageSettings;
-  posts: IPostPublicData[];
-  content?: string;
+  title?: string | null;
+  description?: string | null;
   url?: string | null;
 }) => {
   const pageUrl = useMemo(() => getPageUrl(page, settings), [page, settings]);
 
   const ogImageUrl = useMemo(
-    () => getOgUrl(page, settings, posts.length ? posts[0] : null, content),
-    [page, settings, posts, content]
+    () => getOgUrl(page, settings, title, description),
+    [page, settings, title, description]
   );
 
   return (
@@ -39,15 +37,16 @@ const SeoTags = ({
       </Head>
       <NextSeo
         title={
-          posts?.length
-            ? `${posts[0].title} | ${page?.title}`
+          title
+            ? `${title} | ${page?.title}`
             : `${page?.title} | ${PageTypeToLabel[page?.type]}`
         }
-        description={page?.description ?? ""}
+        description={description ?? page?.description ?? ""}
+        canonical={url || pageUrl}
         openGraph={{
           url: url || pageUrl,
-          title: page?.title,
-          description: page?.description ?? "",
+          title: title ?? page?.title,
+          description: description ?? page?.description ?? "",
           images: [
             {
               url: ogImageUrl,
