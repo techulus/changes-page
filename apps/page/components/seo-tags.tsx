@@ -24,9 +24,16 @@ const SeoTags = ({
 }) => {
   const pageUrl = useMemo(() => getPageUrl(page, settings), [page, settings]);
 
+  const truncatedDescription = useMemo(() => {
+    if (!description) return null;
+    return description.length > 150
+      ? description.substring(0, 150) + "..."
+      : description;
+  }, [description]);
+
   const ogImageUrl = useMemo(
-    () => getOgUrl(page, settings, title, description),
-    [page, settings, title, description]
+    () => getOgUrl(page, settings, title, truncatedDescription),
+    [page, settings, title, truncatedDescription]
   );
 
   return (
@@ -46,7 +53,7 @@ const SeoTags = ({
         openGraph={{
           url: url || pageUrl,
           title: title ?? page?.title,
-          description: description ?? page?.description ?? "",
+          description: truncatedDescription ?? page?.description ?? "",
           images: [
             {
               url: ogImageUrl,

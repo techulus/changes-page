@@ -41,21 +41,16 @@ export function getOgUrl(
   const pageUrl = getPageUrl(page, settings);
 
   if (title?.length && description?.length) {
-    const contentTruncated =
-      description.length > 350
-        ? description.substring(0, 350) + "..."
-        : description;
-
     return `${pageUrl}/api/og?title=${encodeURIComponent(
       page?.title
     )}&body=${encodeURIComponent(title)}&content=${encodeURIComponent(
-      contentTruncated
+      description
     )}${settings?.page_logo ? "&logo=" + settings?.page_logo : ""}`;
   }
 
   return `${pageUrl}/api/og?title=${encodeURIComponent(
     page?.title
-  )}&body=${encodeURIComponent(description ?? page.description ?? "")}${
-    settings?.page_logo ? "&logo=" + settings?.page_logo : ""
-  }`;
+  )}&body=${encodeURIComponent(
+    title ?? description ?? page.description ?? ""
+  )}${settings?.page_logo ? "&logo=" + settings?.page_logo : ""}`;
 }
