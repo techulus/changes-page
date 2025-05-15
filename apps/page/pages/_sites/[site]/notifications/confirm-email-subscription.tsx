@@ -1,12 +1,13 @@
+import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import type { GetServerSideProps } from "next";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import PageHeader from "../../../../components/page-header";
 import SeoTags from "../../../../components/seo-tags";
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { fetchRenderData } from "../../../../lib/data";
 import { verifyPageEmailToken } from "../../../../lib/notifications";
+import { getPageUrl } from "../../../../lib/url";
 
 export default function Index({
   page,
@@ -26,7 +27,16 @@ export default function Index({
 
   return (
     <>
-      <SeoTags page={page} settings={settings} posts={[]} />
+      <SeoTags
+        title="Email Subscription Confirmed"
+        description="You have successfully subscribed to receive email updates from us."
+        page={page}
+        settings={settings}
+        url={`${getPageUrl(
+          page,
+          settings
+        )}/notifications/confirm-email-subscription`}
+      />
 
       <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <PageHeader page={page} settings={settings} />

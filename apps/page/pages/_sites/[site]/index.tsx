@@ -68,7 +68,7 @@ export default function Index({
 
   return (
     <>
-      <SeoTags page={page} settings={settings} posts={posts} />
+      <SeoTags page={page} settings={settings} />
 
       <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <PageHeader page={page} settings={settings} />

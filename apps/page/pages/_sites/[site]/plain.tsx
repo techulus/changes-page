@@ -16,6 +16,7 @@ import {
   fetchRenderData,
   translateHostToPageIdentifier,
 } from "../../../lib/data";
+import { getPageUrl } from "../../../lib/url";
 
 export default function Index({
   posts,
@@ -40,7 +41,11 @@ export default function Index({
 
   return (
     <>
-      <SeoTags page={page} settings={settings} posts={posts} />
+      <SeoTags
+        page={page}
+        settings={settings}
+        url={`${getPageUrl(page, settings)}/plain`}
+      />
 
       <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-2 min-h-full">
         {hideTitle !== "true" && (

@@ -39,8 +39,8 @@ export default function Index({
       <SeoTags
         page={page}
         settings={settings}
-        posts={[post]}
-        content={plainTextContent}
+        title={post.title}
+        description={plainTextContent}
         url={getPostUrl(getPageUrl(page, settings), post)}
       />
 
