@@ -48,12 +48,19 @@ const SeoTags = ({
             ? `${title} | ${page?.title}`
             : `${page?.title} | ${PageTypeToLabel[page?.type]}`
         }
-        description={description ?? page?.description ?? ""}
+        description={
+          truncatedDescription ??
+          page?.description ??
+          PageTypeToLabel[page?.type]
+        }
         canonical={url || pageUrl}
         openGraph={{
           url: url || pageUrl,
           title: title ?? page?.title,
-          description: truncatedDescription ?? page?.description ?? "",
+          description:
+            truncatedDescription ??
+            page?.description ??
+            PageTypeToLabel[page?.type],
           images: [
             {
               url: ogImageUrl,
