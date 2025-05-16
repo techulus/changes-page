@@ -1,10 +1,12 @@
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { Analytics } from "@vercel/analytics/react";
 import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import Head from "next/head";
-import { useState } from "react";
+import { Router } from "next/router";
+import posthog from "posthog-js";
+import { PostHogProvider } from "posthog-js/react";
+import { useEffect, useState } from "react";
 import "../styles/global.css";
 import { UserContextProvider } from "../utils/useUser";
 
@@ -32,8 +34,24 @@ export default function App({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => page);
   const [supabaseClient] = useState(() => createPagesBrowserClient());
 
+  useEffect(() => {
+    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+      loaded: (ph) => {
+        if (process.env.NODE_ENV === "development") ph.debug();
+      },
+      debug: process.env.NODE_ENV === "development",
+    });
+
+    const handleRouteChange = () => posthog.capture("$pageview");
+    Router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      Router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, []);
+
   return (
-    <>
+    <PostHogProvider client={posthog}>
       <Head>
         <meta
           name="viewport"
@@ -51,10 +69,9 @@ export default function App({ Component, pageProps }) {
       >
         <UserContextProvider>
           {getLayout(<Component {...pageProps} />)}
-          <Analytics />
           <ProgressBar />
         </UserContextProvider>
       </SessionContextProvider>
-    </>
+    </PostHogProvider>
   );
 }

@@ -4,7 +4,6 @@ import {
   notifyError,
   notifySuccess,
 } from "../../components/core/toast.component";
-import { track } from "../analytics";
 import { httpGet } from "../http";
 import { useUserData } from "../useUser";
 
@@ -32,8 +31,6 @@ export default function usePageSettings(pageId: string, prefetch = true) {
       if (settings.length) {
         setSettings(settings[0]);
       }
-
-      track("UpdatePageSettings");
 
       notifySuccess("Page updated!");
     } catch (e) {

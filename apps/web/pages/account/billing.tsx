@@ -9,7 +9,6 @@ import { notifyError, notifyInfo } from "../../components/core/toast.component";
 import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import { ROUTES } from "../../data/routes.data";
-import { track } from "../../utils/analytics";
 import { httpPost } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
 
@@ -19,8 +18,6 @@ export default function Billing() {
   async function openBillingPortal() {
     try {
       notifyInfo("Redirecting to billing portal...");
-
-      track("OpenBillingPortal");
 
       const session = await httpPost({
         url: "/api/billing/create-billing-portal",

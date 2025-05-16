@@ -21,7 +21,6 @@ import ReactMarkdown from "react-markdown";
 import { v4 } from "uuid";
 import { InferType } from "yup";
 import { NewPostSchema } from "../../data/schema";
-import { track } from "../../utils/analytics";
 import { useUserData } from "../../utils/useUser";
 import { PrimaryButton } from "../core/buttons.component";
 import MarkdownEditor from "../core/editor.component";
@@ -646,7 +645,6 @@ export default function PostFormComponent({
           formik.setFieldValue("publication_date", publication_date);
           formik.setFieldValue("status", PostStatus.published);
           setCustomPublishDate(false);
-          track("AddCustomPublishDate");
         }}
       />
 
@@ -667,7 +665,6 @@ export default function PostFormComponent({
           }
 
           setPromptSchedule(false);
-          track("SchedulePost");
         }}
       />
 
@@ -678,7 +675,6 @@ export default function PostFormComponent({
         confirmCallback={(title: string) => {
           formik.setFieldValue("title", title);
           setPromptTitleSuggestions(false);
-          track("AiSuggestTitle");
         }}
       />
 
@@ -687,11 +683,9 @@ export default function PostFormComponent({
         open={promptExpandConcept}
         setOpen={(open: boolean) => {
           setPromptExpandConcept(open);
-          track("AiExpandConcept");
         }}
         insertContentCallback={(content: string) => {
           setPromptExpandConcept(false);
-          track("AiExpandConceptCopyToPost");
           formik.setFieldValue(
             "content",
             `${formik.values.content}\n\n${content}`
@@ -704,7 +698,6 @@ export default function PostFormComponent({
         open={promptProofRead}
         setOpen={(open: boolean) => {
           setPromptProofRead(open);
-          track("AiProofRead");
         }}
       />
     </div>

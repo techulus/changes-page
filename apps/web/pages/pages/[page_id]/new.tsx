@@ -11,7 +11,6 @@ import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
 import { NewPostSchema } from "../../../data/schema";
-import { track } from "../../../utils/analytics";
 import { httpPost } from "../../../utils/http";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 
@@ -48,8 +47,6 @@ export default function NewPost({
           ...values,
         },
       });
-
-      track("PostCreated");
 
       if (values.status !== PostStatus.draft) {
         return await router.replace(`${ROUTES.PAGES}/${page_id}?yay=true`);
