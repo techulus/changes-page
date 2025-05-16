@@ -9,7 +9,6 @@ import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import { ROUTES } from "../../data/routes.data";
 import { NewPageSchema } from "../../data/schema";
-import { track } from "../../utils/analytics";
 import { httpPost } from "../../utils/http";
 
 export default function NewPage() {
@@ -45,10 +44,6 @@ export default function NewPage() {
         data: {
           ...values,
         },
-      });
-
-      track("PageCreated", {
-        url_slug: values.url_slug,
       });
 
       return await router.push(ROUTES.PAGES + "?yay=true");

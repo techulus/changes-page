@@ -69,6 +69,25 @@ const moduleExports = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // PostHog rewrites for ingest and static assets
+  async rewrites() {
+    return [
+      {
+        source: "/ingest/static/:path*",
+        destination: "https://us-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/ingest/:path*",
+        destination: "https://us.i.posthog.com/:path*",
+      },
+      {
+        source: "/ingest/decide",
+        destination: "https://us.i.posthog.com/decide",
+      },
+    ];
+  },
+  // This is required to support PostHog trailing slash API requests
+  skipTrailingSlashRedirect: true,
 };
 
 // ensure that your source maps include changes from all other Webpack plugins

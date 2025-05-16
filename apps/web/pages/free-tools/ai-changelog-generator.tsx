@@ -11,7 +11,6 @@ import {
 } from "../../components/core/toast.component";
 import FooterComponent from "../../components/layout/footer.component";
 import MarketingHeaderComponent from "../../components/marketing/marketing-header.component";
-import { track } from "../../utils/analytics";
 import usePrefersColorScheme from "../../utils/hooks/usePrefersColorScheme";
 import { createSignedStreamingUrl } from "../../utils/manageprompt";
 
@@ -34,8 +33,6 @@ export default function AIChangelogGenerator({
       notifyError("Please enter your commit messages or PR titles");
       return;
     }
-
-    track("FreeTools-AiChangelogGenerator-Generate");
 
     setLoading(true);
 

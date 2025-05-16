@@ -22,7 +22,6 @@ import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
 import MemeberDetails from "../../components/teams/memeber-details";
-import { track } from "../../utils/analytics";
 import { getAppBaseURL } from "../../utils/helpers";
 import { httpPost } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
@@ -117,7 +116,6 @@ export default function Teams() {
       return;
     }
 
-    track("DeleteTeam");
     fetchData();
     setTeamToDelete(null);
     setIsDeleting(false);
@@ -133,7 +131,6 @@ export default function Teams() {
       })
       .match({ id: pageId });
 
-    track("AssignPageToTeam");
     fetchData();
     setAssigningPage(false);
     setShowAssignPage(null);
@@ -148,7 +145,6 @@ export default function Teams() {
       })
       .match({ id: pageId });
 
-    track("RemovePageFromTeam");
     fetchData();
   };
 
@@ -158,14 +154,12 @@ export default function Teams() {
       user_id: userId,
     });
 
-    track("RemoveTeamMember");
     fetchData();
   };
 
   const handleRevokeInvite = async (inviteId: string) => {
     await supabase.from("team_invitations").delete().match({ id: inviteId });
 
-    track("RevokeTeamInvitation");
     fetchData();
   };
 
@@ -184,7 +178,6 @@ export default function Teams() {
       }
     );
 
-    track("AcceptTeamInvitation");
     fetchData();
   };
 
@@ -195,7 +188,6 @@ export default function Teams() {
         user_id: user?.id,
       });
 
-      track("LeaveTeam");
       fetchData();
     }
   };
