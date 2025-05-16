@@ -6,6 +6,7 @@ import {
   useUser,
 } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import posthog from "posthog-js";
 import {
   createContext,
   useCallback,
@@ -64,6 +65,10 @@ export const UserContextProvider = (props: any) => {
     if (user) {
       fetchBilling().then(() => {
         setLoading(false);
+      });
+      posthog.identify(user.id, {
+        email: user.email,
+        name: user.user_metadata?.full_name,
       });
     } else {
       setLoading(false);
