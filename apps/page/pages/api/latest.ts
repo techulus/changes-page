@@ -59,7 +59,7 @@ async function handler(
 
     res.status(200).json(postsWithUrl[0] ?? null);
   } catch (e: Error | any) {
-    console.log("changes.md [Error]", e);
+    console.log("Failed to fetch latest post [Error]", e);
     res.status(404).json(null);
   }
 }

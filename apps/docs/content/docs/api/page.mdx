@@ -3,7 +3,7 @@ title: Page
 description: These are APIs that can be used to fetch page data
 ---
 
-### Get the latest post
+### Get latest post
 
 This endpoint will return a JSON response of the latest post in the page.
 
@@ -69,4 +69,26 @@ GET https://yourpage.changes.page/changes.json
     "plain_text_content": "We're kicking off 2025 by introducing one of our most highly requested features!"
   }
 ]
+```
+
+### Get a posts by id
+
+This endpoint will return a JSON response of a post by id.
+
+```text title="Request"
+GET https://yourpage.changes.page/changes.json/:id
+```
+
+```json title="Response: 200 OK"
+{
+  "id": "cf8c52a9-27b3-47df-9f22-0c0af15cfaca",
+  "title": "Unlock Teamwork with Our Latest Feature Update",
+  "content": "We're kicking off 2025 by introducing one of our most highly requested features!",
+  "tags": ["announcement", "new"],
+  "publication_date": "2025-02-14T12:22:16.571+00:00",
+  "updated_at": "2025-02-14T12:22:17.887817+00:00",
+  "created_at": "2025-02-14T09:42:52.934045+00:00",
+  "url": "https://hey.changes.page/post/cf8c52a9-27b3-47df-9f22-0c0af15cfaca/unlock-teamwork-with-our-latest-feature-update",
+  "plain_text_content": "We're kicking off 2025 by introducing one of our most highly requested features!"
+}
 ```

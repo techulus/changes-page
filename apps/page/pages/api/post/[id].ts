@@ -1,9 +1,12 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IPost } from "@changes-page/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { allowCors } from "../../lib/cors";
-import { fetchRenderData, translateHostToPageIdentifier } from "../../lib/data";
-import { getPageUrl, getPostUrl } from "../../lib/url";
+import { allowCors } from "../../../lib/cors";
+import {
+  fetchRenderData,
+  translateHostToPageIdentifier,
+} from "../../../lib/data";
+import { getPageUrl, getPostUrl } from "../../../lib/url";
 
 type IPostWithUrl = Pick<
   IPost,
@@ -14,6 +17,12 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<IPostWithUrl | null>
 ) {
+  const { id } = req.query;
+  if (!id) {
+    res.status(404).json(null);
+    return;
+  }
+
   await allowCors(req, res);
 
   const hostname = String(req?.headers?.host);
@@ -27,15 +36,14 @@ async function handler(
     if (!page) throw new Error("Page not found");
     if (!settings) throw new Error("Settings not found");
 
-    const pageUrl = getPageUrl(page, settings);
+    const pageUrl = getPageUrl(page, settings, hostname);
 
-    // fetch pinned post for page
     const { data, error: postsError } = await supabaseAdmin
       .from("posts")
       .select("id,title,content,tags,publication_date,updated_at,created_at")
+      .eq("id", String(id))
       .eq("page_id", String(page?.id))
       .eq("status", "published")
-      .eq("id", String(settings?.pinned_post_id))
       .order("publication_date", { ascending: false })
       .limit(1);
 
@@ -58,9 +66,9 @@ async function handler(
       };
     });
 
-    res.status(200).json(postsWithUrl[0]);
+    res.status(200).json(postsWithUrl[0] ?? null);
   } catch (e: Error | any) {
-    console.log("Failed to fetch pinned post [Error]", e);
+    console.log("Failed to fetch post [Error]", e);
     res.status(404).json(null);
   }
 }

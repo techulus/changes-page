@@ -88,6 +88,10 @@ const moduleExports = {
         destination: "/api/json",
       },
       {
+        source: "/changes.json/:id",
+        destination: "/api/post/:id",
+      },
+      {
         source: "/latest.json",
         destination: "/api/latest",
       },
