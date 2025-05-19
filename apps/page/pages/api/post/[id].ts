@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IPost } from "@changes-page/supabase/types/page";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { allowCors } from "../../../lib/cors";
 import {
@@ -11,7 +12,7 @@ import { getPageUrl, getPostUrl } from "../../../lib/url";
 type IPostWithUrl = Pick<
   IPost,
   "id" | "title" | "content" | "tags" | "created_at"
-> & { url: string };
+> & { url: string; plain_text_content: string };
 
 async function handler(
   req: NextApiRequest,
@@ -59,14 +60,13 @@ async function handler(
       return;
     }
 
-    const postsWithUrl = posts.map((post) => {
-      return {
-        ...post,
-        url: getPostUrl(pageUrl, post),
-      };
-    });
+    const post = posts[0];
 
-    res.status(200).json(postsWithUrl[0] ?? null);
+    res.status(200).json({
+      ...post,
+      url: getPostUrl(pageUrl, post),
+      plain_text_content: convertMarkdownToPlainText(post.content),
+    });
   } catch (e: Error | any) {
     console.log("Failed to fetch post [Error]", e);
     res.status(404).json(null);
