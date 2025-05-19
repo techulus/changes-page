@@ -1,12 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { IPost } from "@changes-page/supabase/types/page";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { allowCors } from "../../lib/cors";
 import {
   fetchPosts,
   fetchRenderData,
   translateHostToPageIdentifier,
 } from "../../lib/data";
-import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { getPageUrl, getPostUrl } from "../../lib/url";
 
 async function handler(
@@ -43,7 +43,7 @@ async function handler(
 
     res.status(200).json(postsWithUrl);
   } catch (e: Error | any) {
-    console.log("changes.md [Error]", e);
+    console.log("Failed to fetch posts [Error]", e);
     res.status(200).json([]);
   }
 }

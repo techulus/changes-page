@@ -40,7 +40,7 @@ ${post.content}
 
     res.status(200).send(markdown);
   } catch (e: Error | any) {
-    console.log("changes.md [Error]", e);
+    console.log("Failed to fetch posts [changes.md] [Error]", e);
     res.status(200).send("## No posts Found");
   }
 }
