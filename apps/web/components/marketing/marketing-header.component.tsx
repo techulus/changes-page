@@ -33,7 +33,7 @@ export default function MarketingHeaderComponent({ title, description }) {
           type: "website",
           images: [
             {
-              url: `https://changes.page/api/blog/og?title=${title}&content=${description}`,
+              url: "https://changes.page/og.png",
               width: 1200,
               height: 630,
               alt: description,
