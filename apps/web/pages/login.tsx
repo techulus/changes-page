@@ -5,7 +5,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { DEFAULT_TITLE, SUBTITLE, TAGLINE } from "../data/marketing.data";
+import { DEFAULT_TITLE, SUBTITLE } from "../data/marketing.data";
 import { ROUTES } from "../data/routes.data";
 import logoImage from "../public/images/logo.png";
 import { getAppBaseURL } from "../utils/helpers";
@@ -37,9 +37,7 @@ export default function Login() {
           type: "website",
           images: [
             {
-              url: `https://changes.page/api/blog/og?tag=${encodeURIComponent(
-                "changes.page"
-              )}&title=${TAGLINE}`,
+              url: "https://changes.page/og.png",
               width: 1200,
               height: 630,
               alt: SUBTITLE,

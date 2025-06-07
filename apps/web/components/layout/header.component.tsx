@@ -8,7 +8,7 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { DEFAULT_TITLE, SUBTITLE, TAGLINE } from "../../data/marketing.data";
+import { DEFAULT_TITLE, SUBTITLE } from "../../data/marketing.data";
 import { ROUTES } from "../../data/routes.data";
 import logoImage from "../../public/images/logo.png";
 import userImage from "../../public/images/user.png";
@@ -98,9 +98,7 @@ export default function HeaderComponent() {
           type: "website",
           images: [
             {
-              url: `https://changes.page/api/blog/og?tag=${encodeURIComponent(
-                "changes.page"
-              )}&title=${TAGLINE}&content=${SUBTITLE}&logo=https://changes.page/images/logo.png`,
+              url: "https://changes.page/og.png",
               width: 1200,
               height: 630,
               alt: SUBTITLE,
