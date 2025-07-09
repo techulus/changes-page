@@ -26,6 +26,9 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       teams (
         id,
         name
+      ),
+      page_settings (
+        custom_domain
       )
       `
     )
@@ -103,12 +106,19 @@ export default function Pages({
           )}
 
           {pages.length ? (
-            <div className="overflow-hidden shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0 rounded-md bg-white dark:bg-black">
-              {pages.map((page) => (
-                <div
-                  key={page.id}
-                  className="relative group p-6 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
-                >
+            <div className="overflow-hidden shadow rounded-md bg-white dark:bg-gray-900 border dark:border-gray-700">
+              <div className="sm:grid sm:grid-cols-2">
+                {pages.map((page, index) => (
+                  <div
+                    key={page.id}
+                    className={`relative group p-6 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors duration-200 ${
+                      index < pages.length - 1 ? 'border-b border-gray-200 dark:border-gray-700' : ''
+                    } ${
+                      index % 2 === 0 && index < pages.length - 2 ? 'sm:border-r sm:border-gray-200 sm:dark:border-gray-700' : ''
+                    } ${
+                      index % 2 === 0 && index === pages.length - 2 && pages.length % 2 === 0 ? 'sm:border-r sm:border-gray-200 sm:dark:border-gray-700' : ''
+                    }`}
+                  >
                   <div>
                     <span
                       className={classNames(
@@ -135,17 +145,23 @@ export default function Pages({
                     </span>
                   </div>
                   <div className="mt-6">
-                    <h3 className="text-lg font-medium dark:text-gray-50">
+                    <h3 className="text-lg font-medium dark:text-white">
                       <a
                         href={`${ROUTES.PAGES}/${page.id}`}
-                        className="focus:outline-none font-bold tracking-tight"
+                        className="focus:outline-none font-bold tracking-tight hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
                       >
                         <span className="absolute inset-0" aria-hidden="true" />
                         {page.title}
                       </a>
                     </h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-200">
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                       {page.description}
+                    </p>
+                    <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+                      {page.page_settings?.custom_domain 
+                        ? page.page_settings.custom_domain
+                        : `${page.url_slug}.changes.page`
+                      }
                     </p>
                   </div>
                   <span
@@ -162,7 +178,8 @@ export default function Pages({
                     ) : null}
                   </span>
                 </div>
-              ))}
+                ))}
+              </div>
             </div>
           ) : null}
         </div>
