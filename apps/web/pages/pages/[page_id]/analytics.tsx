@@ -196,29 +196,24 @@ export async function getServerSideProps({ req, res, query }) {
 
   console.log(`Fetching stats for page ${page_id} from ${date.toISOString()}`);
 
-  // Get current period stats
-  const {
-    // @ts-ignore
-    data: { page_views, visitors },
-  } = await supabaseAdmin
-    .rpc("page_view_stats", {
-      pageid: String(page_id),
-      date: date.toISOString(),
-    })
-    .maybeSingle()
-    .throwOnError();
+  const { data: allPageViews } = await supabaseAdmin
+    .from("page_views")
+    .select("created_at, visitor_id")
+    .eq("page_id", page_id)
+    .gte("created_at", prevDate.toISOString());
 
-  // Get previous period stats for comparison
-  const {
-    // @ts-ignore
-    data: { page_views: prev_page_views, visitors: prev_visitors },
-  } = await supabaseAdmin
-    .rpc("page_view_stats", {
-      pageid: String(page_id),
-      date: prevDate.toISOString(),
-    })
-    .maybeSingle()
-    .throwOnError();
+  const currentPeriodViews = allPageViews?.filter(
+    (view) => new Date(view.created_at) >= date
+  ) || [];
+  
+  const previousPeriodViews = allPageViews?.filter(
+    (view) => new Date(view.created_at) >= prevDate && new Date(view.created_at) < date
+  ) || [];
+
+  const page_views = currentPeriodViews.length;
+  const visitors = new Set(currentPeriodViews.map(v => v.visitor_id)).size;
+  const prev_page_views = previousPeriodViews.length;
+  const prev_visitors = new Set(previousPeriodViews.map(v => v.visitor_id)).size;
 
   // Calculate growth rates
   const pageViewsGrowth =
