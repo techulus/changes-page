@@ -18,11 +18,11 @@ export default function Index({ addons, unit_amount, stars }) {
     <div className="h-full dark:bg-gray-800">
       <Head>
         <title>
-          Changelog SaaS | Product Update Tool for Teams | changes.page
+          Changes.page - Simple Changelog for Product Teams
         </title>
         <meta
           name="description"
-          content="changes.page is the smarter, faster SaaS changelog tool for product teams. Publish release notes, notify users, and track engagement—all in one place. Try free!"
+          content="Create beautiful release notes and notify users about product updates. Track engagement with built-in analytics. Start your free trial today."
         />
         {/* FAQ Schema for SEO */}
         <script
@@ -164,8 +164,7 @@ export default function Index({ addons, unit_amount, stars }) {
                   Sign Up
                 </h3>
                 <p className="mt-2 text-gray-500 dark:text-gray-300 text-base text-center">
-                  Create your account in seconds and your first page is ready
-                  instantly.
+                  Create your account in seconds and get started instantly.
                 </p>
               </div>
               {/* Connector */}
@@ -202,7 +201,7 @@ export default function Index({ addons, unit_amount, stars }) {
                   Customize
                 </h3>
                 <p className="mt-2 text-gray-500 dark:text-gray-300 text-base text-center">
-                  Set up your page, add your branding, and connect integrations.
+                  Add your branding, customize the design, and connect integrations.
                 </p>
               </div>
               {/* Connector */}
@@ -239,7 +238,7 @@ export default function Index({ addons, unit_amount, stars }) {
                   Publish & Notify
                 </h3>
                 <p className="mt-2 text-gray-500 dark:text-gray-300 text-base text-center">
-                  Publish updates, notify users via email or RSS, and track
+                  Share updates, notify users via email or RSS, and track
                   engagement with analytics.
                 </p>
               </div>
@@ -252,7 +251,7 @@ export default function Index({ addons, unit_amount, stars }) {
         <section className="bg-white dark:bg-gray-900 py-20 border-b border-gray-100 dark:border-gray-800">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-16 text-center">
-              Who is changes.page for?
+              Who uses this tool?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
               {/* Card 1 */}
@@ -292,7 +291,7 @@ export default function Index({ addons, unit_amount, stars }) {
                   Developers
                 </h3>
                 <p className="text-gray-500 dark:text-gray-300 text-base">
-                  Automate changelog publishing and integrate with your CI/CD
+                  Automate release notes and integrate with your CI/CD
                   pipeline.
                 </p>
               </div>
@@ -326,7 +325,7 @@ export default function Index({ addons, unit_amount, stars }) {
                     Zapier
                   </div>
                   <div className="text-gray-500 dark:text-gray-300 text-sm">
-                    Automate your changelog workflow with 5,000+ apps via
+                    Automate your workflow with 5,000+ apps via
                     Zapier.
                   </div>
                 </div>

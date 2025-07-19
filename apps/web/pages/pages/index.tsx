@@ -106,17 +106,17 @@ export default function Pages({
           )}
 
           {pages.length ? (
-            <div className="overflow-hidden shadow rounded-md bg-white dark:bg-gray-900 border dark:border-gray-700">
+            <div className="overflow-hidden shadow rounded-md bg-white dark:bg-gray-900 border dark:border-gray-800">
               <div className="sm:grid sm:grid-cols-2">
                 {pages.map((page, index) => (
                   <div
                     key={page.id}
                     className={`relative group p-6 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors duration-200 ${
-                      index < pages.length - 1 ? 'border-b border-gray-200 dark:border-gray-700' : ''
+                      index < pages.length - 1 ? 'border-b border-gray-200 dark:border-gray-800' : ''
                     } ${
-                      index % 2 === 0 && index < pages.length - 2 ? 'sm:border-r sm:border-gray-200 sm:dark:border-gray-700' : ''
+                      index % 2 === 0 && index < pages.length - 2 ? 'sm:border-r sm:border-gray-200 sm:dark:border-gray-800' : ''
                     } ${
-                      index % 2 === 0 && index === pages.length - 2 && pages.length % 2 === 0 ? 'sm:border-r sm:border-gray-200 sm:dark:border-gray-700' : ''
+                      index % 2 === 0 && index === pages.length - 2 && pages.length % 2 === 0 ? 'sm:border-r sm:border-gray-200 sm:dark:border-gray-800' : ''
                     }`}
                   >
                   <div>
