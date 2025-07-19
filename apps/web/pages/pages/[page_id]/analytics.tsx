@@ -11,40 +11,46 @@ import { getPage } from "../../../utils/useSSR";
 
 // Helper function to detect device type from user agent
 const getDeviceType = (userAgent: string): string => {
-  if (!userAgent) return 'Unknown';
-  
+  if (!userAgent) return "Unknown";
+
   const ua = userAgent.toLowerCase();
-  
-  if (ua.includes('mobile') || ua.includes('android') || ua.includes('iphone') || 
-      ua.includes('ipod') || ua.includes('windows phone') || ua.includes('blackberry')) {
-    return 'Mobile';
+
+  if (
+    ua.includes("mobile") ||
+    ua.includes("android") ||
+    ua.includes("iphone") ||
+    ua.includes("ipod") ||
+    ua.includes("windows phone") ||
+    ua.includes("blackberry")
+  ) {
+    return "Mobile";
   }
-  
-  if (ua.includes('tablet') || ua.includes('ipad')) {
-    return 'Tablet';
+
+  if (ua.includes("tablet") || ua.includes("ipad")) {
+    return "Tablet";
   }
-  
-  return 'Desktop';
+
+  return "Desktop";
 };
 
 // Get device analytics using existing data
 async function getDeviceAnalytics(page_id: string, range: number) {
   const date = new Date(Date.now() - range * 24 * 60 * 60 * 1000);
-  
+
   const { data } = await supabaseAdmin
-    .from('page_views')
-    .select('user_agent')
-    .eq('page_id', page_id)
-    .gte('created_at', date.toISOString())
-    .not('user_agent', 'is', null);
-  
+    .from("page_views")
+    .select("user_agent")
+    .eq("page_id", page_id)
+    .gte("created_at", date.toISOString())
+    .not("user_agent", "is", null);
+
   const deviceCounts = {};
-  
+
   data?.forEach((row) => {
     const device = getDeviceType(row.user_agent);
     deviceCounts[device] = (deviceCounts[device] || 0) + 1;
   });
-  
+
   return Object.entries(deviceCounts)
     .map(([device, count]) => ({
       data_name: device,
@@ -56,21 +62,23 @@ async function getDeviceAnalytics(page_id: string, range: number) {
 // Get peak hours analytics using existing data
 async function getPeakHoursAnalytics(page_id: string, range: number) {
   const date = new Date(Date.now() - range * 24 * 60 * 60 * 1000);
-  
+
   const { data } = await supabaseAdmin
-    .from('page_views')
-    .select('created_at')
-    .eq('page_id', page_id)
-    .gte('created_at', date.toISOString());
-  
+    .from("page_views")
+    .select("created_at")
+    .eq("page_id", page_id)
+    .gte("created_at", date.toISOString());
+
   const hourCounts = {};
-  
+
   data?.forEach((row) => {
     const hour = new Date(row.created_at).getHours();
-    const hourLabel = `${hour.toString().padStart(2, '0')}:00 - ${(hour + 1).toString().padStart(2, '0')}:00`;
+    const hourLabel = `${hour.toString().padStart(2, "0")}:00 - ${(hour + 1)
+      .toString()
+      .padStart(2, "0")}:00`;
     hourCounts[hourLabel] = (hourCounts[hourLabel] || 0) + 1;
   });
-  
+
   return Object.entries(hourCounts)
     .map(([hour, count]) => ({
       data_name: hour,
@@ -80,37 +88,9 @@ async function getPeakHoursAnalytics(page_id: string, range: number) {
     .slice(0, 5);
 }
 
-// Component to render icons based on type
-const MetricIcon = ({ iconType }: { iconType: string }) => {
-  switch (iconType) {
-    case 'eye':
-      return (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-      );
-    case 'users':
-      return (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      );
-    case 'lightning':
-      return (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-};
-
 const StatsTable = ({ data = [], title, total = 5 }) => {
-  // Calculate total count for percentage calculation
   const totalCount = data.reduce((sum, item) => sum + item.data_count, 0);
-  
+
   return (
     <div className="inline-block min-w-full align-middle">
       <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -139,8 +119,11 @@ const StatsTable = ({ data = [], title, total = 5 }) => {
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-800 bg-white dark:bg-black">
             {data.map(({ data_name, data_count }) => {
-              const percentage = totalCount > 0 ? ((data_count / totalCount) * 100).toFixed(1) : 0;
-              
+              const percentage =
+                totalCount > 0
+                  ? ((data_count / totalCount) * 100).toFixed(1)
+                  : 0;
+
               return (
                 <tr key={data_name} className="relative">
                   <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-100 sm:pl-6 truncate overflow-hidden max-w-[200px]">
@@ -207,17 +190,10 @@ export async function getServerSideProps({ req, res, query }) {
   const page = await getPage(supabase, page_id);
 
   const rangeNum = Number(range) || 7;
-  
-  // Current period date
-  const date = new Date(
-    Date.now() - rangeNum * 24 * 60 * 60 * 1000
-  );
-  
-  // Previous period date (for comparison)
-  const prevDate = new Date(
-    Date.now() - (rangeNum * 2) * 24 * 60 * 60 * 1000
-  );
-  
+
+  const date = new Date(Date.now() - rangeNum * 24 * 60 * 60 * 1000);
+  const prevDate = new Date(Date.now() - rangeNum * 2 * 24 * 60 * 60 * 1000);
+
   console.log(`Fetching stats for page ${page_id} from ${date.toISOString()}`);
 
   // Get current period stats
@@ -245,13 +221,19 @@ export async function getServerSideProps({ req, res, query }) {
     .throwOnError();
 
   // Calculate growth rates
-  const pageViewsGrowth = prev_page_views > 0 
-    ? ((page_views - prev_page_views) / prev_page_views * 100).toFixed(1)
-    : page_views > 0 ? 100 : 0;
-  
-  const visitorsGrowth = prev_visitors > 0
-    ? ((visitors - prev_visitors) / prev_visitors * 100).toFixed(1)
-    : visitors > 0 ? 100 : 0;
+  const pageViewsGrowth =
+    prev_page_views > 0
+      ? (((page_views - prev_page_views) / prev_page_views) * 100).toFixed(1)
+      : page_views > 0
+      ? 100
+      : 0;
+
+  const visitorsGrowth =
+    prev_visitors > 0
+      ? (((visitors - prev_visitors) / prev_visitors) * 100).toFixed(1)
+      : visitors > 0
+      ? 100
+      : 0;
 
   // Calculate engagement rate (page views per visitor)
   const engagementRate = visitors > 0 ? (page_views / visitors).toFixed(1) : 0;
@@ -261,13 +243,13 @@ export async function getServerSideProps({ req, res, query }) {
       data_name: "Page Views",
       data_count: Number(page_views).toLocaleString(),
       growth: pageViewsGrowth,
-      trend: Number(pageViewsGrowth) >= 0 ? 'up' : 'down',
+      trend: Number(pageViewsGrowth) >= 0 ? "up" : "down",
     },
     {
       data_name: "Visitors",
       data_count: Number(visitors).toLocaleString(),
       growth: visitorsGrowth,
-      trend: Number(visitorsGrowth) >= 0 ? 'up' : 'down',
+      trend: Number(visitorsGrowth) >= 0 ? "up" : "down",
     },
     {
       data_name: "Engagement Rate",
@@ -280,7 +262,7 @@ export async function getServerSideProps({ req, res, query }) {
 
   // Get device type data by analyzing user agents
   const deviceData = await getDeviceAnalytics(page_id, rangeNum);
-  
+
   // Get peak hours data
   const peakHoursData = await getPeakHoursAnalytics(page_id, rangeNum);
 
@@ -351,21 +333,47 @@ export default function PageAnalytics({
               </dt>
               <dd className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-1">
                 {data_count}
-                {suffix && <span className="text-lg font-normal text-gray-500 dark:text-gray-400 ml-1">{suffix}</span>}
+                {suffix && (
+                  <span className="text-lg font-normal text-gray-500 dark:text-gray-400 ml-1">
+                    {suffix}
+                  </span>
+                )}
               </dd>
               {growth !== null && (
                 <div className="flex items-center text-sm">
-                  <span className={`flex items-center font-medium ${
-                    trend === 'up' ? 'text-green-600' : trend === 'down' ? 'text-red-600' : 'text-gray-500'
-                  }`}>
-                    {trend === 'up' && (
-                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                  <span
+                    className={`flex items-center font-medium ${
+                      trend === "up"
+                        ? "text-green-600"
+                        : trend === "down"
+                        ? "text-red-600"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {trend === "up" && (
+                      <svg
+                        className="w-4 h-4 mr-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     )}
-                    {trend === 'down' && (
-                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    {trend === "down" && (
+                      <svg
+                        className="w-4 h-4 mr-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     )}
                     {Math.abs(Number(growth))}% vs previous period
