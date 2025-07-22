@@ -26,7 +26,7 @@ const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
         .from("team_invitations")
         .select("*")
         .eq("id", invite_id)
-        .eq("email", user.email)
+        .ilike("email", user.email)
         .single();
 
       if (!invite) {
