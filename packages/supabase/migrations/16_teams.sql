@@ -62,8 +62,8 @@ alter table team_invitations add constraint unique_email_team_id unique (email, 
 alter table team_invitations enable row level security;
 create policy "Can view own team invitations." on team_invitations for select using (auth.uid() = inviter_id);
 create policy "Can delete own team invitations." on team_invitations for delete using (auth.uid() = inviter_id);
-create policy "Can view team invitations." on team_invitations for select using (auth.email() = email);
-create policy "Invited users can view teams." on teams for select using (id in (select team_id from team_invitations where email = auth.email()));
+create policy "Can view team invitations." on team_invitations for select using ((lower(auth.email()) = lower(email)));
+create policy "Invited users can view teams." on teams for select using ((id IN ( SELECT team_invitations.team_id FROM team_invitations WHERE (lower(team_invitations.email) = lower(auth.email())))));
 
 CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON team_invitations
