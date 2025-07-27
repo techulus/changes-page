@@ -19,6 +19,16 @@ const cleanupInactivePagesJob = async (
       .json({ error: { statusCode: 405, message: "Method not allowed" } });
   }
 
+  const authHeader = req.headers["authorization"];
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return res.status(401).json({
+      error: {
+        statusCode: 401,
+        message: "Unauthorized",
+      },
+    });
+  }
+
   try {
     const jobId = v4();
 
