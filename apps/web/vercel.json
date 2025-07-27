@@ -3,6 +3,10 @@
     {
       "path": "/api/billing/jobs/report-usage",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/billing/jobs/cleanup-inactive-pages",
+      "schedule": "0 1 * * *"
     }
   ]
 }
