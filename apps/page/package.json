@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3001",
-    "build": "mkdir public/v1 && minify widget/widget.js > public/v1/widget.js && next build",
+    "build": "mkdir -p public/v1 && minify widget/widget.js > public/v1/widget.js && next build",
     "start": "next start",
     "lint": "next lint"
   },
