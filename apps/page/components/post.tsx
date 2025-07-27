@@ -18,7 +18,10 @@ const PostDateTime = dynamic(
   {
     ssr: false,
   }
-);
+) as React.ComponentType<{
+  publishedAt: string;
+  startWithFullDate?: boolean;
+}>;
 
 export default function Post({
   post,

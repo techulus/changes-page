@@ -1,0 +1,23 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "3000:3000"
+    env_file:
+      - apps/web/.env
+    environment:
+      - NODE_ENV=production
+
+  page:
+    build:
+      context: .
+      dockerfile: Dockerfile.page
+    ports:
+      - "3001:3001"
+    env_file:
+      - apps/page/.env
+    environment:
+      - NODE_ENV=production
+
