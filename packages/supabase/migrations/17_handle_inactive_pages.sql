@@ -30,6 +30,8 @@ BEGIN
       pages p
   JOIN 
       users u ON p.user_id = u.id
+  JOIN
+      auth.users au ON u.id = au.id
   WHERE 
       (
         -- Users with canceled subscription
@@ -37,8 +39,10 @@ BEGIN
         -- OR users without any subscription
         OR u.stripe_subscription IS NULL
       )
+      -- not gifted pro
       AND u.pro_gifted = false
-      AND p.created_at < NOW() - INTERVAL '90 days'
+      -- User hasn't been active in the last 180 days
+      AND (au.last_sign_in_at IS NULL OR au.last_sign_in_at < NOW() - INTERVAL '180 days')
   ORDER BY 
       p.created_at ASC;
 END;
