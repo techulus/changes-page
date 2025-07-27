@@ -13,7 +13,7 @@ const cleanupInactivePagesJob = async (
   req: NextApiRequest,
   res: NextApiResponse<CleanupResponse | IErrorResponse>
 ) => {
-  if (req.method !== "POST") {
+  if (req.method !== "GET") {
     return res
       .status(405)
       .json({ error: { statusCode: 405, message: "Method not allowed" } });
