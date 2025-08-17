@@ -29,6 +29,14 @@ If you want to learn more about this project or have any questions, send us an e
 - [Postmark](https://postmarkapp.com)
 - [Arcjet](https://arcjet.com)
 
+## Deployment
+
+<a href="https://railway.com?referralCode=techulus">
+  <img src="https://railway.com/brand/logotype-light.png" alt="Railway" height="70" />
+</a>
+
+Try [Railway](https://railway.com?referralCode=techulus), a modern platform that makes deploying applications simple and fast. Railway provides excellent developer experience with features like automatic deployments, built-in databases, and seamless scaling.
+
 ## Getting Started 🚀
 
 ### Requirements
