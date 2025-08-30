@@ -13,6 +13,8 @@
     <a href="https://github.com/techulus/changes-page/issues">Issues</a>
     ·
     <a href="https://techulus.atlassian.net/servicedesk/customer/portal/1">Support</a>
+    ·
+    <a href="SELF-HOSTING.md">Self-Hosting</a>
   </p>
 </p>
 
