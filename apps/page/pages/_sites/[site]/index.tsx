@@ -166,9 +166,7 @@ export async function getServerSideProps({
     };
   }
 
-  console.time("fetchRenderData");
   const { page, settings } = await fetchRenderData(site);
-  console.timeEnd("fetchRenderData");
 
   if (!page || !settings || !(await isSubscriptionActive(page?.user_id))) {
     return {
@@ -176,12 +174,10 @@ export async function getServerSideProps({
     };
   }
 
-  console.time("fetchPosts");
   const { posts, postsCount } = await fetchPosts(String(page?.id), {
     pinned_post_id: settings?.pinned_post_id,
     limit: 10,
   });
-  console.timeEnd("fetchPosts");
 
   return {
     props: {

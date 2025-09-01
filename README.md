@@ -10,9 +10,9 @@
     <br />
     <a href="https://changes.page">Website</a>
     ·
-    <a href="https://github.com/techulus/changes-page/issues">Issues</a>
-    ·
     <a href="https://techulus.atlassian.net/servicedesk/customer/portal/1">Support</a>
+    ·
+    <a href="SELF-HOSTING.md">Self-Hosting</a>
   </p>
 </p>
 
@@ -28,6 +28,14 @@ If you want to learn more about this project or have any questions, send us an e
 - [inngest](https://www.inngest.com)
 - [Postmark](https://postmarkapp.com)
 - [Arcjet](https://arcjet.com)
+
+## Deployment
+
+<a href="https://railway.com?referralCode=techulus">
+  <img src="https://railway.com/brand/logotype-light.png" alt="Railway" height="70" />
+</a>
+
+Try [Railway](https://railway.com?referralCode=techulus), a modern platform that makes deploying applications simple and fast. Railway provides excellent developer experience with features like automatic deployments, built-in databases, and seamless scaling.
 
 ## Getting Started 🚀
 
