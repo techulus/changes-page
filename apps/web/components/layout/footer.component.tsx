@@ -25,6 +25,14 @@ const navigation = {
       name: "ChangeCraftAI",
       href: "/free-tools/ai-changelog-generator",
     },
+    {
+      name: "SemVer Calculator",
+      href: "/free-tools/semantic-version-calculator",
+    },
+    {
+      name: "Release Calendar",
+      href: "/free-tools/release-calendar",
+    },
     { name: "Blog", href: ROUTES.BLOG },
   ],
   legal: [
