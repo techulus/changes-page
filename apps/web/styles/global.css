@@ -90,6 +90,7 @@ body {
 
 #nprogress .bar {
   background: #4f46e5 !important;
+  height: 4px !important;
 }
 
 #nprogress .peg {

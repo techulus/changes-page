@@ -61,7 +61,7 @@ export default function Page({
           className={classNames(
             "max-w-7xl mx-auto py-4 sm:py-2 px-4 sm:px-6 lg:px-8",
             !subtitle && "py-4 sm:py-4",
-            !!title && tabs.length > 0 && "relative sm:pb-0 lg:pb-2"
+            !!title && tabs.length > 0 && "relative sm:pb-0"
           )}
         >
           <div className="flex flex-row justify-between items-center sm:h-[100px]">
@@ -146,8 +146,8 @@ export default function Page({
               : false}
           </div>
 
-          {!!title && tabs?.length > 0 && (
-            <div className="mt-2 lg:absolute lg:right-8 lg:bottom-0 lg:pt-2">
+          {!!title && tabs?.length > 0 ? (
+            <div className="mt-0 ml-4 md:ml-6 lg:ml-8">
               <div className="sm:hidden">
                 <label htmlFor="current-tab" className="sr-only">
                   Select a tab
@@ -186,7 +186,7 @@ export default function Page({
                 </nav>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </header>
 

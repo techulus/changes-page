@@ -14,17 +14,27 @@ import {
   fetchRenderData,
   isSubscriptionActive,
 } from "../../../lib/data";
+import { supabaseAdmin } from "@changes-page/supabase/admin";
+
+type RoadmapBoard = {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+};
 
 export default function Index({
   posts: initialPosts,
   page,
   postsCount,
   settings,
+  roadmaps,
 }: {
   page: IPage;
   settings: IPageSettings;
   posts: IPost[];
   postsCount: number;
+  roadmaps: RoadmapBoard[];
 }) {
   const { setTheme } = useTheme();
 
@@ -71,7 +81,7 @@ export default function Index({
       <SeoTags page={page} settings={settings} />
 
       <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <PageHeader page={page} settings={settings} />
+        <PageHeader page={page} settings={settings} roadmaps={roadmaps} />
 
         {(settings?.email_notifications || settings?.rss_notifications) && (
           <SubscribePrompt page={page} settings={settings} />
@@ -179,12 +189,21 @@ export async function getServerSideProps({
     limit: 10,
   });
 
+  // Fetch public roadmaps
+  const { data: roadmaps } = await supabaseAdmin
+    .from("roadmap_boards")
+    .select("id, title, slug, description")
+    .eq("page_id", page.id)
+    .eq("is_public", true)
+    .order("created_at", { ascending: true });
+
   return {
     props: {
       page,
       posts,
       postsCount,
       settings,
+      roadmaps: roadmaps || [],
     },
   };
 }

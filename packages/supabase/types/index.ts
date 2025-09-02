@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "10.2.0 (e07807d)"
@@ -392,6 +392,201 @@ export type Database = {
           },
         ]
       }
+      roadmap_boards: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          page_id: string
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          page_id: string
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          page_id?: string
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_boards_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roadmap_categories: {
+        Row: {
+          board_id: string
+          color: string | null
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          board_id: string
+          color?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          board_id?: string
+          color?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_categories_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_boards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roadmap_columns: {
+        Row: {
+          board_id: string
+          created_at: string
+          id: string
+          name: string
+          position: number
+        }
+        Insert: {
+          board_id: string
+          created_at?: string
+          id?: string
+          name: string
+          position: number
+        }
+        Update: {
+          board_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_columns_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_boards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roadmap_items: {
+        Row: {
+          board_id: string
+          category_id: string | null
+          column_id: string
+          created_at: string
+          description: string | null
+          id: string
+          position: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          board_id: string
+          category_id?: string | null
+          column_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          position: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          board_id?: string
+          category_id?: string | null
+          column_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          position?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_items_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_boards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roadmap_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roadmap_items_column_id_fkey"
+            columns: ["column_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_columns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roadmap_votes: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_votes_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       team_invitations: {
         Row: {
           created_at: string
@@ -561,12 +756,20 @@ export type Database = {
       get_pages_with_inactive_subscriptions: {
         Args: Record<PropertyKey, never>
         Returns: {
+          page_created_at: string
           page_id: string
           page_title: string
-          page_created_at: string
           url: string
           user_id: string
         }[]
+      }
+      initialize_roadmap_categories: {
+        Args: { board_id: string }
+        Returns: undefined
+      }
+      initialize_roadmap_columns: {
+        Args: { board_id: string }
+        Returns: undefined
       }
       is_subscription_active: {
         Args: { user_id: string }
@@ -577,39 +780,47 @@ export type Database = {
         Returns: boolean
       }
       page_view_browsers: {
-        Args: { pageid: string; date: string }
+        Args: { date: string; pageid: string }
         Returns: {
-          data_name: string
           data_count: number
+          data_name: string
         }[]
       }
       page_view_os: {
-        Args: { pageid: string; date: string }
+        Args: { date: string; pageid: string }
         Returns: {
-          data_name: string
           data_count: number
+          data_name: string
         }[]
       }
       page_view_referrers: {
-        Args: { pageid: string; date: string }
+        Args: { date: string; pageid: string }
         Returns: {
-          data_name: string
           data_count: number
+          data_name: string
         }[]
       }
       page_view_stats: {
-        Args: { pageid: string; date: string }
+        Args: { date: string; pageid: string }
         Returns: Record<string, unknown>
       }
       post_reactions_aggregate: {
         Args: { postid: string }
         Returns: {
-          thumbs_up_count: number
-          thumbs_down_count: number
+          heart_count: number
           rocket_count: number
           sad_count: number
-          heart_count: number
+          thumbs_down_count: number
+          thumbs_up_count: number
         }[]
+      }
+      roadmap_item_has_voted: {
+        Args: { itemid: string; visitorid: string }
+        Returns: boolean
+      }
+      roadmap_item_votes_count: {
+        Args: { itemid: string }
+        Returns: number
       }
     }
     Enums: {
