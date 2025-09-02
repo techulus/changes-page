@@ -14,6 +14,7 @@ import {
   fetchRenderData,
   isSubscriptionActive,
 } from "../../../../lib/data";
+import { getPageUrl } from "../../../../lib/url";
 
 type RoadmapBoard = Database["public"]["Tables"]["roadmap_boards"]["Row"];
 type RoadmapColumn = Database["public"]["Tables"]["roadmap_columns"]["Row"];
@@ -169,21 +170,26 @@ export default function RoadmapPage({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            item_ids: items.map(item => item.id),
+            item_ids: items.map((item) => item.id),
           }),
         });
-        
+
         const data = await response.json();
 
         if (data.ok) {
           // Transform API response to match expected frontend structure
-          const transformedVotes: Record<string, { count: number; voted: boolean }> = {};
-          Object.entries(data.votes).forEach(([itemId, voteData]: [string, any]) => {
-            transformedVotes[itemId] = {
-              count: voteData.vote_count,
-              voted: voteData.user_voted,
-            };
-          });
+          const transformedVotes: Record<
+            string,
+            { count: number; voted: boolean }
+          > = {};
+          Object.entries(data.votes).forEach(
+            ([itemId, voteData]: [string, any]) => {
+              transformedVotes[itemId] = {
+                count: voteData.vote_count,
+                voted: voteData.user_voted,
+              };
+            }
+          );
           setVotes(transformedVotes);
         }
       } catch (error) {
@@ -201,7 +207,7 @@ export default function RoadmapPage({
         settings={settings}
         title={`${board.title} - ${page.title}`}
         description={board.description || `Public roadmap for ${page.title}`}
-        url={`https://${page.slug}.changes.page/roadmap/${board.slug}`}
+        url={`${getPageUrl(page, settings)}/roadmap/${board.slug}`}
       />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">

@@ -760,7 +760,7 @@ export default function RoadmapBoardDetails({
               No stages configured
             </h3>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              This board doesn't have any stages set up yet.
+              This board doesn&apos;t have any stages set up yet.
             </p>
           </div>
         )}
