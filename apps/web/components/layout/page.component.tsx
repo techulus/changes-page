@@ -156,7 +156,7 @@ export default function Page({
                   id="current-tab"
                   name="current-tab"
                   className="block w-full rounded-md dark:bg-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-700 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  defaultValue={tabs.find((tab) => tab.current)?.name}
+                  defaultValue={tabs.find((tab) => tab.current)?.href}
                   onChange={(e) => router.push(e?.target?.value)}
                 >
                   {tabs.map((tab) => (

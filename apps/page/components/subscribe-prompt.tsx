@@ -163,7 +163,7 @@ export default function SubscribePrompt({
               Subscribe to get future posts via email
             </p>
             <form className="flex" onSubmit={formik.handleSubmit}>
-              <label htmlFor="email-address" className="sr-only">
+              <label htmlFor="email" className="sr-only">
                 Email address
               </label>
               <input

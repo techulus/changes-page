@@ -110,9 +110,6 @@ create table roadmap_votes (
 alter table roadmap_votes add constraint unique_item_visitor unique (item_id, visitor_id);
 
 alter table roadmap_votes enable row level security;
-create policy "Anyone can view roadmap votes." on roadmap_votes for select using (item_id in (select id from roadmap_items where board_id in (select id from roadmap_boards where is_public = true)));
-create policy "Anyone can insert roadmap votes." on roadmap_votes for insert with check (item_id in (select id from roadmap_items where board_id in (select id from roadmap_boards where is_public = true)));
-create policy "Anyone can delete their own roadmap votes." on roadmap_votes for delete using (item_id in (select id from roadmap_items where board_id in (select id from roadmap_boards where is_public = true)));
 
 -- Function to get vote count for roadmap items
 CREATE OR REPLACE FUNCTION roadmap_item_votes_count(itemid uuid)

@@ -42,7 +42,7 @@ export default async function getBulkRoadmapItemVotes(
     visitor_id = v4();
     res.setHeader(
       "Set-Cookie",
-      `cp_pa_vid=${visitor_id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`
+      `cp_pa_vid=${visitor_id}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=31536000`
     );
   }
 
