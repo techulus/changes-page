@@ -377,26 +377,25 @@ export default function RoadmapPage({
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
-                  <div className="flex justify-between items-start mb-6">
-                    <Dialog.Title
-                      as="h3"
-                      className="text-xl font-semibold leading-6 text-gray-900 dark:text-white pr-4"
-                    >
-                      {selectedItem?.title}
-                    </Dialog.Title>
-                    <button
-                      type="button"
-                      className="rounded-md bg-white dark:bg-gray-900 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      onClick={closeItemModal}
-                    >
-                      <XIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
+                <div className="relative">
+                  <button
+                    type="button"
+                    className="absolute -top-4 -right-4 z-10 rounded-full bg-white dark:bg-gray-700 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-lg border border-gray-200 dark:border-gray-600"
+                    onClick={closeItemModal}
+                  >
+                    <XIcon className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                  <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+                    {/* Column Divider */}
+                    <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2 z-10"></div>
+                    
                     {/* Left side - Content */}
                     <div className="lg:col-span-2 space-y-6">
+                      <h3 className="text-xl font-semibold leading-6 text-gray-900 dark:text-white">
+                        {selectedItem?.title}
+                      </h3>
                       {selectedItem?.description && (
                         <div>
                           <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
@@ -504,7 +503,8 @@ export default function RoadmapPage({
                       )}
                     </div>
                   </div>
-                </Dialog.Panel>
+                  </Dialog.Panel>
+                </div>
               </Transition.Child>
             </div>
           </div>

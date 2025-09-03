@@ -661,18 +661,20 @@ export default function RoadmapBoardDetails({
                                     e.stopPropagation();
                                     handleEditItem(item);
                                   }}
-                                  className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+                                  title="Edit item"
                                 >
-                                  <PencilIcon className="h-3 w-3" />
+                                  <PencilIcon className="h-4 w-4" />
                                 </button>
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleDeleteItem(item.id);
                                   }}
-                                  className="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400"
+                                  className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                                  title="Delete item"
                                 >
-                                  <TrashIcon className="h-3 w-3" />
+                                  <TrashIcon className="h-4 w-4" />
                                 </button>
                               </div>
                             )}
@@ -808,35 +810,17 @@ export default function RoadmapBoardDetails({
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-800 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
-                  <div className="flex justify-between items-start mb-6">
-                    <Dialog.Title
-                      as="h3"
-                      className="text-xl font-semibold leading-6 text-gray-900 dark:text-gray-100 pr-4"
-                    >
-                      <input
-                        type="text"
-                        value={itemForm.title}
-                        onChange={(e) =>
-                          setItemForm((prev) => ({
-                            ...prev,
-                            title: e.target.value,
-                          }))
-                        }
-                        className="bg-transparent border-none outline-none focus:ring-0 p-0 text-xl font-semibold leading-6 text-gray-900 dark:text-gray-100 w-full"
-                        placeholder="Enter item title..."
-                      />
-                    </Dialog.Title>
-                    <button
-                      type="button"
-                      className="rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      onClick={closeModal}
-                    >
-                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
+                <div className="relative">
+                  <button
+                    type="button"
+                    className="absolute -top-4 -right-4 z-10 rounded-full bg-white dark:bg-gray-700 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-lg border border-gray-200 dark:border-gray-600"
+                    onClick={closeModal}
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-800 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
 
                   <form onSubmit={handleSubmitItem}>
                     {formErrors.general && (
@@ -855,10 +839,25 @@ export default function RoadmapBoardDetails({
                       </div>
                     )}
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+                      {/* Column Divider */}
+                      <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2 z-10"></div>
+                      
                       {/* Left side - Content */}
                       <div className="lg:col-span-2 space-y-6">
                         <div>
+                          <input
+                            type="text"
+                            value={itemForm.title}
+                            onChange={(e) =>
+                              setItemForm((prev) => ({
+                                ...prev,
+                                title: e.target.value,
+                              }))
+                            }
+                            className="w-full text-xl font-semibold leading-6 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none mb-6"
+                            placeholder="Enter item title..."
+                          />
                           <MarkdownEditor
                             value={itemForm.description}
                             onChange={handleDescriptionChange}
@@ -924,7 +923,8 @@ export default function RoadmapBoardDetails({
                       </div>
                     </div>
                   </form>
-                </Dialog.Panel>
+                  </Dialog.Panel>
+                </div>
               </Transition.Child>
             </div>
           </div>
