@@ -6,6 +6,10 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import { useTheme } from "next-themes";
 import { Fragment, useEffect, useMemo, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
 import Footer from "../../../../components/footer";
 import PageHeader from "../../../../components/page-header";
 import SeoTags from "../../../../components/seo-tags";
@@ -260,6 +264,11 @@ export default function RoadmapPage({
                           >
                             <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
                               {item.title}
+                              {item.description && item.description.trim() && (
+                                <svg className="inline h-4 w-4 text-gray-400 ml-1 align-text-bottom" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                                </svg>
+                              )}
                             </h4>
 
                             {/* Bottom row with category and votes */}
@@ -354,25 +363,25 @@ export default function RoadmapPage({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <div className="flex min-h-full items-end justify-center p-0 text-center sm:items-center sm:p-4">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
                 leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-900 p-6 text-left align-middle shadow-xl transition-all">
-                  <div className="flex justify-between items-start mb-4">
+                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
+                  <div className="flex justify-between items-start mb-6">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900 dark:text-white pr-4"
+                      className="text-xl font-semibold leading-6 text-gray-900 dark:text-white pr-4"
                     >
                       {selectedItem?.title}
                     </Dialog.Title>
@@ -385,62 +394,115 @@ export default function RoadmapPage({
                     </button>
                   </div>
 
-                  {selectedItem?.description && (
-                    <div className="mb-4">
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
-                        {selectedItem.description}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      {selectedItem?.roadmap_categories && (
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColorClasses(
-                            selectedItem.roadmap_categories.color || "blue"
-                          )}`}
-                        >
-                          {selectedItem.roadmap_categories.name}
-                        </span>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Left side - Content */}
+                    <div className="lg:col-span-2 space-y-6">
+                      {selectedItem?.description && (
+                        <div>
+                          <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
+                            <ReactMarkdown
+                              rehypePlugins={[
+                                rehypeRaw,
+                                // @ts-ignore
+                                rehypeSanitize,
+                              ]}
+                              remarkPlugins={[remarkGfm]}
+                            >
+                              {selectedItem.description}
+                            </ReactMarkdown>
+                          </div>
+                        </div>
                       )}
                     </div>
-                    <button
-                      onClick={() =>
-                        selectedItem && handleVote(selectedItem.id)
-                      }
-                      disabled={
-                        !selectedItem || votingItems.has(selectedItem.id)
-                      }
-                      className={`flex items-center text-sm px-3 py-1.5 rounded-lg transition-colors ${
-                        selectedItem && votes[selectedItem.id]?.voted
-                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                          : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600"
-                      } ${
-                        !selectedItem || votingItems.has(selectedItem.id)
-                          ? "opacity-50 cursor-not-allowed"
-                          : "cursor-pointer"
-                      }`}
-                    >
-                      <svg
-                        className="mr-1 h-4 w-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span>
-                        {selectedItem
-                          ? votes[selectedItem.id]?.count ??
-                            (selectedItem.vote_count || 0)
-                          : 0}{" "}
-                        votes
-                      </span>
-                    </button>
+
+                    {/* Right side - Metadata */}
+                    <div className="lg:col-span-1 space-y-6">
+                      {/* Votes */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Votes</span>
+                        <button
+                          onClick={() =>
+                            selectedItem && handleVote(selectedItem.id)
+                          }
+                          disabled={
+                            !selectedItem || votingItems.has(selectedItem.id)
+                          }
+                          className={`flex items-center text-sm px-3 py-1.5 rounded-lg transition-colors ${
+                            selectedItem && votes[selectedItem.id]?.voted
+                              ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                              : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600"
+                          } ${
+                            !selectedItem || votingItems.has(selectedItem.id)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                        >
+                          <svg
+                            className="mr-1 h-4 w-4"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span>
+                            {selectedItem
+                              ? votes[selectedItem.id]?.count ??
+                                (selectedItem.vote_count || 0)
+                              : 0}
+                          </span>
+                        </button>
+                      </div>
+
+                      {/* Status (Column) */}
+                      {selectedItem?.column_id && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</span>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                            {columns.find(col => col.id === selectedItem.column_id)?.name || 'Unknown'}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Category */}
+                      {selectedItem?.roadmap_categories && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Category</span>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColorClasses(
+                              selectedItem.roadmap_categories.color || "blue"
+                            )}`}
+                          >
+                            {selectedItem.roadmap_categories.name}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Board */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Board</span>
+                        <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
+                          {board.title}
+                        </span>
+                      </div>
+
+                      {/* Created Date */}
+                      {selectedItem?.created_at && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Created</span>
+                          <span className="text-sm text-gray-900 dark:text-gray-100">
+                            {new Date(selectedItem.created_at).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
