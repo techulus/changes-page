@@ -1,32 +1,25 @@
+import { Database } from "@changes-page/supabase/types";
 import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import OptionalLink from "./optional-link";
 
-type RoadmapBoard = {
-  id: string;
-  title: string;
-  slug: string;
-  description?: string;
-};
+type RoadmapBoard = Database["public"]["Tables"]["roadmap_boards"]["Row"];
 
 export default function PageHeader({
   page,
   settings,
   roadmaps = [],
+  isRoadmapPage = false,
 }: {
   page: IPage;
   settings: IPageSettings;
   roadmaps?: RoadmapBoard[];
+  isRoadmapPage?: boolean;
 }) {
-  const router = useRouter();
-  const currentPath = router.asPath;
-  const isRoadmapPage = currentPath.includes("/roadmap/");
-
   return (
     <>
       {settings?.custom_css ? (
@@ -143,7 +136,9 @@ export default function PageHeader({
                                           : "text-gray-700 dark:text-gray-300"
                                       }`}
                                     >
-                                      <div className="font-medium">{roadmap.title}</div>
+                                      <div className="font-medium">
+                                        {roadmap.title}
+                                      </div>
                                       {roadmap.description && (
                                         <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
                                           {roadmap.description}

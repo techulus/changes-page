@@ -1,8 +1,8 @@
 import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import { Timeline } from "@changes-page/ui";
 import classNames from "classnames";
-import { useTheme } from "next-themes";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { usePageTheme } from "../../../hooks/usePageTheme";
 import Footer from "../../../components/footer";
 import PageHeader from "../../../components/page-header";
 import Post from "../../../components/post";
@@ -36,15 +36,8 @@ export default function Index({
   postsCount: number;
   roadmaps: RoadmapBoard[];
 }) {
-  const { setTheme } = useTheme();
-
-  useEffect(() => {
-    if (settings?.color_scheme != "auto") {
-      setTheme(settings?.color_scheme);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings?.color_scheme]);
-
+  usePageTheme(settings?.color_scheme);
+  
   const [posts, setPosts] = useState<IPost[]>(initialPosts);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
 

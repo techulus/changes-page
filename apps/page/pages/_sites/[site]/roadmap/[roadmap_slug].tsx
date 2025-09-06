@@ -4,8 +4,8 @@ import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { getCategoryColorClasses } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import { useTheme } from "next-themes";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useMemo, useState, useEffect } from "react";
+import { usePageTheme } from "../../../../hooks/usePageTheme";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
@@ -19,6 +19,7 @@ import {
   isSubscriptionActive,
 } from "../../../../lib/data";
 import { getPageUrl } from "../../../../lib/url";
+import { httpPost } from "../../../../utils/http";
 
 type RoadmapBoard = Database["public"]["Tables"]["roadmap_boards"]["Row"];
 type RoadmapColumn = Database["public"]["Tables"]["roadmap_columns"]["Row"];
@@ -51,20 +52,14 @@ export default function RoadmapPage({
   items,
   roadmaps,
 }: RoadmapPageProps) {
-  const { setTheme } = useTheme();
+  usePageTheme(settings?.color_scheme);
+  
   const [selectedItem, setSelectedItem] = useState<RoadmapItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [votes, setVotes] = useState<
     Record<string, { count: number; voted: boolean }>
   >({});
   const [votingItems, setVotingItems] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    if (settings?.color_scheme != "auto") {
-      setTheme(settings?.color_scheme);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings?.color_scheme]);
 
   // Organize items by column
   const itemsByColumn = useMemo(() => {
@@ -113,36 +108,19 @@ export default function RoadmapPage({
     }));
 
     try {
-      const response = await fetch("/api/roadmap/vote", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ item_id: itemId }),
+      const data = await httpPost({
+        url: "/api/roadmap/vote",
+        data: { item_id: itemId },
       });
 
-      const data = await response.json();
-
-      if (data.ok) {
-        // Update with server response to ensure consistency
-        setVotes((prev) => ({
-          ...prev,
-          [itemId]: {
-            count: data.vote_count || 0,
-            voted: newVotedState,
-          },
-        }));
-      } else {
-        console.error("Voting error:", data.error || "Failed to vote");
-        // Revert optimistic update on error
-        setVotes((prev) => ({
-          ...prev,
-          [itemId]: {
-            count: currentVoteState?.count || 0,
-            voted: currentVoteState?.voted || false,
-          },
-        }));
-      }
+      // Update with server response to ensure consistency
+      setVotes((prev) => ({
+        ...prev,
+        [itemId]: {
+          count: data.vote_count || 0,
+          voted: newVotedState,
+        },
+      }));
     } catch (error) {
       console.error("Error voting:", error);
       // Revert optimistic update on error
@@ -168,34 +146,25 @@ export default function RoadmapPage({
       if (items.length === 0) return;
 
       try {
-        const response = await fetch("/api/roadmap/votes/bulk", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            item_ids: items.map((item) => item.id),
-          }),
+        const data = await httpPost({
+          url: "/api/roadmap/votes/bulk",
+          data: { item_ids: items.map((item) => item.id) },
         });
 
-        const data = await response.json();
-
-        if (data.ok) {
-          // Transform API response to match expected frontend structure
-          const transformedVotes: Record<
-            string,
-            { count: number; voted: boolean }
-          > = {};
-          Object.entries(data.votes).forEach(
-            ([itemId, voteData]: [string, any]) => {
-              transformedVotes[itemId] = {
-                count: voteData.vote_count,
-                voted: voteData.user_voted,
-              };
-            }
-          );
-          setVotes(transformedVotes);
-        }
+        // Transform API response to match expected frontend structure
+        const transformedVotes: Record<
+          string,
+          { count: number; voted: boolean }
+        > = {};
+        Object.entries(data.votes).forEach(
+          ([itemId, voteData]: [string, any]) => {
+            transformedVotes[itemId] = {
+              count: voteData.vote_count,
+              voted: voteData.user_voted,
+            };
+          }
+        );
+        setVotes(transformedVotes);
       } catch (error) {
         console.error("Error fetching votes:", error);
       }
@@ -215,7 +184,7 @@ export default function RoadmapPage({
       />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-        <PageHeader page={page} settings={settings} roadmaps={roadmaps} />
+        <PageHeader page={page} settings={settings} roadmaps={roadmaps} isRoadmapPage={true} />
 
         {/* Kanban Board Container */}
         <main className="flex-1 overflow-hidden px-4 md:px-0 bg-gray-100 dark:bg-gray-950 -mt-8 py-6">

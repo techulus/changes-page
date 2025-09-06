@@ -2,9 +2,8 @@ import { Timeline } from "@changes-page/ui";
 import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
 import { InferGetServerSidePropsType } from "next";
-import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useEffect } from "react";
+import { usePageTheme } from "../../../../../hooks/usePageTheme";
 import { validate as uuidValidate } from "uuid";
 import Footer from "../../../../../components/footer";
 import PageHeader from "../../../../../components/page-header";
@@ -25,14 +24,7 @@ export default function Index({
   settings,
   plainTextContent,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { setTheme } = useTheme();
-
-  useEffect(() => {
-    if (settings?.color_scheme != "auto") {
-      setTheme(settings?.color_scheme);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings?.color_scheme]);
+  usePageTheme(settings?.color_scheme);
 
   return (
     <>
