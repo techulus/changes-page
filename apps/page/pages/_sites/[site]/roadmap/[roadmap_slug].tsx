@@ -21,9 +21,7 @@ import { usePageTheme } from "../../../../hooks/usePageTheme";
 import {
   BLACKLISTED_SLUGS,
   fetchRenderData,
-  getRoadmapBoards,
   getRoadmapBySlug,
-  isSubscriptionActive,
 } from "../../../../lib/data";
 import { getPageUrl } from "../../../../lib/url";
 import { httpPost } from "../../../../utils/http";
@@ -143,7 +141,7 @@ export default function RoadmapPage({
 
       try {
         const data = await httpPost({
-          url: "/api/roadmap/votes/bulk",
+          url: "/api/roadmap/votes",
           data: { item_ids: items.map((item) => item.id) },
         });
 
@@ -524,9 +522,9 @@ export async function getServerSideProps({
     };
   }
 
-  const { page, settings } = await fetchRenderData(site);
+  const { page, settings, roadmaps } = await fetchRenderData(site);
 
-  if (!page || !settings || !(await isSubscriptionActive(page?.user_id))) {
+  if (!page || !settings) {
     return {
       notFound: true,
     };
@@ -542,8 +540,6 @@ export async function getServerSideProps({
       notFound: true,
     };
   }
-
-  const roadmaps = await getRoadmapBoards(page.id);
 
   return {
     props: {

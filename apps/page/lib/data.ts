@@ -77,6 +77,11 @@ export const BLACKLISTED_SLUGS = [
   "press-kit",
 ];
 
+export type PageRoadmap = Pick<
+  IRoadmapBoard,
+  "id" | "title" | "slug" | "description"
+>;
+
 const postSelectParams =
   "id,title,content,tags,publication_date,updated_at,created_at,allow_reactions";
 
@@ -109,9 +114,11 @@ function translateHostToPageIdentifier(host: string): {
   };
 }
 
-async function fetchRenderData(
-  site: string
-): Promise<{ page: IPage | null; settings: IPageSettings | null }> {
+async function fetchRenderData(site: string): Promise<{
+  page: IPage | null;
+  settings: IPageSettings | null;
+  roadmaps: PageRoadmap[];
+}> {
   const pageSelect = `id,title,description,type,url_slug,user_id`;
   const settingsSelect = `page_id,page_logo,cover_image,product_url,twitter_url,github_url,instagram_url,facebook_url,linkedin_url,youtube_url,tiktok_url,app_store_url,play_store_url,pinned_post_id,whitelabel,hide_search_engine,email_notifications,rss_notifications,color_scheme,custom_css`;
 
@@ -121,6 +128,7 @@ async function fetchRenderData(
   const emptyResponse = {
     page: null,
     settings: null,
+    roadmaps: [],
   };
 
   try {
@@ -199,16 +207,30 @@ async function fetchRenderData(
       }
     }
 
-    return {
-      page: page as IPage,
-      settings: settings as IPageSettings,
-    };
+    const [{ data: roadmaps }, isSubscriptionActive] = await Promise.all([
+      supabaseAdmin
+        .from("roadmap_boards")
+        .select("id, title, slug, description")
+        .eq("page_id", page.id)
+        .eq("is_public", true)
+        .order("created_at", { ascending: true }),
+      isPageSubscriptionActive(page.user_id),
+    ]);
+
+    return isSubscriptionActive
+      ? {
+          page: page as IPage,
+          settings: settings as IPageSettings,
+          roadmaps: roadmaps ?? [],
+        }
+      : emptyResponse;
   } catch (e) {
     console.log("[fetchRenderData] error", e);
 
     return {
       page: null,
       settings: null,
+      roadmaps: [],
     };
   }
 }
@@ -335,7 +357,7 @@ async function fetchPostById(
   };
 }
 
-async function isSubscriptionActive(user_id: string): Promise<boolean> {
+async function isPageSubscriptionActive(user_id: string): Promise<boolean> {
   const { data: isSubscriptionActive, error } = await supabaseAdmin
     .rpc<
       "is_subscription_active",
@@ -356,27 +378,6 @@ async function isSubscriptionActive(user_id: string): Promise<boolean> {
   );
 
   return isSubscriptionActive ?? true;
-}
-
-export type PageRoadmap = Pick<
-  IRoadmapBoard,
-  "id" | "title" | "slug" | "description"
->;
-
-async function getRoadmapBoards(pageId: string): Promise<PageRoadmap[]> {
-  try {
-    const { data: roadmaps } = await supabaseAdmin
-      .from("roadmap_boards")
-      .select("id, title, slug, description")
-      .eq("page_id", pageId)
-      .eq("is_public", true)
-      .order("created_at", { ascending: true });
-    if (!roadmaps) return [];
-    return roadmaps;
-  } catch (e) {
-    console.error("Error fetching roadmap boards:", e);
-    return [];
-  }
 }
 
 export type RoadmapItemWithCategory = IRoadmapItem & {
@@ -444,9 +445,7 @@ export {
   fetchPostById,
   fetchPosts,
   fetchRenderData,
-  getRoadmapBoards,
   getRoadmapBySlug,
-  isSubscriptionActive,
   PAGINATION_LIMIT,
   translateHostToPageIdentifier,
 };

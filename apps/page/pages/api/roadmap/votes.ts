@@ -1,36 +1,49 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+
+type BulkVotesResponse = {
+  ok: boolean;
+  votes: Record<string, { vote_count: number; user_voted: boolean }>;
+};
 
 // UUID validation regex
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-export default async function getRoadmapItemVotes(
+export default async function getBulkRoadmapItemVotes(
   req: NextApiRequest,
-  res: NextApiResponse<{ ok: boolean; vote_count: number; user_voted: boolean }>
+  res: NextApiResponse<BulkVotesResponse>
 ) {
   // Validate HTTP method
-  if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
-    return res.status(405).json({ ok: false, vote_count: 0, user_voted: false });
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ ok: false, votes: {} });
   }
 
-  // Validate item_id
-  const { item_id } = req.query;
-  
-  if (!item_id) {
-    return res.status(400).json({ ok: false, vote_count: 0, user_voted: false });
-  }
-
-  if (Array.isArray(item_id)) {
-    return res.status(400).json({ ok: false, vote_count: 0, user_voted: false });
-  }
-
-  if (!UUID_REGEX.test(item_id)) {
-    return res.status(400).json({ ok: false, vote_count: 0, user_voted: false });
-  }
-
+  const { item_ids } = req.body;
   let { cp_pa_vid: visitor_id } = req.cookies;
+
+  // Input validation
+  if (!item_ids || !Array.isArray(item_ids)) {
+    return res.status(400).json({ ok: false, votes: {} });
+  }
+
+  // Prevent abuse with max array length
+  if (item_ids.length > 100) {
+    return res.status(400).json({ ok: false, votes: {} });
+  }
+
+  // Validate all item_ids are valid UUIDs
+  if (!item_ids.every((id) => typeof id === "string" && UUID_REGEX.test(id))) {
+    return res.status(400).json({ ok: false, votes: {} });
+  }
+
+  // De-duplicate to keep queries lean
+  const distinctItemIds: string[] = Array.from(new Set(item_ids));
+  if (distinctItemIds.length === 0) {
+    return res.status(200).json({ ok: true, votes: {} });
+  }
 
   if (!visitor_id) {
     visitor_id = v4();
@@ -41,35 +54,67 @@ export default async function getRoadmapItemVotes(
   }
 
   try {
-    // Get vote count
-    const { data: voteCount, error: countError } = await supabaseAdmin
-      .from("roadmap_votes")
-      .select("id", { count: 'exact' })
-      .eq("item_id", item_id);
+    // Use a more efficient approach: get counts per item using a GROUP BY-like query
+    const voteCountPromises = distinctItemIds.map((itemId) =>
+      supabaseAdmin
+        .from("roadmap_votes")
+        .select("id", { count: "exact", head: true })
+        .eq("item_id", itemId)
+    );
 
-    if (countError) {
-      console.error("getRoadmapItemVotes [Count Error]", countError);
+    const [userVoteResult, ...voteCountResults] = await Promise.all([
+      supabaseAdmin
+        .from("roadmap_votes")
+        .select("item_id")
+        .in("item_id", distinctItemIds)
+        .eq("visitor_id", visitor_id),
+      ...voteCountPromises,
+    ]);
+
+    if (userVoteResult.error) {
+      console.error(
+        "getBulkRoadmapItemVotes [User Error]",
+        userVoteResult.error
+      );
+      return res.status(500).json({ ok: false, votes: {} });
     }
 
-    // Check if current user voted
-    const { data: userVote, error: userError } = await supabaseAdmin
-      .from("roadmap_votes")
-      .select("id")
-      .eq("item_id", item_id)
-      .eq("visitor_id", visitor_id)
-      .maybeSingle();
-
-    if (userError) {
-      console.error("getRoadmapItemVotes [User Error]", userError);
+    // Check for any errors in vote count queries
+    for (let i = 0; i < voteCountResults.length; i++) {
+      if (voteCountResults[i].error) {
+        console.error(
+          `getBulkRoadmapItemVotes [Count Error for ${distinctItemIds[i]}]`,
+          voteCountResults[i].error
+        );
+        return res.status(500).json({ ok: false, votes: {} });
+      }
     }
+
+    // Create vote counts map from the database counts
+    const voteCountsMap: Record<string, number> = {};
+    distinctItemIds.forEach((itemId, index) => {
+      voteCountsMap[itemId] = voteCountResults[index].count || 0;
+    });
+
+    const userVotedSet = new Set(
+      (userVoteResult.data || []).map((vote) => vote.item_id)
+    );
+
+    const votes: Record<string, { vote_count: number; user_voted: boolean }> =
+      {};
+    item_ids.forEach((itemId: string) => {
+      votes[itemId] = {
+        vote_count: voteCountsMap[itemId] || 0,
+        user_voted: userVotedSet.has(itemId),
+      };
+    });
 
     res.status(200).json({
       ok: true,
-      vote_count: voteCount?.length || 0,
-      user_voted: !!userVote,
+      votes,
     });
   } catch (e: Error | any) {
-    console.log("getRoadmapItemVotes [Error]", e);
-    res.status(200).json({ ok: true, vote_count: 0, user_voted: false });
+    console.log("getBulkRoadmapItemVotes [Error]", e);
+    res.status(500).json({ ok: false, votes: {} });
   }
 }

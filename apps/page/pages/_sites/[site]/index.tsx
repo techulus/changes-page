@@ -12,8 +12,6 @@ import {
   BLACKLISTED_SLUGS,
   fetchPosts,
   fetchRenderData,
-  getRoadmapBoards,
-  isSubscriptionActive,
   PageRoadmap,
 } from "../../../lib/data";
 
@@ -163,9 +161,9 @@ export async function getServerSideProps({
     };
   }
 
-  const { page, settings } = await fetchRenderData(site);
+  const { page, settings, roadmaps } = await fetchRenderData(site);
 
-  if (!page || !settings || !(await isSubscriptionActive(page?.user_id))) {
+  if (!page || !settings) {
     return {
       notFound: true,
     };
@@ -175,8 +173,6 @@ export async function getServerSideProps({
     pinned_post_id: settings?.pinned_post_id,
     limit: 10,
   });
-
-  const roadmaps = await getRoadmapBoards(String(page?.id));
 
   return {
     props: {

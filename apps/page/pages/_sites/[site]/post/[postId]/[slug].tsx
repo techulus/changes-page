@@ -3,18 +3,14 @@ import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
 import { InferGetServerSidePropsType } from "next";
 import Link from "next/link";
-import { usePageTheme } from "../../../../../hooks/usePageTheme";
 import { validate as uuidValidate } from "uuid";
 import Footer from "../../../../../components/footer";
 import PageHeader from "../../../../../components/page-header";
 import Post from "../../../../../components/post";
 import SeoTags from "../../../../../components/seo-tags";
 import SubscribePrompt from "../../../../../components/subscribe-prompt";
-import {
-  fetchPostById,
-  fetchRenderData,
-  isSubscriptionActive,
-} from "../../../../../lib/data";
+import { usePageTheme } from "../../../../../hooks/usePageTheme";
+import { fetchPostById, fetchRenderData } from "../../../../../lib/data";
 import { getPageUrl, getPostUrl } from "../../../../../lib/url";
 
 export default function Index({
@@ -112,8 +108,7 @@ export async function getServerSideProps({
   }
 
   const { page, settings } = await fetchRenderData(site);
-
-  if (!page || !settings || !(await isSubscriptionActive(page?.user_id))) {
+  if (!page || !settings) {
     return {
       notFound: true,
     };
