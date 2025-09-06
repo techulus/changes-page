@@ -1,13 +1,9 @@
+import { getCategoryColorClasses } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  DotsVerticalIcon,
-  PencilIcon,
-  PlusIcon,
-  TrashIcon,
-} from "@heroicons/react/solid";
+import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { Fragment, useMemo, useState, useCallback, type JSX } from "react";
+import { Fragment, useCallback, useMemo, useState, type JSX } from "react";
 import { SecondaryButton } from "../../../../components/core/buttons.component";
 import MarkdownEditor from "../../../../components/core/editor.component";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
@@ -17,7 +13,6 @@ import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-adm
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { getPage } from "../../../../utils/useSSR";
 import { useUserData } from "../../../../utils/useUser";
-import { getCategoryColorClasses } from "@changes-page/utils";
 
 export async function getServerSideProps({ req, res, params }) {
   const { page_id, board_id } = params;
@@ -561,9 +556,8 @@ export default function RoadmapBoardDetails({
           isPageOwner && (
             <SecondaryButton
               label="Settings"
-              icon={<DotsVerticalIcon className="-ml-1 mr-2 h-5 w-5" />}
               onClick={() =>
-                (window.location.href = `/pages/${page_id}/roadmap/${board.id}/settings`)
+                router.push(`/pages/${page_id}/roadmap/${board.id}/settings`)
               }
             />
           )
@@ -644,14 +638,26 @@ export default function RoadmapBoardDetails({
                           } ${draggedItem?.id === item.id ? "opacity-50" : ""}`}
                         >
                           <div className="flex items-start justify-between">
-                            <div className="flex items-start flex-1 cursor-pointer" onClick={() => setSelectedItem(item)}>
+                            <div
+                              className="flex items-start flex-1 cursor-pointer"
+                              onClick={() => setSelectedItem(item)}
+                            >
                               <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 line-clamp-2 flex-1">
                                 {item.title}
-                                {item.description && item.description.trim() && (
-                                  <svg className="inline h-4 w-4 text-gray-400 ml-1 align-text-bottom" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                                  </svg>
-                                )}
+                                {item.description &&
+                                  item.description.trim() && (
+                                    <svg
+                                      className="inline h-4 w-4 text-gray-400 ml-1 align-text-bottom"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
                               </h4>
                             </div>
                             {isPageOwner && (
@@ -680,12 +686,15 @@ export default function RoadmapBoardDetails({
                             )}
                           </div>
 
-
                           {/* Bottom row with category and votes */}
                           <div className="mt-3 flex items-center justify-between">
                             <div className="flex items-center">
                               {item.roadmap_categories && (
-                                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getCategoryColorClasses(item.roadmap_categories.color || 'blue')}`}>
+                                <span
+                                  className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getCategoryColorClasses(
+                                    item.roadmap_categories.color || "blue"
+                                  )}`}
+                                >
                                   {item.roadmap_categories.name}
                                 </span>
                               )}
@@ -816,113 +825,126 @@ export default function RoadmapBoardDetails({
                     className="absolute -top-4 -right-4 z-10 rounded-full bg-white dark:bg-gray-700 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-lg border border-gray-200 dark:border-gray-600"
                     onClick={closeModal}
                   >
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                   <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-800 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
-
-                  <form onSubmit={handleSubmitItem}>
-                    {formErrors.general && (
-                      <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4 mb-6">
-                        <div className="text-sm text-red-700 dark:text-red-400">
-                          {formErrors.general}
+                    <form onSubmit={handleSubmitItem}>
+                      {formErrors.general && (
+                        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4 mb-6">
+                          <div className="text-sm text-red-700 dark:text-red-400">
+                            {formErrors.general}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {formErrors.title && (
-                      <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3 mb-4">
-                        <div className="text-sm text-red-700 dark:text-red-400">
-                          {formErrors.title}
+                      {formErrors.title && (
+                        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3 mb-4">
+                          <div className="text-sm text-red-700 dark:text-red-400">
+                            {formErrors.title}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
-                      {/* Column Divider */}
-                      <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2 z-10"></div>
-                      
-                      {/* Left side - Content */}
-                      <div className="lg:col-span-2 space-y-6">
-                        <div>
-                          <input
-                            type="text"
-                            value={itemForm.title}
-                            onChange={(e) =>
-                              setItemForm((prev) => ({
-                                ...prev,
-                                title: e.target.value,
-                              }))
-                            }
-                            className="w-full text-xl font-semibold leading-6 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none mb-6"
-                            placeholder="Enter item title..."
-                          />
-                          <MarkdownEditor
-                            value={itemForm.description}
-                            onChange={handleDescriptionChange}
-                          />
-                        </div>
-                      </div>
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+                        {/* Column Divider */}
+                        <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2 z-10"></div>
 
-                      {/* Right side - Metadata */}
-                      <div className="lg:col-span-1 space-y-6">
-                        {/* Category */}
-                        {boardCategories.length > 0 && (
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Category</span>
-                            <select
-                              value={itemForm.category_id}
+                        {/* Left side - Content */}
+                        <div className="lg:col-span-2 space-y-6">
+                          <div>
+                            <input
+                              type="text"
+                              value={itemForm.title}
                               onChange={(e) =>
                                 setItemForm((prev) => ({
                                   ...prev,
-                                  category_id: e.target.value,
+                                  title: e.target.value,
                                 }))
                               }
-                              className="text-sm rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300"
-                            >
-                              <option value="">No category</option>
-                              {boardCategories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                  {category.name}
-                                </option>
-                              ))}
-                            </select>
+                              className="w-full text-xl font-semibold leading-6 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none mb-6"
+                              placeholder="Enter item title..."
+                            />
+                            <MarkdownEditor
+                              value={itemForm.description}
+                              onChange={handleDescriptionChange}
+                            />
                           </div>
-                        )}
-
-                        {/* Board */}
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Board</span>
-                          <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
-                            {board.title}
-                          </span>
                         </div>
 
-                        {/* Action Buttons */}
-                        <div className="space-y-3 pt-4">
-                          <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="w-full inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {isSubmitting
-                              ? "Saving..."
-                              : editingItem
-                              ? "Update Item"
-                              : "Create Item"}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={closeModal}
-                            className="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          >
-                            Cancel
-                          </button>
+                        {/* Right side - Metadata */}
+                        <div className="lg:col-span-1 space-y-6">
+                          {/* Category */}
+                          {boardCategories.length > 0 && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                Category
+                              </span>
+                              <select
+                                value={itemForm.category_id}
+                                onChange={(e) =>
+                                  setItemForm((prev) => ({
+                                    ...prev,
+                                    category_id: e.target.value,
+                                  }))
+                                }
+                                className="text-sm rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300"
+                              >
+                                <option value="">No category</option>
+                                {boardCategories.map((category) => (
+                                  <option key={category.id} value={category.id}>
+                                    {category.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          )}
+
+                          {/* Board */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                              Board
+                            </span>
+                            <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
+                              {board.title}
+                            </span>
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="space-y-3 pt-4">
+                            <button
+                              type="submit"
+                              disabled={isSubmitting}
+                              className="w-full inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {isSubmitting
+                                ? "Saving..."
+                                : editingItem
+                                ? "Update Item"
+                                : "Create Item"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={closeModal}
+                              className="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </form>
+                    </form>
                   </Dialog.Panel>
                 </div>
               </Transition.Child>

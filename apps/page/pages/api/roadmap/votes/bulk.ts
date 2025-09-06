@@ -17,6 +17,7 @@ export default async function getBulkRoadmapItemVotes(
 ) {
   // Validate HTTP method
   if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
     return res.status(405).json({ ok: false, votes: {} });
   }
 
@@ -36,6 +37,12 @@ export default async function getBulkRoadmapItemVotes(
   // Validate all item_ids are valid UUIDs
   if (!item_ids.every((id) => typeof id === "string" && UUID_REGEX.test(id))) {
     return res.status(400).json({ ok: false, votes: {} });
+  }
+
+  // De-duplicate to keep queries lean
+  const distinctItemIds: string[] = Array.from(new Set(item_ids));
+  if (distinctItemIds.length === 0) {
+    return res.status(200).json({ ok: true, votes: {} });
   }
 
   if (!visitor_id) {
