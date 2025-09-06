@@ -2,26 +2,20 @@ import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import { Timeline } from "@changes-page/ui";
 import classNames from "classnames";
 import { useCallback, useMemo, useState } from "react";
-import { usePageTheme } from "../../../hooks/usePageTheme";
 import Footer from "../../../components/footer";
 import PageHeader from "../../../components/page-header";
 import Post from "../../../components/post";
 import SeoTags from "../../../components/seo-tags";
 import SubscribePrompt from "../../../components/subscribe-prompt";
+import { usePageTheme } from "../../../hooks/usePageTheme";
 import {
   BLACKLISTED_SLUGS,
   fetchPosts,
   fetchRenderData,
+  getRoadmapBoards,
   isSubscriptionActive,
+  PageRoadmap,
 } from "../../../lib/data";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-
-type RoadmapBoard = {
-  id: string;
-  title: string;
-  slug: string;
-  description?: string;
-};
 
 export default function Index({
   posts: initialPosts,
@@ -34,10 +28,10 @@ export default function Index({
   settings: IPageSettings;
   posts: IPost[];
   postsCount: number;
-  roadmaps: RoadmapBoard[];
+  roadmaps: PageRoadmap[];
 }) {
   usePageTheme(settings?.color_scheme);
-  
+
   const [posts, setPosts] = useState<IPost[]>(initialPosts);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
 
@@ -182,13 +176,7 @@ export async function getServerSideProps({
     limit: 10,
   });
 
-  // Fetch public roadmaps
-  const { data: roadmaps } = await supabaseAdmin
-    .from("roadmap_boards")
-    .select("id, title, slug, description")
-    .eq("page_id", page.id)
-    .eq("is_public", true)
-    .order("created_at", { ascending: true });
+  const roadmaps = await getRoadmapBoards(String(page?.id));
 
   return {
     props: {
@@ -196,7 +184,7 @@ export async function getServerSideProps({
       posts,
       postsCount,
       settings,
-      roadmaps: roadmaps || [],
+      roadmaps,
     },
   };
 }

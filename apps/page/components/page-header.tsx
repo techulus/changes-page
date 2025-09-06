@@ -1,13 +1,11 @@
-import { Database } from "@changes-page/supabase/types";
 import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
+import { PageRoadmap } from "../lib/data";
 import OptionalLink from "./optional-link";
-
-type RoadmapBoard = Database["public"]["Tables"]["roadmap_boards"]["Row"];
 
 export default function PageHeader({
   page,
@@ -17,7 +15,7 @@ export default function PageHeader({
 }: {
   page: IPage;
   settings: IPageSettings;
-  roadmaps?: RoadmapBoard[];
+  roadmaps?: PageRoadmap[];
   isRoadmapPage?: boolean;
 }) {
   return (

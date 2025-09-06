@@ -1,11 +1,15 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { Database } from "@changes-page/supabase/types";
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
+import {
+  IPage,
+  IPageSettings,
+  IRoadmapBoard,
+  IRoadmapCategory,
+  IRoadmapColumn,
+  IRoadmapItem,
+} from "@changes-page/supabase/types/page";
 import { getCategoryColorClasses } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import { Fragment, useMemo, useState, useEffect } from "react";
-import { usePageTheme } from "../../../../hooks/usePageTheme";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
@@ -13,36 +17,21 @@ import remarkGfm from "remark-gfm";
 import Footer from "../../../../components/footer";
 import PageHeader from "../../../../components/page-header";
 import SeoTags from "../../../../components/seo-tags";
+import { usePageTheme } from "../../../../hooks/usePageTheme";
 import {
   BLACKLISTED_SLUGS,
   fetchRenderData,
+  getRoadmapBoards,
+  getRoadmapBySlug,
   isSubscriptionActive,
 } from "../../../../lib/data";
 import { getPageUrl } from "../../../../lib/url";
 import { httpPost } from "../../../../utils/http";
 
-type RoadmapBoard = Database["public"]["Tables"]["roadmap_boards"]["Row"];
-type RoadmapColumn = Database["public"]["Tables"]["roadmap_columns"]["Row"];
-type RoadmapCategory =
-  Database["public"]["Tables"]["roadmap_categories"]["Row"];
-type RoadmapItem = Database["public"]["Tables"]["roadmap_items"]["Row"] & {
-  roadmap_categories?: RoadmapCategory | null;
+type RoadmapItem = IRoadmapItem & {
+  roadmap_categories?: IRoadmapCategory | null;
   vote_count?: number;
 };
-
-interface RoadmapPageProps {
-  page: IPage;
-  settings: IPageSettings;
-  board: RoadmapBoard;
-  columns: RoadmapColumn[];
-  items: RoadmapItem[];
-  roadmaps: Array<{
-    id: string;
-    title: string;
-    slug: string;
-    description?: string;
-  }>;
-}
 
 export default function RoadmapPage({
   page,
@@ -51,9 +40,16 @@ export default function RoadmapPage({
   columns,
   items,
   roadmaps,
-}: RoadmapPageProps) {
+}: {
+  page: IPage;
+  settings: IPageSettings;
+  board: IRoadmapBoard;
+  columns: IRoadmapColumn[];
+  items: RoadmapItem[];
+  roadmaps: IRoadmapBoard[];
+}) {
   usePageTheme(settings?.color_scheme);
-  
+
   const [selectedItem, setSelectedItem] = useState<RoadmapItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [votes, setVotes] = useState<
@@ -184,7 +180,12 @@ export default function RoadmapPage({
       />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-        <PageHeader page={page} settings={settings} roadmaps={roadmaps} isRoadmapPage={true} />
+        <PageHeader
+          page={page}
+          settings={settings}
+          roadmaps={roadmaps}
+          isRoadmapPage={true}
+        />
 
         {/* Kanban Board Container */}
         <main className="flex-1 overflow-hidden px-4 md:px-0 bg-gray-100 dark:bg-gray-950 -mt-8 py-6">
@@ -234,8 +235,16 @@ export default function RoadmapPage({
                             <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
                               {item.title}
                               {item.description && item.description.trim() && (
-                                <svg className="inline h-4 w-4 text-gray-400 ml-1 align-text-bottom" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                                <svg
+                                  className="inline h-4 w-4 text-gray-400 ml-1 align-text-bottom"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                    clipRule="evenodd"
+                                  />
                                 </svg>
                               )}
                             </h4>
@@ -355,123 +364,136 @@ export default function RoadmapPage({
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                   <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+                      {/* Column Divider */}
+                      <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2 z-10"></div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
-                    {/* Column Divider */}
-                    <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2 z-10"></div>
-                    
-                    {/* Left side - Content */}
-                    <div className="lg:col-span-2 space-y-6">
-                      <h3 className="text-xl font-semibold leading-6 text-gray-900 dark:text-white">
-                        {selectedItem?.title}
-                      </h3>
-                      {selectedItem?.description && (
-                        <div>
-                          <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
-                            <ReactMarkdown
-                              rehypePlugins={[
-                                rehypeRaw,
-                                // @ts-ignore
-                                rehypeSanitize,
-                              ]}
-                              remarkPlugins={[remarkGfm]}
-                            >
-                              {selectedItem.description}
-                            </ReactMarkdown>
+                      {/* Left side - Content */}
+                      <div className="lg:col-span-2 space-y-6">
+                        <h3 className="text-xl font-semibold leading-6 text-gray-900 dark:text-white">
+                          {selectedItem?.title}
+                        </h3>
+                        {selectedItem?.description && (
+                          <div>
+                            <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
+                              <ReactMarkdown
+                                rehypePlugins={[
+                                  rehypeRaw,
+                                  // @ts-ignore
+                                  rehypeSanitize,
+                                ]}
+                                remarkPlugins={[remarkGfm]}
+                              >
+                                {selectedItem.description}
+                              </ReactMarkdown>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Right side - Metadata */}
-                    <div className="lg:col-span-1 space-y-6">
-                      {/* Votes */}
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Votes</span>
-                        <button
-                          onClick={() =>
-                            selectedItem && handleVote(selectedItem.id)
-                          }
-                          disabled={
-                            !selectedItem || votingItems.has(selectedItem.id)
-                          }
-                          className={`flex items-center text-sm px-3 py-1.5 rounded-lg transition-colors ${
-                            selectedItem && votes[selectedItem.id]?.voted
-                              ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                              : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600"
-                          } ${
-                            !selectedItem || votingItems.has(selectedItem.id)
-                              ? "opacity-50 cursor-not-allowed"
-                              : "cursor-pointer"
-                          }`}
-                        >
-                          <svg
-                            className="mr-1 h-4 w-4"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span>
-                            {selectedItem
-                              ? votes[selectedItem.id]?.count ??
-                                (selectedItem.vote_count || 0)
-                              : 0}
-                          </span>
-                        </button>
+                        )}
                       </div>
 
-                      {/* Status (Column) */}
-                      {selectedItem?.column_id && (
+                      {/* Right side - Metadata */}
+                      <div className="lg:col-span-1 space-y-6">
+                        {/* Votes */}
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</span>
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                            {columns.find(col => col.id === selectedItem.column_id)?.name || 'Unknown'}
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                            Votes
                           </span>
-                        </div>
-                      )}
-
-                      {/* Category */}
-                      {selectedItem?.roadmap_categories && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Category</span>
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColorClasses(
-                              selectedItem.roadmap_categories.color || "blue"
-                            )}`}
+                          <button
+                            onClick={() =>
+                              selectedItem && handleVote(selectedItem.id)
+                            }
+                            disabled={
+                              !selectedItem || votingItems.has(selectedItem.id)
+                            }
+                            className={`flex items-center text-sm px-3 py-1.5 rounded-lg transition-colors ${
+                              selectedItem && votes[selectedItem.id]?.voted
+                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600"
+                            } ${
+                              !selectedItem || votingItems.has(selectedItem.id)
+                                ? "opacity-50 cursor-not-allowed"
+                                : "cursor-pointer"
+                            }`}
                           >
-                            {selectedItem.roadmap_categories.name}
-                          </span>
+                            <svg
+                              className="mr-1 h-4 w-4"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            <span>
+                              {selectedItem
+                                ? votes[selectedItem.id]?.count ??
+                                  (selectedItem.vote_count || 0)
+                                : 0}
+                            </span>
+                          </button>
                         </div>
-                      )}
 
-                      {/* Board */}
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Board</span>
-                        <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
-                          {board.title}
-                        </span>
-                      </div>
+                        {/* Status (Column) */}
+                        {selectedItem?.column_id && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                              Status
+                            </span>
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                              {columns.find(
+                                (col) => col.id === selectedItem.column_id
+                              )?.name || "Unknown"}
+                            </span>
+                          </div>
+                        )}
 
-                      {/* Created Date */}
-                      {selectedItem?.created_at && (
+                        {/* Category */}
+                        {selectedItem?.roadmap_categories && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                              Category
+                            </span>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColorClasses(
+                                selectedItem.roadmap_categories.color || "blue"
+                              )}`}
+                            >
+                              {selectedItem.roadmap_categories.name}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Board */}
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Created</span>
-                          <span className="text-sm text-gray-900 dark:text-gray-100">
-                            {new Date(selectedItem.created_at).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric'
-                            })}
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                            Board
+                          </span>
+                          <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
+                            {board.title}
                           </span>
                         </div>
-                      )}
+
+                        {/* Created Date */}
+                        {selectedItem?.created_at && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                              Created
+                            </span>
+                            <span className="text-sm text-gray-900 dark:text-gray-100">
+                              {new Date(
+                                selectedItem.created_at
+                              ).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
                   </Dialog.Panel>
                 </div>
               </Transition.Child>
@@ -510,60 +532,18 @@ export async function getServerSideProps({
     };
   }
 
-  // Fetch the roadmap board
-  const { data: board, error: boardError } = await supabaseAdmin
-    .from("roadmap_boards")
-    .select("*")
-    .eq("page_id", page.id)
-    .eq("slug", roadmap_slug)
-    .eq("is_public", true)
-    .single();
+  const { board, columns, items } = await getRoadmapBySlug(
+    page.id,
+    roadmap_slug
+  );
 
-  if (boardError || !board) {
-    console.error("Failed to fetch roadmap board", boardError);
+  if (!board) {
     return {
       notFound: true,
     };
   }
 
-  // Fetch columns for this board
-  const { data: columns, error: columnsError } = await supabaseAdmin
-    .from("roadmap_columns")
-    .select("*")
-    .eq("board_id", board.id)
-    .order("position", { ascending: true });
-
-  if (columnsError) {
-    console.error("Failed to fetch columns", columnsError);
-  }
-
-  // Fetch items for this board with category information
-  const { data: items, error: itemsError } = await supabaseAdmin
-    .from("roadmap_items")
-    .select(
-      `
-      *,
-      roadmap_categories (
-        id,
-        name,
-        color
-      )
-    `
-    )
-    .eq("board_id", board.id)
-    .order("position", { ascending: true });
-
-  if (itemsError) {
-    console.error("Failed to fetch items", itemsError);
-  }
-
-  // Fetch all public roadmaps for navigation
-  const { data: roadmaps } = await supabaseAdmin
-    .from("roadmap_boards")
-    .select("id, title, slug, description")
-    .eq("page_id", page.id)
-    .eq("is_public", true)
-    .order("created_at", { ascending: true });
+  const roadmaps = await getRoadmapBoards(page.id);
 
   return {
     props: {

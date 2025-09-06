@@ -11,6 +11,13 @@ export type ITeam = Database["public"]["Tables"]["teams"]["Row"];
 export type ITeamMember = Database["public"]["Tables"]["team_members"]["Row"];
 export type ITeamInvitation =
   Database["public"]["Tables"]["team_invitations"]["Row"];
+export type IRoadmapBoard =
+  Database["public"]["Tables"]["roadmap_boards"]["Row"];
+export type IRoadmapColumn =
+  Database["public"]["Tables"]["roadmap_columns"]["Row"];
+export type IRoadmapCategory =
+  Database["public"]["Tables"]["roadmap_categories"]["Row"];
+export type IRoadmapItem = Database["public"]["Tables"]["roadmap_items"]["Row"];
 
 export enum PageType {
   changelogs = "changelogs",
