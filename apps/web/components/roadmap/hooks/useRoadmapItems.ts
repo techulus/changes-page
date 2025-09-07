@@ -1,30 +1,33 @@
-import { useState } from "react";
+import {
+  IRoadmapBoard,
+  IRoadmapCategory,
+} from "@changes-page/supabase/types/page";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { 
-  ItemForm, 
-  FormErrors, 
-  RoadmapItemWithRelations, 
-  RoadmapBoard, 
-  RoadmapCategory, 
-  ItemsByColumn 
+import { useState } from "react";
+import {
+  FormErrors,
+  ItemForm,
+  ItemsByColumn,
+  RoadmapItemWithRelations,
 } from "../types";
 
 interface UseRoadmapItemsProps {
   supabase: SupabaseClient;
-  board: RoadmapBoard;
-  categories: RoadmapCategory[];
+  board: IRoadmapBoard;
+  categories: IRoadmapCategory[];
   itemsByColumn: ItemsByColumn;
 }
 
-export function useRoadmapItems({ 
-  supabase, 
-  board, 
-  categories, 
-  itemsByColumn 
+export function useRoadmapItems({
+  supabase,
+  board,
+  categories,
+  itemsByColumn,
 }: UseRoadmapItemsProps) {
   const [showItemModal, setShowItemModal] = useState(false);
   const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null);
-  const [editingItem, setEditingItem] = useState<RoadmapItemWithRelations | null>(null);
+  const [editingItem, setEditingItem] =
+    useState<RoadmapItemWithRelations | null>(null);
   const [itemForm, setItemForm] = useState<ItemForm>({
     title: "",
     description: "",
@@ -59,7 +62,9 @@ export function useRoadmapItems({
 
   const handleDeleteItem = async (
     itemId: string,
-    setBoardItems: React.Dispatch<React.SetStateAction<RoadmapItemWithRelations[]>>
+    setBoardItems: React.Dispatch<
+      React.SetStateAction<RoadmapItemWithRelations[]>
+    >
   ) => {
     if (!confirm("Are you sure you want to delete this item?")) return;
 
@@ -89,7 +94,9 @@ export function useRoadmapItems({
 
   const handleSubmitItem = async (
     e: React.FormEvent<HTMLFormElement>,
-    setBoardItems: React.Dispatch<React.SetStateAction<RoadmapItemWithRelations[]>>
+    setBoardItems: React.Dispatch<
+      React.SetStateAction<RoadmapItemWithRelations[]>
+    >
   ) => {
     e.preventDefault();
     if (!validateForm()) return;

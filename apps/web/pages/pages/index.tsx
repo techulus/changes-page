@@ -2,6 +2,7 @@ import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
 import { PlusIcon, UserGroupIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, type JSX } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -109,7 +110,10 @@ export default function Pages({
             <div className="overflow-hidden shadow rounded-md bg-white dark:bg-gray-900 border dark:border-gray-800">
               <ul className="divide-y divide-gray-200 dark:divide-gray-800">
                 {pages.map((page) => (
-                  <li key={page.id} className="relative group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
+                  <li
+                    key={page.id}
+                    className="relative group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
+                  >
                     <div className="flex items-center justify-between p-6">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-2">
@@ -147,13 +151,16 @@ export default function Pages({
                         </div>
                         <div>
                           <h3 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-                            <a
+                            <Link
                               href={`${ROUTES.PAGES}/${page.id}`}
                               className="focus:outline-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
                             >
-                              <span className="absolute inset-0" aria-hidden="true" />
+                              <span
+                                className="absolute inset-0"
+                                aria-hidden="true"
+                              />
                               {page.title}
-                            </a>
+                            </Link>
                           </h3>
                           {page.description && (
                             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
@@ -161,10 +168,9 @@ export default function Pages({
                             </p>
                           )}
                           <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
-                            {page.page_settings?.custom_domain 
+                            {page.page_settings?.custom_domain
                               ? page.page_settings.custom_domain
-                              : `${page.url_slug}.changes.page`
-                            }
+                              : `${page.url_slug}.changes.page`}
                           </p>
                         </div>
                       </div>

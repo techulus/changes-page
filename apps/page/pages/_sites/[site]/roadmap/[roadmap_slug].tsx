@@ -10,7 +10,7 @@ import { XIcon } from "@heroicons/react/outline";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import rehypeSanitize from "rehype-sanitize";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 import Footer from "../../../../components/footer";
 import PageHeader from "../../../../components/page-header";
@@ -371,8 +371,31 @@ export default function RoadmapPage({
                               <ReactMarkdown
                                 rehypePlugins={[
                                   rehypeRaw,
-                                  // @ts-ignore
-                                  rehypeSanitize,
+                                  [
+                                    rehypeSanitize,
+                                    {
+                                      ...defaultSchema,
+                                      attributes: {
+                                        ...defaultSchema.attributes,
+                                        a: [
+                                          ...(defaultSchema.attributes?.a ||
+                                            []),
+                                          ["target"],
+                                          ["rel"],
+                                        ],
+                                        code: [
+                                          ...(defaultSchema.attributes?.code ||
+                                            []),
+                                          ["className"],
+                                        ],
+                                        span: [
+                                          ...(defaultSchema.attributes?.span ||
+                                            []),
+                                          ["className"],
+                                        ],
+                                      },
+                                    },
+                                  ],
                                 ]}
                                 remarkPlugins={[remarkGfm]}
                               >
