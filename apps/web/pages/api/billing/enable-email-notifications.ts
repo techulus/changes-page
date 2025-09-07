@@ -8,6 +8,16 @@ const enableEmailNotifications = withAuth<{ status: string }>(
   async (req, res, { user }) => {
     if (req.method === "PUT") {
       try {
+        const priceId = process.env.EMAIL_NOTIFICATION_STRIPE_PRICE_ID;
+        if (!priceId) {
+          return res.status(500).json({
+            error: {
+              statusCode: 500,
+              message: "Internal error: Price ID not configured.",
+            },
+          });
+        }
+
         const { stripe_subscription_id, stripe_subscription } =
           await getUserById(user.id);
 
@@ -25,6 +35,15 @@ const enableEmailNotifications = withAuth<{ status: string }>(
           });
         }
 
+        if (!stripe_subscription_id) {
+          return res.status(400).json({
+            error: {
+              statusCode: 400,
+              message: "Missing Stripe subscription",
+            },
+          });
+        }
+
         const subscription = await stripe.subscriptions.retrieve(
           stripe_subscription_id
         );
@@ -32,17 +51,21 @@ const enableEmailNotifications = withAuth<{ status: string }>(
         // Ignore if already added to subscription
         if (
           subscription.items.data.find(
-            (item) =>
-              item.price.id === process.env.EMAIL_NOTIFICATION_STRIPE_PRICE_ID
+            (item: Stripe.SubscriptionItem) => item.price.id === priceId
           )
         ) {
           return res.status(200).json({ status: "ok" });
         }
 
-        await stripe.subscriptionItems.create({
-          subscription: stripe_subscription_id,
-          price: process.env.EMAIL_NOTIFICATION_STRIPE_PRICE_ID,
-        });
+        await stripe.subscriptionItems.create(
+          {
+            subscription: stripe_subscription_id,
+            price: priceId,
+          },
+          {
+            idempotencyKey: `sub:${stripe_subscription_id}:price:${priceId}`,
+          }
+        );
 
         return res.status(201).json({ status: "ok" });
       } catch (err) {

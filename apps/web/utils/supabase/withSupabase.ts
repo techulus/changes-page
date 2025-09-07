@@ -18,7 +18,13 @@ export function withSupabase<P = any>(handler: SupabaseHandler<P>) {
     } = await supabase.auth.getUser();
 
     if (!user || error) {
-      throw new Error("User not authenticated");
+      const next = encodeURIComponent(context.resolvedUrl || "/");
+      return {
+        redirect: {
+          destination: `/login?redirectedFrom=${next}`,
+          permanent: false,
+        },
+      } as GetServerSidePropsResult<P>;
     }
 
     return handler(context, { supabase, user });

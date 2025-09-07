@@ -18,15 +18,16 @@ const removeDomain = withAuth<{ success: boolean }>(
     // check custom domain ownership
     const { data, error } = await supabaseAdmin
       .from("page_settings")
-      .select("page_id, pages(user_id)")
+      .select("page_id,custom_domain, pages(user_id)")
       .eq("custom_domain", domain)
       .single();
     if (!data || error || data?.pages?.user_id !== user.id) {
       return res.status(400).json({ success: false });
     }
 
+    const safeDomain = data.custom_domain;
     const response = await fetch(
-      `https://api.vercel.com/v8/projects/${process.env.VERCEL_PAGES_PROJECT_ID}/domains/${domain}?teamId=${process.env.VERCEL_TEAM_ID}`,
+      `https://api.vercel.com/v8/projects/${process.env.VERCEL_PAGES_PROJECT_ID}/domains/${safeDomain}?teamId=${process.env.VERCEL_TEAM_ID}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.VERCEL_AUTH_TOKEN}`,
