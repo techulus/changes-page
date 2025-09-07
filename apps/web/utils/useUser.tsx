@@ -121,6 +121,7 @@ export const UserContextProvider = ({
     supabase,
   };
 
+  // @ts-ignore
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 

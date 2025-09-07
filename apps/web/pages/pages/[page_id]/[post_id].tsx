@@ -60,7 +60,7 @@ export default function EditPost({
       await supabase.from("posts").update(newPost).match({ id: post_id });
 
       await supabase.from("page_audit_logs").insert({
-        page_id: page_id,
+        page_id: String(page_id),
         actor_id: user.id,
         action: `Updated Post: ${newPost.title}`,
         changes: newPost,

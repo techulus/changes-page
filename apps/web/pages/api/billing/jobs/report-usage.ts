@@ -5,6 +5,11 @@ import { Stripe } from "stripe";
 import { v4 } from "uuid";
 import { getPagesCount } from "../../../../utils/useDatabase";
 
+type UserWithSubscription = {
+  id: string;
+  stripe_subscription: Stripe.Subscription;
+};
+
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export const VALID_STRIPE_PRICE_IDS = [
@@ -15,7 +20,7 @@ export const VALID_STRIPE_PRICE_IDS = [
 ];
 
 const reportUsageJob = async (
-  req: NextApiRequest,
+  _: NextApiRequest,
   res: NextApiResponse<{ status: string } | IErrorResponse>
 ) => {
   try {
@@ -25,16 +30,16 @@ const reportUsageJob = async (
 
     const { data: users, error } = await supabaseAdmin
       .from("users")
-      .select("id,stripe_subscription,stripe_subscription->>status")
-      .filter("stripe_subscription->>status", "in", '("active","trialing")');
+      .select("id,stripe_subscription")
+      .filter("stripe_subscription->>status", "in", '("active","trialing")')
+      .overrideTypes<UserWithSubscription[]>();
 
     if (error) throw error;
 
     console.log(`Job ${jobId} - Found ${users?.length} users`);
 
     for (const user of users ?? []) {
-      const subscription =
-        user.stripe_subscription as unknown as Stripe.Subscription;
+      const subscription = user.stripe_subscription;
 
       console.log(
         `Job ${jobId} - Processing user ${user.id} with status ${subscription.status}`

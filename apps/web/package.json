@@ -27,6 +27,7 @@
     "@supabase/supabase-js": "^2.39.3",
     "@tailwindcss/typography": "^0.5.1",
     "@types/canvas-confetti": "^1.6.4",
+    "@types/validator": "^13.15.3",
     "@vercel/og": "^0.0.20",
     "canvas-confetti": "^1.9.3",
     "chrono-node": "^2.7.6",
@@ -66,6 +67,7 @@
     "use-debounce": "^7.0.1",
     "use-file-picker": "^1.4.1",
     "uuid": "^8.3.2",
+    "validator": "^13.15.15",
     "yup": "^1.3.3"
   },
   "devDependencies": {
@@ -78,6 +80,6 @@
     "postcss": "^8.4.5",
     "prettier": "^2.3.2",
     "tailwindcss": "^3.0.15",
-    "typescript": "^4"
+    "typescript": "^5"
   }
 }

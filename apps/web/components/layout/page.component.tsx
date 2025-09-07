@@ -126,6 +126,7 @@ export default function Page({
                         </Menu.Button>
 
                         <Transition
+                          // @ts-ignore
                           as={Fragment}
                           enter="transition ease-out duration-200"
                           enterFrom="transform opacity-0 scale-95"
@@ -169,6 +170,7 @@ export default function Page({
               <div className="hidden sm:block">
                 <nav className="-mb-px flex space-x-8">
                   {tabs.map((tab) => (
+                    // @ts-ignore
                     <Link
                       key={tab.name}
                       href={tab.href}
