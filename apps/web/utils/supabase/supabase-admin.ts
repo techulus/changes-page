@@ -1,15 +1,11 @@
 import { Database } from "@changes-page/supabase/types";
-import {
-  createPagesServerClient,
-  Session,
-  User,
-} from "@supabase/auth-helpers-nextjs";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { Session, SupabaseClient, User } from "@supabase/supabase-js";
 import {
   GetServerSidePropsContext,
   NextApiRequest,
   NextApiResponse,
 } from "next";
+import { createServerClientSSR } from "./server";
 
 export const getSupabaseServerClient = async (
   context:
@@ -20,10 +16,19 @@ export const getSupabaseServerClient = async (
       }
 ): Promise<{
   supabase: SupabaseClient<Database>;
-  session: Session;
-  user: User;
+  session: Session | null;
+  user: User | null;
 }> => {
-  const supabase = createPagesServerClient(context);
+  const supabase = createServerClientSSR(context);
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error) {
+    console.error("Error getting user:", error);
+  }
 
   const {
     data: { session },
@@ -32,6 +37,6 @@ export const getSupabaseServerClient = async (
   return {
     supabase,
     session,
-    user: session?.user,
+    user,
   };
 };
