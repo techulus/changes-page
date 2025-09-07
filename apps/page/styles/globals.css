@@ -25,3 +25,17 @@ div#__next {
   -webkit-animation-iteration-count: 1;
   animation-iteration-count: 1;
 }
+
+#nprogress .bar {
+  background: #4f46e5 !important;
+  height: 4px !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #4f46e5, 0 0 5px #4f46e5;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #4f46e5;
+  border-left-color: #4f46e5;
+}
