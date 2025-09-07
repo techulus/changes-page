@@ -163,25 +163,27 @@ export function useRoadmapDragDrop({
           newPosition = targetItem.position;
           const itemsToShift = targetColumnItems.filter(item => item.position >= targetItem.position);
           if (itemsToShift.length > 0) {
-            const shiftPromises = itemsToShift.map(item =>
-              supabase
+            // Sort items in descending position order to avoid uniqueness conflicts
+            const sortedItems = itemsToShift.sort((a, b) => (b.position || 0) - (a.position || 0));
+            for (const item of sortedItems) {
+              await supabase
                 .from("roadmap_items")
                 .update({ position: item.position + 1 })
-                .eq("id", item.id)
-            );
-            await Promise.all(shiftPromises);
+                .eq("id", item.id);
+            }
           }
         } else {
           newPosition = targetItem.position + 1;
           const itemsToShift = targetColumnItems.filter(item => item.position > targetItem.position);
           if (itemsToShift.length > 0) {
-            const shiftPromises = itemsToShift.map(item =>
-              supabase
+            // Sort items in descending position order to avoid uniqueness conflicts
+            const sortedItems = itemsToShift.sort((a, b) => (b.position || 0) - (a.position || 0));
+            for (const item of sortedItems) {
+              await supabase
                 .from("roadmap_items")
                 .update({ position: item.position + 1 })
-                .eq("id", item.id)
-            );
-            await Promise.all(shiftPromises);
+                .eq("id", item.id);
+            }
           }
         }
       } else {
