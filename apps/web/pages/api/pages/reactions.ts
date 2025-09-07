@@ -1,6 +1,6 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 
 export default async function getPostReactions(
   req: NextApiRequest,
@@ -9,7 +9,7 @@ export default async function getPostReactions(
   let { post_id } = req.query;
 
   try {
-    const { user } = await getSupabaseServerClient({ req, res });
+    const { user } = await getSupabaseServerClientForAPI({ req, res });
     if (!user) {
       return res.status(401).json({
         ok: false,

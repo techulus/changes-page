@@ -1,7 +1,7 @@
 import { IErrorResponse } from "@changes-page/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { runWorkflow } from "../../../utils/manageprompt";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 
 const suggestTitle = async (
   req: NextApiRequest,
@@ -11,7 +11,7 @@ const suggestTitle = async (
     const { content } = req.body;
 
     try {
-      await getSupabaseServerClient({ req, res });
+      await getSupabaseServerClientForAPI({ req, res });
 
       const result = await runWorkflow("wf_e1eb79b1dc017ca189506d799453caae", {
         content,

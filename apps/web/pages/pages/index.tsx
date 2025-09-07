@@ -14,11 +14,11 @@ import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
 import { ROUTES } from "../../data/routes.data";
 import { getAppBaseURL } from "../../utils/helpers";
-import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForSSR } from "../../utils/supabase/supabase-admin";
 import { useUserData } from "../../utils/useUser";
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const { supabase } = await getSupabaseServerClient(ctx);
+  const { supabase } = await getSupabaseServerClientForSSR(ctx);
 
   const { data: pages, error } = await supabase
     .from("pages")

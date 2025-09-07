@@ -1,11 +1,11 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { SpinnerWithSpacing } from "@changes-page/ui";
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForSSR } from "../../../utils/supabase/supabase-admin";
 import { getPageAnalytics } from "../../../utils/useDatabase";
 import { getPage } from "../../../utils/useSSR";
 
@@ -183,10 +183,11 @@ const StatsTable = ({ data = [], title, total = 5 }) => {
   );
 };
 
-export async function getServerSideProps({ req, res, query }) {
-  const { page_id, range } = query;
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const { range } = ctx.query;
+  const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
+  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id);
 
   const rangeNum = Number(range) || 7;
@@ -202,18 +203,21 @@ export async function getServerSideProps({ req, res, query }) {
     .eq("page_id", page_id)
     .gte("created_at", prevDate.toISOString());
 
-  const currentPeriodViews = allPageViews?.filter(
-    (view) => new Date(view.created_at) >= date
-  ) || [];
-  
-  const previousPeriodViews = allPageViews?.filter(
-    (view) => new Date(view.created_at) >= prevDate && new Date(view.created_at) < date
-  ) || [];
+  const currentPeriodViews =
+    allPageViews?.filter((view) => new Date(view.created_at) >= date) || [];
+
+  const previousPeriodViews =
+    allPageViews?.filter(
+      (view) =>
+        new Date(view.created_at) >= prevDate &&
+        new Date(view.created_at) < date
+    ) || [];
 
   const page_views = currentPeriodViews.length;
-  const visitors = new Set(currentPeriodViews.map(v => v.visitor_id)).size;
+  const visitors = new Set(currentPeriodViews.map((v) => v.visitor_id)).size;
   const prev_page_views = previousPeriodViews.length;
-  const prev_visitors = new Set(previousPeriodViews.map(v => v.visitor_id)).size;
+  const prev_visitors = new Set(previousPeriodViews.map((v) => v.visitor_id))
+    .size;
 
   // Calculate growth rates
   const pageViewsGrowth =

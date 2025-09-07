@@ -5,21 +5,46 @@ import {
   NextApiRequest,
   NextApiResponse,
 } from "next";
-import { createServerClientSSR } from "./server";
+import { createServerClientForAPI, createServerClientSSR } from "./server";
 
-export const getSupabaseServerClient = async (
-  context:
-    | GetServerSidePropsContext
-    | {
-        req: NextApiRequest;
-        res: NextApiResponse;
-      }
+export const getSupabaseServerClientForSSR = async (
+  context: GetServerSidePropsContext
 ): Promise<{
   supabase: SupabaseClient<Database>;
   session: Session | null;
   user: User | null;
 }> => {
   const supabase = createServerClientSSR(context);
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error) {
+    console.error("Error getting user:", error);
+  }
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  return {
+    supabase,
+    session,
+    user,
+  };
+};
+
+export const getSupabaseServerClientForAPI = async (context: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}): Promise<{
+  supabase: SupabaseClient<Database>;
+  session: Session | null;
+  user: User | null;
+}> => {
+  const supabase = createServerClientForAPI(context);
 
   const {
     data: { user },

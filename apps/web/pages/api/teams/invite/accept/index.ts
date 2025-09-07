@@ -1,7 +1,7 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { NextApiRequest, NextApiResponse } from "next";
 import { apiRateLimiter } from "../../../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../../../utils/supabase/supabase-admin";
 
 const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
@@ -15,7 +15,10 @@ const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await apiRateLimiter(req, res);
 
-      const { user, supabase } = await getSupabaseServerClient({ req, res });
+      const { user, supabase } = await getSupabaseServerClientForAPI({
+        req,
+        res,
+      });
       if (!user) {
         return res.status(401).json({
           error: { statusCode: 401, message: "Unauthorized" },

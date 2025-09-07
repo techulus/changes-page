@@ -1,18 +1,18 @@
 import { PlusIcon } from "@heroicons/react/solid";
-import { InferGetServerSidePropsType } from "next";
-import { useMemo, type JSX } from "react";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
+import { useMemo, type JSX } from "react";
 import { PrimaryRouterButton } from "../../../../components/core/buttons.component";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
 import { ROUTES } from "../../../../data/routes.data";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForSSR } from "../../../../utils/supabase/supabase-admin";
 import { getPage } from "../../../../utils/useSSR";
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id } = params;
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
+  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -132,7 +132,7 @@ export default function RoadmapPage({
                           {board.is_public ? "Public" : "Private"}
                         </span>
                       </div>
-                      
+
                       {board.description && (
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                           {board.description}
@@ -142,17 +142,30 @@ export default function RoadmapPage({
 
                     <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
                       <div className="text-right">
-                        <p className="text-xs uppercase tracking-wide font-medium">Created</p>
+                        <p className="text-xs uppercase tracking-wide font-medium">
+                          Created
+                        </p>
                         <p>
-                          {new Date(board.created_at).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
+                          {new Date(board.created_at).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )}
                         </p>
                       </div>
-                      <svg className="h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                      <svg
+                        className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     </div>
                   </div>

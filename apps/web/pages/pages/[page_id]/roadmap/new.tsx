@@ -1,18 +1,16 @@
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useMemo, useState, type JSX } from "react";
+import { useState, type JSX } from "react";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
-import usePageSettings from "../../../../utils/hooks/usePageSettings";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
-import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
+import { getSupabaseServerClientForSSR } from "../../../../utils/supabase/supabase-admin";
 import { getPage } from "../../../../utils/useSSR";
 import { useUserData } from "../../../../utils/useUser";
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id } = params;
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
+  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -24,30 +22,19 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const settings = await createOrRetrievePageSettings(String(page_id));
-
   return {
     props: {
       page_id,
       page,
-      settings,
     },
   };
 }
 
 export default function NewRoadmapBoard({
-  page,
   page_id,
-  settings: serverSettings,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const { supabase, user } = useUserData();
-  const { settings: clientSettings } = usePageSettings(page_id, false);
-
-  const settings = useMemo(
-    () => clientSettings ?? serverSettings,
-    [serverSettings, clientSettings]
-  );
+  const { supabase } = useUserData();
 
   const [formData, setFormData] = useState({
     title: "",

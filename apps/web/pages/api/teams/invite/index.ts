@@ -4,7 +4,7 @@ import { ROUTES } from "../../../../data/routes.data";
 import { getAppBaseURL } from "../../../../utils/helpers";
 import inngestClient from "../../../../utils/inngest";
 import { apiRateLimiter } from "../../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../../utils/supabase/supabase-admin";
 import { getUserById } from "../../../../utils/useDatabase";
 
 const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -19,7 +19,10 @@ const inviteUser = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await apiRateLimiter(req, res);
 
-      const { user, supabase } = await getSupabaseServerClient({ req, res });
+      const { user, supabase } = await getSupabaseServerClientForAPI({
+        req,
+        res,
+      });
       if (!user) {
         return res.status(401).json({
           error: { statusCode: 401, message: "Unauthorized" },

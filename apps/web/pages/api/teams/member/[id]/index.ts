@@ -1,7 +1,7 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { NextApiRequest, NextApiResponse } from "next";
 import { apiRateLimiter } from "../../../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../../../utils/supabase/supabase-admin";
 import { getUserById } from "../../../../../utils/useDatabase";
 
 const getTeamMemberDetails = async (
@@ -19,7 +19,7 @@ const getTeamMemberDetails = async (
     try {
       await apiRateLimiter(req, res);
 
-      const { user } = await getSupabaseServerClient({ req, res });
+      const { user } = await getSupabaseServerClientForAPI({ req, res });
 
       const { has_active_subscription } = await getUserById(user.id);
       if (!has_active_subscription) {
@@ -31,7 +31,7 @@ const getTeamMemberDetails = async (
       const { data: teamMember, error: teamMemberError } = await supabaseAdmin
         .from("team_members")
         .select("*")
-        .eq("id", id)
+        .eq("id", String(id))
         .single();
 
       if (teamMemberError) {

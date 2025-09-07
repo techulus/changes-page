@@ -3,10 +3,10 @@ import Head from "next/head";
 import FooterComponent from "../../components/layout/footer.component";
 import HeaderComponent from "../../components/layout/header.component";
 import Page from "../../components/layout/page.component";
-import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForSSR } from "../../utils/supabase/supabase-admin";
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const { user } = await getSupabaseServerClient(ctx);
+  const { user } = await getSupabaseServerClientForSSR(ctx);
 
   return {
     props: { email: user?.email },

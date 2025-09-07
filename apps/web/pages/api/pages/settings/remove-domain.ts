@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../../utils/supabase/supabase-admin";
 
 async function removeDomain(req: NextApiRequest, res: NextApiResponse) {
-  const { user } = await getSupabaseServerClient({ req, res });
+  const { user } = await getSupabaseServerClientForAPI({ req, res });
 
   const { domain } = req.body;
 

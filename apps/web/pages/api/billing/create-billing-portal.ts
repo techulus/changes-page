@@ -1,7 +1,7 @@
 import { IErrorResponse } from "@changes-page/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { apiRateLimiter } from "../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 import { createOrRetrieveCustomer } from "../../../utils/useDatabase";
 import { getAppBaseURL } from "./../../../utils/helpers";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -15,7 +15,7 @@ const createBillingSession = async (
     const { return_url } = req.body;
 
     try {
-      const { user } = await getSupabaseServerClient({ req, res });
+      const { user } = await getSupabaseServerClientForAPI({ req, res });
       const customer = await createOrRetrieveCustomer(user.id, user.email);
 
       console.log(

@@ -1,6 +1,6 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../../utils/supabase/supabase-admin";
 
 const getEmailSubscribers = async (
   req: NextApiRequest,
@@ -8,9 +8,9 @@ const getEmailSubscribers = async (
 ) => {
   if (req.method === "GET") {
     try {
-      const { user } = await getSupabaseServerClient({ req, res });
+      const { user } = await getSupabaseServerClientForAPI({ req, res });
 
-      const { page_id } = req.query;
+      const page_id = String(req.query.page_id);
 
       await supabaseAdmin
         .from("pages")

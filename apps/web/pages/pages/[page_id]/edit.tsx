@@ -1,5 +1,5 @@
 import { IPage } from "@changes-page/supabase/types/page";
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { InferType } from "yup";
@@ -12,15 +12,15 @@ import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
 import { NewPageSchema } from "../../../data/schema";
 import { httpPost } from "../../../utils/http";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForSSR } from "../../../utils/supabase/supabase-admin";
 import { getPage } from "../../../utils/useSSR";
 import { useUserData } from "../../../utils/useUser";
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id } = params;
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const { page_id } = ctx.params;
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
-  const page = await getPage(supabase, params.page_id as string);
+  const { supabase } = await getSupabaseServerClientForSSR(ctx);
+  const page = await getPage(supabase, page_id as string);
 
   return {
     props: { page_id, page },

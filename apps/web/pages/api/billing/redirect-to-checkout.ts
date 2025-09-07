@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getAppBaseURL } from "../../../utils/helpers";
 import { apiRateLimiter } from "../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 import {
   createOrRetrieveCustomer,
   getUserById,
@@ -18,7 +18,7 @@ const redirectToCheckout = async (
     const { return_url } = req.query;
 
     try {
-      const { user } = await getSupabaseServerClient({ req, res });
+      const { user } = await getSupabaseServerClientForAPI({ req, res });
 
       const {
         stripe_customer_id,

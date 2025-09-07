@@ -2,7 +2,7 @@ import { PostStatus } from "@changes-page/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NewPostSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 import { createPost } from "../../../utils/useDatabase";
 
 const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -24,7 +24,10 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await apiRateLimiter(req, res);
 
-      const { user, supabase } = await getSupabaseServerClient({ req, res });
+      const { user, supabase } = await getSupabaseServerClientForAPI({
+        req,
+        res,
+      });
 
       const isValid = await NewPostSchema.isValid({
         page_id,

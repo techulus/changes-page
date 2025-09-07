@@ -2,7 +2,7 @@ import { IErrorResponse } from "@changes-page/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { IBillingInfo } from "../../../data/user.interface";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 import { getUserById } from "../../../utils/useDatabase";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -13,7 +13,7 @@ const getBillingStatus = async (
 ) => {
   if (req.method === "GET") {
     try {
-      const { user } = await getSupabaseServerClient({ req, res });
+      const { user } = await getSupabaseServerClientForAPI({ req, res });
 
       const {
         pro_gifted,

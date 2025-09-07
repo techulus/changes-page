@@ -1,7 +1,7 @@
 import { IErrorResponse } from "@changes-page/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createSignedStreamingUrl } from "../../../utils/manageprompt";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 
 const expandConcept = async (
   req: NextApiRequest,
@@ -10,7 +10,7 @@ const expandConcept = async (
   if (req.method === "POST") {
     const { workflowId } = req.body;
     try {
-      await getSupabaseServerClient({ req, res });
+      await getSupabaseServerClientForAPI({ req, res });
 
       const url = await createSignedStreamingUrl(workflowId);
 

@@ -8,17 +8,17 @@ import {
   TrashIcon,
   UserIcon,
 } from "@heroicons/react/solid";
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForSSR } from "../../../utils/supabase/supabase-admin";
 import { getPage } from "../../../utils/useSSR";
 
-export async function getServerSideProps({ req, res, query }) {
-  const { page_id } = query;
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
+  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id);
   const { data: audit_logs } = await supabaseAdmin
     .from("page_audit_logs")

@@ -15,7 +15,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/solid";
 import classNames from "classnames";
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import { useMemo, useState, type JSX } from "react";
@@ -41,15 +41,15 @@ import { ROUTES } from "../../../data/routes.data";
 import usePageSettings from "../../../utils/hooks/usePageSettings";
 import usePageUrl from "../../../utils/hooks/usePageUrl";
 import usePosts from "../../../utils/hooks/usePosts";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForSSR } from "../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 import { getPage } from "../../../utils/useSSR";
 import { useUserData } from "../../../utils/useUser";
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id } = params;
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
+  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;

@@ -3,7 +3,7 @@ import { IPage } from "@changes-page/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { NewPageSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 import {
   createPage,
   getUserById,
@@ -20,7 +20,7 @@ const createNewPage = async (
     const { url_slug, title, description, type } = req.body;
 
     try {
-      const { user } = await getSupabaseServerClient({ req, res });
+      const { user } = await getSupabaseServerClientForAPI({ req, res });
 
       const { has_active_subscription } = await getUserById(user.id);
       if (!has_active_subscription) {

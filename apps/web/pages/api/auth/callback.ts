@@ -1,13 +1,13 @@
 import { NextApiHandler } from "next";
 import { ROUTES } from "../../../data/routes.data";
-import { createServerClientSSR } from "../../../utils/supabase/server";
+import { createServerClientForAPI } from "../../../utils/supabase/server";
 
 const callback: NextApiHandler = async (req, res) => {
   const code = req.query.code;
   const redirectedFrom = req.query.redirectedFrom;
 
   if (typeof code === "string") {
-    const supabase = createServerClientSSR({ req, res });
+    const supabase = createServerClientForAPI({ req, res });
 
     try {
       const { data, error } = await supabase.auth.exchangeCodeForSession(code);

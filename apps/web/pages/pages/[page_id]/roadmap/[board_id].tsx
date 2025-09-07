@@ -1,21 +1,19 @@
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { type JSX } from "react";
 import { SecondaryButton } from "../../../../components/core/buttons.component";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
 import RoadmapBoard from "../../../../components/roadmap/RoadmapBoard";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
+import { getSupabaseServerClientForSSR } from "../../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { getPage } from "../../../../utils/useSSR";
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id, board_id } = params;
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const page_id = String(ctx.params?.page_id);
+  const board_id = String(ctx.params?.board_id);
 
-  const { supabase } = await getSupabaseServerClient({
-    req,
-    res,
-  });
+  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
