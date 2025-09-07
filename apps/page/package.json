@@ -50,6 +50,7 @@
     "@next/bundle-analyzer": "^13.1.6",
     "@types/cors": "^2.8.13",
     "@types/node": "^17.0.41",
+    "@types/nprogress": "^0.2.3",
     "@types/react": "^18.2.0",
     "@types/ua-parser-js": "^0.7.36",
     "@types/uuid": "^9.0.0",
