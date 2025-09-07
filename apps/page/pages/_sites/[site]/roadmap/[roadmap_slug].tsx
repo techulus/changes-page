@@ -2,9 +2,7 @@ import {
   IPage,
   IPageSettings,
   IRoadmapBoard,
-  IRoadmapCategory,
   IRoadmapColumn,
-  IRoadmapItem,
 } from "@changes-page/supabase/types/page";
 import { getCategoryColorClasses } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
@@ -22,12 +20,13 @@ import {
   BLACKLISTED_SLUGS,
   fetchRenderData,
   getRoadmapBySlug,
+  PageRoadmap,
+  RoadmapItemWithCategory,
 } from "../../../../lib/data";
 import { getPageUrl } from "../../../../lib/url";
 import { httpPost } from "../../../../utils/http";
 
-type RoadmapItem = IRoadmapItem & {
-  roadmap_categories?: IRoadmapCategory | null;
+type RoadmapItem = RoadmapItemWithCategory & {
   vote_count?: number;
 };
 
@@ -44,7 +43,7 @@ export default function RoadmapPage({
   board: IRoadmapBoard;
   columns: IRoadmapColumn[];
   items: RoadmapItem[];
-  roadmaps: IRoadmapBoard[];
+  roadmaps: PageRoadmap[];
 }) {
   usePageTheme(settings?.color_scheme);
 

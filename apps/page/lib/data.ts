@@ -406,7 +406,7 @@ async function getRoadmapBySlug(
 
   if (error) {
     console.error("Error fetching roadmap by slug:", error);
-    return { board: null, columns: [], items: [] };
+    return { board, columns: [], items: [] };
   }
 
   const { data: columns, error: columnsError } = await supabaseAdmin
@@ -416,7 +416,7 @@ async function getRoadmapBySlug(
     .order("position", { ascending: true });
   if (columnsError) {
     console.error("Error fetching roadmap columns:", columnsError);
-    return { board: null, columns: [], items: [] };
+    return { board, columns: [], items: [] };
   }
 
   const { data: items, error: itemsError } = await supabaseAdmin
