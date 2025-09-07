@@ -116,6 +116,22 @@ export default function PageDetail({
 
   const [showWidgetCode, setShowWidgetCode] = useState(false);
 
+  const viewTabs = useMemo(
+    () => [
+      {
+        name: "Changelog",
+        current: true,
+        href: `/pages/${page_id}`,
+      },
+      {
+        name: "Roadmap",
+        current: false,
+        href: `/pages/${page_id}/roadmap`,
+      },
+    ],
+    [page_id]
+  );
+
   const statusFilters = useMemo(
     () => [
       {
@@ -287,6 +303,7 @@ export default function PageDetail({
         showBackButton={true}
         backRoute={ROUTES.PAGES}
         containerClassName="lg:pb-0"
+        tabs={viewTabs}
         buttons={
           <PrimaryRouterButton
             label="Post"

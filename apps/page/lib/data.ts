@@ -1,6 +1,13 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { Database } from "@changes-page/supabase/types";
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
+import {
+  IPage,
+  IPageSettings,
+  IPost,
+  IRoadmapBoard,
+  IRoadmapColumn,
+  IRoadmapItem,
+} from "@changes-page/supabase/types/page";
 import { sanitizeCss } from "./css";
 
 const PAGINATION_LIMIT = 50;
@@ -70,6 +77,11 @@ export const BLACKLISTED_SLUGS = [
   "press-kit",
 ];
 
+export type PageRoadmap = Pick<
+  IRoadmapBoard,
+  "id" | "title" | "slug" | "description"
+>;
+
 const postSelectParams =
   "id,title,content,tags,publication_date,updated_at,created_at,allow_reactions";
 
@@ -102,9 +114,11 @@ function translateHostToPageIdentifier(host: string): {
   };
 }
 
-async function fetchRenderData(
-  site: string
-): Promise<{ page: IPage | null; settings: IPageSettings | null }> {
+async function fetchRenderData(site: string): Promise<{
+  page: IPage | null;
+  settings: IPageSettings | null;
+  roadmaps: PageRoadmap[];
+}> {
   const pageSelect = `id,title,description,type,url_slug,user_id`;
   const settingsSelect = `page_id,page_logo,cover_image,product_url,twitter_url,github_url,instagram_url,facebook_url,linkedin_url,youtube_url,tiktok_url,app_store_url,play_store_url,pinned_post_id,whitelabel,hide_search_engine,email_notifications,rss_notifications,color_scheme,custom_css`;
 
@@ -114,6 +128,7 @@ async function fetchRenderData(
   const emptyResponse = {
     page: null,
     settings: null,
+    roadmaps: [],
   };
 
   try {
@@ -192,16 +207,30 @@ async function fetchRenderData(
       }
     }
 
-    return {
-      page: page as IPage,
-      settings: settings as IPageSettings,
-    };
+    const [{ data: roadmaps }, isSubscriptionActive] = await Promise.all([
+      supabaseAdmin
+        .from("roadmap_boards")
+        .select("id, title, slug, description")
+        .eq("page_id", page.id)
+        .eq("is_public", true)
+        .order("created_at", { ascending: true }),
+      isPageSubscriptionActive(page.user_id),
+    ]);
+
+    return isSubscriptionActive
+      ? {
+          page: page as IPage,
+          settings: settings as IPageSettings,
+          roadmaps: roadmaps ?? [],
+        }
+      : emptyResponse;
   } catch (e) {
     console.log("[fetchRenderData] error", e);
 
     return {
       page: null,
       settings: null,
+      roadmaps: [],
     };
   }
 }
@@ -328,7 +357,7 @@ async function fetchPostById(
   };
 }
 
-async function isSubscriptionActive(user_id: string): Promise<boolean> {
+async function isPageSubscriptionActive(user_id: string): Promise<boolean> {
   const { data: isSubscriptionActive, error } = await supabaseAdmin
     .rpc<
       "is_subscription_active",
@@ -351,12 +380,72 @@ async function isSubscriptionActive(user_id: string): Promise<boolean> {
   return isSubscriptionActive ?? true;
 }
 
+export type RoadmapItemWithCategory = IRoadmapItem & {
+  roadmap_categories: {
+    id: string;
+    name: string;
+    color: string | null;
+  } | null;
+};
+
+async function getRoadmapBySlug(
+  pageId: string,
+  slug: string
+): Promise<{
+  board: IRoadmapBoard | null;
+  columns: IRoadmapColumn[];
+  items: RoadmapItemWithCategory[] | null;
+}> {
+  const { data: board, error } = await supabaseAdmin
+    .from("roadmap_boards")
+    .select("*")
+    .eq("page_id", pageId)
+    .eq("slug", slug)
+    .eq("is_public", true)
+    .single();
+
+  if (error) {
+    console.error("Error fetching roadmap by slug:", error);
+    return { board, columns: [], items: [] };
+  }
+
+  const { data: columns, error: columnsError } = await supabaseAdmin
+    .from("roadmap_columns")
+    .select("*")
+    .eq("board_id", board.id)
+    .order("position", { ascending: true });
+  if (columnsError) {
+    console.error("Error fetching roadmap columns:", columnsError);
+    return { board, columns: [], items: [] };
+  }
+
+  const { data: items, error: itemsError } = await supabaseAdmin
+    .from("roadmap_items")
+    .select(
+      `
+      *,
+      roadmap_categories (
+        id,
+        name,
+        color
+      )
+    `
+    )
+    .eq("board_id", board.id)
+    .order("position", { ascending: true });
+
+  if (itemsError) {
+    console.error("Failed to fetch items", itemsError);
+  }
+
+  return { board, columns, items };
+}
+
 export {
   fetchPostById,
   fetchPosts,
   fetchRenderData,
-  isSubscriptionActive,
+  getRoadmapBySlug,
   PAGINATION_LIMIT,
-  translateHostToPageIdentifier
+  translateHostToPageIdentifier,
 };
-

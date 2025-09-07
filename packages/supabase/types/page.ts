@@ -1,16 +1,18 @@
-import type { Database } from "./index";
+import type { Database, Tables } from "./index";
 
-export type IPage = Database["public"]["Tables"]["pages"]["Row"];
-export type IPageSettings =
-  Database["public"]["Tables"]["page_settings"]["Row"];
-export type IPost = Database["public"]["Tables"]["posts"]["Row"];
-export type IPageEmailSubscriber =
-  Database["public"]["Tables"]["page_email_subscribers"]["Row"];
-export type IPageView = Database["public"]["Tables"]["page_views"]["Row"];
-export type ITeam = Database["public"]["Tables"]["teams"]["Row"];
-export type ITeamMember = Database["public"]["Tables"]["team_members"]["Row"];
-export type ITeamInvitation =
-  Database["public"]["Tables"]["team_invitations"]["Row"];
+export type IPage = Tables<"pages">;
+export type IPageSettings = Tables<"page_settings">;
+export type IPost = Tables<"posts">;
+export type IPageEmailSubscriber = Tables<"page_email_subscribers">;
+export type IPageView = Tables<"page_views">;
+export type ITeam = Tables<"teams">;
+export type ITeamMember = Tables<"team_members">;
+export type ITeamInvitation = Tables<"team_invitations">;
+export type IRoadmapBoard = Tables<"roadmap_boards">;
+export type IRoadmapColumn = Tables<"roadmap_columns">;
+export type IRoadmapCategory = Tables<"roadmap_categories">;
+export type IRoadmapItem = Tables<"roadmap_items">;
+export type IRoadmapVote = Tables<"roadmap_votes">;
 
 export enum PageType {
   changelogs = "changelogs",
