@@ -2,8 +2,8 @@ import {
   IRoadmapBoard,
   IRoadmapCategory,
 } from "@changes-page/supabase/types/page";
-import { SupabaseClient } from "@supabase/supabase-js";
 import { useState } from "react";
+import { useUserData } from "../../../utils/useUser";
 import {
   FormErrors,
   ItemForm,
@@ -11,19 +11,16 @@ import {
   RoadmapItemWithRelations,
 } from "../types";
 
-interface UseRoadmapItemsProps {
-  supabase: SupabaseClient;
-  board: IRoadmapBoard;
-  categories: IRoadmapCategory[];
-  itemsByColumn: ItemsByColumn;
-}
-
 export function useRoadmapItems({
-  supabase,
   board,
   categories,
   itemsByColumn,
-}: UseRoadmapItemsProps) {
+}: {
+  board: IRoadmapBoard;
+  categories: IRoadmapCategory[];
+  itemsByColumn: ItemsByColumn;
+}) {
+  const { supabase } = useUserData();
   const [showItemModal, setShowItemModal] = useState(false);
   const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null);
   const [editingItem, setEditingItem] =

@@ -4,7 +4,6 @@ import {
   IRoadmapColumn,
 } from "@changes-page/supabase/types/page";
 import { useMemo, useState } from "react";
-import { useUserData } from "../../utils/useUser";
 import RoadmapColumn from "./RoadmapColumn";
 import RoadmapItemModal from "./RoadmapItemModal";
 import { useRoadmapDragDrop } from "./hooks/useRoadmapDragDrop";
@@ -22,7 +21,6 @@ export default function RoadmapBoard({
   items: RoadmapItemWithRelations[];
   categories: IRoadmapCategory[];
 }) {
-  const { supabase } = useUserData();
   const [boardItems, setBoardItems] = useState(items);
 
   const itemsByColumn: ItemsByColumn = useMemo(() => {
@@ -36,13 +34,11 @@ export default function RoadmapBoard({
   }, [columns, boardItems]);
 
   const dragDropHandlers = useRoadmapDragDrop({
-    supabase,
     itemsByColumn,
     setBoardItems,
   });
 
   const itemHandlers = useRoadmapItems({
-    supabase,
     board,
     categories,
     itemsByColumn,
