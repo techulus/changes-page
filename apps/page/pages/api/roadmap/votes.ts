@@ -83,7 +83,8 @@ export default async function getBulkRoadmapItemVotes(
     for (let i = 0; i < voteCountResults.length; i++) {
       if (voteCountResults[i].error) {
         console.error(
-          `getBulkRoadmapItemVotes [Count Error for ${distinctItemIds[i]}]`,
+          "getBulkRoadmapItemVotes [Count Error for %s]",
+          distinctItemIds[i],
           voteCountResults[i].error
         );
         return res.status(500).json({ ok: false, votes: {} });
