@@ -6,31 +6,33 @@ const callback: NextApiHandler = async (req, res) => {
   const code = req.query.code;
   const redirectedFrom = req.query.redirectedFrom;
 
-  if (typeof code === "string") {
-    const supabase = createServerClientForAPI({ req, res });
+  if (typeof code !== "string") {
+    return res.redirect(
+      `/login?error=${encodeURIComponent("Missing or invalid code")}`
+    );
+  }
 
-    try {
-      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+  const supabase = createServerClientForAPI({ req, res });
 
-      if (error) {
-        console.error("Auth callback error:", error);
-        return res.redirect(
-          `/login?error=${encodeURIComponent(error.message)}`
-        );
-      }
+  try {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-      if (!data.session) {
-        console.error("Auth callback: No session created");
-        return res.redirect(
-          `/login?error=${encodeURIComponent("No session created")}`
-        );
-      }
-    } catch (err) {
-      console.error("Auth callback exception:", err);
+    if (error) {
+      console.error("Auth callback error:", error);
+      return res.redirect(`/login?error=${encodeURIComponent(error.message)}`);
+    }
+
+    if (!data.session) {
+      console.error("Auth callback: No session created");
       return res.redirect(
-        `/login?error=${encodeURIComponent("Authentication failed")}`
+        `/login?error=${encodeURIComponent("No session created")}`
       );
     }
+  } catch (err) {
+    console.error("Auth callback exception:", err);
+    return res.redirect(
+      `/login?error=${encodeURIComponent("Authentication failed")}`
+    );
   }
 
   let redirectTo = ROUTES.PAGES;
