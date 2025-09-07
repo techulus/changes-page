@@ -61,10 +61,12 @@ export const UserContextProvider = ({
   }, []);
 
   const signOut = useCallback(async () => {
-    await router.replace(ROUTES.HOME);
     const { error } = await supabase.auth.signOut();
 
+    posthog.reset();
     setBillingDetails(null);
+    await router.replace(ROUTES.HOME);
+
     notifyInfo("Logout completed");
 
     return { error };
