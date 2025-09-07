@@ -1,17 +1,12 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { Parser } from "@json2csv/plainjs";
-import { NextApiRequest, NextApiResponse } from "next";
 import { apiRateLimiter } from "../../../../utils/rate-limit";
-import { getSupabaseServerClientForAPI } from "../../../../utils/supabase/supabase-admin";
+import { withAuth } from "../../../../utils/withAuth";
 
-const getSubscribersExportCsv = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+const getSubscribersExportCsv = withAuth(async (req, res, { user }) => {
   if (req.method === "GET") {
     try {
       await apiRateLimiter(req, res);
-      const { user } = await getSupabaseServerClientForAPI({ req, res });
 
       const page_id = String(req.query.page_id);
 
@@ -54,6 +49,6 @@ const getSubscribersExportCsv = async (
     res.setHeader("Allow", "POST,PUT");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default getSubscribersExportCsv;

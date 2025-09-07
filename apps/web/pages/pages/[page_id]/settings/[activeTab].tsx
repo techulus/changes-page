@@ -1,5 +1,5 @@
 import { SpinnerWithSpacing } from "@changes-page/ui";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
@@ -10,7 +10,7 @@ import SocialLinksSettings from "../../../../components/page-settings/social-lin
 import StyleSettings from "../../../../components/page-settings/style";
 import { ROUTES } from "../../../../data/routes.data";
 import usePageSettings from "../../../../utils/hooks/usePageSettings";
-import { getSupabaseServerClientForSSR } from "../../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { getPage } from "../../../../utils/useSSR";
 
@@ -21,10 +21,9 @@ const IntegrationsSettings = dynamic(
   }
 );
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id);
   const settings = await createOrRetrievePageSettings(String(page_id));
 
@@ -36,7 +35,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       activeTab: ctx.params?.activeTab,
     },
   };
-}
+});
 
 export default function PageSettings({
   page,

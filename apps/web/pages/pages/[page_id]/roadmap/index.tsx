@@ -1,18 +1,17 @@
 import { PlusIcon } from "@heroicons/react/solid";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useMemo, type JSX } from "react";
 import { PrimaryRouterButton } from "../../../../components/core/buttons.component";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
 import { ROUTES } from "../../../../data/routes.data";
-import { getSupabaseServerClientForSSR } from "../../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../../utils/supabase/withSupabase";
 import { getPage } from "../../../../utils/useSSR";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -41,7 +40,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       boards: boards || [],
     },
   };
-}
+});
 
 export default function RoadmapPage({
   page,

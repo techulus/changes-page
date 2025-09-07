@@ -1,27 +1,20 @@
-import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPage } from "@changes-page/supabase/types/page";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { NewPageSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
-import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 import {
   createPage,
   getUserById,
   updateSubscriptionUsage,
 } from "../../../utils/useDatabase";
+import { withAuth } from "../../../utils/withAuth";
 
-const createNewPage = async (
-  req: NextApiRequest,
-  res: NextApiResponse<IPage | IErrorResponse>
-) => {
+const createNewPage = withAuth<IPage>(async (req, res, { user }) => {
   if (req.method === "POST") {
     await apiRateLimiter(req, res);
 
     const { url_slug, title, description, type } = req.body;
 
     try {
-      const { user } = await getSupabaseServerClientForAPI({ req, res });
-
       const { has_active_subscription } = await getUserById(user.id);
       if (!has_active_subscription) {
         return res.status(403).json({
@@ -65,6 +58,6 @@ const createNewPage = async (
     res.setHeader("Allow", "POST");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default createNewPage;

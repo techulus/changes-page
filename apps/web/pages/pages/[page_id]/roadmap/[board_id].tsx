@@ -1,19 +1,18 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { type JSX } from "react";
 import { SecondaryButton } from "../../../../components/core/buttons.component";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
 import RoadmapBoard from "../../../../components/roadmap/RoadmapBoard";
-import { getSupabaseServerClientForSSR } from "../../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { getPage } from "../../../../utils/useSSR";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const page_id = String(ctx.params?.page_id);
   const board_id = String(ctx.params?.board_id);
 
-  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -84,7 +83,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       categories: categories || [],
     },
   };
-}
+});
 
 export default function RoadmapBoardDetails({
   page_id,

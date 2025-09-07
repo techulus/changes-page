@@ -8,17 +8,16 @@ import {
   TrashIcon,
   UserIcon,
 } from "@heroicons/react/solid";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
-import { getSupabaseServerClientForSSR } from "../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { getPage } from "../../../utils/useSSR";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id);
   const { data: audit_logs } = await supabaseAdmin
     .from("page_audit_logs")
@@ -34,7 +33,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       audit_logs: audit_logs ?? [],
     },
   };
-}
+});
 
 export default function PageAnalytics({
   page,

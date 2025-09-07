@@ -5,24 +5,23 @@ import {
 } from "@changes-page/utils";
 import { MenuIcon } from "@heroicons/react/outline";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, type JSX } from "react";
 import AuthLayout from "../../../../../components/layout/auth-layout.component";
 import Page from "../../../../../components/layout/page.component";
 import usePageSettings from "../../../../../utils/hooks/usePageSettings";
 import { getPageUrl } from "../../../../../utils/hooks/usePageUrl";
-import { getSupabaseServerClientForSSR } from "../../../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../../../utils/useDatabase";
 import { getPage } from "../../../../../utils/useSSR";
 import { useUserData } from "../../../../../utils/useUser";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const page_id = String(ctx.params?.page_id);
   const board_id = String(ctx.params?.board_id);
   const { tab = "board" } = ctx.query;
 
-  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -84,7 +83,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       initialTab: tab,
     },
   };
-}
+});
 
 export default function BoardSettings({
   page,

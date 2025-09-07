@@ -1,11 +1,11 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { SpinnerWithSpacing } from "@changes-page/ui";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
-import { getSupabaseServerClientForSSR } from "../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { getPageAnalytics } from "../../../utils/useDatabase";
 import { getPage } from "../../../utils/useSSR";
 
@@ -183,11 +183,10 @@ const StatsTable = ({ data = [], title, total = 5 }) => {
   );
 };
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const { range } = ctx.query;
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
+  const range = String(ctx.query.range);
   const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id);
 
   const rangeNum = Number(range) || 7;
@@ -281,7 +280,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       peakHoursData,
     },
   };
-}
+});
 
 export default function PageAnalytics({
   page,

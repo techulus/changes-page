@@ -1,5 +1,5 @@
 import { IPost, PostStatus } from "@changes-page/supabase/types/page";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState, type JSX } from "react";
 import { InferType } from "yup";
@@ -11,14 +11,13 @@ import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
 import { NewPostSchema } from "../../../data/schema";
-import { getSupabaseServerClientForSSR } from "../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 import { useUserData } from "../../../utils/useUser";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const { page_id, post_id } = ctx.params;
 
-  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const settings = await createOrRetrievePageSettings(String(page_id));
   const { data: post } = await supabase
     .from("posts")
@@ -34,7 +33,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       settings,
     },
   };
-}
+});
 
 export default function EditPost({
   page_id,

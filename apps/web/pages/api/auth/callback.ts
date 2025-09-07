@@ -35,15 +35,11 @@ const callback: NextApiHandler = async (req, res) => {
     );
   }
 
-  let redirectTo = ROUTES.PAGES;
-  if (
+  const redirectTo =
     typeof redirectedFrom === "string" &&
-    redirectedFrom.startsWith("/") &&
-    !redirectedFrom.includes("://") &&
-    !redirectedFrom.includes("\\")
-  ) {
-    redirectTo = redirectedFrom;
-  }
+    Object.values(ROUTES).includes(redirectedFrom)
+      ? redirectedFrom
+      : ROUTES.PAGES;
 
   res.redirect(redirectTo);
 };

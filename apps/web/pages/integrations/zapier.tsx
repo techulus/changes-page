@@ -1,17 +1,16 @@
-import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import FooterComponent from "../../components/layout/footer.component";
 import HeaderComponent from "../../components/layout/header.component";
 import Page from "../../components/layout/page.component";
-import { getSupabaseServerClientForSSR } from "../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../utils/supabase/withSupabase";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const { user } = await getSupabaseServerClientForSSR(ctx);
-
-  return {
-    props: { email: user?.email },
-  };
-}
+export const getServerSideProps = withSupabase<{ email: string }>(
+  async (_, { user }) => {
+    return {
+      props: { email: user?.email },
+    };
+  }
+);
 
 export default function Zapier({ email }: { email?: string }) {
   return (

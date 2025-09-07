@@ -1,25 +1,19 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { getAppBaseURL } from "../../../utils/helpers";
 import { apiRateLimiter } from "../../../utils/rate-limit";
-import { getSupabaseServerClientForAPI } from "../../../utils/supabase/supabase-admin";
 import {
   createOrRetrieveCustomer,
   getUserById,
 } from "../../../utils/useDatabase";
+import { withAuth } from "../../../utils/withAuth";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const redirectToCheckout = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+const redirectToCheckout = withAuth(async (req, res, { user }) => {
   if (req.method === "GET") {
     await apiRateLimiter(req, res);
     const { return_url } = req.query;
 
     try {
-      const { user } = await getSupabaseServerClientForAPI({ req, res });
-
       const {
         stripe_customer_id,
         stripe_subscription,
@@ -44,7 +38,8 @@ const redirectToCheckout = async (
           return_url: return_url || `${getAppBaseURL()}/pages`,
         });
 
-        return res.redirect(307, url);
+        res.redirect(307, url);
+        return;
       }
 
       console.log(
@@ -84,7 +79,8 @@ const redirectToCheckout = async (
         cancel_url: return_url || getAppBaseURL(),
       });
 
-      return res.redirect(307, url);
+      res.redirect(307, url);
+      return;
     } catch (err) {
       console.log("createCheckout", err);
       res
@@ -95,6 +91,6 @@ const redirectToCheckout = async (
     res.setHeader("Allow", "GET");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default redirectToCheckout;

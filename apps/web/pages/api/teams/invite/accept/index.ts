@@ -1,9 +1,8 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { NextApiRequest, NextApiResponse } from "next";
 import { apiRateLimiter } from "../../../../../utils/rate-limit";
-import { getSupabaseServerClientForAPI } from "../../../../../utils/supabase/supabase-admin";
+import { withAuth } from "../../../../../utils/withAuth";
 
-const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
+const acceptInvite = withAuth(async (req, res, { user, supabase }) => {
   if (req.method === "POST") {
     const { invite_id } = req.body;
     if (!invite_id) {
@@ -14,16 +13,6 @@ const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       await apiRateLimiter(req, res);
-
-      const { user, supabase } = await getSupabaseServerClientForAPI({
-        req,
-        res,
-      });
-      if (!user) {
-        return res.status(401).json({
-          error: { statusCode: 401, message: "Unauthorized" },
-        });
-      }
 
       const { data: invite } = await supabase
         .from("team_invitations")
@@ -67,6 +56,6 @@ const acceptInvite = async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader("Allow", "POST,PUT");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default acceptInvite;

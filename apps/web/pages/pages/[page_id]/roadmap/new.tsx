@@ -1,16 +1,15 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState, type JSX } from "react";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
-import { getSupabaseServerClientForSSR } from "../../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../../utils/supabase/withSupabase";
 import { getPage } from "../../../../utils/useSSR";
 import { useUserData } from "../../../../utils/useUser";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const page_id = String(ctx.params?.page_id);
 
-  const { supabase } = await getSupabaseServerClientForSSR(ctx);
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -28,7 +27,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       page,
     },
   };
-}
+});
 
 export default function NewRoadmapBoard({
   page_id,
