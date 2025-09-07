@@ -107,79 +107,84 @@ export default function Pages({
 
           {pages.length ? (
             <div className="overflow-hidden shadow rounded-md bg-white dark:bg-gray-900 border dark:border-gray-800">
-              <div className="sm:grid sm:grid-cols-2">
-                {pages.map((page, index) => (
-                  <div
-                    key={page.id}
-                    className={`relative group p-6 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors duration-200 ${
-                      index < pages.length - 1 ? 'border-b border-gray-200 dark:border-gray-800' : ''
-                    } ${
-                      index % 2 === 0 && index < pages.length - 2 ? 'sm:border-r sm:border-gray-200 sm:dark:border-gray-800' : ''
-                    } ${
-                      index % 2 === 0 && index === pages.length - 2 && pages.length % 2 === 0 ? 'sm:border-r sm:border-gray-200 sm:dark:border-gray-800' : ''
-                    }`}
-                  >
-                  <div>
-                    <span
-                      className={classNames(
-                        page.type === PageType.announcements &&
-                          "bg-blue-100 dark:bg-blue-700",
-                        page.type === PageType.changelogs &&
-                          "bg-teal-100 dark:bg-teal-700",
-                        page.type === PageType.releases &&
-                          "bg-rose-100 dark:bg-rose-700",
-                        page.type === PageType.updates &&
-                          "bg-amber-100 dark:bg-amber-700",
-                        page.type === PageType.announcements &&
-                          "text-blue-500 dark:text-blue-100",
-                        page.type === PageType.changelogs &&
-                          "text-teal-500 dark:text-teal-100",
-                        page.type === PageType.releases &&
-                          "text-rose-500 dark:text-rose-100",
-                        page.type === PageType.updates &&
-                          "text-amber-500 dark:text-amber-100",
-                        "inline-flex px-2 py-1 font-bold rounded-md"
-                      )}
-                    >
-                      {PageTypeToLabel[page.type]}
-                    </span>
-                  </div>
-                  <div className="mt-6">
-                    <h3 className="text-lg font-medium dark:text-white">
-                      <a
-                        href={`${ROUTES.PAGES}/${page.id}`}
-                        className="focus:outline-none font-bold tracking-tight hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
-                      >
-                        <span className="absolute inset-0" aria-hidden="true" />
-                        {page.title}
-                      </a>
-                    </h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                      {page.description}
-                    </p>
-                    <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
-                      {page.page_settings?.custom_domain 
-                        ? page.page_settings.custom_domain
-                        : `${page.url_slug}.changes.page`
-                      }
-                    </p>
-                  </div>
-                  <span
-                    className="pointer-events-none absolute top-6 right-6 text-gray-500 dark:text-gray-400 group-hover:text-indigo-400"
-                    aria-hidden="true"
-                  >
-                    {page.teams && page.user_id !== user?.id ? (
-                      <div className="flex items-center gap-1">
-                        <UserGroupIcon className="h-4 w-4" />
-                        <span className="text-sm font-medium">
-                          Editor ({page.teams.name})
-                        </span>
+              <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+                {pages.map((page) => (
+                  <li key={page.id} className="relative group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
+                    <div className="flex items-center justify-between p-6">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span
+                            className={classNames(
+                              page.type === PageType.announcements &&
+                                "bg-blue-100 dark:bg-blue-700",
+                              page.type === PageType.changelogs &&
+                                "bg-teal-100 dark:bg-teal-700",
+                              page.type === PageType.releases &&
+                                "bg-rose-100 dark:bg-rose-700",
+                              page.type === PageType.updates &&
+                                "bg-amber-100 dark:bg-amber-700",
+                              page.type === PageType.announcements &&
+                                "text-blue-500 dark:text-blue-100",
+                              page.type === PageType.changelogs &&
+                                "text-teal-500 dark:text-teal-100",
+                              page.type === PageType.releases &&
+                                "text-rose-500 dark:text-rose-100",
+                              page.type === PageType.updates &&
+                                "text-amber-500 dark:text-amber-100",
+                              "inline-flex px-2 py-1 text-xs font-bold rounded-md"
+                            )}
+                          >
+                            {PageTypeToLabel[page.type]}
+                          </span>
+                          {page.teams && page.user_id !== user?.id && (
+                            <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                              <UserGroupIcon className="h-4 w-4" />
+                              <span className="text-xs font-medium">
+                                Editor ({page.teams.name})
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+                            <a
+                              href={`${ROUTES.PAGES}/${page.id}`}
+                              className="focus:outline-none hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                            >
+                              <span className="absolute inset-0" aria-hidden="true" />
+                              {page.title}
+                            </a>
+                          </h3>
+                          {page.description && (
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                              {page.description}
+                            </p>
+                          )}
+                          <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+                            {page.page_settings?.custom_domain 
+                              ? page.page_settings.custom_domain
+                              : `${page.url_slug}.changes.page`
+                            }
+                          </p>
+                        </div>
                       </div>
-                    ) : null}
-                  </span>
-                </div>
+                      <div className="ml-4 flex-shrink-0">
+                        <svg
+                          className="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           ) : null}
         </div>

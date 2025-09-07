@@ -54,7 +54,6 @@ export default function RoadmapPage({
   >({});
   const [votingItems, setVotingItems] = useState<Set<string>>(new Set());
 
-  // Organize items by column
   const itemsByColumn = useMemo(() => {
     const organized: Record<string, RoadmapItem[]> = {};
     columns.forEach((column) => {
@@ -76,12 +75,10 @@ export default function RoadmapPage({
   };
 
   const handleVote = async (itemId: string) => {
-    // Prevent voting if already in progress or if user has already voted and we're not toggling
     if (votingItems.has(itemId)) return;
 
     setVotingItems((prev) => new Set(prev).add(itemId));
 
-    // Optimistic update
     const currentVoteState = votes[itemId];
     const newVotedState = !currentVoteState?.voted;
     const newCount = currentVoteState?.count
@@ -106,7 +103,6 @@ export default function RoadmapPage({
         data: { item_id: itemId },
       });
 
-      // Update with server response to ensure consistency
       setVotes((prev) => ({
         ...prev,
         [itemId]: {
@@ -116,7 +112,6 @@ export default function RoadmapPage({
       }));
     } catch (error) {
       console.error("Error voting:", error);
-      // Revert optimistic update on error
       setVotes((prev) => ({
         ...prev,
         [itemId]: {
@@ -360,7 +355,7 @@ export default function RoadmapPage({
                   >
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
-                  <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
+                  <Dialog.Panel className="w-full max-w-5xl sm:min-w-[880px] transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
                       {/* Column Divider */}
                       <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2 z-10"></div>

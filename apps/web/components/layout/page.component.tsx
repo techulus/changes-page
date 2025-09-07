@@ -147,8 +147,8 @@ export default function Page({
           </div>
 
           {!!title && tabs?.length > 0 ? (
-            <div className="mt-0 ml-4 md:ml-6 lg:ml-8">
-              <div className="sm:hidden">
+            <div className="ml-4 md:ml-6 lg:ml-8">
+              <div className="sm:hidden mt-4">
                 <label htmlFor="current-tab" className="sr-only">
                   Select a tab
                 </label>
