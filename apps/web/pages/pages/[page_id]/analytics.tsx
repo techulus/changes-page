@@ -184,15 +184,17 @@ const StatsTable = ({ data = [], title, total = 5 }) => {
 };
 
 export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
-  const range = String(ctx.query.range);
-  const page_id = String(ctx.params?.page_id);
+  const page_id = ctx.params?.page_id;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
   const page = await getPage(supabase, page_id);
 
-  const rangeNum = Number(range) || 7;
+  const range = Number(ctx.query.range) || 7;
 
-  const date = new Date(Date.now() - rangeNum * 24 * 60 * 60 * 1000);
-  const prevDate = new Date(Date.now() - rangeNum * 2 * 24 * 60 * 60 * 1000);
+  const date = new Date(Date.now() - range * 24 * 60 * 60 * 1000);
+  const prevDate = new Date(Date.now() - range * 2 * 24 * 60 * 60 * 1000);
 
   console.log(`Fetching stats for page ${page_id} from ${date.toISOString()}`);
 
@@ -259,10 +261,10 @@ export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   ];
 
   // Get device type data by analyzing user agents
-  const deviceData = await getDeviceAnalytics(page_id, rangeNum);
+  const deviceData = await getDeviceAnalytics(page_id, range);
 
   // Get peak hours data
-  const peakHoursData = await getPeakHoursAnalytics(page_id, rangeNum);
+  const peakHoursData = await getPeakHoursAnalytics(page_id, range);
 
   const metrics = ["browsers", "os", "referrers"];
   const metricsData = await Promise.all(

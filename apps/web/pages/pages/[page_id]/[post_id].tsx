@@ -18,11 +18,19 @@ import { useUserData } from "../../../utils/useUser";
 export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const { page_id, post_id } = ctx.params;
 
-  const settings = await createOrRetrievePageSettings(String(page_id));
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
+
+  if (!post_id || Array.isArray(post_id)) {
+    return { notFound: true };
+  }
+
+  const settings = await createOrRetrievePageSettings(page_id);
   const { data: post } = await supabase
     .from("posts")
     .select("*")
-    .eq("id", post_id as string)
+    .eq("id", post_id)
     .single();
 
   return {

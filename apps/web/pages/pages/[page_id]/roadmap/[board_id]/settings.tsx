@@ -18,8 +18,16 @@ import { getPage } from "../../../../../utils/useSSR";
 import { useUserData } from "../../../../../utils/useUser";
 
 export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
-  const page_id = String(ctx.params?.page_id);
-  const board_id = String(ctx.params?.board_id);
+  const { page_id } = ctx.params;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
+
+  const { board_id } = ctx.params;
+  if (!board_id || Array.isArray(board_id)) {
+    return { notFound: true };
+  }
+
   const { tab = "board" } = ctx.query;
 
   const page = await getPage(supabase, page_id).catch((e) => {
@@ -33,7 +41,7 @@ export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
     };
   }
 
-  const settings = await createOrRetrievePageSettings(String(page_id));
+  const settings = await createOrRetrievePageSettings(page_id);
 
   // Fetch the specific roadmap board
   const { data: board, error: boardError } = await supabase

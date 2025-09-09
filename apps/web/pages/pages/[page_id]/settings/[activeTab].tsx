@@ -22,10 +22,13 @@ const IntegrationsSettings = dynamic(
 );
 
 export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
-  const page_id = String(ctx.params?.page_id);
+  const { page_id } = ctx.params;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
   const page = await getPage(supabase, page_id);
-  const settings = await createOrRetrievePageSettings(String(page_id));
+  const settings = await createOrRetrievePageSettings(page_id);
 
   return {
     props: {

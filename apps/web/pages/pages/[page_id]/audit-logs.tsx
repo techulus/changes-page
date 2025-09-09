@@ -16,9 +16,13 @@ import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { getPage } from "../../../utils/useSSR";
 
 export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
-  const page_id = String(ctx.params?.page_id);
+  const page_id = ctx.params?.page_id;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
   const page = await getPage(supabase, page_id);
+
   const { data: audit_logs } = await supabaseAdmin
     .from("page_audit_logs")
     .select("*, actor:actor_id(full_name)")

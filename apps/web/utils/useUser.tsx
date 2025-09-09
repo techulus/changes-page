@@ -1,5 +1,10 @@
 import { Database } from "@changes-page/supabase/types";
-import { Session, SupabaseClient, User } from "@supabase/supabase-js";
+import {
+  AuthError,
+  Session,
+  SupabaseClient,
+  User,
+} from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import posthog from "posthog-js";
 import {
@@ -19,9 +24,9 @@ const UserContext = createContext<{
   loading: boolean;
   session: Session | null;
   user: User | null;
-  billingDetails: IBillingInfo;
-  fetchBilling: () => void;
-  signOut: () => Promise<{ error: Error | null }>;
+  billingDetails: IBillingInfo | null;
+  fetchBilling: () => Promise<IBillingInfo | null>;
+  signOut: () => Promise<{ error: AuthError | null }>;
   supabase: SupabaseClient<Database>;
 }>({
   loading: true,
@@ -44,7 +49,9 @@ export const UserContextProvider = ({
   const [session, setSession] = useState<Session | null>(initialSession);
   const [user, setUser] = useState<User | null>(initialSession?.user ?? null);
   const [loading, setLoading] = useState(!initialSession);
-  const [billingDetails, setBillingDetails] = useState<IBillingInfo>(null);
+  const [billingDetails, setBillingDetails] = useState<IBillingInfo | null>(
+    null
+  );
 
   const router = useRouter();
 
