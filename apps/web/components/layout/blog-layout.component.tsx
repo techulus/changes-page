@@ -201,6 +201,7 @@ export default function BlogLayout({
             ) : null}
 
             <div className="blog-content-override prose dark:prose-invert prose-indigo mx-auto mt-6 max-w-[70ch]">
+              {/* @ts-ignore */}
               <ReactMarkdown
                 rehypePlugins={[
                   rehypeRaw,

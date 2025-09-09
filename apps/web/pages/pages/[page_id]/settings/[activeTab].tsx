@@ -10,7 +10,7 @@ import SocialLinksSettings from "../../../../components/page-settings/social-lin
 import StyleSettings from "../../../../components/page-settings/style";
 import { ROUTES } from "../../../../data/routes.data";
 import usePageSettings from "../../../../utils/hooks/usePageSettings";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { getPage } from "../../../../utils/useSSR";
 
@@ -21,22 +21,28 @@ const IntegrationsSettings = dynamic(
   }
 );
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id } = params;
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
+  const { page_id } = ctx.params;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
-  const page = await getPage(supabase, page_id);
-  const settings = await createOrRetrievePageSettings(String(page_id));
+  const page = await getPage(supabase, page_id).catch(() => null);
+  if (!page) {
+    return { notFound: true };
+  }
+
+  const settings = await createOrRetrievePageSettings(page_id);
 
   return {
     props: {
       page,
       settings,
       page_id,
-      activeTab: params.activeTab,
+      activeTab: ctx.params?.activeTab,
     },
   };
-}
+});
 
 export default function PageSettings({
   page,

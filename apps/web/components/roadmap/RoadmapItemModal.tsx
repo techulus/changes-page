@@ -43,9 +43,11 @@ export default function RoadmapItemModal({
   );
 
   return (
+    // @ts-ignore
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
         <Transition.Child
+          // @ts-ignore
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -60,6 +62,7 @@ export default function RoadmapItemModal({
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-0 text-center sm:items-center sm:p-4">
             <Transition.Child
+              // @ts-ignore
               as={Fragment}
               enter="ease-out duration-300"
               enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"

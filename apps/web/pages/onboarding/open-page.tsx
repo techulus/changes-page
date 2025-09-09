@@ -1,14 +1,14 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { SpinnerWithSpacing } from "@changes-page/ui";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { ROUTES } from "../../data/routes.data";
-import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../utils/supabase/withSupabase";
 
-export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext
-) => {
-  const { user } = await getSupabaseServerClient(ctx);
-
+export const getServerSideProps = withSupabase<{
+  redirect: {
+    permanent: boolean;
+    destination: string;
+  };
+}>(async (ctx, { user }) => {
   if (!user) {
     return {
       redirect: {
@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (
       destination: `${ROUTES.PAGES}/${pages[0].id}/${path ?? ""}`,
     },
   };
-};
+});
 
 function LoadingPage() {
   return <SpinnerWithSpacing />;

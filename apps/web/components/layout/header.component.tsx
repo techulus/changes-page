@@ -212,6 +212,7 @@ export default function HeaderComponent() {
                           </div>
                           <Transition
                             show={open}
+                            // @ts-ignore
                             as={Fragment}
                             enter="transition ease-out duration-100"
                             enterFrom="transform opacity-0 scale-95"

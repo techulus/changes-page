@@ -1,4 +1,4 @@
-import { IPost } from "@changes-page/supabase/types/page";
+import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -41,7 +41,7 @@ export default function usePagePosts(
       .range(0 + offset, PAGINATION_LIMIT - 1 + offset);
 
     if (status) {
-      query = query.eq("status", String(status));
+      query = query.eq("status", status as PostStatus);
     }
 
     if (pinnedPostId && !status) {

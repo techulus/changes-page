@@ -1,18 +1,18 @@
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useMemo, useState, type JSX } from "react";
+import { useState, type JSX } from "react";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
-import usePageSettings from "../../../../utils/hooks/usePageSettings";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
-import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
+import { withSupabase } from "../../../../utils/supabase/withSupabase";
 import { getPage } from "../../../../utils/useSSR";
 import { useUserData } from "../../../../utils/useUser";
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id } = params;
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
+  const page_id = ctx.params?.page_id;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -24,30 +24,19 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const settings = await createOrRetrievePageSettings(String(page_id));
-
   return {
     props: {
       page_id,
       page,
-      settings,
     },
   };
-}
+});
 
 export default function NewRoadmapBoard({
-  page,
   page_id,
-  settings: serverSettings,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const { supabase, user } = useUserData();
-  const { settings: clientSettings } = usePageSettings(page_id, false);
-
-  const settings = useMemo(
-    () => clientSettings ?? serverSettings,
-    [serverSettings, clientSettings]
-  );
+  const { supabase } = useUserData();
 
   const [formData, setFormData] = useState({
     title: "",

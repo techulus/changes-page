@@ -12,14 +12,17 @@ import { InferGetServerSidePropsType } from "next";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { getPage } from "../../../utils/useSSR";
 
-export async function getServerSideProps({ req, res, query }) {
-  const { page_id } = query;
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
+  const page_id = ctx.params?.page_id;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
   const page = await getPage(supabase, page_id);
+
   const { data: audit_logs } = await supabaseAdmin
     .from("page_audit_logs")
     .select("*, actor:actor_id(full_name)")
@@ -34,7 +37,7 @@ export async function getServerSideProps({ req, res, query }) {
       audit_logs: audit_logs ?? [],
     },
   };
-}
+});
 
 export default function PageAnalytics({
   page,

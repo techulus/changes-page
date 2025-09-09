@@ -1,11 +1,10 @@
 import { PostStatus } from "@changes-page/supabase/types/page";
-import { NextApiRequest, NextApiResponse } from "next";
 import { NewPostSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { createPost } from "../../../utils/useDatabase";
+import { withAuth } from "../../../utils/withAuth";
 
-const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
+const createNewPost = withAuth(async (req, res, { user, supabase }) => {
   if (req.method === "POST") {
     const {
       page_id,
@@ -23,8 +22,6 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       await apiRateLimiter(req, res);
-
-      const { user, supabase } = await getSupabaseServerClient({ req, res });
 
       const isValid = await NewPostSchema.isValid({
         page_id,
@@ -94,6 +91,6 @@ const createNewPost = async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader("Allow", "POST,PUT");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default createNewPost;

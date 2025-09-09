@@ -5,17 +5,21 @@ import { SecondaryButton } from "../../../../components/core/buttons.component";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
 import RoadmapBoard from "../../../../components/roadmap/RoadmapBoard";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { getPage } from "../../../../utils/useSSR";
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id, board_id } = params;
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
+  const { page_id } = ctx.params;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
-  const { supabase } = await getSupabaseServerClient({
-    req,
-    res,
-  });
+  const { board_id } = ctx.params;
+  if (!board_id || Array.isArray(board_id)) {
+    return { notFound: true };
+  }
+
   const page = await getPage(supabase, page_id).catch((e) => {
     console.error("Failed to get page", e);
     return null;
@@ -27,7 +31,7 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const settings = await createOrRetrievePageSettings(String(page_id));
+  const settings = await createOrRetrievePageSettings(page_id);
 
   const { data: board, error: boardError } = await supabase
     .from("roadmap_boards")
@@ -86,7 +90,7 @@ export async function getServerSideProps({ req, res, params }) {
       categories: categories || [],
     },
   };
-}
+});
 
 export default function RoadmapBoardDetails({
   page_id,

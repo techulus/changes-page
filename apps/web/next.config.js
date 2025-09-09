@@ -66,9 +66,6 @@ const moduleExports = {
       "cdn.sanity.io",
     ],
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   // PostHog rewrites for ingest and static assets
   async rewrites() {
     return [

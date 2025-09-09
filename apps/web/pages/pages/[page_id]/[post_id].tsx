@@ -11,19 +11,26 @@ import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
 import { NewPostSchema } from "../../../data/schema";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 import { useUserData } from "../../../utils/useUser";
 
-export async function getServerSideProps({ params, req, res }) {
-  const { page_id, post_id } = params;
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
+  const { page_id, post_id } = ctx.params;
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
-  const settings = await createOrRetrievePageSettings(String(page_id));
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
+
+  if (!post_id || Array.isArray(post_id)) {
+    return { notFound: true };
+  }
+
+  const settings = await createOrRetrievePageSettings(page_id);
   const { data: post } = await supabase
     .from("posts")
     .select("*")
-    .eq("id", post_id as string)
+    .eq("id", post_id)
     .single();
 
   return {
@@ -34,7 +41,7 @@ export async function getServerSideProps({ params, req, res }) {
       settings,
     },
   };
-}
+});
 
 export default function EditPost({
   page_id,
@@ -61,7 +68,7 @@ export default function EditPost({
       await supabase.from("posts").update(newPost).match({ id: post_id });
 
       await supabase.from("page_audit_logs").insert({
-        page_id: page_id,
+        page_id: String(page_id),
         actor_id: user.id,
         action: `Updated Post: ${newPost.title}`,
         changes: newPost,

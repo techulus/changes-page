@@ -1,7 +1,7 @@
 import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
 import { PlusIcon, UserGroupIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, type JSX } from "react";
@@ -14,12 +14,10 @@ import Page from "../../components/layout/page.component";
 import Changelog from "../../components/marketing/changelog";
 import { ROUTES } from "../../data/routes.data";
 import { getAppBaseURL } from "../../utils/helpers";
-import { getSupabaseServerClient } from "../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../utils/supabase/withSupabase";
 import { useUserData } from "../../utils/useUser";
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const { supabase } = await getSupabaseServerClient(ctx);
-
+export const getServerSideProps = withSupabase(async (_, { supabase }) => {
   const { data: pages, error } = await supabase
     .from("pages")
     .select(
@@ -41,7 +39,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       error,
     },
   };
-}
+});
 
 export default function Pages({
   pages,

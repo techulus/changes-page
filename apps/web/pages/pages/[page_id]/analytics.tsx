@@ -5,7 +5,7 @@ import Image from "next/image";
 import AuthLayout from "../../../components/layout/auth-layout.component";
 import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { getPageAnalytics } from "../../../utils/useDatabase";
 import { getPage } from "../../../utils/useSSR";
 
@@ -183,16 +183,18 @@ const StatsTable = ({ data = [], title, total = 5 }) => {
   );
 };
 
-export async function getServerSideProps({ req, res, query }) {
-  const { page_id, range } = query;
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
+  const page_id = ctx.params?.page_id;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
   const page = await getPage(supabase, page_id);
 
-  const rangeNum = Number(range) || 7;
+  const range = Number(ctx.query.range) || 7;
 
-  const date = new Date(Date.now() - rangeNum * 24 * 60 * 60 * 1000);
-  const prevDate = new Date(Date.now() - rangeNum * 2 * 24 * 60 * 60 * 1000);
+  const date = new Date(Date.now() - range * 24 * 60 * 60 * 1000);
+  const prevDate = new Date(Date.now() - range * 2 * 24 * 60 * 60 * 1000);
 
   console.log(`Fetching stats for page ${page_id} from ${date.toISOString()}`);
 
@@ -202,18 +204,21 @@ export async function getServerSideProps({ req, res, query }) {
     .eq("page_id", page_id)
     .gte("created_at", prevDate.toISOString());
 
-  const currentPeriodViews = allPageViews?.filter(
-    (view) => new Date(view.created_at) >= date
-  ) || [];
-  
-  const previousPeriodViews = allPageViews?.filter(
-    (view) => new Date(view.created_at) >= prevDate && new Date(view.created_at) < date
-  ) || [];
+  const currentPeriodViews =
+    allPageViews?.filter((view) => new Date(view.created_at) >= date) || [];
+
+  const previousPeriodViews =
+    allPageViews?.filter(
+      (view) =>
+        new Date(view.created_at) >= prevDate &&
+        new Date(view.created_at) < date
+    ) || [];
 
   const page_views = currentPeriodViews.length;
-  const visitors = new Set(currentPeriodViews.map(v => v.visitor_id)).size;
+  const visitors = new Set(currentPeriodViews.map((v) => v.visitor_id)).size;
   const prev_page_views = previousPeriodViews.length;
-  const prev_visitors = new Set(previousPeriodViews.map(v => v.visitor_id)).size;
+  const prev_visitors = new Set(previousPeriodViews.map((v) => v.visitor_id))
+    .size;
 
   // Calculate growth rates
   const pageViewsGrowth =
@@ -256,10 +261,10 @@ export async function getServerSideProps({ req, res, query }) {
   ];
 
   // Get device type data by analyzing user agents
-  const deviceData = await getDeviceAnalytics(page_id, rangeNum);
+  const deviceData = await getDeviceAnalytics(page_id, range);
 
   // Get peak hours data
-  const peakHoursData = await getPeakHoursAnalytics(page_id, rangeNum);
+  const peakHoursData = await getPeakHoursAnalytics(page_id, range);
 
   const metrics = ["browsers", "os", "referrers"];
   const metricsData = await Promise.all(
@@ -277,7 +282,7 @@ export async function getServerSideProps({ req, res, query }) {
       peakHoursData,
     },
   };
-}
+});
 
 export default function PageAnalytics({
   page,

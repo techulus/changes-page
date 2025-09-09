@@ -12,20 +12,22 @@ import Page from "../../../components/layout/page.component";
 import { ROUTES } from "../../../data/routes.data";
 import { NewPageSchema } from "../../../data/schema";
 import { httpPost } from "../../../utils/http";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { getPage } from "../../../utils/useSSR";
 import { useUserData } from "../../../utils/useUser";
 
-export async function getServerSideProps({ req, res, params }) {
-  const { page_id } = params;
+export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
+  const { page_id } = ctx.params;
+  if (!page_id || Array.isArray(page_id)) {
+    return { notFound: true };
+  }
 
-  const { supabase } = await getSupabaseServerClient({ req, res });
-  const page = await getPage(supabase, params.page_id as string);
+  const page = await getPage(supabase, page_id);
 
   return {
     props: { page_id, page },
   };
-}
+});
 
 export default function EditPage({
   page_id,

@@ -1,9 +1,9 @@
-import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import { promptSuggestTitle } from "../../utils/useAiAssistant";
-import { LightningBoltIcon } from "@heroicons/react/solid";
-import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { SpinnerWithSpacing } from "@changes-page/ui";
+import { convertMarkdownToPlainText } from "@changes-page/utils";
+import { Dialog, Transition } from "@headlessui/react";
+import { LightningBoltIcon } from "@heroicons/react/solid";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { promptSuggestTitle } from "../../utils/useAiAssistant";
 import { notifyError } from "../core/toast.component";
 
 export default function AiSuggestTitlePromptDialogComponent({
@@ -37,6 +37,7 @@ export default function AiSuggestTitlePromptDialogComponent({
   }, [open, content]);
 
   return (
+    // @ts-ignore
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
@@ -46,6 +47,7 @@ export default function AiSuggestTitlePromptDialogComponent({
       >
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
+            // @ts-ignore
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -65,6 +67,7 @@ export default function AiSuggestTitlePromptDialogComponent({
             &#8203;
           </span>
           <Transition.Child
+            // @ts-ignore
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"

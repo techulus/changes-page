@@ -310,6 +310,7 @@ export function Post({
             </span>
 
             <div className="prose dark:prose-invert text-gray-900 dark:text-gray-300 break-words">
+              {/* @ts-ignore */}
               <ReactMarkdown
                 rehypePlugins={[
                   rehypeRaw,

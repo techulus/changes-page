@@ -1,16 +1,16 @@
-import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import classNames from "classnames";
 import { PostStatus } from "@changes-page/supabase/types/page";
-import { MenuItem } from "../core/menu.component";
+import { Menu, Transition } from "@headlessui/react";
+import { LocationMarkerIcon as RemovePinIcon } from "@heroicons/react/outline";
 import {
   LocationMarkerIcon as AddPinIcon,
   ExternalLinkIcon,
   PencilAltIcon,
   TrashIcon,
 } from "@heroicons/react/solid";
-import { LocationMarkerIcon as RemovePinIcon } from "@heroicons/react/outline";
+import classNames from "classnames";
+import { Fragment } from "react";
 import { ROUTES } from "../../data/routes.data";
+import { MenuItem } from "../core/menu.component";
 
 const PostOptions = ({
   post,
@@ -23,6 +23,7 @@ const PostOptions = ({
   floating = false,
 }) => (
   <Transition
+    // @ts-ignore
     as={Fragment}
     enter="transition ease-out duration-100"
     enterFrom="transform opacity-0 scale-95"

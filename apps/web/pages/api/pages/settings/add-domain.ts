@@ -1,10 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { apiRateLimiter } from "../../../../utils/rate-limit";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
+import { withAuth } from "../../../../utils/withAuth";
 
-async function addDomain(req: NextApiRequest, res: NextApiResponse) {
+const addDomain = withAuth(async (req, res, { user }) => {
   await apiRateLimiter(req, res);
-  const { user } = await getSupabaseServerClient({ req, res });
 
   const { domain } = req.body;
 
@@ -49,6 +47,6 @@ async function addDomain(req: NextApiRequest, res: NextApiResponse) {
       success: true,
     });
   }
-}
+});
 
 export default addDomain;
