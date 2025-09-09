@@ -27,7 +27,11 @@ export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
     return { notFound: true };
   }
 
-  const page = await getPage(supabase, page_id);
+  const page = await getPage(supabase, page_id).catch(() => null);
+  if (!page) {
+    return { notFound: true };
+  }
+
   const settings = await createOrRetrievePageSettings(page_id);
 
   return {
