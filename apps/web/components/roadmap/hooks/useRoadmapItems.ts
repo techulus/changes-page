@@ -3,8 +3,8 @@ import {
   IRoadmapCategory,
 } from "@changes-page/supabase/types/page";
 import { useState } from "react";
-import { useUserData } from "../../../utils/useUser";
 import { createAuditLog } from "../../../utils/auditLog";
+import { useUserData } from "../../../utils/useUser";
 import {
   FormErrors,
   ItemForm,
@@ -67,12 +67,6 @@ export function useRoadmapItems({
     if (!confirm("Are you sure you want to delete this item?")) return;
 
     try {
-      // Get the item before deleting for audit log
-      const itemToDelete = setBoardItems((prev) => {
-        const item = prev.find((item) => item.id === itemId);
-        return prev;
-      });
-      
       const { error } = await supabase
         .from("roadmap_items")
         .delete()
@@ -152,9 +146,9 @@ export function useRoadmapItems({
             page_id: board.page_id,
             actor_id: user.id,
             action: `Updated Roadmap Item: ${data.title}`,
-            changes: { 
+            changes: {
               old: editingItem,
-              new: data
+              new: data,
             },
           });
         }
