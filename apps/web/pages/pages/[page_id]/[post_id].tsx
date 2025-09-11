@@ -14,6 +14,7 @@ import { NewPostSchema } from "../../../data/schema";
 import { withSupabase } from "../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../utils/useDatabase";
 import { useUserData } from "../../../utils/useUser";
+import { createAuditLog } from "../../../utils/auditLog";
 
 export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const { page_id, post_id } = ctx.params;
@@ -67,7 +68,7 @@ export default function EditPost({
 
       await supabase.from("posts").update(newPost).match({ id: post_id });
 
-      await supabase.from("page_audit_logs").insert({
+      await createAuditLog(supabase, {
         page_id: String(page_id),
         actor_id: user.id,
         action: `Updated Post: ${newPost.title}`,

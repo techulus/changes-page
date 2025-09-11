@@ -3,6 +3,7 @@ import {
   IRoadmapCategory,
 } from "@changes-page/supabase/types/page";
 import { useState } from "react";
+import { createAuditLog } from "../../../utils/auditLog";
 import { useUserData } from "../../../utils/useUser";
 import {
   FormErrors,
@@ -20,7 +21,7 @@ export function useRoadmapItems({
   categories: IRoadmapCategory[];
   itemsByColumn: ItemsByColumn;
 }) {
-  const { supabase } = useUserData();
+  const { supabase, user } = useUserData();
   const [showItemModal, setShowItemModal] = useState(false);
   const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null);
   const [editingItem, setEditingItem] =
@@ -66,6 +67,10 @@ export function useRoadmapItems({
     if (!confirm("Are you sure you want to delete this item?")) return;
 
     try {
+      const itemToDelete = Object.values(itemsByColumn)
+        .flat()
+        .find((it) => it.id === itemId);
+
       const { error } = await supabase
         .from("roadmap_items")
         .delete()
@@ -74,6 +79,15 @@ export function useRoadmapItems({
       if (error) throw error;
 
       setBoardItems((prev) => prev.filter((item) => item.id !== itemId));
+
+      if (itemToDelete && user) {
+        await createAuditLog(supabase, {
+          page_id: board.page_id,
+          actor_id: user.id,
+          action: `Deleted Roadmap Item: ${itemToDelete.title}`,
+          changes: { item_id: itemToDelete.id, item_title: itemToDelete.title },
+        });
+      }
     } catch (error) {
       console.error("Error deleting item:", error);
       alert("Failed to delete item");
@@ -127,6 +141,19 @@ export function useRoadmapItems({
         setBoardItems((prev) =>
           prev.map((item) => (item.id === editingItem.id ? data : item))
         );
+
+        // Create audit log for update
+        if (user) {
+          await createAuditLog(supabase, {
+            page_id: board.page_id,
+            actor_id: user.id,
+            action: `Updated Roadmap Item: ${data.title}`,
+            changes: {
+              old: editingItem,
+              new: data,
+            },
+          });
+        }
       } else {
         if (!selectedColumnId) return;
 
@@ -162,6 +189,16 @@ export function useRoadmapItems({
         if (error) throw error;
 
         setBoardItems((prev) => [...prev, data]);
+
+        // Create audit log for creation
+        if (user) {
+          await createAuditLog(supabase, {
+            page_id: board.page_id,
+            actor_id: user.id,
+            action: `Created Roadmap Item: ${data.title}`,
+            changes: { item: data },
+          });
+        }
       }
 
       setShowItemModal(false);

@@ -1,19 +1,23 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { useUserData } from "../../../utils/useUser";
+import { createAuditLog } from "../../../utils/auditLog";
 import {
   DragOverPosition,
   ItemsByColumn,
   RoadmapItemWithRelations,
 } from "../types";
+import { IRoadmapBoard } from "@changes-page/supabase/types/page";
 
 export function useRoadmapDragDrop({
   itemsByColumn,
   setBoardItems,
+  board,
 }: {
   itemsByColumn: ItemsByColumn;
   setBoardItems: Dispatch<SetStateAction<RoadmapItemWithRelations[]>>;
+  board: IRoadmapBoard;
 }) {
-  const { supabase } = useUserData();
+  const { supabase, user } = useUserData();
   const [draggedItem, setDraggedItem] =
     useState<RoadmapItemWithRelations | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
@@ -89,6 +93,26 @@ export function useRoadmapDragDrop({
           targetColumnId,
           currentDragOverPosition
         );
+      }
+
+      // Create audit log for item move
+      if (user && draggedItem) {
+        const action = sourceColumnId === targetColumnId ? "Reordered" : "Moved";
+        const description = sourceColumnId === targetColumnId 
+          ? `${action} item within column`
+          : `${action} item from column to column`;
+
+        await createAuditLog(supabase, {
+          page_id: board.page_id,
+          actor_id: user.id,
+          action: `Updated Roadmap Item: ${draggedItem.title}`,
+          changes: { 
+            action: description,
+            from_column: sourceColumnId,
+            to_column: targetColumnId,
+            item: draggedItem
+          },
+        });
       }
     } catch (error) {
       console.error("Error moving item:", error);

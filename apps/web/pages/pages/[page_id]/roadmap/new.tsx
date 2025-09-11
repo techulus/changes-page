@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useState, type JSX } from "react";
 import AuthLayout from "../../../../components/layout/auth-layout.component";
 import Page from "../../../../components/layout/page.component";
+import { createAuditLog } from "../../../../utils/auditLog";
 import { withSupabase } from "../../../../utils/supabase/withSupabase";
 import { getPage } from "../../../../utils/useSSR";
 import { useUserData } from "../../../../utils/useUser";
@@ -36,7 +37,7 @@ export default function NewRoadmapBoard({
   page_id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const { supabase } = useUserData();
+  const { supabase, user } = useUserData();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -135,6 +136,15 @@ export default function NewRoadmapBoard({
       await supabase.rpc("initialize_roadmap_categories", {
         board_id: board.id,
       });
+
+      if (user) {
+        await createAuditLog(supabase, {
+          page_id: page_id,
+          actor_id: user.id,
+          action: `Created Roadmap Board: ${board.title}`,
+          changes: { board },
+        });
+      }
 
       // Redirect to the roadmap page
       await router.push(`/pages/${page_id}/roadmap`);
