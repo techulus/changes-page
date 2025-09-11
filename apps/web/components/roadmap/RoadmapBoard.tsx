@@ -36,6 +36,7 @@ export default function RoadmapBoard({
   const dragDropHandlers = useRoadmapDragDrop({
     itemsByColumn,
     setBoardItems,
+    board,
   });
 
   const itemHandlers = useRoadmapItems({

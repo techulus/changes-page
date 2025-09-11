@@ -3,6 +3,7 @@ import { NewPostSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
 import { createPost } from "../../../utils/useDatabase";
 import { withAuth } from "../../../utils/withAuth";
+import { createAuditLog } from "../../../utils/auditLog";
 
 const createNewPost = withAuth(async (req, res, { user, supabase }) => {
   if (req.method === "POST") {
@@ -73,7 +74,7 @@ const createNewPost = withAuth(async (req, res, { user, supabase }) => {
 
       const post = await createPost(postPayload);
 
-      await supabase.from("page_audit_logs").insert({
+      await createAuditLog(supabase, {
         page_id,
         actor_id: user.id,
         action: `Created Post: ${post.title}`,

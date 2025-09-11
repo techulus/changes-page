@@ -16,6 +16,7 @@ import { withSupabase } from "../../../../../utils/supabase/withSupabase";
 import { createOrRetrievePageSettings } from "../../../../../utils/useDatabase";
 import { getPage } from "../../../../../utils/useSSR";
 import { useUserData } from "../../../../../utils/useUser";
+import { createAuditLog } from "../../../../../utils/auditLog";
 
 export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
   const { page_id } = ctx.params;
@@ -235,6 +236,27 @@ export default function BoardSettings({
         throw error;
       }
 
+      // Create audit log for board update
+      await createAuditLog(supabase, {
+        page_id: page_id,
+        actor_id: user.id,
+        action: `Updated Roadmap Board: ${boardForm.title}`,
+        changes: { 
+          old: {
+            title: board.title,
+            description: board.description,
+            slug: board.slug,
+            is_public: board.is_public
+          },
+          new: {
+            title: boardForm.title,
+            description: boardForm.description,
+            slug: boardForm.slug,
+            is_public: boardForm.is_public
+          }
+        },
+      });
+
       // Refresh the page to show updated settings
       window.location.reload();
     } catch (error) {
@@ -266,6 +288,14 @@ export default function BoardSettings({
       setBoardCategories([...boardCategories, data]);
       setNewCategory("");
       setNewCategoryColor("blue");
+
+      // Create audit log for category creation
+      await createAuditLog(supabase, {
+        page_id: page_id,
+        actor_id: user.id,
+        action: `Created Roadmap Category: ${data.name}`,
+        changes: { category: data },
+      });
     } catch (error) {
       console.error("Error adding category:", error);
       alert("Failed to add category");
@@ -286,13 +316,18 @@ export default function BoardSettings({
 
       if (error) throw error;
 
+      const oldCategory = boardCategories.find(cat => cat.id === categoryId);
+      const newCategoryData = {
+        name: categoryToEdit.trim(),
+        color: categoryColorToEdit,
+      };
+
       setBoardCategories((prev) =>
         prev.map((cat) =>
           cat.id === categoryId
             ? {
                 ...cat,
-                name: categoryToEdit.trim(),
-                color: categoryColorToEdit,
+                ...newCategoryData,
               }
             : cat
         )
@@ -300,6 +335,19 @@ export default function BoardSettings({
       setEditingCategory(null);
       setCategoryToEdit("");
       setCategoryColorToEdit("blue");
+
+      // Create audit log for category update
+      if (oldCategory) {
+        await createAuditLog(supabase, {
+          page_id: page_id,
+          actor_id: user.id,
+          action: `Updated Roadmap Category: ${newCategoryData.name}`,
+          changes: { 
+            old: oldCategory,
+            new: { ...oldCategory, ...newCategoryData }
+          },
+        });
+      }
     } catch (error) {
       console.error("Error updating category:", error);
       alert("Failed to update category");
@@ -332,7 +380,18 @@ export default function BoardSettings({
 
       if (error) throw error;
 
+      const deletedCategory = boardCategories.find(cat => cat.id === categoryId);
       setBoardCategories((prev) => prev.filter((cat) => cat.id !== categoryId));
+
+      // Create audit log for category deletion
+      if (deletedCategory) {
+        await createAuditLog(supabase, {
+          page_id: page_id,
+          actor_id: user.id,
+          action: `Deleted Roadmap Category: ${deletedCategory.name}`,
+          changes: { category: deletedCategory },
+        });
+      }
     } catch (error) {
       console.error("Error deleting category:", error);
       alert("Failed to delete category");
@@ -362,6 +421,14 @@ export default function BoardSettings({
 
       setBoardColumns([...boardColumns, data]);
       setNewColumn("");
+
+      // Create audit log for column creation
+      await createAuditLog(supabase, {
+        page_id: page_id,
+        actor_id: user.id,
+        action: `Created Roadmap Column: ${data.name}`,
+        changes: { column: data },
+      });
     } catch (error) {
       console.error("Error adding column:", error);
       alert("Failed to add column");
@@ -379,13 +446,29 @@ export default function BoardSettings({
 
       if (error) throw error;
 
+      const oldColumn = boardColumns.find(col => col.id === columnId);
+      const newColumnName = columnToEdit.trim();
+
       setBoardColumns((prev) =>
         prev.map((col) =>
-          col.id === columnId ? { ...col, name: columnToEdit.trim() } : col
+          col.id === columnId ? { ...col, name: newColumnName } : col
         )
       );
       setEditingColumn(null);
       setColumnToEdit("");
+
+      // Create audit log for column update
+      if (oldColumn) {
+        await createAuditLog(supabase, {
+          page_id: page_id,
+          actor_id: user.id,
+          action: `Updated Roadmap Column: ${newColumnName}`,
+          changes: { 
+            old: oldColumn,
+            new: { ...oldColumn, name: newColumnName }
+          },
+        });
+      }
     } catch (error) {
       console.error("Error updating column:", error);
       alert("Failed to update column");
@@ -420,7 +503,18 @@ export default function BoardSettings({
 
       if (error) throw error;
 
+      const deletedColumn = boardColumns.find(col => col.id === columnId);
       setBoardColumns((prev) => prev.filter((col) => col.id !== columnId));
+
+      // Create audit log for column deletion
+      if (deletedColumn) {
+        await createAuditLog(supabase, {
+          page_id: page_id,
+          actor_id: user.id,
+          action: `Deleted Roadmap Column: ${deletedColumn.name}`,
+          changes: { column: deletedColumn },
+        });
+      }
     } catch (error) {
       console.error("Error deleting column:", error);
       alert("Failed to delete column");
@@ -470,6 +564,17 @@ export default function BoardSettings({
       );
 
       await Promise.all(updatePromises);
+
+      // Create audit log for column reordering
+      await createAuditLog(supabase, {
+        page_id: page_id,
+        actor_id: user.id,
+        action: "Reordered Roadmap Columns",
+        changes: { 
+          old_order: boardColumns.map(col => ({ id: col.id, name: col.name, position: col.position })),
+          new_order: newColumns.map((col, index) => ({ id: col.id, name: col.name, position: index + 1 }))
+        },
+      });
 
       // Update local state
       setBoardColumns(

@@ -6,6 +6,7 @@ import {
 } from "../../components/core/toast.component";
 import { httpGet } from "../http";
 import { useUserData } from "../useUser";
+import { createAuditLog } from "../auditLog";
 
 export default function usePageSettings(pageId: string, prefetch = true) {
   const { supabase, user } = useUserData();
@@ -21,7 +22,7 @@ export default function usePageSettings(pageId: string, prefetch = true) {
         .match({ page_id: pageId })
         .select();
 
-      await supabase.from("page_audit_logs").insert({
+      await createAuditLog(supabase, {
         page_id: pageId,
         actor_id: user.id,
         action: "Updated Page Settings",
