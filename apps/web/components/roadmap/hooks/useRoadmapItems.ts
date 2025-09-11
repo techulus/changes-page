@@ -67,6 +67,10 @@ export function useRoadmapItems({
     if (!confirm("Are you sure you want to delete this item?")) return;
 
     try {
+      const itemToDelete = Object.values(itemsByColumn)
+        .flat()
+        .find((it) => it.id === itemId);
+
       const { error } = await supabase
         .from("roadmap_items")
         .delete()
@@ -74,18 +78,16 @@ export function useRoadmapItems({
 
       if (error) throw error;
 
-      setBoardItems((prev) => {
-        const deletedItem = prev.find((item) => item.id === itemId);
-        if (deletedItem && user) {
-          createAuditLog(supabase, {
-            page_id: board.page_id,
-            actor_id: user.id,
-            action: `Deleted Roadmap Item: ${deletedItem.title}`,
-            changes: { item: deletedItem },
-          });
-        }
-        return prev.filter((item) => item.id !== itemId);
-      });
+      setBoardItems((prev) => prev.filter((item) => item.id !== itemId));
+
+      if (itemToDelete && user) {
+        await createAuditLog(supabase, {
+          page_id: board.page_id,
+          actor_id: user.id,
+          action: `Deleted Roadmap Item: ${itemToDelete.title}`,
+          changes: { item_id: itemToDelete.id, item_title: itemToDelete.title },
+        });
+      }
     } catch (error) {
       console.error("Error deleting item:", error);
       alert("Failed to delete item");
