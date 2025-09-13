@@ -94,7 +94,11 @@ export default function Hero({ stars = null }: { stars?: string | null }) {
             </div>
           </div>
           <p className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl hero">
-            Changelogs made{" "}
+            Changelogs{" "}
+            <span className="underline decoration-blue-500 text-white">
+              and roadmaps
+            </span>{" "}
+            made{" "}
             <span className="underline decoration-yellow-500 text-white">
               smarter, faster,
             </span>{" "}
@@ -105,10 +109,10 @@ export default function Hero({ stars = null }: { stars?: string | null }) {
           </p>
 
           <p className="mt-6 text-lg leading-8 text-gray-300">
-            Our open-source platform empowers you to publish and manage your
-            changelog page. Notify users via email, encourage their feedback,
-            track analytics on page visitors, and enjoy a host of additional
-            features. Kickstart your page in just a few minutes!
+            Our open-source platform empowers you to publish changelog pages and
+            interactive roadmaps. Share what you&apos;ve built and what&apos;s coming next.
+            Notify users via email, gather feedback with voting, track analytics,
+            and enjoy a host of additional features. Kickstart your page in just a few minutes!
           </p>
 
           <div className="mt-10 flex items-center gap-x-6">
