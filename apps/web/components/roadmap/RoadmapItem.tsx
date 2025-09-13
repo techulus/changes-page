@@ -86,7 +86,7 @@ export default function RoadmapItem({
             </span>
           )}
         </div>
-        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-md px-2 py-1 hover:border-gray-300 dark:hover:border-gray-500 transition-colors">
           <svg className="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
