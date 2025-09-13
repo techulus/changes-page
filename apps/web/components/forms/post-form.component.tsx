@@ -204,6 +204,7 @@ export default function PostFormComponent({
 
                     <Transition
                       show={open}
+                      // @ts-ignore
                       as={Fragment}
                       leave="transition ease-in duration-100"
                       leaveFrom="opacity-100"
@@ -319,6 +320,7 @@ export default function PostFormComponent({
                 </Menu.Button>
 
                 <Transition
+                  // @ts-ignore
                   as={Fragment}
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
@@ -586,6 +588,7 @@ export default function PostFormComponent({
             <div className="relative bg-slate-50 dark:bg-slate-900">
               {!editNotes ? (
                 formik.values.notes ? (
+                  // @ts-ignore
                   <ReactMarkdown className="pt-4 mx-auto px-6 prose dark:prose-invert prose-indigo max-w-full">
                     {formik.values.notes}
                   </ReactMarkdown>

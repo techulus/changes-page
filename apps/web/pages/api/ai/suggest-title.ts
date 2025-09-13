@@ -1,18 +1,11 @@
-import { IErrorResponse } from "@changes-page/supabase/types/api";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { runWorkflow } from "../../../utils/manageprompt";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { withAuth } from "../../../utils/withAuth";
 
-const suggestTitle = async (
-  req: NextApiRequest,
-  res: NextApiResponse<string[] | IErrorResponse>
-) => {
+const suggestTitle = withAuth<string[]>(async (req, res) => {
   if (req.method === "POST") {
     const { content } = req.body;
 
     try {
-      await getSupabaseServerClient({ req, res });
-
       const result = await runWorkflow("wf_e1eb79b1dc017ca189506d799453caae", {
         content,
       });
@@ -30,6 +23,6 @@ const suggestTitle = async (
     res.setHeader("Allow", "POST");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default suggestTitle;

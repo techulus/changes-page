@@ -1,6 +1,6 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { IErrorResponse } from "@changes-page/supabase/types/api";
-import { IPost } from "@changes-page/supabase/types/page";
+import { IPost, PostStatus } from "@changes-page/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getPageUrl, getPostUrl } from "../../../../utils/hooks/usePageUrl";
 import {
@@ -40,7 +40,7 @@ export default async function handler(
       .from("posts")
       .select("id,title,content,tags,created_at")
       .eq("page_id", String(pageDetails.id))
-      .eq("status", String(status))
+      .eq("status", status as PostStatus)
       .order("created_at", { ascending: false })
       .range(offset, limit - 1 + offset);
 

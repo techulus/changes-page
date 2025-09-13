@@ -1,19 +1,12 @@
-import { IErrorResponse } from "@changes-page/supabase/types/api";
 import { IPageSettings } from "@changes-page/supabase/types/page";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getSupabaseServerClient } from "../../../../utils/supabase/supabase-admin";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
+import { withAuth } from "../../../../utils/withAuth";
 
-const getPageSettings = async (
-  req: NextApiRequest,
-  res: NextApiResponse<IPageSettings | IErrorResponse>
-) => {
+const getPageSettings = withAuth<IPageSettings>(async (req, res, { user }) => {
   if (req.method === "GET") {
     const { page_id } = req.query;
 
     try {
-      const { user } = await getSupabaseServerClient({ req, res });
-
       console.log("getPageSettings", user?.id);
 
       const data = await createOrRetrievePageSettings(String(page_id));
@@ -29,6 +22,6 @@ const getPageSettings = async (
     res.setHeader("Allow", "POST");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default getPageSettings;

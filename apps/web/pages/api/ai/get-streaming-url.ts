@@ -1,17 +1,11 @@
-import { IErrorResponse } from "@changes-page/supabase/types/api";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { createSignedStreamingUrl } from "../../../utils/manageprompt";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
+import { withAuth } from "../../../utils/withAuth";
 
-const expandConcept = async (
-  req: NextApiRequest,
-  res: NextApiResponse<{ url: string } | IErrorResponse>
-) => {
+const expandConcept = withAuth<{ url: string }>(async (req, res) => {
   if (req.method === "POST") {
     const { workflowId } = req.body;
-    try {
-      await getSupabaseServerClient({ req, res });
 
+    try {
       const url = await createSignedStreamingUrl(workflowId);
 
       return res.status(200).json({ url });
@@ -25,6 +19,6 @@ const expandConcept = async (
     res.setHeader("Allow", "POST");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default expandConcept;

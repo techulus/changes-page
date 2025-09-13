@@ -1,20 +1,13 @@
-import { IErrorResponse } from "@changes-page/supabase/types/api";
-import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { IBillingInfo } from "../../../data/user.interface";
-import { getSupabaseServerClient } from "../../../utils/supabase/supabase-admin";
 import { getUserById } from "../../../utils/useDatabase";
+import { withAuth } from "../../../utils/withAuth";
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const getBillingStatus = async (
-  req: NextApiRequest,
-  res: NextApiResponse<IBillingInfo | IErrorResponse>
-) => {
+const getBillingStatus = withAuth<IBillingInfo>(async (req, res, { user }) => {
   if (req.method === "GET") {
     try {
-      const { user } = await getSupabaseServerClient({ req, res });
-
       const {
         pro_gifted,
         stripe_customer_id,
@@ -143,6 +136,6 @@ const getBillingStatus = async (
     res.setHeader("Allow", "GET");
     res.status(405).end("Method Not Allowed");
   }
-};
+});
 
 export default getBillingStatus;

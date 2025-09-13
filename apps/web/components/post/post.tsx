@@ -23,6 +23,7 @@ import { notifyError } from "../core/toast.component";
 import ConfirmDeleteDialog from "../dialogs/confirm-delete-dialog.component";
 import PostOptions from "./post-options";
 import { PostStatusIcon } from "./post-status";
+import { createAuditLog } from "../../utils/auditLog";
 
 const ReactionsCounter = ({ aggregate }: { aggregate: IReactions }) => {
   return (
@@ -171,7 +172,7 @@ export function Post({
       try {
         await supabase.from("posts").delete().eq("id", post.id);
 
-        await supabase.from("page_audit_logs").insert({
+        await createAuditLog(supabase, {
           page_id: page.id,
           actor_id: user.id,
           action: "Deleted Post",
@@ -310,6 +311,7 @@ export function Post({
             </span>
 
             <div className="prose dark:prose-invert text-gray-900 dark:text-gray-300 break-words">
+              {/* @ts-ignore */}
               <ReactMarkdown
                 rehypePlugins={[
                   rehypeRaw,

@@ -22,7 +22,7 @@ export default function Page({
   containerClassName,
 }: {
   title: string;
-  subtitle?: string;
+  subtitle?: string | JSX.Element;
   buttons?: JSX.Element | JSX.Element[];
   menuItems?: JSX.Element | JSX.Element[];
   children?: JSX.Element | JSX.Element[];
@@ -61,7 +61,7 @@ export default function Page({
           className={classNames(
             "max-w-7xl mx-auto py-4 sm:py-2 px-4 sm:px-6 lg:px-8",
             !subtitle && "py-4 sm:py-4",
-            !!title && tabs.length > 0 && "relative sm:pb-0 lg:pb-2"
+            !!title && tabs.length > 0 && "relative sm:pb-0"
           )}
         >
           <div className="flex flex-row justify-between items-center sm:h-[100px]">
@@ -126,6 +126,7 @@ export default function Page({
                         </Menu.Button>
 
                         <Transition
+                          // @ts-ignore
                           as={Fragment}
                           enter="transition ease-out duration-200"
                           enterFrom="transform opacity-0 scale-95"
@@ -146,9 +147,9 @@ export default function Page({
               : false}
           </div>
 
-          {!!title && tabs?.length > 0 && (
-            <div className="mt-2 lg:absolute lg:right-8 lg:bottom-0 lg:pt-2">
-              <div className="sm:hidden">
+          {!!title && tabs?.length > 0 ? (
+            <div className="ml-4 md:ml-6 lg:ml-8">
+              <div className="sm:hidden mt-4">
                 <label htmlFor="current-tab" className="sr-only">
                   Select a tab
                 </label>
@@ -156,7 +157,7 @@ export default function Page({
                   id="current-tab"
                   name="current-tab"
                   className="block w-full rounded-md dark:bg-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-700 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  defaultValue={tabs.find((tab) => tab.current)?.name}
+                  defaultValue={tabs.find((tab) => tab.current)?.href}
                   onChange={(e) => router.push(e?.target?.value)}
                 >
                   {tabs.map((tab) => (
@@ -169,6 +170,7 @@ export default function Page({
               <div className="hidden sm:block">
                 <nav className="-mb-px flex space-x-8">
                   {tabs.map((tab) => (
+                    // @ts-ignore
                     <Link
                       key={tab.name}
                       href={tab.href}
@@ -186,7 +188,7 @@ export default function Page({
                 </nav>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </header>
 

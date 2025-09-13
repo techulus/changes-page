@@ -1,10 +1,10 @@
 import { Database } from "@changes-page/supabase/types";
-import { Session, SupabaseClient, User } from "@supabase/auth-helpers-nextjs";
 import {
-  useSession,
-  useSupabaseClient,
-  useUser,
-} from "@supabase/auth-helpers-react";
+  AuthError,
+  Session,
+  SupabaseClient,
+  User,
+} from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import posthog from "posthog-js";
 import {
@@ -16,17 +16,17 @@ import {
 } from "react";
 import { notifyError, notifyInfo } from "../components/core/toast.component";
 import { ROUTES } from "../data/routes.data";
-import { IBillingInfo, IUser } from "../data/user.interface";
+import { IBillingInfo } from "../data/user.interface";
 import { httpGet } from "../utils/http";
+import { createClient } from "./supabase/client";
 
 const UserContext = createContext<{
   loading: boolean;
   session: Session | null;
   user: User | null;
-  billingDetails: IBillingInfo;
-  fetchBilling: () => void;
-  fetchUser: () => Promise<IUser>;
-  signOut: () => Promise<{ error: Error | null }>;
+  billingDetails: IBillingInfo | null;
+  fetchBilling: () => Promise<IBillingInfo | null>;
+  signOut: () => Promise<{ error: AuthError | null }>;
   supabase: SupabaseClient<Database>;
 }>({
   loading: true,
@@ -34,25 +34,31 @@ const UserContext = createContext<{
   user: null,
   billingDetails: null,
   fetchBilling: () => null,
-  fetchUser: () => null,
   signOut: () => null,
   supabase: null,
 });
 
-export const UserContextProvider = (props: any) => {
-  const supabase = useSupabaseClient();
-  const session = useSession();
-  const user = useUser();
+export const UserContextProvider = ({
+  children,
+  initialSession = null,
+}: {
+  children: React.ReactNode;
+  initialSession?: Session | null;
+}) => {
+  const [supabase] = useState(() => createClient());
+  const [session, setSession] = useState<Session | null>(initialSession);
+  const [user, setUser] = useState<User | null>(initialSession?.user ?? null);
+  const [loading, setLoading] = useState(!initialSession);
+  const [billingDetails, setBillingDetails] = useState<IBillingInfo | null>(
+    null
+  );
 
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [billingDetails, setBillingDetails] = useState<IBillingInfo>(null);
 
   const fetchBilling = useCallback(async () => {
     return httpGet({ url: `/api/billing` })
       .then((billingDetails) => {
         setBillingDetails(billingDetails);
-
         return billingDetails;
       })
       .catch((error) => {
@@ -60,6 +66,43 @@ export const UserContextProvider = (props: any) => {
         notifyError("Failed to fetch billing information");
       });
   }, []);
+
+  const signOut = useCallback(async () => {
+    const { error } = await supabase.auth.signOut();
+
+    posthog.reset();
+    setBillingDetails(null);
+    await router.replace(ROUTES.HOME);
+
+    notifyInfo("Logout completed");
+
+    return { error };
+  }, [supabase, router]);
+
+  useEffect(() => {
+    // Get initial session
+    const getInitialSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    };
+
+    getInitialSession();
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   useEffect(() => {
     if (user) {
@@ -79,29 +122,20 @@ export const UserContextProvider = (props: any) => {
     loading,
     session,
     user,
-
     billingDetails,
     fetchBilling,
-
-    signOut: async () => {
-      await router.replace(ROUTES.HOME);
-      await supabase.auth.signOut();
-
-      setBillingDetails(null);
-
-      notifyInfo("Logout completed");
-    },
-
+    signOut,
     supabase,
   };
 
-  return <UserContext.Provider value={value} {...props} />;
+  // @ts-ignore
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
 export const useUserData = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error(`useUser must be used within a UserContextProvider.`);
+    throw new Error(`useUserData must be used within a UserContextProvider.`);
   }
   return context;
 };

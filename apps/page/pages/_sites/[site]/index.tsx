@@ -1,18 +1,18 @@
 import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
 import { Timeline } from "@changes-page/ui";
 import classNames from "classnames";
-import { useTheme } from "next-themes";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Footer from "../../../components/footer";
 import PageHeader from "../../../components/page-header";
 import Post from "../../../components/post";
 import SeoTags from "../../../components/seo-tags";
 import SubscribePrompt from "../../../components/subscribe-prompt";
+import { usePageTheme } from "../../../hooks/usePageTheme";
 import {
   BLACKLISTED_SLUGS,
   fetchPosts,
   fetchRenderData,
-  isSubscriptionActive,
+  PageRoadmap,
 } from "../../../lib/data";
 
 export default function Index({
@@ -20,20 +20,15 @@ export default function Index({
   page,
   postsCount,
   settings,
+  roadmaps,
 }: {
   page: IPage;
   settings: IPageSettings;
   posts: IPost[];
   postsCount: number;
+  roadmaps: PageRoadmap[];
 }) {
-  const { setTheme } = useTheme();
-
-  useEffect(() => {
-    if (settings?.color_scheme != "auto") {
-      setTheme(settings?.color_scheme);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings?.color_scheme]);
+  usePageTheme(settings?.color_scheme);
 
   const [posts, setPosts] = useState<IPost[]>(initialPosts);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
@@ -71,7 +66,7 @@ export default function Index({
       <SeoTags page={page} settings={settings} />
 
       <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <PageHeader page={page} settings={settings} />
+        <PageHeader page={page} settings={settings} roadmaps={roadmaps} />
 
         {(settings?.email_notifications || settings?.rss_notifications) && (
           <SubscribePrompt page={page} settings={settings} />
@@ -166,9 +161,9 @@ export async function getServerSideProps({
     };
   }
 
-  const { page, settings } = await fetchRenderData(site);
+  const { page, settings, roadmaps } = await fetchRenderData(site);
 
-  if (!page || !settings || !(await isSubscriptionActive(page?.user_id))) {
+  if (!page || !settings) {
     return {
       notFound: true,
     };
@@ -185,6 +180,7 @@ export async function getServerSideProps({
       posts,
       postsCount,
       settings,
+      roadmaps,
     },
   };
 }

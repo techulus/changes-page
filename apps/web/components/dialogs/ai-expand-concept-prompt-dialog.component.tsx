@@ -72,6 +72,7 @@ export default function AiExpandConceptPromptDialogComponent({
   }, [open, content]);
 
   return (
+    // @ts-ignore
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
@@ -81,6 +82,7 @@ export default function AiExpandConceptPromptDialogComponent({
       >
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
+            // @ts-ignore
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -100,6 +102,7 @@ export default function AiExpandConceptPromptDialogComponent({
             &#8203;
           </span>
           <Transition.Child
+            // @ts-ignore
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"

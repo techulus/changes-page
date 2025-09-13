@@ -1,8 +1,8 @@
+import { IPost } from "@changes-page/supabase/types/page";
 import { Transition } from "@headlessui/react";
+import { SpeakerphoneIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
-import { IPost } from "@changes-page/supabase/types/page";
-import { SpeakerphoneIcon } from "@heroicons/react/outline";
 
 type IPostWithUrl = IPost & { url: string };
 
@@ -44,6 +44,7 @@ export default function Changelog() {
     <>
       <Transition
         show
+        // @ts-ignore
         as={Fragment}
         enter="transform ease-out duration-300 transition"
         enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"

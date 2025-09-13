@@ -206,9 +206,7 @@ export const updateSubscriptionUsage = async (
   }
 };
 
-export const createOrRetrievePageSettings = async (
-  page_id: string
-) => {
+export const createOrRetrievePageSettings = async (page_id: string) => {
   const { data: pageSettings } = await supabaseAdmin
     .from("page_settings")
     .select("*")
@@ -218,10 +216,7 @@ export const createOrRetrievePageSettings = async (
   if (pageSettings) return pageSettings;
 
   const { data: newPageSettings, error: createPageSettingsError } =
-    await supabaseAdmin
-      .from("page_settings")
-      .insert([{ page_id }])
-      .select();
+    await supabaseAdmin.from("page_settings").insert([{ page_id }]).select();
 
   if (createPageSettingsError) throw createPageSettingsError;
 
@@ -311,6 +306,7 @@ export const reportEmailUsage = async (
     `Update email usage count for user: ${user_id} to ${count}`,
     idempotencyKey
   );
+
   try {
     await stripe.subscriptionItems.createUsageRecord(
       emailSubscriptionItem.id,
@@ -335,7 +331,7 @@ export const reportEmailUsage = async (
 export async function getPageAnalytics(
   page_id: string,
   metric: string,
-  range: string
+  range: number
 ) {
   let functionName:
     | "page_view_browsers"
@@ -357,10 +353,7 @@ export async function getPageAnalytics(
       break;
   }
 
-  // date {range} days ago
-  const date = new Date(
-    Date.now() - (Number(range) || 7) * 24 * 60 * 60 * 1000
-  );
+  const date = new Date(Date.now() - (range || 7) * 24 * 60 * 60 * 1000);
   console.log(
     `Fetching ${metric} for page ${page_id} for last ${range} days: ${date.toISOString()}`
   );
@@ -374,4 +367,3 @@ export async function getPageAnalytics(
 
   return data as unknown as IAnalyticsData[];
 }
-
