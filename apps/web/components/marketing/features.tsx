@@ -4,7 +4,6 @@ import {
   ChartBarIcon,
   CheckCircleIcon,
   CollectionIcon,
-  EyeOffIcon,
   HeartIcon,
   LightningBoltIcon,
   MailIcon,
@@ -65,12 +64,6 @@ export default function Features() {
         description:
           "Your page is available in plain text, JSON and markdown format letting you easily embed it anywhere.",
         icon: HeartIcon,
-      },
-      {
-        name: "Privacy",
-        description:
-          "You can create private changelog pages that are hidden from serach engines.",
-        icon: EyeOffIcon,
       },
       {
         name: "Wallet-friendly",

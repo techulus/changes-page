@@ -347,169 +347,185 @@ export default function RoadmapPage({
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <div className="relative">
+                <div className="relative w-full sm:w-auto">
+                  {/* Desktop Close Button */}
                   <button
                     type="button"
-                    className="absolute -top-4 -right-4 z-10 rounded-full bg-white dark:bg-gray-700 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-lg border border-gray-200 dark:border-gray-600"
+                    className="hidden sm:block absolute -top-4 -right-4 z-30 rounded-full bg-white dark:bg-gray-700 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-lg border border-gray-200 dark:border-gray-600"
                     onClick={closeItemModal}
                   >
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
-                  <Dialog.Panel className="w-full max-w-5xl sm:min-w-[880px] transform overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-8 text-left align-middle shadow-xl transition-all min-h-[50vh] sm:min-h-0">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
-                      {/* Column Divider */}
-                      <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2 z-10"></div>
 
-                      {/* Left side - Content */}
-                      <div className="lg:col-span-2 space-y-6">
-                        <h3 className="text-xl font-semibold leading-6 text-gray-900 dark:text-white">
-                          {selectedItem?.title}
-                        </h3>
-                        {selectedItem?.description && (
-                          <div>
-                            <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
-                              <ReactMarkdown
-                                rehypePlugins={[
-                                  rehypeRaw,
-                                  [
-                                    rehypeSanitize,
-                                    {
-                                      ...defaultSchema,
-                                      attributes: {
-                                        ...defaultSchema.attributes,
-                                        a: [
-                                          ...(defaultSchema.attributes?.a ||
-                                            []),
-                                          ["target"],
-                                          ["rel"],
-                                        ],
-                                        code: [
-                                          ...(defaultSchema.attributes?.code ||
-                                            []),
-                                          ["className"],
-                                        ],
-                                        span: [
-                                          ...(defaultSchema.attributes?.span ||
-                                            []),
-                                          ["className"],
-                                        ],
-                                      },
+                <Dialog.Panel className="w-full h-full sm:h-auto sm:max-w-5xl sm:min-w-[880px] transform overflow-hidden rounded-none sm:rounded-2xl bg-white dark:bg-gray-900 text-left align-middle shadow-xl transition-all flex flex-col sm:block">
+
+                  {/* Mobile Header with Close Button */}
+                  <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 sm:hidden">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
+                      {selectedItem?.title}
+                    </h3>
+                    <button
+                      type="button"
+                      className="rounded-full p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      onClick={closeItemModal}
+                    >
+                      <XIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative p-4 sm:p-8 overflow-y-auto flex-1 sm:h-auto">
+                    {/* Column Divider */}
+                    <div className="hidden lg:block absolute left-2/3 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800 transform -translate-x-1/2 z-10"></div>
+
+                    {/* Left side - Content */}
+                    <div className="lg:col-span-2 space-y-6">
+                      <h3 className="hidden sm:block text-xl font-semibold leading-6 text-gray-900 dark:text-white">
+                        {selectedItem?.title}
+                      </h3>
+                      {selectedItem?.description && (
+                        <div>
+                          <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
+                            <ReactMarkdown
+                              rehypePlugins={[
+                                rehypeRaw,
+                                [
+                                  rehypeSanitize,
+                                  {
+                                    ...defaultSchema,
+                                    attributes: {
+                                      ...defaultSchema.attributes,
+                                      a: [
+                                        ...(defaultSchema.attributes?.a || []),
+                                        ["target"],
+                                        ["rel"],
+                                      ],
+                                      code: [
+                                        ...(defaultSchema.attributes?.code ||
+                                          []),
+                                        ["className"],
+                                      ],
+                                      span: [
+                                        ...(defaultSchema.attributes?.span ||
+                                          []),
+                                        ["className"],
+                                      ],
                                     },
-                                  ],
-                                ]}
-                                remarkPlugins={[remarkGfm]}
-                              >
-                                {selectedItem.description}
-                              </ReactMarkdown>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Right side - Metadata */}
-                      <div className="lg:col-span-1 space-y-6">
-                        {/* Votes */}
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                            Votes
-                          </span>
-                          <button
-                            onClick={() =>
-                              selectedItem && handleVote(selectedItem.id)
-                            }
-                            disabled={
-                              !selectedItem || votingItems.has(selectedItem.id)
-                            }
-                            className={`flex items-center text-sm px-3 py-1.5 rounded-lg border transition-colors ${
-                              selectedItem && votes[selectedItem.id]?.voted
-                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-blue-300 dark:border-blue-700"
-                                : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                            } ${
-                              !selectedItem || votingItems.has(selectedItem.id)
-                                ? "opacity-50 cursor-not-allowed"
-                                : "cursor-pointer"
-                            }`}
-                          >
-                            <svg
-                              className="mr-1 h-4 w-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
+                                  },
+                                ],
+                              ]}
+                              remarkPlugins={[remarkGfm]}
                             >
-                              <path
-                                fillRule="evenodd"
-                                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span>
-                              {selectedItem
-                                ? votes[selectedItem.id]?.count ??
-                                  (selectedItem.vote_count || 0)
-                                : 0}
-                            </span>
-                          </button>
+                              {selectedItem.description}
+                            </ReactMarkdown>
+                          </div>
                         </div>
-
-                        {/* Status (Column) */}
-                        {selectedItem?.column_id && (
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                              Status
-                            </span>
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                              {columns.find(
-                                (col) => col.id === selectedItem.column_id
-                              )?.name || "Unknown"}
-                            </span>
-                          </div>
-                        )}
-
-                        {/* Category */}
-                        {selectedItem?.roadmap_categories && (
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                              Category
-                            </span>
-                            <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColorClasses(
-                                selectedItem.roadmap_categories.color || "blue"
-                              )}`}
-                            >
-                              {selectedItem.roadmap_categories.name}
-                            </span>
-                          </div>
-                        )}
-
-                        {/* Board */}
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                            Board
-                          </span>
-                          <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
-                            {board.title}
-                          </span>
-                        </div>
-
-                        {/* Created Date */}
-                        {selectedItem?.created_at && (
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                              Created
-                            </span>
-                            <span className="text-sm text-gray-900 dark:text-gray-100">
-                              {new Date(
-                                selectedItem.created_at
-                              ).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </span>
-                          </div>
-                        )}
-                      </div>
+                      )}
                     </div>
-                  </Dialog.Panel>
+
+                    {/* Right side - Metadata */}
+                    <div className="lg:col-span-1 space-y-6">
+                      {/* Votes */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                          Votes
+                        </span>
+                        <button
+                          onClick={() =>
+                            selectedItem && handleVote(selectedItem.id)
+                          }
+                          disabled={
+                            !selectedItem || votingItems.has(selectedItem.id)
+                          }
+                          className={`flex items-center text-sm px-3 py-1.5 rounded-lg border transition-colors ${
+                            selectedItem && votes[selectedItem.id]?.voted
+                              ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-blue-300 dark:border-blue-700"
+                              : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                          } ${
+                            !selectedItem || votingItems.has(selectedItem.id)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                        >
+                          <svg
+                            className="mr-1 h-4 w-4"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span>
+                            {selectedItem
+                              ? votes[selectedItem.id]?.count ??
+                                (selectedItem.vote_count || 0)
+                              : 0}
+                          </span>
+                        </button>
+                      </div>
+
+                      {/* Status (Column) */}
+                      {selectedItem?.column_id && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                            Status
+                          </span>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                            {columns.find(
+                              (col) => col.id === selectedItem.column_id
+                            )?.name || "Unknown"}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Category */}
+                      {selectedItem?.roadmap_categories && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                            Category
+                          </span>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getCategoryColorClasses(
+                              selectedItem.roadmap_categories.color || "blue"
+                            )}`}
+                          >
+                            {selectedItem.roadmap_categories.name}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Board */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                          Board
+                        </span>
+                        <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
+                          {board.title}
+                        </span>
+                      </div>
+
+                      {/* Created Date */}
+                      {selectedItem?.created_at && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                            Created
+                          </span>
+                          <span className="text-sm text-gray-900 dark:text-gray-100">
+                            {new Date(
+                              selectedItem.created_at
+                            ).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </Dialog.Panel>
                 </div>
               </Transition.Child>
             </div>
