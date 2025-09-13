@@ -3,6 +3,7 @@ import {
   CashIcon,
   ChartBarIcon,
   CheckCircleIcon,
+  CollectionIcon,
   EyeOffIcon,
   HeartIcon,
   LightningBoltIcon,
@@ -28,6 +29,12 @@ export default function Features() {
         description:
           "Our pages are server side rendered, making them fast and search engine friendly.",
         icon: LightningBoltIcon,
+      },
+      {
+        name: "Interactive Roadmaps",
+        description:
+          "Build public roadmaps with voting to engage your community and prioritize features together.",
+        icon: CollectionIcon,
       },
       {
         name: "Notifications",
@@ -96,6 +103,10 @@ export default function Features() {
             solution revolutionizing{" "}
             <span className="underline decoration-red-500 text-white">
               changelog
+            </span>{" "}
+            and{" "}
+            <span className="underline decoration-blue-500 text-white">
+              roadmap
             </span>{" "}
             management.
           </p>

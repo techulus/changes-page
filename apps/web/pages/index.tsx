@@ -18,11 +18,11 @@ export default function Index({ addons, unit_amount, stars }) {
     <div className="h-full dark:bg-gray-800">
       <Head>
         <title>
-          Changes.page - Simple Changelog for Product Teams
+          Changes.page - Changelog & Roadmap Platform for Product Teams
         </title>
         <meta
           name="description"
-          content="Create beautiful release notes and notify users about product updates. Track engagement with built-in analytics. Start your free trial today."
+          content="Create beautiful release notes and interactive roadmaps. Notify users about updates, gather feedback with voting, and track engagement with built-in analytics. Start your free trial today."
         />
         {/* FAQ Schema for SEO */}
         <script
@@ -110,6 +110,14 @@ export default function Index({ addons, unit_amount, stars }) {
                   acceptedAnswer: {
                     "@type": "Answer",
                     text: "Yes, we use a markdown editor for writing posts in your page.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Do you support roadmaps?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes, you can create interactive roadmap boards with voting functionality to engage your community and prioritize features together.",
                   },
                 },
               ],
@@ -201,7 +209,7 @@ export default function Index({ addons, unit_amount, stars }) {
                   Customize
                 </h3>
                 <p className="mt-2 text-gray-500 dark:text-gray-300 text-base text-center">
-                  Add your branding, customize the design, and connect integrations.
+                  Add your branding, create roadmap boards, and connect integrations.
                 </p>
               </div>
               {/* Connector */}
@@ -238,7 +246,7 @@ export default function Index({ addons, unit_amount, stars }) {
                   Publish & Notify
                 </h3>
                 <p className="mt-2 text-gray-500 dark:text-gray-300 text-base text-center">
-                  Share updates, notify users via email or RSS, and track
+                  Share updates and roadmap progress, notify users via email or RSS, and track
                   engagement with analytics.
                 </p>
               </div>
@@ -276,7 +284,7 @@ export default function Index({ addons, unit_amount, stars }) {
                   Product Managers
                 </h3>
                 <p className="text-gray-500 dark:text-gray-300 text-base">
-                  Announce releases, gather feedback, and drive adoption with
+                  Announce releases, share roadmaps with voting, gather feedback, and drive adoption with
                   every update.
                 </p>
               </div>
