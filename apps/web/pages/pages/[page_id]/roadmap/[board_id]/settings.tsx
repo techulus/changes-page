@@ -8,6 +8,7 @@ import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, type JSX } from "react";
+import ConfirmDeleteDialog from "../../../../../components/dialogs/confirm-delete-dialog.component";
 import SwitchComponent from "../../../../../components/forms/switch.component";
 import AuthLayout from "../../../../../components/layout/auth-layout.component";
 import Page from "../../../../../components/layout/page.component";
@@ -152,6 +153,10 @@ export default function BoardSettings({
   // Drag and drop state for columns
   const [draggedColumn, setDraggedColumn] = useState(null);
   const [dragOverIndex, setDragOverIndex] = useState(null);
+
+  // Delete board state
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeletingBoard, setIsDeletingBoard] = useState(false);
 
   const tabs = [
     {
@@ -303,7 +308,7 @@ export default function BoardSettings({
     }
   };
 
-  const handleUpdateCategory = async (categoryId) => {
+  const handleUpdateCategory = async (categoryId: string) => {
     if (!categoryToEdit.trim() || !isPageOwner) return;
 
     try {
@@ -355,7 +360,7 @@ export default function BoardSettings({
     }
   };
 
-  const handleDeleteCategory = async (categoryId) => {
+  const handleDeleteCategory = async (categoryId: string) => {
     // Check if category has items
     try {
       const { data: itemsWithCategory, error: checkError } = await supabase
@@ -438,7 +443,7 @@ export default function BoardSettings({
     }
   };
 
-  const handleUpdateColumn = async (columnId) => {
+  const handleUpdateColumn = async (columnId: string) => {
     if (!columnToEdit.trim() || !isPageOwner) return;
 
     try {
@@ -478,7 +483,7 @@ export default function BoardSettings({
     }
   };
 
-  const handleDeleteColumn = async (columnId) => {
+  const handleDeleteColumn = async (columnId: string) => {
     // Check if stage has items
     try {
       const { data: itemsInColumn, error: checkError } = await supabase
@@ -605,6 +610,38 @@ export default function BoardSettings({
   const handleColumnDragEnd = () => {
     setDraggedColumn(null);
     setDragOverIndex(null);
+  };
+
+  // Delete board function
+  const handleDeleteBoard = async () => {
+    if (!isPageOwner) return;
+
+    setIsDeletingBoard(true);
+    try {
+      const { error } = await supabase
+        .from("roadmap_boards")
+        .delete()
+        .eq("id", board.id)
+        .eq("page_id", page_id);
+
+      if (error) throw error;
+
+      // Create audit log for board deletion
+      await createAuditLog(supabase, {
+        page_id: page_id,
+        actor_id: user.id,
+        action: `Deleted Roadmap Board: ${board.title}`,
+        changes: { board: board },
+      });
+
+      // Redirect to roadmap list
+      router.push(`/pages/${page_id}/roadmap`);
+    } catch (error) {
+      console.error("Error deleting board:", error);
+      alert("Failed to delete board");
+      setIsDeletingBoard(false);
+    }
+    setShowDeleteDialog(false);
   };
 
   if (!page_id || !board || !isPageOwner) {
@@ -767,7 +804,15 @@ export default function BoardSettings({
                 />
               </div>
 
-              <div className="flex justify-end">
+              <div className="flex justify-between items-center">
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteDialog(true)}
+                  className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  <TrashIcon className="h-4 w-4 mr-2" />
+                  Delete Board
+                </button>
                 <button
                   type="submit"
                   disabled={isSavingBoard}
@@ -1044,6 +1089,17 @@ export default function BoardSettings({
           </div>
         )}
       </div>
+
+      {/* Delete Board Confirmation Dialog */}
+      <ConfirmDeleteDialog
+        itemName={board.title}
+        open={showDeleteDialog}
+        setOpen={setShowDeleteDialog}
+        highRiskAction={true}
+        riskVerificationText={board.title}
+        deleteCallback={handleDeleteBoard}
+        processing={isDeletingBoard}
+      />
     </Page>
   );
 }

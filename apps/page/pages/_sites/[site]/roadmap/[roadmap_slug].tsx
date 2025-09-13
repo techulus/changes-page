@@ -260,10 +260,10 @@ export default function RoadmapPage({
                                   handleVote(item.id);
                                 }}
                                 disabled={votingItems.has(item.id)}
-                                className={`flex items-center text-xs px-2 py-1 rounded transition-colors ${
+                                className={`flex items-center text-xs px-2 py-1 rounded border transition-colors ${
                                   votes[item.id]?.voted
-                                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                                    : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-blue-300 dark:border-blue-700"
+                                    : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                                 } ${
                                   votingItems.has(item.id)
                                     ? "opacity-50 cursor-not-allowed"
@@ -420,10 +420,10 @@ export default function RoadmapPage({
                             disabled={
                               !selectedItem || votingItems.has(selectedItem.id)
                             }
-                            className={`flex items-center text-sm px-3 py-1.5 rounded-lg transition-colors ${
+                            className={`flex items-center text-sm px-3 py-1.5 rounded-lg border transition-colors ${
                               selectedItem && votes[selectedItem.id]?.voted
-                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                                : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-blue-300 dark:border-blue-700"
+                                : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                             } ${
                               !selectedItem || votingItems.has(selectedItem.id)
                                 ? "opacity-50 cursor-not-allowed"
