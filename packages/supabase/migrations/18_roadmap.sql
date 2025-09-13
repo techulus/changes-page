@@ -5,7 +5,7 @@ create table roadmap_boards (
   title text not null,
   description text,
   slug text not null,
-  is_public boolean not null default true,
+  is_public boolean not null default false,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );

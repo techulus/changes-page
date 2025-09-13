@@ -306,6 +306,7 @@ export const reportEmailUsage = async (
     `Update email usage count for user: ${user_id} to ${count}`,
     idempotencyKey
   );
+
   try {
     await stripe.subscriptionItems.createUsageRecord(
       emailSubscriptionItem.id,

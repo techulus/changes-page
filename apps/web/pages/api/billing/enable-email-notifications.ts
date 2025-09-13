@@ -18,8 +18,12 @@ const enableEmailNotifications = withAuth<{ status: string }>(
           });
         }
 
-        const { stripe_subscription_id, stripe_subscription } =
+        const { stripe_subscription_id, stripe_subscription, pro_gifted } =
           await getUserById(user.id);
+
+        if (pro_gifted) {
+          return res.status(200).json({ status: "ok" });
+        }
 
         if (
           !stripe_subscription ||

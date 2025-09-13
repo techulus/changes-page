@@ -1,3 +1,4 @@
+import { GlobeIcon, LockClosedIcon } from "@heroicons/react/outline";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { type JSX } from "react";
@@ -107,9 +108,25 @@ export default function RoadmapBoardDetails({
     <>
       <Page
         title={board.title}
-        subtitle={`${board.is_public ? "Public" : "Private"} Roadmap • ${
-          board.description || "No description"
-        }`}
+        subtitle={
+          <div className="flex items-center gap-3">
+            {board.is_public ? (
+              <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2.5 py-1 rounded-full text-sm font-medium">
+                <GlobeIcon className="h-4 w-4" />
+                Public
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-2.5 py-1 rounded-full text-sm font-medium">
+                <LockClosedIcon className="h-4 w-4" />
+                Private
+              </div>
+            )}
+            <span className="text-gray-500 dark:text-gray-400">•</span>
+            <span className="text-gray-600 dark:text-gray-400">
+              {board.description || "No description"}
+            </span>
+          </div>
+        }
         showBackButton={true}
         backRoute={`/pages/${page_id}/roadmap`}
         containerClassName="lg:pb-0"

@@ -22,7 +22,7 @@ export default function Page({
   containerClassName,
 }: {
   title: string;
-  subtitle?: string;
+  subtitle?: string | JSX.Element;
   buttons?: JSX.Element | JSX.Element[];
   menuItems?: JSX.Element | JSX.Element[];
   children?: JSX.Element | JSX.Element[];

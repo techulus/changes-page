@@ -4,7 +4,6 @@ import {
   convertMarkdownToHtml,
   convertMarkdownToPlainText,
 } from "@changes-page/utils";
-import Stripe from "stripe";
 import { getPageUrl, getPostUrl } from "./hooks/usePageUrl";
 import inngestClient from "./inngest";
 import { getUserById } from "./useDatabase";
@@ -62,11 +61,7 @@ export const sendPostEmailToSubscribers = async (
   }
 
   const user = await getUserById(page.user_id);
-  if (
-    !user?.stripe_subscription ||
-    (user?.stripe_subscription as unknown as Stripe.Subscription)?.status ===
-      "canceled"
-  ) {
+  if (!user?.has_active_subscription) {
     console.log(
       "sendPostEmailToSubscribers: Account not subscribed to email notifications"
     );
