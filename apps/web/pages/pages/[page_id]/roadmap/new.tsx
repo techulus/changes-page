@@ -113,7 +113,7 @@ export default function NewRoadmapBoard({
           title: formData.title.trim(),
           description: formData.description.trim() || null,
           slug: formData.slug.trim(),
-          is_public: true,
+          is_public: false,
         })
         .select()
         .single();
