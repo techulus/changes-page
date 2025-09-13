@@ -111,32 +111,6 @@ alter table roadmap_votes add constraint unique_item_visitor unique (item_id, vi
 
 alter table roadmap_votes enable row level security;
 
--- Function to get vote count for roadmap items
-CREATE OR REPLACE FUNCTION roadmap_item_votes_count(itemid uuid)
-RETURNS bigint
-AS $$
-BEGIN
-  RETURN (
-    SELECT COUNT(*)
-    FROM roadmap_votes
-    WHERE item_id = itemid
-  );
-END;
-$$ LANGUAGE 'plpgsql';
-
--- Function to check if a visitor has voted for an item
-CREATE OR REPLACE FUNCTION roadmap_item_has_voted(itemid uuid, visitorid uuid)
-RETURNS boolean
-AS $$
-BEGIN
-  RETURN EXISTS (
-    SELECT 1
-    FROM roadmap_votes
-    WHERE item_id = itemid AND visitor_id = visitorid
-  );
-END;
-$$ LANGUAGE 'plpgsql';
-
 -- Function to initialize default columns for a roadmap board
 CREATE OR REPLACE FUNCTION initialize_roadmap_columns(board_id uuid)
 RETURNS void
