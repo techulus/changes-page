@@ -45,7 +45,7 @@ export default function RoadmapColumn({
 }: RoadmapColumnProps) {
   return (
     <div
-      className={`flex-shrink-0 w-80 flex flex-col transition-colors ${
+      className={`flex-shrink-0 snap-center w-[calc(100vw-3rem)] md:w-80 flex flex-col transition-colors ${
         dragOverColumn === column.id
           ? "bg-indigo-50 dark:bg-indigo-900/20 rounded-lg"
           : ""

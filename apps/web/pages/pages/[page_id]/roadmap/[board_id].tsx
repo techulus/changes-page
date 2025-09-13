@@ -121,10 +121,6 @@ export default function RoadmapBoardDetails({
                 Private
               </div>
             )}
-            <span className="text-gray-500 dark:text-gray-400">•</span>
-            <span className="text-gray-600 dark:text-gray-400">
-              {board.description || "No description"}
-            </span>
           </div>
         }
         showBackButton={true}
