@@ -621,7 +621,8 @@ export default function BoardSettings({
       const { error } = await supabase
         .from("roadmap_boards")
         .delete()
-        .eq("id", board.id);
+        .eq("id", board.id)
+        .eq("page_id", page_id);
 
       if (error) throw error;
 
