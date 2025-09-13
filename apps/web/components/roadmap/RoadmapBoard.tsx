@@ -47,10 +47,10 @@ export default function RoadmapBoard({
 
   return (
     <>
-      <div className="flex-1 overflow-x-auto overflow-y-hidden">
-        <div className="flex justify-center">
+      <div className="overflow-x-auto snap-x snap-mandatory md:overflow-x-auto h-full">
+        <div className="flex md:justify-center h-full">
           <div
-            className="flex space-x-6 pb-6 h-full"
+            className="flex space-x-4 md:space-x-6 pb-6 px-4 md:px-0 h-full"
             style={{ minHeight: "calc(100vh - 300px)" }}
           >
             {columns.map((column) => (

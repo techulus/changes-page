@@ -50,7 +50,7 @@ export default function RoadmapItem({
             )}
           </h4>
         </div>
-        <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+        <div className="flex space-x-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity ml-2">
           <button
             onClick={(e) => {
               e.stopPropagation();
