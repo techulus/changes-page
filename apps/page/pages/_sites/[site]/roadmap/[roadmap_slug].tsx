@@ -347,7 +347,7 @@ export default function RoadmapPage({
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <div className="relative">
+                <div className="relative w-full sm:w-auto">
                   {/* Desktop Close Button */}
                   <button
                     type="button"
