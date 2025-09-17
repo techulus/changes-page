@@ -22,6 +22,10 @@ const navigation = {
   ],
   company: [
     {
+      name: "Developers care about changelogs",
+      href: "/developers-care-about-changelog",
+    },
+    {
       name: "ChangeCraftAI",
       href: "/free-tools/ai-changelog-generator",
     },
