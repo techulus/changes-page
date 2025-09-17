@@ -77,7 +77,7 @@ export default function DevelopersCareAboutChangelog() {
                 <span className="underline decoration-yellow-500 text-white">Changelogs</span>
               </h1>
               <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Well-crafted changelogs aren't just documentation—they're a bridge of trust between you and the developers who depend on your software.
+                Well-crafted changelogs aren&apos;t just documentation—they&apos;re a bridge of trust between you and the developers who depend on your software.
                 Learn why they matter and how to create ones that developers actually love.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -106,7 +106,7 @@ export default function DevelopersCareAboutChangelog() {
                 Why Developers Actually Care About Changelogs
               </h2>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                For developers, changelogs aren't just nice-to-have documentation. They're essential tools for making informed decisions about updates, debugging issues, and planning integrations.
+                For developers, changelogs aren&apos;t just nice-to-have documentation. They&apos;re essential tools for making informed decisions about updates, debugging issues, and planning integrations.
               </p>
             </div>
 
@@ -173,7 +173,7 @@ export default function DevelopersCareAboutChangelog() {
                 What Developers Want in Changelogs
               </h2>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                Not all changelogs are created equal. Here's what makes a changelog truly valuable for developers.
+                Not all changelogs are created equal. Here&apos;s what makes a changelog truly valuable for developers.
               </p>
             </div>
 
@@ -272,7 +272,7 @@ export default function DevelopersCareAboutChangelog() {
                       Consistent Format
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      Use a consistent structure and format that's easy to scan and parse.
+                      Use a consistent structure and format that&apos;s easy to scan and parse.
                     </p>
                   </div>
                 </div>
@@ -311,7 +311,7 @@ export default function DevelopersCareAboutChangelog() {
                   Reduced Support
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Clear changelogs reduce support tickets by answering questions before they're asked.
+                  Clear changelogs reduce support tickets by answering questions before they&apos;re asked.
                 </p>
               </div>
 
@@ -323,7 +323,7 @@ export default function DevelopersCareAboutChangelog() {
                   Faster Updates
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Developers update more confidently when they understand what's changing.
+                  Developers update more confidently when they understand what&apos;s changing.
                 </p>
               </div>
             </div>
