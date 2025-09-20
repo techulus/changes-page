@@ -30,6 +30,7 @@
     "@types/validator": "^13.15.3",
     "@vercel/og": "^0.0.20",
     "canvas-confetti": "^1.9.3",
+    "capture-node": "^2.2.0",
     "chrono-node": "^2.7.6",
     "classnames": "^2.3.1",
     "easymde": "^2.18.0",
