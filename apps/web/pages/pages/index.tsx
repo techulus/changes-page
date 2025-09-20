@@ -35,11 +35,13 @@ export const getServerSideProps = withSupabase(async (_, { supabase }) => {
     .order("updated_at", { ascending: false });
 
   const screenshots = pages.map((page) =>
-    getPageScreenshotUrl(
-      page.page_settings?.custom_domain
-        ? `https://${page.page_settings.custom_domain}`
-        : `https://${page.url_slug}.changes.page`
-    )
+    page
+      ? getPageScreenshotUrl(
+          page.page_settings?.custom_domain
+            ? `https://${page.page_settings.custom_domain}`
+            : `https://${page.url_slug}.changes.page`
+        )
+      : null
   );
 
   return {
@@ -125,14 +127,16 @@ export default function Pages({
                   >
                     <div className="flex items-center justify-between p-6">
                       <div className="flex items-center gap-4">
-                        <div className="flex-shrink-0 hidden sm:block">
-                          <img
-                            className="w-48 h-18 object-cover rounded-md border border-gray-200 dark:border-gray-700"
-                            src={screenshots[idx]}
-                            alt={`Screenshot of ${page.title}`}
-                            loading="lazy"
-                          />
-                        </div>
+                        {screenshots[idx] ? (
+                          <div className="flex-shrink-0 hidden sm:block">
+                            <img
+                              className="w-48 h-18 object-cover rounded-md border border-gray-200 dark:border-gray-700"
+                              src={screenshots[idx]}
+                              alt={`Screenshot of ${page.title}`}
+                              loading="lazy"
+                            />
+                          </div>
+                        ) : null}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-2">
                             <span
