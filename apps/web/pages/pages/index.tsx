@@ -130,7 +130,7 @@ export default function Pages({
                         {screenshots[idx] ? (
                           <div className="flex-shrink-0 hidden sm:block">
                             <img
-                              className="w-48 h-18 object-cover rounded-md border border-gray-200 dark:border-gray-700"
+                              className="w-40 h-28 object-cover rounded-md border border-gray-200 dark:border-gray-700"
                               src={screenshots[idx]}
                               alt={`Screenshot of ${page.title}`}
                               loading="lazy"
