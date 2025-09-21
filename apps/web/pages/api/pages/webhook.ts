@@ -44,8 +44,6 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
             path: `${user_id}/${page.id}`,
           },
         });
-
-        return res.status(200).json({ ok: true });
       }
 
       return res.status(200).json({ ok: true });
