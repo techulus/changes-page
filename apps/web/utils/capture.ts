@@ -9,6 +9,5 @@ export function getPageScreenshotUrl(url: string) {
   return capture.buildImageUrl(url, {
     vw: 1280,
     vh: 640,
-    scaleFactor: 1.5,
   });
 }

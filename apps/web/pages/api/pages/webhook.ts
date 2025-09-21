@@ -1,6 +1,8 @@
 import { IPage } from "@changes-page/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
+import { DELETE_IMAGES_JOB_EVENT } from "../../../inngest/jobs/delete-images";
+import inngestClient from "../../../utils/inngest";
 import {
   createOrRetrievePageSettings,
   updateSubscriptionUsage,
@@ -32,6 +34,16 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
           "Trigger databaseWebhook [Page]: Revalidation failed, failed to get page settings, maybe page is deleted?:",
           err
         );
+      }
+
+      if (type === "DELETE") {
+        console.log("Trigger databaseWebhook [Page]: Deleting images");
+        await inngestClient.send({
+          name: DELETE_IMAGES_JOB_EVENT,
+          data: {
+            path: `${user_id}/${page.id}`,
+          },
+        });
       }
 
       return res.status(200).json({ ok: true });
