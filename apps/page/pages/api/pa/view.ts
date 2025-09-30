@@ -6,6 +6,7 @@ import {
   translateHostToPageIdentifier,
 } from "../../../lib/data";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { getVisitorId, setLegacyVisitorCookie } from "../../../lib/visitor-auth";
 
 async function pageAnalyticsView(
   req: NextApiRequest,
@@ -20,14 +21,11 @@ async function pageAnalyticsView(
   const { domain, page: url_slug } = translateHostToPageIdentifier(hostname);
 
   const { page_path, referrer } = req.body;
-  let { cp_pa_vid: visitor_id } = req.cookies;
 
-  if (!visitor_id) {
-    visitor_id = v4();
-    res.setHeader(
-      "Set-Cookie",
-      `cp_pa_vid=${visitor_id}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=31536000`
-    );
+  const visitor_id = await getVisitorId(req);
+
+  if (!req.cookies.cp_visitor_token && !req.cookies.cp_pa_vid) {
+    setLegacyVisitorCookie(res, visitor_id);
   }
 
   try {

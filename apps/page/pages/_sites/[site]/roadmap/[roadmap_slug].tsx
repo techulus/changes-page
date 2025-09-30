@@ -15,7 +15,9 @@ import remarkGfm from "remark-gfm";
 import Footer from "../../../../components/footer";
 import PageHeader from "../../../../components/page-header";
 import SeoTags from "../../../../components/seo-tags";
+import VisitorAuthModal from "../../../../components/visitor-auth-modal";
 import { usePageTheme } from "../../../../hooks/usePageTheme";
+import { useVisitorAuth } from "../../../../hooks/useVisitorAuth";
 import {
   BLACKLISTED_SLUGS,
   fetchRenderData,
@@ -47,8 +49,10 @@ export default function RoadmapPage({
 }) {
   usePageTheme(settings?.color_scheme);
 
+  const { visitor, isLoading: isAuthLoading } = useVisitorAuth();
   const [selectedItem, setSelectedItem] = useState<RoadmapItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [votes, setVotes] = useState<
     Record<string, { count: number; voted: boolean }>
   >({});
@@ -75,6 +79,11 @@ export default function RoadmapPage({
   };
 
   const handleVote = async (itemId: string) => {
+    if (!visitor) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     if (votingItems.has(itemId)) return;
 
     setVotingItems((prev) => new Set(prev).add(itemId));
@@ -532,6 +541,11 @@ export default function RoadmapPage({
           </div>
         </Dialog>
       </Transition>
+
+      <VisitorAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
     </>
   );
 }

@@ -1,6 +1,6 @@
+import { IPageSettings } from "@changes-page/supabase/types/page";
 import Image from "next/image";
 import { useEffect } from "react";
-import { IPageSettings } from "@changes-page/supabase/types/page";
 import appStoreBadgeLight from "../public/badges/App_Store_Badge_US-UK_RGB_blk.svg";
 import appStoreBadgeDark from "../public/badges/App_Store_Badge_US-UK_RGB_wht.svg";
 import googlePlayBadge from "../public/badges/google-play-badge.png";
@@ -14,6 +14,7 @@ import {
   TwitterIcon,
   YouTubeIcon,
 } from "./social-icons.component";
+import VisitorStatus from "./visitor-status";
 
 export default function Footer({ settings }: { settings: IPageSettings }) {
   useEffect(() => {
@@ -25,8 +26,12 @@ export default function Footer({ settings }: { settings: IPageSettings }) {
 
   return (
     <footer>
+      <div className="pt-4 py-2 flex justify-center space-x-6">
+        <VisitorStatus />
+      </div>
+
       {(settings?.app_store_url || settings?.play_store_url) && (
-        <p className="pt-8 py-4 flex justify-center space-x-6">
+        <p className="pt-4 py-4 flex justify-center space-x-6">
           {settings?.app_store_url ? (
             <a
               target="_blank"

@@ -13,8 +13,7 @@ export const httpPost = async ({
 
   const payload = await res.json();
 
-  if (res.status >= 400 || !payload.ok) {
-    // throw error with response body
+  if (res.status >= 400 || (!payload.ok && !payload.success)) {
     throw new Error(payload.message);
   }
 

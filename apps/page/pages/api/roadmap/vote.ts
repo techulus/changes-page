@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { getVisitorId, setLegacyVisitorCookie, getAuthenticatedVisitor } from "../../../lib/visitor-auth";
 
 export default async function voteOnRoadmapItem(
   req: NextApiRequest,
@@ -16,18 +17,15 @@ export default async function voteOnRoadmapItem(
     return res.status(400).json({ ok: false, error: "Missing item_id" });
   }
 
-  let { cp_pa_vid: visitor_id } = req.cookies;
+  const visitor_id = await getVisitorId(req);
 
-  if (!visitor_id) {
-    visitor_id = v4();
-    res.setHeader(
-      "Set-Cookie",
-      `cp_pa_vid=${visitor_id}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=31536000`
-    );
+  const authenticatedVisitor = await getAuthenticatedVisitor(req);
+
+  if (!req.cookies.cp_visitor_token && !req.cookies.cp_pa_vid) {
+    setLegacyVisitorCookie(res, visitor_id);
   }
 
   try {
-    // Ensure item exists and belongs to a public board
     const { data: itemCheck, error: itemCheckError } = await supabaseAdmin
       .from("roadmap_items")
       .select("id, board_id, roadmap_boards!inner(is_public)")

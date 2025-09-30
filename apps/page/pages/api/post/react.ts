@@ -1,20 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { getVisitorId, setLegacyVisitorCookie } from "../../../lib/visitor-auth";
 
 export default async function reactToPost(
   req: NextApiRequest,
   res: NextApiResponse<{ ok: boolean }>
 ) {
   const { post_id, reaction } = req.body;
-  let { cp_pa_vid: visitor_id } = req.cookies;
 
-  if (!visitor_id) {
-    visitor_id = v4();
-    res.setHeader(
-      "Set-Cookie",
-      `cp_pa_vid=${visitor_id}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=31536000`
-    );
+  const visitor_id = await getVisitorId(req);
+
+  if (!req.cookies.cp_visitor_token && !req.cookies.cp_pa_vid) {
+    setLegacyVisitorCookie(res, visitor_id);
   }
 
   try {

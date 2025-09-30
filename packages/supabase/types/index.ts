@@ -242,6 +242,36 @@ export type Database = {
           },
         ]
       }
+      page_visitors: {
+        Row: {
+          created_at: string
+          email: string
+          email_verified: boolean
+          id: string
+          updated_at: string
+          verification_expires_at: string | null
+          verification_token: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          email_verified?: boolean
+          id?: string
+          updated_at?: string
+          verification_expires_at?: string | null
+          verification_token?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          email_verified?: boolean
+          id?: string
+          updated_at?: string
+          verification_expires_at?: string | null
+          verification_token?: string | null
+        }
+        Relationships: []
+      }
       pages: {
         Row: {
           created_at: string
@@ -813,14 +843,6 @@ export type Database = {
           thumbs_down_count: number
           thumbs_up_count: number
         }[]
-      }
-      roadmap_item_has_voted: {
-        Args: { itemid: string; visitorid: string }
-        Returns: boolean
-      }
-      roadmap_item_votes_count: {
-        Args: { itemid: string }
-        Returns: number
       }
     }
     Enums: {
