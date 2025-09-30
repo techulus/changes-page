@@ -1,4 +1,11 @@
-import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface Visitor {
   id: string;
@@ -10,9 +17,7 @@ interface UseVisitorAuthReturn {
   visitor: Visitor | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: () => void;
   logout: () => Promise<void>;
-  refetch: () => Promise<void>;
 }
 
 const VisitorAuthContext = createContext<UseVisitorAuthReturn | null>(null);
@@ -62,28 +67,15 @@ export function VisitorAuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = useCallback(() => {
-    // This would trigger opening the auth modal
-    // Implementation depends on how you want to handle the modal state
-  }, []);
-
   useEffect(() => {
     fetchVisitor();
-  }, [fetchVisitor]);
-
-  const refetch = useCallback(async () => {
-    setHasFetched(false);
-    setIsLoading(true);
-    await fetchVisitor();
   }, [fetchVisitor]);
 
   const value = {
     visitor,
     isLoading,
     isAuthenticated: !!visitor,
-    login,
     logout,
-    refetch,
   };
 
   return (

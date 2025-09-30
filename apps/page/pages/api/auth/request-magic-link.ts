@@ -76,11 +76,7 @@ export default async function requestMagicLink(
     const decision = await aj.protect(req, { email });
 
     if (decision.isDenied()) {
-      console.log(
-        "auth/request-magic-link: [Arcjet Block]",
-        email,
-        decision.reason
-      );
+      console.log("auth/request-magic-link: [Arcjet Block]", decision.reason);
       return res.status(400).json({
         success: false,
         message: "Please provide a valid email address",

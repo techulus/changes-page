@@ -28,13 +28,13 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
     if (page_id) {
       const { data: page } = await supabaseAdmin
         .from("pages")
-        .select("title, logo_url")
+        .select("title, page_settings(page_logo)")
         .eq("id", page_id)
         .single();
 
       if (page) {
         pageName = page.title;
-        pageLogoUrl = page.logo_url;
+        pageLogoUrl = page.page_settings?.page_logo || null;
       }
     }
 

@@ -3,6 +3,10 @@ import { SignJWT, jwtVerify } from "jose";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { randomBytes, randomUUID } from "node:crypto";
 
+if (!process.env.VISITOR_JWT_SECRET) {
+  throw new Error("VISITOR_JWT_SECRET environment variable is required");
+}
+
 const JWT_SECRET = new TextEncoder().encode(process.env.VISITOR_JWT_SECRET);
 
 const JWT_COOKIE_NAME = "cp_visitor_token";
@@ -114,13 +118,11 @@ export async function getAuthenticatedVisitor(
   req: NextApiRequest
 ): Promise<AuthenticatedVisitor | null> {
   const token = req.cookies[JWT_COOKIE_NAME];
-
   if (!token) {
     return null;
   }
 
   const payload = await verifyVisitorJWT(token);
-
   if (!payload) {
     return null;
   }

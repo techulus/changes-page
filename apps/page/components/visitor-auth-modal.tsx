@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
+import { useState } from "react";
 import { httpPost } from "../utils/http";
 
 interface VisitorAuthModalProps {
@@ -33,7 +33,11 @@ export default function VisitorAuthModal({
         sessionStorage.setItem("auth_redirect", window.location.href);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +86,7 @@ export default function VisitorAuthModal({
                 </svg>
               </div>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
-                We've sent a magic link to <strong>{email}</strong>
+                We have sent a magic link to <strong>{email}</strong>
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Click the link in your email to complete your sign-in. The link
@@ -126,7 +130,7 @@ export default function VisitorAuthModal({
               </button>
 
               <p className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
-                We'll send you a secure link to sign in without a password.
+                We will send you a secure link to sign in without a password.
               </p>
             </form>
           )}

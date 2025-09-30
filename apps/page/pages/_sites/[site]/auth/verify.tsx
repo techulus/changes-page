@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { httpPost } from "../../../../utils/http";
 
 export default function VerifyMagicLink() {
   const router = useRouter();
   const { token } = router.query;
-  const [status, setStatus] = useState<"loading" | "verifying" | "success" | "error">("loading");
+  const [status, setStatus] = useState<
+    "loading" | "verifying" | "success" | "error"
+  >("loading");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // Wait for router to be ready
     if (!router.isReady) return;
 
     if (!token || typeof token !== "string") {
@@ -24,15 +26,11 @@ export default function VerifyMagicLink() {
 
   const verifyToken = async (verificationToken: string) => {
     try {
-      const response = await fetch("/api/auth/verify-magic-link", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const response = await httpPost({
+        url: "/api/auth/verify-magic-link",
+        data: {
           token: verificationToken,
-        }),
-        credentials: "include",
+        },
       });
 
       const data = await response.json();
@@ -133,7 +131,8 @@ export default function VerifyMagicLink() {
                   Go Back
                 </button>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  You can request a new magic link from the page you were visiting.
+                  You can request a new magic link from the page you were
+                  visiting.
                 </p>
               </div>
             )}
