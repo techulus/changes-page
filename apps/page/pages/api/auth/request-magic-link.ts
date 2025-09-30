@@ -1,6 +1,7 @@
 import arcjet, { protectSignup } from "@arcjet/next";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
+import validator from "validator";
 import {
   fetchRenderData,
   translateHostToPageIdentifier,
@@ -43,8 +44,7 @@ export default async function requestMagicLink(
     });
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
+  if (!validator.isEmail(email)) {
     return res.status(400).json({
       success: false,
       message: "Invalid email format",

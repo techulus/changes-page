@@ -164,6 +164,9 @@ importers:
       uuid:
         specifier: ^9.0.0
         version: 9.0.1
+      validator:
+        specifier: ^13.15.15
+        version: 13.15.15
       yup:
         specifier: ^0.32.9
         version: 0.32.11
@@ -189,6 +192,9 @@ importers:
       '@types/uuid':
         specifier: ^9.0.0
         version: 9.0.8
+      '@types/validator':
+        specifier: ^13.15.3
+        version: 13.15.3
       autoprefixer:
         specifier: ^10.4.5
         version: 10.4.21(postcss@8.5.3)
