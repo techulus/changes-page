@@ -1,6 +1,6 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import inngestClient from "../../utils/inngest";
 import postmarkClient from "../../utils/postmark";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
 
 interface EventData {
   email: string;
@@ -13,7 +13,8 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
   { name: "Email: Send visitor magic link" },
   { event: "email/visitor.magic-link" },
   async ({ event }) => {
-    const { email, verification_token, page_url, page_id }: EventData = event.data;
+    const { email, verification_token, page_url, page_id }: EventData =
+      event.data;
 
     console.log("Sending magic link email", {
       email,
@@ -21,25 +22,26 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
       page_id,
     });
 
-    // Fetch page branding information
-    let pageName = "changes.page";
-    let pageLogoUrl: string | null = null;
-
-    if (page_id) {
-      const { data: page } = await supabaseAdmin
-        .from("pages")
-        .select("title, page_settings(page_logo)")
-        .eq("id", page_id)
-        .single();
-
-      if (page) {
-        pageName = page.title;
-        pageLogoUrl = page.page_settings?.page_logo || null;
-      }
+    if (!page_id) {
+      throw new Error("Missing page_id");
     }
 
-    // Build the magic link URL using the specific page URL
-    const magicLinkUrl = `${page_url}/auth/verify?token=${verification_token}`;
+    const { data: page, error: pageError } = await supabaseAdmin
+      .from("pages")
+      .select("title, page_settings(page_logo)")
+      .eq("id", page_id)
+      .maybeSingle();
+    if (!page || pageError) {
+      console.error("Error fetching page:", pageError);
+      throw new Error("Page not found");
+    }
+
+    const pageName = page.title;
+    const pageLogoUrl = page.page_settings?.page_logo || null;
+
+    const magicLinkUrl = new URL(page_url);
+    magicLinkUrl.pathname = "/auth/verify";
+    magicLinkUrl.searchParams.set("token", verification_token);
 
     const result = await postmarkClient.sendEmail({
       MessageStream: "outbound",
@@ -105,9 +107,10 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
         <body>
           <div class="container">
             <div class="logo">
-              ${pageLogoUrl
-                ? `<img src="${pageLogoUrl}" alt="${pageName}" style="max-width: 150px; height: auto; margin: 0 auto;"/>`
-                : `<h1 style="color: #4f46e5; margin: 0;">${pageName}</h1>`
+              ${
+                pageLogoUrl
+                  ? `<img src="${pageLogoUrl}" alt="${pageName}" style="max-width: 150px; height: auto; margin: 0 auto;"/>`
+                  : `<h1 style="color: #4f46e5; margin: 0;">${pageName}</h1>`
               }
             </div>
 
@@ -118,18 +121,18 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
             <p>You requested to sign in to ${pageName}. Click the button below to complete your authentication:</p>
 
             <div style="text-align: center;">
-              <a href="${magicLinkUrl}" class="button">Sign In</a>
+              <a href="${magicLinkUrl.toString()}" class="button">Sign In</a>
             </div>
 
             <div class="warning">
-              <strong>Security note:</strong> This link will expire in 15 minutes and can only be used once.
+              <strong>Note:</strong> This link will expire in 15 minutes and can only be used once.
             </div>
 
             <p>If you didn't request this email, you can safely ignore it.</p>
 
             <p>If you're having trouble with the button above, you can also copy and paste this link into your browser:</p>
             <p style="background-color: #f3f4f6; padding: 10px; border-radius: 4px; word-break: break-all; font-size: 14px;">
-              ${magicLinkUrl}
+              ${magicLinkUrl.toString()}
             </p>
 
             <div class="footer">
@@ -146,7 +149,7 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
 
         You requested to sign in to ${pageName}. Click or copy the link below to complete your authentication:
 
-        ${magicLinkUrl}
+        ${magicLinkUrl.toString()}
 
         This link will expire in 15 minutes and can only be used once.
 
