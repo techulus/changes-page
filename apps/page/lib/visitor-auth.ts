@@ -1,6 +1,6 @@
 import { IPageVisitor } from "@changes-page/supabase/types/page";
 import { SignJWT, jwtVerify } from "jose";
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { randomBytes, randomUUID } from "node:crypto";
 
 if (!process.env.VISITOR_JWT_SECRET) {
@@ -9,7 +9,7 @@ if (!process.env.VISITOR_JWT_SECRET) {
 
 const JWT_SECRET = new TextEncoder().encode(process.env.VISITOR_JWT_SECRET);
 
-const JWT_COOKIE_NAME = "cp_visitor_token";
+export const JWT_COOKIE_NAME = "cp_visitor_token";
 const JWT_EXPIRY = "30d";
 
 export interface VisitorTokenPayload {
@@ -87,31 +87,6 @@ export async function verifyVisitorJWT(
 }
 
 /**
- * Set visitor auth cookie in the response
- */
-export function setVisitorAuthCookie(
-  res: NextApiResponse,
-  token: string
-): void {
-  res.setHeader(
-    "Set-Cookie",
-    `${JWT_COOKIE_NAME}=${token}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=${
-      30 * 24 * 60 * 60
-    }` // 30 days
-  );
-}
-
-/**
- * Clear visitor auth cookie
- */
-export function clearVisitorAuthCookie(res: NextApiResponse): void {
-  res.setHeader(
-    "Set-Cookie",
-    `${JWT_COOKIE_NAME}=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0`
-  );
-}
-
-/**
  * Get authenticated visitor from request cookies
  */
 export async function getAuthenticatedVisitor(
@@ -154,19 +129,6 @@ export async function getVisitorId(req: NextApiRequest): Promise<string> {
   }
 
   return visitorId;
-}
-
-/**
- * Set legacy visitor ID cookie (for backward compatibility)
- */
-export function setLegacyVisitorCookie(
-  res: NextApiResponse,
-  visitorId: string
-): void {
-  res.setHeader(
-    "Set-Cookie",
-    `cp_pa_vid=${visitorId}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=31536000` // 1 year
-  );
 }
 
 /**

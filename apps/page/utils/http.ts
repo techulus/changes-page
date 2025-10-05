@@ -3,12 +3,13 @@ export const httpPost = async <T = any, U = {}>({
   data = {} as U,
 }: {
   url: string;
-  data: U;
+  data?: U;
 }): Promise<T> => {
   const res = await fetch(url, {
     method: "POST",
     headers: new Headers({ "Content-Type": "application/json" }),
     body: JSON.stringify(data),
+    credentials: "include",
   });
 
   const payload = await res.json();

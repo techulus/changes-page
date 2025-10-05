@@ -1,7 +1,7 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { getVisitorId, setLegacyVisitorCookie, getAuthenticatedVisitor } from "../../../lib/visitor-auth";
+import { getVisitorId } from "../../../lib/visitor-auth";
 
 export default async function voteOnRoadmapItem(
   req: NextApiRequest,
@@ -18,12 +18,6 @@ export default async function voteOnRoadmapItem(
   }
 
   const visitor_id = await getVisitorId(req);
-
-  const authenticatedVisitor = await getAuthenticatedVisitor(req);
-
-  if (!req.cookies.cp_visitor_token && !req.cookies.cp_pa_vid) {
-    setLegacyVisitorCookie(res, visitor_id);
-  }
 
   try {
     const { data: itemCheck, error: itemCheckError } = await supabaseAdmin
@@ -95,4 +89,3 @@ export default async function voteOnRoadmapItem(
     res.status(500).json({ ok: false, error: "Internal server error" });
   }
 }
-

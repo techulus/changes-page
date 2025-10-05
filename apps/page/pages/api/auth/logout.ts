@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { clearVisitorAuthCookie } from "../../../lib/visitor-auth";
+import { JWT_COOKIE_NAME } from "../../../lib/visitor-auth";
 
 interface ApiResponse {
   success: boolean;
@@ -18,8 +18,10 @@ export default async function logoutVisitor(
   }
 
   try {
-    // Clear the authentication cookie
-    clearVisitorAuthCookie(res);
+    res.setHeader(
+      "Set-Cookie",
+      `${JWT_COOKIE_NAME}=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0`
+    );
 
     return res.status(200).json({
       success: true,

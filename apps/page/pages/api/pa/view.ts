@@ -6,13 +6,12 @@ import {
   translateHostToPageIdentifier,
 } from "../../../lib/data";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { getVisitorId, setLegacyVisitorCookie } from "../../../lib/visitor-auth";
+import { getVisitorId } from "../../../lib/visitor-auth";
 
 async function pageAnalyticsView(
   req: NextApiRequest,
   res: NextApiResponse<{ ok: boolean }>
 ) {
-  // Ignore bots
   if (String(req?.headers["user-agent"]).toLowerCase().includes("bot")) {
     return res.status(200).json({ ok: true });
   }
@@ -25,7 +24,10 @@ async function pageAnalyticsView(
   const visitor_id = await getVisitorId(req);
 
   if (!req.cookies.cp_visitor_token && !req.cookies.cp_pa_vid) {
-    setLegacyVisitorCookie(res, visitor_id);
+    res.setHeader(
+      "Set-Cookie",
+      `cp_pa_vid=${visitor_id}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=31536000`
+    );
   }
 
   try {

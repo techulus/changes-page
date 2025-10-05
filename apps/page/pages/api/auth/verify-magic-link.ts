@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { createVisitorJWT, setVisitorAuthCookie, isTokenExpired } from "../../../lib/visitor-auth";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { createVisitorJWT, isTokenExpired } from "../../../lib/visitor-auth";
 
 interface RequestBody {
   token: string;
@@ -65,7 +65,8 @@ export default async function verifyMagicLink(
     if (isTokenExpired(visitor.verification_expires_at)) {
       return res.status(400).json({
         success: false,
-        message: "Verification token has expired. Please request a new magic link.",
+        message:
+          "Verification token has expired. Please request a new magic link.",
       });
     }
 
@@ -90,16 +91,15 @@ export default async function verifyMagicLink(
       });
     }
 
-    // Create JWT token
     const jwtToken = await createVisitorJWT(updatedVisitor);
 
-    // Set auth cookie and visitor ID cookie
-    setVisitorAuthCookie(res, jwtToken);
-
-    // Also set the legacy visitor ID cookie to match the authenticated visitor ID
     res.setHeader("Set-Cookie", [
-      `cp_visitor_token=${jwtToken}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}`,
-      `cp_pa_vid=${updatedVisitor.id}; Path=/; Secure; SameSite=Lax; Max-Age=${365 * 24 * 60 * 60}`
+      `cp_visitor_token=${jwtToken}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=${
+        30 * 24 * 60 * 60
+      }`,
+      `cp_pa_vid=${updatedVisitor.id}; Path=/; Secure; SameSite=Lax; Max-Age=${
+        365 * 24 * 60 * 60
+      }`,
     ]);
 
     return res.status(200).json({
