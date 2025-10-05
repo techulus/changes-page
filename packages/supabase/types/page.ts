@@ -5,6 +5,7 @@ export type IPageSettings = Tables<"page_settings">;
 export type IPost = Tables<"posts">;
 export type IPageEmailSubscriber = Tables<"page_email_subscribers">;
 export type IPageView = Tables<"page_views">;
+export type IPageVisitor = Tables<"page_visitors">;
 export type ITeam = Tables<"teams">;
 export type ITeamMember = Tables<"team_members">;
 export type ITeamInvitation = Tables<"team_invitations">;

@@ -3,6 +3,7 @@ import { Spinner } from "@changes-page/ui";
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import { useFormik } from "formik";
 import { useCallback, useEffect, useState } from "react";
+import validator from "validator";
 import * as Yup from "yup";
 import { httpGet, httpPut } from "../../utils/http";
 import { notifyError } from "../core/toast.component";
@@ -64,6 +65,11 @@ export default function NotificationsSettings({
           notifyError(
             "Please fill in the required fields to enable email notifications"
           );
+          return;
+        }
+
+        if (!validator.isEmail(values.email_reply_to)) {
+          notifyError("Please enter a valid reply-to email address");
           return;
         }
       }

@@ -1,20 +1,20 @@
-export const httpPost = async ({
+export const httpPost = async <T = any, U = {}>({
   url,
-  data = {},
+  data,
 }: {
   url: string;
-  data: any;
-}) => {
+  data?: U;
+}): Promise<T> => {
   const res = await fetch(url, {
     method: "POST",
     headers: new Headers({ "Content-Type": "application/json" }),
-    body: JSON.stringify(data),
+    body: data ? JSON.stringify(data) : undefined,
+    credentials: "include",
   });
 
   const payload = await res.json();
 
-  if (res.status >= 400 || !payload.ok) {
-    // throw error with response body
+  if (res.status >= 400 || !payload.success) {
     throw new Error(payload.message);
   }
 
