@@ -1,10 +1,10 @@
-export const httpPost = async ({
+export const httpPost = async <T, U = {}>({
   url,
-  data = {},
+  data = {} as U,
 }: {
   url: string;
-  data: any;
-}) => {
+  data: U;
+}): Promise<T> => {
   const res = await fetch(url, {
     method: "POST",
     headers: new Headers({ "Content-Type": "application/json" }),

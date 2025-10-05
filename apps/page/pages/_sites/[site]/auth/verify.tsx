@@ -26,16 +26,14 @@ export default function VerifyMagicLink() {
 
   const verifyToken = async (verificationToken: string) => {
     try {
-      const response = await httpPost({
+      const response = await httpPost<{ success: boolean; message: string }>({
         url: "/api/auth/verify-magic-link",
         data: {
           token: verificationToken,
         },
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (response.success) {
         setStatus("success");
         setMessage("Email verified successfully! You are now signed in.");
 
@@ -47,7 +45,7 @@ export default function VerifyMagicLink() {
         }, 2000);
       } else {
         setStatus("error");
-        setMessage(data.message || "Failed to verify email");
+        setMessage(response.message || "Failed to verify email");
       }
     } catch (error) {
       setStatus("error");
