@@ -1,6 +1,6 @@
 export const httpPost = async <T = any, U = {}>({
   url,
-  data = {} as U,
+  data,
 }: {
   url: string;
   data?: U;
@@ -8,13 +8,13 @@ export const httpPost = async <T = any, U = {}>({
   const res = await fetch(url, {
     method: "POST",
     headers: new Headers({ "Content-Type": "application/json" }),
-    body: JSON.stringify(data),
+    body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
   });
 
   const payload = await res.json();
 
-  if (res.status >= 400 || (!payload.ok && !payload.success)) {
+  if (res.status >= 400 || !payload.success) {
     throw new Error(payload.message);
   }
 
