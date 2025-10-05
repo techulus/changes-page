@@ -43,6 +43,7 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
     magicLinkUrl.pathname = "/auth/verify";
     magicLinkUrl.searchParams.set("token", verification_token);
 
+    // avoid catching error here so that inngest can retry
     const result = await postmarkClient.sendEmail({
       MessageStream: "outbound",
       From: "no-reply@changes.page",

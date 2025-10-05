@@ -173,7 +173,6 @@ export default async function requestMagicLink(
       return res.status(500).json({
         success: false,
         message: "Failed to process request",
-        error: upsertError.message,
       });
     }
 

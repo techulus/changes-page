@@ -67,11 +67,11 @@ export default function NotificationsSettings({
           );
           return;
         }
-      }
 
-      if (!validator.isEmail(values.email_reply_to)) {
-        notifyError("Please enter a valid reply-to email address");
-        return;
+        if (!validator.isEmail(values.email_reply_to)) {
+          notifyError("Please enter a valid reply-to email address");
+          return;
+        }
       }
 
       try {
