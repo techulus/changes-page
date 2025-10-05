@@ -1,4 +1,4 @@
-export const httpPost = async <T, U = {}>({
+export const httpPost = async <T = any, U = {}>({
   url,
   data = {} as U,
 }: {
