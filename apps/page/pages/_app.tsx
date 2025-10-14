@@ -2,6 +2,7 @@ import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import { VisitorAuthProvider } from "../hooks/useVisitorAuth";
 import "../styles/globals.css";
 
 const ProgressBar = dynamic(
@@ -21,8 +22,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         ></meta>
       </Head>
       <ThemeProvider attribute="class">
-        <Component {...pageProps} />
-        <ProgressBar />
+        <VisitorAuthProvider>
+          <Component {...pageProps} />
+          <ProgressBar />
+        </VisitorAuthProvider>
       </ThemeProvider>
     </>
   );

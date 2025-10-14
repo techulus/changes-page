@@ -6,12 +6,12 @@ import {
   translateHostToPageIdentifier,
 } from "../../../lib/data";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { getVisitorId } from "../../../lib/visitor-auth";
 
 async function pageAnalyticsView(
   req: NextApiRequest,
   res: NextApiResponse<{ ok: boolean }>
 ) {
-  // Ignore bots
   if (String(req?.headers["user-agent"]).toLowerCase().includes("bot")) {
     return res.status(200).json({ ok: true });
   }
@@ -20,10 +20,10 @@ async function pageAnalyticsView(
   const { domain, page: url_slug } = translateHostToPageIdentifier(hostname);
 
   const { page_path, referrer } = req.body;
-  let { cp_pa_vid: visitor_id } = req.cookies;
 
-  if (!visitor_id) {
-    visitor_id = v4();
+  const visitor_id = await getVisitorId(req);
+
+  if (!req.cookies.cp_visitor_token && !req.cookies.cp_pa_vid) {
     res.setHeader(
       "Set-Cookie",
       `cp_pa_vid=${visitor_id}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=31536000`
