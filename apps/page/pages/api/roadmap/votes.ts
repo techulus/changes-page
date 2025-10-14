@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
 
 type BulkVotesResponse = {
-  ok: boolean;
+  success: boolean;
   votes: Record<string, { vote_count: number; user_voted: boolean }>;
 };
 
@@ -18,7 +18,7 @@ export default async function getBulkRoadmapItemVotes(
   // Validate HTTP method
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
-    return res.status(405).json({ ok: false, votes: {} });
+    return res.status(405).json({ success: false, votes: {} });
   }
 
   const { item_ids } = req.body;
@@ -26,23 +26,23 @@ export default async function getBulkRoadmapItemVotes(
 
   // Input validation
   if (!item_ids || !Array.isArray(item_ids)) {
-    return res.status(400).json({ ok: false, votes: {} });
+    return res.status(400).json({ success: false, votes: {} });
   }
 
   // Prevent abuse with max array length
   if (item_ids.length > 100) {
-    return res.status(400).json({ ok: false, votes: {} });
+    return res.status(400).json({ success: false, votes: {} });
   }
 
   // Validate all item_ids are valid UUIDs
   if (!item_ids.every((id) => typeof id === "string" && UUID_REGEX.test(id))) {
-    return res.status(400).json({ ok: false, votes: {} });
+    return res.status(400).json({ success: false, votes: {} });
   }
 
   // De-duplicate to keep queries lean
   const distinctItemIds: string[] = Array.from(new Set(item_ids));
   if (distinctItemIds.length === 0) {
-    return res.status(200).json({ ok: true, votes: {} });
+    return res.status(200).json({ success: true, votes: {} });
   }
 
   if (!visitor_id) {
@@ -76,7 +76,7 @@ export default async function getBulkRoadmapItemVotes(
         "getBulkRoadmapItemVotes [User Error]",
         userVoteResult.error
       );
-      return res.status(500).json({ ok: false, votes: {} });
+      return res.status(500).json({ success: false, votes: {} });
     }
 
     // Check for any errors in vote count queries
@@ -87,7 +87,7 @@ export default async function getBulkRoadmapItemVotes(
           distinctItemIds[i],
           voteCountResults[i].error
         );
-        return res.status(500).json({ ok: false, votes: {} });
+        return res.status(500).json({ success: false, votes: {} });
       }
     }
 
@@ -111,11 +111,11 @@ export default async function getBulkRoadmapItemVotes(
     });
 
     res.status(200).json({
-      ok: true,
+      success: true,
       votes,
     });
   } catch (e: Error | any) {
     console.log("getBulkRoadmapItemVotes [Error]", e);
-    res.status(500).json({ ok: false, votes: {} });
+    res.status(500).json({ success: false, votes: {} });
   }
 }
