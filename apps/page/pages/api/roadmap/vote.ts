@@ -5,16 +5,16 @@ import { getVisitorId } from "../../../lib/visitor-auth";
 
 export default async function voteOnRoadmapItem(
   req: NextApiRequest,
-  res: NextApiResponse<{ ok: boolean; vote_count?: number; error?: string }>
+  res: NextApiResponse<{ success: boolean; vote_count?: number; error?: string }>
 ) {
   if (req.method !== "POST") {
-    return res.status(405).json({ ok: false, error: "Method not allowed" });
+    return res.status(405).json({ success: false, error: "Method not allowed" });
   }
 
   const { item_id } = req.body;
 
   if (!item_id) {
-    return res.status(400).json({ ok: false, error: "Missing item_id" });
+    return res.status(400).json({ success: false, error: "Missing item_id" });
   }
 
   const visitor_id = await getVisitorId(req);
@@ -30,7 +30,7 @@ export default async function voteOnRoadmapItem(
     if (itemCheckError || !itemCheck) {
       return res
         .status(404)
-        .json({ ok: false, error: "Item not found or not public" });
+        .json({ success: false, error: "Item not found or not public" });
     }
 
     // Check if user has already voted
@@ -52,7 +52,7 @@ export default async function voteOnRoadmapItem(
         console.error("voteOnRoadmapItem [Delete Error]", deleteError);
         return res
           .status(500)
-          .json({ ok: false, error: "Failed to remove vote" });
+          .json({ success: false, error: "Failed to remove vote" });
       }
     } else {
       // Add vote
@@ -66,7 +66,7 @@ export default async function voteOnRoadmapItem(
 
       if (insertError) {
         console.error("voteOnRoadmapItem [Insert Error]", insertError);
-        return res.status(500).json({ ok: false, error: "Failed to add vote" });
+        return res.status(500).json({ success: false, error: "Failed to add vote" });
       }
     }
 
@@ -81,11 +81,11 @@ export default async function voteOnRoadmapItem(
     }
 
     res.status(200).json({
-      ok: true,
+      success: true,
       vote_count: count || 0,
     });
   } catch (e: Error | any) {
     console.log("voteOnRoadmapItem [Error]", e);
-    res.status(500).json({ ok: false, error: "Internal server error" });
+    res.status(500).json({ success: false, error: "Internal server error" });
   }
 }
