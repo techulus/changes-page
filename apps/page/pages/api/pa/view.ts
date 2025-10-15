@@ -1,3 +1,4 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import UAParser from "ua-parser-js";
 import { v4 } from "uuid";
@@ -5,15 +6,14 @@ import {
   fetchRenderData,
   translateHostToPageIdentifier,
 } from "../../../lib/data";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { getVisitorId } from "../../../lib/visitor-auth";
 
 async function pageAnalyticsView(
   req: NextApiRequest,
-  res: NextApiResponse<{ ok: boolean }>
+  res: NextApiResponse<{ success: boolean }>
 ) {
   if (String(req?.headers["user-agent"]).toLowerCase().includes("bot")) {
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ success: true });
   }
 
   const hostname = String(req?.headers?.host);
@@ -51,10 +51,10 @@ async function pageAnalyticsView(
       console.error("pageAnalyticsView [Error]", error);
     }
 
-    res.status(200).json({ ok: true });
+    res.status(200).json({ success: true });
   } catch (e: Error | any) {
     console.log("pageAnalyticsView [Error]", e);
-    res.status(200).json({ ok: true });
+    res.status(200).json({ success: true });
   }
 }
 

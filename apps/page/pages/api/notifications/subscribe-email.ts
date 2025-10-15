@@ -10,14 +10,14 @@ import inngestClient from "../../../utils/inngest";
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{ ok: boolean; message?: string } | null>
+  res: NextApiResponse<{ success: boolean; message?: string } | null>
 ) {
   if (req.method === "POST") {
     const hostname = String(req?.headers?.host);
     const { email } = req.body;
 
     if (!email) {
-      res.status(400).json({ ok: false });
+      res.status(400).json({ success: false });
       return;
     }
 
@@ -53,9 +53,10 @@ async function handler(
           email,
           decision.reason
         );
-        return res
-          .status(400)
-          .json({ ok: false, message: "Please provide a valid email address" });
+        return res.status(400).json({
+          success: false,
+          message: "Please provide a valid email address",
+        });
       }
     }
 
@@ -72,7 +73,7 @@ async function handler(
       const pageUrl = getPageUrl(page, settings);
 
       if (!settings.email_notifications) {
-        return res.status(400).json({ ok: false });
+        return res.status(400).json({ success: false });
       }
 
       const result = await subscribeViaEmail(String(page?.id), String(email));
@@ -100,10 +101,10 @@ async function handler(
         },
       });
 
-      res.status(200).json({ ok: true });
+      res.status(200).json({ success: true });
     } catch (e: Error | any) {
       console.log("notifications/email: [Error]", e);
-      res.status(400).json({ ok: false, message: e.message ?? String(e) });
+      res.status(400).json({ success: false, message: e.message ?? String(e) });
     }
   } else {
     res.setHeader("Allow", "POST");
