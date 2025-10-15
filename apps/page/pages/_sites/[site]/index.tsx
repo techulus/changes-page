@@ -138,7 +138,7 @@ export default function Index({
           </div>
         </main>
 
-        <Footer settings={settings} />
+        <Footer settings={settings} roadmaps={roadmaps} />
       </div>
     </>
   );

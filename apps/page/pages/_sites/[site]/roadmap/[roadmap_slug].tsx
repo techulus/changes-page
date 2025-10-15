@@ -327,7 +327,7 @@ export default function RoadmapPage({
           </div>
         </main>
 
-        <Footer settings={settings} />
+        <Footer settings={settings} roadmaps={roadmaps} />
       </div>
 
       {/* Item Details Modal */}

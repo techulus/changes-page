@@ -1,10 +1,10 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
 
 export default async function getPostReactions(
   req: NextApiRequest,
-  res: NextApiResponse<{ ok: boolean; aggregate: any; user: any }>
+  res: NextApiResponse<{ success: boolean; aggregate: any; user: any }>
 ) {
   let { post_id } = req.query;
   let { cp_pa_vid: visitor_id } = req.cookies;
@@ -41,7 +41,7 @@ export default async function getPostReactions(
     }
 
     res.status(200).json({
-      ok: true,
+      success: true,
       aggregate: aggregate?.length
         ? {
             thumbs_up: aggregate[0].thumbs_up_count,
@@ -55,6 +55,6 @@ export default async function getPostReactions(
     });
   } catch (e: Error | any) {
     console.log("getPostReactions [Error]", e);
-    res.status(200).json({ ok: true, aggregate: null, user: null });
+    res.status(200).json({ success: false, aggregate: null, user: null });
   }
 }

@@ -1,6 +1,7 @@
 import { IPageSettings } from "@changes-page/supabase/types/page";
 import Image from "next/image";
 import { useEffect } from "react";
+import { PageRoadmap } from "../lib/data";
 import appStoreBadgeLight from "../public/badges/App_Store_Badge_US-UK_RGB_blk.svg";
 import appStoreBadgeDark from "../public/badges/App_Store_Badge_US-UK_RGB_wht.svg";
 import googlePlayBadge from "../public/badges/google-play-badge.png";
@@ -16,7 +17,13 @@ import {
 } from "./social-icons.component";
 import VisitorStatus from "./visitor-status";
 
-export default function Footer({ settings }: { settings: IPageSettings }) {
+export default function Footer({
+  settings,
+  roadmaps = [],
+}: {
+  settings: IPageSettings;
+  roadmaps?: PageRoadmap[];
+}) {
   useEffect(() => {
     httpPost({
       url: "/api/pa/view",
@@ -26,9 +33,11 @@ export default function Footer({ settings }: { settings: IPageSettings }) {
 
   return (
     <footer>
-      <div className="pt-4 py-2 flex justify-center space-x-6">
-        <VisitorStatus />
-      </div>
+      {(roadmaps ?? []).length ? (
+        <div className="pt-4 py-2 flex justify-center space-x-6">
+          <VisitorStatus />
+        </div>
+      ) : null}
 
       {(settings?.app_store_url || settings?.play_store_url) && (
         <p className="pt-4 py-4 flex justify-center space-x-6">

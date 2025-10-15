@@ -3,8 +3,6 @@ import { Transition } from "@headlessui/react";
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";
 import { httpGet, httpPost } from "../utils/http";
-import { useVisitorAuth } from "../hooks/useVisitorAuth";
-import VisitorAuthModal from "./visitor-auth-modal";
 
 const ReactionsCounter = ({
   postId,
@@ -13,7 +11,6 @@ const ReactionsCounter = ({
   floating,
   optimisticUpdate,
   setShowPicker,
-  onAuthRequired,
 }: {
   postId: string;
   aggregate: IReactions;
@@ -21,15 +18,9 @@ const ReactionsCounter = ({
   floating: boolean;
   optimisticUpdate?: (reaction: string, status: boolean) => void;
   setShowPicker?: (v: boolean) => void;
-  onAuthRequired?: () => void;
 }) => {
   const doReact = useCallback(
     (reaction: string) => {
-      if (onAuthRequired) {
-        onAuthRequired();
-        return;
-      }
-
       if (setShowPicker) {
         setShowPicker(false);
       }
@@ -47,7 +38,7 @@ const ReactionsCounter = ({
         },
       });
     },
-    [postId, setShowPicker, user, optimisticUpdate, onAuthRequired]
+    [postId, setShowPicker, user, optimisticUpdate]
   );
 
   return (
@@ -220,9 +211,7 @@ const ReactionsCounter = ({
 
 export default function Reactions(props: any) {
   const { post } = props;
-  const { visitor } = useVisitorAuth();
   const [showPicker, setShowPicker] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [reactions, setReactions] = useState<IReactions>({});
   const [userReaction, setUserReaction] = useState<IReactions>({});
 
@@ -269,20 +258,12 @@ export default function Reactions(props: any) {
     updateReactions();
   }, [updateReactions]);
 
-  const handleReactionClick = useCallback(() => {
-    if (!visitor) {
-      setIsAuthModalOpen(true);
-      return;
-    }
-    setShowPicker((v) => !v);
-  }, [visitor]);
-
   return (
     <div className="flex">
       <div className="relative flex items-center">
         <button
           className="text-sm p-1.5 my-2 border border-gray-300 dark:border-gray-700 rounded-full bg-white dark:bg-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200"
-          onClick={handleReactionClick}
+          onClick={() => setShowPicker((v) => !v)}
         >
           <svg
             className=" w-4 h-4"
@@ -332,15 +313,9 @@ export default function Reactions(props: any) {
           user={userReaction}
           optimisticUpdate={optimisticUpdate}
           setShowPicker={setShowPicker}
-          onAuthRequired={!visitor ? () => setIsAuthModalOpen(true) : undefined}
           floating={false}
         />
       ) : null}
-
-      <VisitorAuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-      />
     </div>
   );
 }

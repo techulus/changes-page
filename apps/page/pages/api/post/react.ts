@@ -1,11 +1,11 @@
+import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { getVisitorId } from "../../../lib/visitor-auth";
 
 export default async function reactToPost(
   req: NextApiRequest,
-  res: NextApiResponse<{ ok: boolean }>
+  res: NextApiResponse<{ success: boolean }>
 ) {
   const { post_id, reaction } = req.body;
 
@@ -40,9 +40,9 @@ export default async function reactToPost(
       console.error("reactToPost [Error]", error);
     }
 
-    res.status(200).json({ ok: true });
+    res.status(200).json({ success: true });
   } catch (e: Error | any) {
     console.log("reactToPost [Error]", e);
-    res.status(200).json({ ok: true });
+    res.status(200).json({ success: false });
   }
 }
