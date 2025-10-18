@@ -14,6 +14,7 @@ export type IRoadmapColumn = Tables<"roadmap_columns">;
 export type IRoadmapCategory = Tables<"roadmap_categories">;
 export type IRoadmapItem = Tables<"roadmap_items">;
 export type IRoadmapVote = Tables<"roadmap_votes">;
+export type IRoadmapTriageItem = Tables<"roadmap_triage_items">;
 
 export enum PageType {
   changelogs = "changelogs",
