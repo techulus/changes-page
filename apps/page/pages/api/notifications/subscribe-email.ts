@@ -102,9 +102,12 @@ async function handler(
       });
 
       res.status(200).json({ success: true });
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.log("notifications/email: [Error]", e);
-      res.status(400).json({ success: false, message: e.message ?? String(e) });
+      res.status(400).json({
+        success: false,
+        message: e instanceof Error ? e.message : String(e),
+      });
     }
   } else {
     res.setHeader("Allow", "POST");

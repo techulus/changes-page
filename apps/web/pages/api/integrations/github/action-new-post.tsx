@@ -53,8 +53,13 @@ export default async function handler(
     res.status(200).json({
       id: data.id,
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error("[Github]: action-new-post error", e);
-    res.status(500).json({ error: { statusCode: 500, message: e.message } });
+    res.status(500).json({
+      error: {
+        statusCode: 500,
+        message: e instanceof Error ? e.message : String(e),
+      },
+    });
   }
 }
