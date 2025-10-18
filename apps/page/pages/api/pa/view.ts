@@ -52,7 +52,7 @@ async function pageAnalyticsView(
     }
 
     res.status(200).json({ success: true });
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("pageAnalyticsView [Error]", e);
     res.status(200).json({ success: true });
   }

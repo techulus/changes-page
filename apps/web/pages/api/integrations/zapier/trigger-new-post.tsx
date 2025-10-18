@@ -52,7 +52,7 @@ export default async function handler(
     }));
 
     res.status(200).json(postsWithUrl);
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     if (e.message.includes("Invalid")) {
       return res
         .status(400)

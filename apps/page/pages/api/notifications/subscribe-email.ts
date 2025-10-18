@@ -102,7 +102,7 @@ async function handler(
       });
 
       res.status(200).json({ success: true });
-    } catch (e: Error | any) {
+    } catch (e: unknown) {
       console.log("notifications/email: [Error]", e);
       res.status(400).json({ success: false, message: e.message ?? String(e) });
     }

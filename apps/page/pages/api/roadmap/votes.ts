@@ -114,7 +114,7 @@ export default async function getBulkRoadmapItemVotes(
       success: true,
       votes,
     });
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("getBulkRoadmapItemVotes [Error]", e);
     res.status(500).json({ success: false, votes: {} });
   }

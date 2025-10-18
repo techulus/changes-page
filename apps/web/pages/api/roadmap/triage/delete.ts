@@ -1,28 +1,36 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { withAuth } from "../../../../utils/withAuth";
 import { createAuditLog } from "../../../../utils/auditLog";
+import { withAuth } from "../../../../utils/withAuth";
 
 const deleteTriageItem = withAuth<{ success: boolean; error?: string }>(
   async (req, res, { supabase, user }) => {
     if (req.method !== "POST") {
-      return res.status(405).json({ success: false, error: "Method not allowed" });
+      return res
+        .status(405)
+        .json({ success: false, error: "Method not allowed" });
     }
 
     const { triage_item_id } = req.body;
 
     if (!triage_item_id) {
-      return res.status(400).json({ success: false, error: "Missing triage_item_id" });
+      return res
+        .status(400)
+        .json({ success: false, error: "Missing triage_item_id" });
     }
 
     try {
       const { data: triageItem, error: triageError } = await supabaseAdmin
         .from("roadmap_triage_items")
-        .select("*, roadmap_boards!inner(id, page_id, pages!inner(id, user_id))")
+        .select(
+          "*, roadmap_boards!inner(id, page_id, pages!inner(id, user_id))"
+        )
         .eq("id", triage_item_id)
         .single();
 
       if (triageError || !triageItem) {
-        return res.status(404).json({ success: false, error: "Triage item not found" });
+        return res
+          .status(404)
+          .json({ success: false, error: "Triage item not found" });
       }
 
       if (triageItem.roadmap_boards.pages.user_id !== user.id) {
@@ -36,7 +44,9 @@ const deleteTriageItem = withAuth<{ success: boolean; error?: string }>(
 
       if (deleteError) {
         console.error("deleteTriageItem [Delete Error]", deleteError);
-        return res.status(500).json({ success: false, error: "Failed to delete triage item" });
+        return res
+          .status(500)
+          .json({ success: false, error: "Failed to delete triage item" });
       }
 
       try {
@@ -53,7 +63,7 @@ const deleteTriageItem = withAuth<{ success: boolean; error?: string }>(
       res.status(200).json({
         success: true,
       });
-    } catch (e: Error | any) {
+    } catch (e: unknown) {
       console.log("deleteTriageItem [Error]", e);
       res.status(500).json({ success: false, error: "Internal server error" });
     }

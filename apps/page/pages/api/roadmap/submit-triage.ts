@@ -8,7 +8,9 @@ export default async function submitTriageItem(
   res: NextApiResponse<{ success: boolean; item?: any; error?: string }>
 ) {
   if (req.method !== "POST") {
-    return res.status(405).json({ success: false, error: "Method not allowed" });
+    return res
+      .status(405)
+      .json({ success: false, error: "Method not allowed" });
   }
 
   const { board_id, title, description } = req.body;
@@ -22,24 +24,34 @@ export default async function submitTriageItem(
   }
 
   const trimmedTitle = title.trim();
-  const trimmedDescription = description && typeof description === "string" ? description.trim() : null;
+  const trimmedDescription =
+    description && typeof description === "string" ? description.trim() : null;
 
   if (!trimmedTitle) {
-    return res.status(400).json({ success: false, error: "Title cannot be empty" });
+    return res
+      .status(400)
+      .json({ success: false, error: "Title cannot be empty" });
   }
 
   if (trimmedTitle.length > 200) {
-    return res.status(400).json({ success: false, error: "Title must be 200 characters or less" });
+    return res
+      .status(400)
+      .json({ success: false, error: "Title must be 200 characters or less" });
   }
 
   if (trimmedDescription && trimmedDescription.length > 2000) {
-    return res.status(400).json({ success: false, error: "Description must be 2000 characters or less" });
+    return res.status(400).json({
+      success: false,
+      error: "Description must be 2000 characters or less",
+    });
   }
 
   const visitor = await getAuthenticatedVisitor(req);
 
   if (!visitor) {
-    return res.status(401).json({ success: false, error: "Authentication required" });
+    return res
+      .status(401)
+      .json({ success: false, error: "Authentication required" });
   }
 
   try {
@@ -70,14 +82,16 @@ export default async function submitTriageItem(
 
     if (insertError) {
       console.error("submitTriageItem [Insert Error]", insertError);
-      return res.status(500).json({ success: false, error: "Failed to submit item" });
+      return res
+        .status(500)
+        .json({ success: false, error: "Failed to submit item" });
     }
 
     res.status(200).json({
       success: true,
       item: triageItem,
     });
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("submitTriageItem [Error]", e);
     res.status(500).json({ success: false, error: "Internal server error" });
   }

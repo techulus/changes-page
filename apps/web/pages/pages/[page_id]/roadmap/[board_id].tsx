@@ -80,11 +80,15 @@ export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
 
-  const { data: triageItems } = await supabase
+  const { data: triageItems, error: triageError } = await supabase
     .from("roadmap_triage_items")
-    .select("*")
+    .select("id, board_id, title, description, created_at, updated_at")
     .eq("board_id", board_id)
     .order("created_at", { ascending: false });
+
+  if (triageError) {
+    console.error("Failed to fetch triage items", triageError);
+  }
 
   return {
     props: {

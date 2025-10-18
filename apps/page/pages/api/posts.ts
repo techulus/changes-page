@@ -28,7 +28,7 @@ async function handler(
       .order("publication_date", { ascending: false });
 
     res.status(200).json(posts as Array<IPost>);
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     res.status(500).json({ error: { statusCode: 500, message: e.message } });
   }
 }

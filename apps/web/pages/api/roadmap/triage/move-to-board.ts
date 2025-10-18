@@ -1,21 +1,28 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import { v4 } from "uuid";
-import { withAuth } from "../../../../utils/withAuth";
 import { createAuditLog } from "../../../../utils/auditLog";
+import { withAuth } from "../../../../utils/withAuth";
 
-const moveTriageToBoard = withAuth<{ success: boolean; item?: any; error?: string }>(
-  async (req, res, { supabase, user }) => {
-    if (req.method !== "POST") {
-      return res.status(405).json({ success: false, error: "Method not allowed" });
-    }
+const moveTriageToBoard = withAuth<{
+  success: boolean;
+  item?: any;
+  error?: string;
+}>(async (req, res, { supabase, user }) => {
+  if (req.method !== "POST") {
+    return res
+      .status(405)
+      .json({ success: false, error: "Method not allowed" });
+  }
 
-    const { triage_item_id } = req.body;
+  const { triage_item_id } = req.body;
 
-    if (!triage_item_id) {
-      return res.status(400).json({ success: false, error: "Missing triage_item_id" });
-    }
+  if (!triage_item_id) {
+    return res
+      .status(400)
+      .json({ success: false, error: "Missing triage_item_id" });
+  }
 
-    try {
+  try {
     const { data: triageItem, error: triageError } = await supabaseAdmin
       .from("roadmap_triage_items")
       .select("*, roadmap_boards!inner(id, page_id, pages!inner(id, user_id))")
@@ -23,7 +30,9 @@ const moveTriageToBoard = withAuth<{ success: boolean; item?: any; error?: strin
       .single();
 
     if (triageError || !triageItem) {
-      return res.status(404).json({ success: false, error: "Triage item not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Triage item not found" });
     }
 
     if (triageItem.roadmap_boards.pages.user_id !== user.id) {
@@ -39,7 +48,9 @@ const moveTriageToBoard = withAuth<{ success: boolean; item?: any; error?: strin
       .single();
 
     if (columnError || !firstColumn) {
-      return res.status(500).json({ success: false, error: "Failed to find first column" });
+      return res
+        .status(500)
+        .json({ success: false, error: "Failed to find first column" });
     }
 
     const { data: columnItems, error: itemsError } = await supabaseAdmin
@@ -50,10 +61,13 @@ const moveTriageToBoard = withAuth<{ success: boolean; item?: any; error?: strin
       .limit(1);
 
     if (itemsError) {
-      return res.status(500).json({ success: false, error: "Failed to calculate position" });
+      return res
+        .status(500)
+        .json({ success: false, error: "Failed to calculate position" });
     }
 
-    const maxPosition = columnItems && columnItems.length > 0 ? columnItems[0].position : 0;
+    const maxPosition =
+      columnItems && columnItems.length > 0 ? columnItems[0].position : 0;
 
     const { data: newItem, error: insertError } = await supabaseAdmin
       .from("roadmap_items")
@@ -81,7 +95,9 @@ const moveTriageToBoard = withAuth<{ success: boolean; item?: any; error?: strin
 
     if (insertError) {
       console.error("moveTriageToBoard [Insert Error]", insertError);
-      return res.status(500).json({ success: false, error: "Failed to create roadmap item" });
+      return res
+        .status(500)
+        .json({ success: false, error: "Failed to create roadmap item" });
     }
 
     const { error: deleteError } = await supabaseAdmin
@@ -108,11 +124,10 @@ const moveTriageToBoard = withAuth<{ success: boolean; item?: any; error?: strin
       success: true,
       item: newItem,
     });
-    } catch (e: Error | any) {
-      console.log("moveTriageToBoard [Error]", e);
-      res.status(500).json({ success: false, error: "Internal server error" });
-    }
+  } catch (e: unknown) {
+    console.log("moveTriageToBoard [Error]", e);
+    res.status(500).json({ success: false, error: "Internal server error" });
   }
-);
+});
 
 export default moveTriageToBoard;
