@@ -80,6 +80,12 @@ export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
 
+  const { data: triageItems } = await supabase
+    .from("roadmap_triage_items")
+    .select("*")
+    .eq("board_id", board_id)
+    .order("created_at", { ascending: false });
+
   return {
     props: {
       page_id,
@@ -89,6 +95,7 @@ export const getServerSideProps = withSupabase(async (ctx, { supabase }) => {
       columns: columns || [],
       items: items || [],
       categories: categories || [],
+      triageItems: triageItems || [],
     },
   };
 });
@@ -99,6 +106,7 @@ export default function RoadmapBoardDetails({
   columns,
   items,
   categories,
+  triageItems,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
 
@@ -140,6 +148,7 @@ export default function RoadmapBoardDetails({
           board={board}
           columns={columns}
           items={items}
+          triageItems={triageItems}
           categories={categories}
         />
       </Page>

@@ -27,3 +27,8 @@ export interface DragOverPosition {
 export interface FormErrors {
   [key: string]: string;
 }
+
+export interface TriageItemForm {
+  title: string;
+  description: string;
+}
