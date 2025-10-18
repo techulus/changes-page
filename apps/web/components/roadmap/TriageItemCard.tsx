@@ -2,8 +2,10 @@ import { IRoadmapTriageItem } from "@changes-page/supabase/types/page";
 import { TrashIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 
+type TriageItemForAdmin = Omit<IRoadmapTriageItem, "visitor_id">;
+
 interface TriageItemCardProps {
-  item: IRoadmapTriageItem;
+  item: TriageItemForAdmin;
   onMoveToBoard: (itemId: string) => Promise<void>;
   onDelete: (itemId: string) => Promise<void>;
 }

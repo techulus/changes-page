@@ -12,6 +12,8 @@ import { useRoadmapDragDrop } from "./hooks/useRoadmapDragDrop";
 import { useRoadmapItems } from "./hooks/useRoadmapItems";
 import { ItemsByColumn, RoadmapItemWithRelations } from "./types";
 
+type TriageItemForAdmin = Omit<IRoadmapTriageItem, "visitor_id">;
+
 export default function RoadmapBoard({
   board,
   columns,
@@ -23,7 +25,7 @@ export default function RoadmapBoard({
   columns: IRoadmapColumn[];
   items: RoadmapItemWithRelations[];
   categories: IRoadmapCategory[];
-  triageItems?: IRoadmapTriageItem[];
+  triageItems?: TriageItemForAdmin[];
 }) {
   const [boardItems, setBoardItems] = useState(items);
 

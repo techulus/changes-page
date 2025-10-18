@@ -4,8 +4,10 @@ import { httpPost } from "../../utils/http";
 import TriageItemCard from "./TriageItemCard";
 import { RoadmapItemWithRelations } from "./types";
 
+type TriageItemForAdmin = Omit<IRoadmapTriageItem, "visitor_id">;
+
 interface TriageRowProps {
-  triageItems: IRoadmapTriageItem[];
+  triageItems: TriageItemForAdmin[];
   onItemMoved: (newItem: RoadmapItemWithRelations) => void;
   onItemDeleted?: () => void;
 }
