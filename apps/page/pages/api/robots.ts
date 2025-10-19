@@ -26,7 +26,7 @@ async function handler(
     if (!settings) throw new Error("Settings not found");
 
     res.status(200).send(settings?.hide_search_engine ? DISALLOW : ALLOW);
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("robots.txt [Error]", e);
     res.status(200).send(DISALLOW);
   }

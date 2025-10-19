@@ -42,7 +42,7 @@ async function handler(
     );
 
     res.status(200).json(postsWithUrl);
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("Failed to fetch posts [Error]", e);
     res.status(200).json([]);
   }

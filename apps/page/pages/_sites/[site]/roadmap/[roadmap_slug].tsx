@@ -16,6 +16,7 @@ import Footer from "../../../../components/footer";
 import PageHeader from "../../../../components/page-header";
 import SeoTags from "../../../../components/seo-tags";
 import VisitorAuthModal from "../../../../components/visitor-auth-modal";
+import TriageSubmissionModal from "../../../../components/roadmap/TriageSubmissionModal";
 import { usePageTheme } from "../../../../hooks/usePageTheme";
 import { useVisitorAuth } from "../../../../hooks/useVisitorAuth";
 import {
@@ -53,6 +54,7 @@ export default function RoadmapPage({
   const [selectedItem, setSelectedItem] = useState<RoadmapItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isTriageModalOpen, setIsTriageModalOpen] = useState(false);
   const [votes, setVotes] = useState<
     Record<string, { count: number; voted: boolean }>
   >({});
@@ -76,6 +78,18 @@ export default function RoadmapPage({
   const closeItemModal = () => {
     setIsModalOpen(false);
     setSelectedItem(null);
+  };
+
+  const handleContributeClick = () => {
+    if (!visitor) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+    setIsTriageModalOpen(true);
+  };
+
+  const handleTriageSuccess = () => {
+    alert("Thank you for your contribution! We'll review your idea soon.");
   };
 
   const handleVote = async (itemId: string) => {
@@ -194,14 +208,24 @@ export default function RoadmapPage({
             {/* Roadmap Header */}
             <div className="pb-6 text-left">
               <div className="max-w-5xl mx-auto">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white text-left">
-                  {board.title}
-                </h1>
-                {board.description && (
-                  <p className="mt-2 text-gray-600 dark:text-gray-400 text-left">
-                    {board.description}
-                  </p>
-                )}
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex-1">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white text-left">
+                      {board.title}
+                    </h1>
+                    {board.description && (
+                      <p className="mt-2 text-gray-600 dark:text-gray-400 text-left">
+                        {board.description}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={handleContributeClick}
+                    className="w-full md:w-auto flex-shrink-0 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+                  >
+                    Contribute Idea
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -545,6 +569,13 @@ export default function RoadmapPage({
       <VisitorAuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
+      />
+
+      <TriageSubmissionModal
+        isOpen={isTriageModalOpen}
+        onClose={() => setIsTriageModalOpen(false)}
+        boardId={board.id}
+        onSuccess={handleTriageSuccess}
       />
     </>
   );

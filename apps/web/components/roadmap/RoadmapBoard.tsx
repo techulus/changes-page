@@ -2,24 +2,30 @@ import {
   IRoadmapBoard,
   IRoadmapCategory,
   IRoadmapColumn,
+  IRoadmapTriageItem,
 } from "@changes-page/supabase/types/page";
 import { useMemo, useState } from "react";
 import RoadmapColumn from "./RoadmapColumn";
 import RoadmapItemModal from "./RoadmapItemModal";
+import TriageRow from "./TriageRow";
 import { useRoadmapDragDrop } from "./hooks/useRoadmapDragDrop";
 import { useRoadmapItems } from "./hooks/useRoadmapItems";
 import { ItemsByColumn, RoadmapItemWithRelations } from "./types";
+
+type TriageItemForAdmin = Omit<IRoadmapTriageItem, "visitor_id">;
 
 export default function RoadmapBoard({
   board,
   columns,
   items,
   categories,
+  triageItems = [],
 }: {
   board: IRoadmapBoard;
   columns: IRoadmapColumn[];
   items: RoadmapItemWithRelations[];
   categories: IRoadmapCategory[];
+  triageItems?: TriageItemForAdmin[];
 }) {
   const [boardItems, setBoardItems] = useState(items);
 
@@ -45,8 +51,45 @@ export default function RoadmapBoard({
     itemsByColumn,
   });
 
+  const handleTriageItemMoved = (newItem: RoadmapItemWithRelations) => {
+    setBoardItems((prev) => {
+      const itemsWithoutDuplicate = prev.filter((item) => item.id !== newItem.id);
+
+      const itemsInTargetColumn = itemsWithoutDuplicate.filter(
+        (item) => item.column_id === newItem.column_id
+      );
+
+      const hasPositionConflict = itemsInTargetColumn.some(
+        (item) => item.position === newItem.position
+      );
+
+      if (hasPositionConflict) {
+        const adjustedItems = itemsWithoutDuplicate.map((item) => {
+          if (item.column_id === newItem.column_id && item.position >= newItem.position) {
+            return { ...item, position: item.position + 1 };
+          }
+          return item;
+        });
+        return [...adjustedItems, newItem];
+      }
+
+      return [...itemsWithoutDuplicate, newItem];
+    });
+  };
+
+  const handleTriageItemDeleted = () => {
+  };
+
   return (
     <>
+      {triageItems.length > 0 && (
+        <TriageRow
+          triageItems={triageItems}
+          onItemMoved={handleTriageItemMoved}
+          onItemDeleted={handleTriageItemDeleted}
+        />
+      )}
+
       <div className="overflow-x-auto snap-x snap-mandatory md:overflow-x-auto h-full">
         <div className="flex md:justify-center h-full">
           <div

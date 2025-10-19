@@ -5,10 +5,16 @@ import { getVisitorId } from "../../../lib/visitor-auth";
 
 export default async function voteOnRoadmapItem(
   req: NextApiRequest,
-  res: NextApiResponse<{ success: boolean; vote_count?: number; error?: string }>
+  res: NextApiResponse<{
+    success: boolean;
+    vote_count?: number;
+    error?: string;
+  }>
 ) {
   if (req.method !== "POST") {
-    return res.status(405).json({ success: false, error: "Method not allowed" });
+    return res
+      .status(405)
+      .json({ success: false, error: "Method not allowed" });
   }
 
   const { item_id } = req.body;
@@ -66,7 +72,9 @@ export default async function voteOnRoadmapItem(
 
       if (insertError) {
         console.error("voteOnRoadmapItem [Insert Error]", insertError);
-        return res.status(500).json({ success: false, error: "Failed to add vote" });
+        return res
+          .status(500)
+          .json({ success: false, error: "Failed to add vote" });
       }
     }
 
@@ -84,7 +92,7 @@ export default async function voteOnRoadmapItem(
       success: true,
       vote_count: count || 0,
     });
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("voteOnRoadmapItem [Error]", e);
     res.status(500).json({ success: false, error: "Internal server error" });
   }
