@@ -1,6 +1,7 @@
 export const ROUTES = {
   HOME: "/",
   PRICING: "/pricing",
+  ROADMAP: "/roadmap",
   LOGIN: "/login",
   LOGIN_CALLBACK: "/api/auth/callback",
 

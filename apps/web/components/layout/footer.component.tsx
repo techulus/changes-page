@@ -22,6 +22,10 @@ const navigation = {
   ],
   company: [
     {
+      name: "Roadmap Boards",
+      href: ROUTES.ROADMAP,
+    },
+    {
       name: "Developers care about changelogs",
       href: "/developers-care-about-changelog",
     },
