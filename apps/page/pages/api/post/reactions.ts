@@ -53,7 +53,7 @@ export default async function getPostReactions(
         : null,
       user,
     });
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("getPostReactions [Error]", e);
     res.status(200).json({ success: false, aggregate: null, user: null });
   }

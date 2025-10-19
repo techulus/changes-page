@@ -38,7 +38,7 @@ export default withAuth<{ ok: boolean; aggregate: any }>(
           rocket: aggregate[0].rocket_count,
         },
       });
-    } catch (e: Error | any) {
+    } catch (e: unknown) {
       console.log("getPostReactions [Error]", e);
       res.status(500).json({ ok: false, aggregate: null });
     }

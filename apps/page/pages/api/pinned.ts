@@ -59,7 +59,7 @@ async function handler(
     });
 
     res.status(200).json(postsWithUrl[0]);
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("Failed to fetch pinned post [Error]", e);
     res.status(404).json(null);
   }

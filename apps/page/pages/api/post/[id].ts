@@ -67,7 +67,7 @@ async function handler(
       url: getPostUrl(pageUrl, post),
       plain_text_content: convertMarkdownToPlainText(post.content),
     });
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("Failed to fetch post [Error]", e);
     res.status(404).json(null);
   }

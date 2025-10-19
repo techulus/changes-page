@@ -51,7 +51,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<string>) {
     res.setHeader("Content-Type", "application/xml");
     res.setHeader("content-disposition", 'inline; filename="sitemap.xml"');
     res.status(200).send(result.toString());
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("Sitemap [Error]", e);
     res.status(500).send("Something went wrong");
   }

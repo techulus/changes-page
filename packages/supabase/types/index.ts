@@ -588,6 +588,51 @@ export type Database = {
           },
         ]
       }
+      roadmap_triage_items: {
+        Row: {
+          board_id: string
+          created_at: string
+          description: string | null
+          id: string
+          title: string
+          updated_at: string
+          visitor_id: string
+        }
+        Insert: {
+          board_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          visitor_id: string
+        }
+        Update: {
+          board_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_triage_items_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_boards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roadmap_triage_items_visitor_id_fkey"
+            columns: ["visitor_id"]
+            isOneToOne: false
+            referencedRelation: "page_visitors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       roadmap_votes: {
         Row: {
           created_at: string

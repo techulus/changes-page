@@ -1,3 +1,7 @@
+import {
+  convertMarkdownToHtml,
+  convertMarkdownToPlainText,
+} from "@changes-page/utils";
 import { Feed } from "feed";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
@@ -5,10 +9,6 @@ import {
   fetchRenderData,
   translateHostToPageIdentifier,
 } from "../../lib/data";
-import {
-  convertMarkdownToHtml,
-  convertMarkdownToPlainText,
-} from "@changes-page/utils";
 import { getPageUrl, getPostUrl } from "../../lib/url";
 
 async function handler(req: NextApiRequest, res: NextApiResponse<string>) {
@@ -69,7 +69,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<string>) {
     res
       .status(200)
       .send((req?.url ?? "rss").includes("rss") ? feed.rss2() : feed.atom1());
-  } catch (e: Error | any) {
+  } catch (e: unknown) {
     console.log("feed.rss [Error]", e);
     res.status(500).send("Something went wrong");
   }
