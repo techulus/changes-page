@@ -6,7 +6,7 @@ import {
 } from "@changes-page/supabase/types/page";
 import { getCategoryColorClasses } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/outline";
+import { PlusIcon, XIcon } from "@heroicons/react/outline";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -14,9 +14,9 @@ import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 import Footer from "../../../../components/footer";
 import PageHeader from "../../../../components/page-header";
+import TriageSubmissionModal from "../../../../components/roadmap/TriageSubmissionModal";
 import SeoTags from "../../../../components/seo-tags";
 import VisitorAuthModal from "../../../../components/visitor-auth-modal";
-import TriageSubmissionModal from "../../../../components/roadmap/TriageSubmissionModal";
 import { usePageTheme } from "../../../../hooks/usePageTheme";
 import { useVisitorAuth } from "../../../../hooks/useVisitorAuth";
 import {
@@ -221,9 +221,10 @@ export default function RoadmapPage({
                   </div>
                   <button
                     onClick={handleContributeClick}
-                    className="w-full md:w-auto flex-shrink-0 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+                    className="max-w-fit flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm font-medium rounded-md transition-colors shadow-sm"
                   >
-                    Contribute Idea
+                    <PlusIcon className="w-4 h-4" />
+                    Idea
                   </button>
                 </div>
               </div>
