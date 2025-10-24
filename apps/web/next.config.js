@@ -5,7 +5,7 @@ const ContentSecurityPolicy = `
   style-src 'self' data: 'unsafe-inline' maxcdn.bootstrapcdn.com cdn.jsdelivr.net cdn.zapier.com fonts.googleapis.com;
   img-src 'self' * data: blob:;
   font-src 'self' data: maxcdn.bootstrapcdn.com cdn.jsdelivr.net fonts.gstatic.com;
-  connect-src 'self' wss: *.supabase.co *.changes.page manageprompt.com zapier.com *.zapier.com www.google.com *.atlassian.com us.i.posthog.com;
+  connect-src 'self' wss: *.supabase.co *.changes.page manageprompt.com zapier.com *.zapier.com www.google.com *.atlassian.com;
   worker-src 'self' blob:;
   report-to default
 `;
@@ -66,25 +66,6 @@ const moduleExports = {
       "cdn.sanity.io",
     ],
   },
-  // PostHog rewrites for ingest and static assets
-  async rewrites() {
-    return [
-      {
-        source: "/ingest/static/:path*",
-        destination: "https://us-assets.i.posthog.com/static/:path*",
-      },
-      {
-        source: "/ingest/:path*",
-        destination: "https://us.i.posthog.com/:path*",
-      },
-      {
-        source: "/ingest/decide",
-        destination: "https://us.i.posthog.com/decide",
-      },
-    ];
-  },
-  // This is required to support PostHog trailing slash API requests
-  skipTrailingSlashRedirect: true,
 };
 
 // ensure that your source maps include changes from all other Webpack plugins
