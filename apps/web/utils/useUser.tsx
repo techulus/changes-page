@@ -6,7 +6,6 @@ import {
   User,
 } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
-import posthog from "posthog-js";
 import {
   createContext,
   useCallback,
@@ -70,7 +69,6 @@ export const UserContextProvider = ({
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
 
-    posthog.reset();
     setBillingDetails(null);
     await router.replace(ROUTES.HOME);
 
@@ -108,10 +106,6 @@ export const UserContextProvider = ({
     if (user) {
       fetchBilling().then(() => {
         setLoading(false);
-      });
-      posthog.identify(user.id, {
-        email: user.email,
-        name: user.user_metadata?.full_name,
       });
     } else {
       setLoading(false);
