@@ -2,6 +2,7 @@ import { serve } from "inngest/next";
 import { handleSubscriptionChange } from "../../inngest/billing/handle-subscription";
 import { reportUsageForStripeInvoice } from "../../inngest/billing/report-pages-usage-invoice";
 import { sendConfirmEmailNotification } from "../../inngest/email/send-confirm-email-notification";
+import { sendRoadmapTriageNotification } from "../../inngest/email/send-roadmap-triage-notification";
 import { sendTeamInviteEmail } from "../../inngest/email/send-team-invite";
 import { sendWelcomeEmail } from "../../inngest/email/send-welcome-email";
 import { sendVisitorMagicLink } from "../../inngest/email/send-visitor-magic-link";
@@ -16,6 +17,7 @@ export default serve("changes-page", [
   // Emails
   sendConfirmEmailNotification,
   sendPostNotification,
+  sendRoadmapTriageNotification,
   sendWelcomeEmail,
   sendTeamInviteEmail,
   sendVisitorMagicLink,

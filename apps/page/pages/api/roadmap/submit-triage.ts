@@ -1,7 +1,26 @@
+import arcjet, { detectBot, tokenBucket } from "@arcjet/next";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
 import { getAuthenticatedVisitor } from "../../../lib/visitor-auth";
+import inngestClient from "../../../utils/inngest";
+
+const aj = arcjet({
+  key: process.env.ARCJET_KEY!,
+  rules: [
+    tokenBucket({
+      mode: "LIVE",
+      characteristics: ["userId"],
+      refillRate: 5,
+      interval: "1h",
+      capacity: 10,
+    }),
+    detectBot({
+      mode: "LIVE",
+      block: ["AUTOMATED"],
+    }),
+  ],
+});
 
 export default async function submitTriageItem(
   req: NextApiRequest,
@@ -54,15 +73,37 @@ export default async function submitTriageItem(
       .json({ success: false, error: "Authentication required" });
   }
 
+  if (process.env.ARCJET_KEY) {
+    const decision = await aj.protect(req, {
+      userId: visitor.id,
+      requested: 1,
+    });
+
+    if (decision.isDenied()) {
+      console.log(
+        "roadmap/submit-triage: [Arcjet Block]",
+        visitor.id,
+        decision.reason
+      );
+
+      return res.status(403).json({
+        success: false,
+        error: "Request blocked.",
+      });
+    }
+  }
+
   try {
-    const { data: boardCheck, error: boardCheckError } = await supabaseAdmin
+    const { data: board, error: boardCheckError } = await supabaseAdmin
       .from("roadmap_boards")
-      .select("id, is_public")
+      .select(
+        "id, is_public, title, page_id, pages(url_slug, page_settings(custom_domain))"
+      )
       .eq("id", board_id)
       .eq("is_public", true)
       .maybeSingle();
 
-    if (boardCheckError || !boardCheck) {
+    if (boardCheckError || !board) {
       return res
         .status(404)
         .json({ success: false, error: "Board not found or not public" });
@@ -85,6 +126,20 @@ export default async function submitTriageItem(
       return res
         .status(500)
         .json({ success: false, error: "Failed to submit item" });
+    }
+
+    try {
+      await inngestClient.send({
+        name: "email/roadmap.triage-submitted",
+        data: {
+          page_id: board.page_id,
+          board_id: board.id,
+          board_title: board.title,
+          item_title: trimmedTitle,
+        },
+      });
+    } catch (emailError) {
+      console.error("submitTriageItem [Email Error]", emailError);
     }
 
     res.status(200).json({
