@@ -2,25 +2,28 @@ import arcjet, { detectBot, tokenBucket } from "@arcjet/next";
 import { supabaseAdmin } from "@changes-page/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
+import { escape } from "validator";
 import { getAuthenticatedVisitor } from "../../../lib/visitor-auth";
 import inngestClient from "../../../utils/inngest";
 
-const aj = arcjet({
-  key: process.env.ARCJET_KEY!,
-  rules: [
-    tokenBucket({
-      mode: "LIVE",
-      characteristics: ["userId"],
-      refillRate: 5,
-      interval: "1h",
-      capacity: 10,
-    }),
-    detectBot({
-      mode: "LIVE",
-      block: ["AUTOMATED"],
-    }),
-  ],
-});
+const aj = process.env.ARCJET_KEY
+  ? arcjet({
+      key: process.env.ARCJET_KEY,
+      rules: [
+        tokenBucket({
+          mode: "LIVE",
+          characteristics: ["userId"],
+          refillRate: 5,
+          interval: "1h",
+          capacity: 10,
+        }),
+        detectBot({
+          mode: "LIVE",
+          block: ["AUTOMATED"],
+        }),
+      ],
+    })
+  : undefined;
 
 export default async function submitTriageItem(
   req: NextApiRequest,
@@ -73,7 +76,7 @@ export default async function submitTriageItem(
       .json({ success: false, error: "Authentication required" });
   }
 
-  if (process.env.ARCJET_KEY) {
+  if (aj) {
     const decision = await aj.protect(req, {
       userId: visitor.id,
       requested: 1,
@@ -133,7 +136,7 @@ export default async function submitTriageItem(
           page_id: board.page_id,
           board_id: board.id,
           board_title: board.title,
-          item_title: trimmedTitle,
+          item_title: escape(trimmedTitle),
         },
       });
     } catch (emailError) {
