@@ -96,9 +96,7 @@ export default async function submitTriageItem(
   try {
     const { data: board, error: boardCheckError } = await supabaseAdmin
       .from("roadmap_boards")
-      .select(
-        "id, is_public, title, page_id, pages(url_slug, page_settings(custom_domain))"
-      )
+      .select("id, is_public, title, page_id")
       .eq("id", board_id)
       .eq("is_public", true)
       .maybeSingle();
