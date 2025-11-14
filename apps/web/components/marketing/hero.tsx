@@ -112,11 +112,11 @@ export default function Hero({ stars = null }: { stars?: string | null }) {
           </p>
 
           <p className="mt-6 text-lg leading-8 text-gray-300">
-            Our open-source platform empowers you to publish changelog pages and
-            interactive roadmaps. Share what you&apos;ve built and what&apos;s
-            coming next. Notify users via email, gather feedback with voting,
-            track analytics, and enjoy a host of additional features. Kickstart
-            your page in just a few minutes!
+            Our open-source platform empowers you to share what you&apos;ve
+            built with changelogs and what&apos;s coming next with roadmaps.
+            Notify users via email, gather feedback with voting, track
+            analytics, and enjoy a host of additional features. Kickstart your
+            page in just a few minutes!
           </p>
 
           <div className="mt-10 flex items-center gap-x-6">
