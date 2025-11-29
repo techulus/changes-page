@@ -93,15 +93,15 @@ export default function Features() {
             <span className="underline decoration-yellow-500 text-white">
               open-source
             </span>{" "}
-            solution revolutionizing{" "}
+            platform for{" "}
             <span className="underline decoration-red-500 text-white">
-              changelog
+              changelogs
             </span>{" "}
             and{" "}
             <span className="underline decoration-blue-500 text-white">
-              roadmap
-            </span>{" "}
-            management.
+              roadmaps
+            </span>
+            , built for modern teams.
           </p>
         </div>
       </div>

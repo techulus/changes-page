@@ -1,0 +1,47 @@
+name: Page E2E Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Playwright Tests
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: pnpm --filter @changes-page/page exec playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: pnpm --filter @changes-page/page test
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: |
+            apps/page/screenshot.jpg
+            apps/page/latestPostResponse-screenshot.jpg
+          retention-days: 7
+          if-no-files-found: ignore

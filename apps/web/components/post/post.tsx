@@ -8,6 +8,7 @@ import {
   PostType,
 } from "@changes-page/supabase/types/page";
 import { PostDateTime, PostTypeBadge } from "@changes-page/ui";
+import { DateTime } from "@changes-page/utils";
 import { Menu } from "@headlessui/react";
 import { DotsVerticalIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
@@ -16,6 +17,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
+import { createAuditLog } from "../../utils/auditLog";
 import usePageUrl from "../../utils/hooks/usePageUrl";
 import { httpGet } from "../../utils/http";
 import { useUserData } from "../../utils/useUser";
@@ -23,7 +25,6 @@ import { notifyError } from "../core/toast.component";
 import ConfirmDeleteDialog from "../dialogs/confirm-delete-dialog.component";
 import PostOptions from "./post-options";
 import { PostStatusIcon } from "./post-status";
-import { createAuditLog } from "../../utils/auditLog";
 
 const ReactionsCounter = ({ aggregate }: { aggregate: IReactions }) => {
   return (
@@ -216,14 +217,36 @@ export function Post({
             <span className="inline-flex flex-col md:flex-row text-sm md:space-x-2 space-y-2 md:space-y-0 whitespace-nowrap text-gray-500 dark:text-gray-400">
               <PostDateTime publishedAt={publishedAt} startWithFullDate />
 
-              <div className="flex items-center -mt-0.5">
+              <div className="flex items-center -mt-0.5 flex-wrap gap-2">
                 {(post?.tags ?? []).map((tag: PostType, idx) => (
-                  <div key={tag} className={classNames(idx ? "ml-2" : "")}>
+                  <div key={tag}>
                     <PostTypeBadge type={tag} />
                   </div>
                 ))}
                 {settings?.pinned_post_id === post.id && (
-                  <PostTypeBadge type="pinned" className="ml-2" />
+                  <PostTypeBadge type="pinned" />
+                )}
+                {post.status !== PostStatus.published && (
+                  <div className={classNames(
+                    "flex lg:hidden items-center space-x-1.5",
+                    post.status === PostStatus.draft && "text-slate-700 dark:text-slate-500",
+                    post.status === PostStatus.publish_later && "text-orange-700 dark:text-orange-500"
+                  )}>
+                    <PostStatusIcon
+                      status={post.status}
+                      className="w-4 h-4"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium">
+                        {PostStatusToLabel[post.status]}
+                      </span>
+                      {post.status === PostStatus.publish_later && post.publish_at && (
+                        <span className="text-xs">
+                          {DateTime.fromISO(post.publish_at).toNiceFormat()}
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
 
@@ -253,22 +276,25 @@ export function Post({
               <aside className="hidden lg:block absolute top-4 -right-52 w-48">
                 <h2 className="sr-only">Options</h2>
                 <div className="space-y-5">
-                  <div className="flex items-center space-x-2">
-                    <span
-                      className={classNames(
-                        "text-sm font-medium text-green-700 dark:text-green-500",
-                        post.status === PostStatus.draft &&
-                          "text-slate-700 dark:text-slate-500",
-                        post.status === PostStatus.publish_later &&
-                          "text-orange-700 dark:text-orange-500"
-                      )}
-                    >
+                  <div className={classNames(
+                    "flex flex-col space-y-1  text-green-700 dark:text-green-500",
+                    post.status === PostStatus.draft &&
+                    "text-slate-700 dark:text-slate-500",
+                    post.status === PostStatus.publish_later &&
+                    "text-orange-700 dark:text-orange-500"
+                  )}>
+                    <span className="text-sm font-medium">
                       <PostStatusIcon
                         status={post.status}
                         className="w-5 h-5 inline-block mr-1.5"
                       />
                       {PostStatusToLabel[post.status]}
                     </span>
+                    {post.status === PostStatus.publish_later && post.publish_at && (
+                      <span className="text-xs pl-[1.625rem]">
+                        {DateTime.fromISO(post.publish_at).toNiceFormat()}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center space-x-2">
@@ -328,8 +354,8 @@ export function Post({
               <ReactionsCounter aggregate={reactions} />
             ) : null}
           </div>
-        </div>
-      </li>
+        </div >
+      </li >
     </>
   );
 }
