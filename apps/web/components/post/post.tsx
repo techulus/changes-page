@@ -219,7 +219,7 @@ export function Post({
 
               <div className="flex items-center -mt-0.5 flex-wrap gap-2">
                 {(post?.tags ?? []).map((tag: PostType, idx) => (
-                  <div key={tag} className={classNames(idx ? "" : "")}>
+                  <div key={tag}>
                     <PostTypeBadge type={tag} />
                   </div>
                 ))}
