@@ -1,11 +1,11 @@
-const withBundleAnalyzer = require("@next/bundle-analyzer")({});
+const { withSentryConfig } = require("@sentry/nextjs");
 
 const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' *;
   style-src 'self' data: 'unsafe-inline' maxcdn.bootstrapcdn.com cdn.jsdelivr.net cdn.zapier.com fonts.googleapis.com;
   img-src 'self' * data: blob:;
   font-src 'self' data: maxcdn.bootstrapcdn.com cdn.jsdelivr.net fonts.gstatic.com;
-  connect-src 'self' wss: *.supabase.co *.changes.page manageprompt.com zapier.com *.zapier.com www.google.com *.atlassian.com;
+  connect-src 'self' wss: *.supabase.co *.changes.page manageprompt.com zapier.com *.zapier.com www.google.com;
   worker-src 'self' blob:;
   report-to default
 `;
@@ -48,7 +48,7 @@ const securityHeaders = [
   },
 ];
 
-const moduleExports = {
+const nextConfig = {
   async headers() {
     return [
       {
@@ -68,18 +68,8 @@ const moduleExports = {
   },
 };
 
-// ensure that your source maps include changes from all other Webpack plugins
-module.exports =
-  process.env.ANALYZE === "true"
-    ? withBundleAnalyzer(moduleExports)
-    : moduleExports;
-
-// Injected content via Sentry wizard below
-
-const { withSentryConfig } = require("@sentry/nextjs");
-
 module.exports = withSentryConfig(
-  module.exports,
+  nextConfig,
   {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options

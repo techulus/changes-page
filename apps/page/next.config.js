@@ -1,4 +1,4 @@
-const withBundleAnalyzer = require("@next/bundle-analyzer")({});
+const { withSentryConfig } = require("@sentry/nextjs");
 
 const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: *;
@@ -46,8 +46,7 @@ const securityHeaders = [
   },
 ];
 
-// Your existing module.exports
-const moduleExports = {
+const nextConfig = {
   async headers() {
     return [
       {
@@ -109,17 +108,8 @@ const moduleExports = {
   },
 };
 
-module.exports =
-  process.env.ANALYZE === "true"
-    ? withBundleAnalyzer(moduleExports)
-    : moduleExports;
-
-// Injected content via Sentry wizard below
-
-const { withSentryConfig } = require("@sentry/nextjs");
-
 module.exports = withSentryConfig(
-  module.exports,
+  nextConfig,
   {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
