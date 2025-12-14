@@ -13,10 +13,8 @@ function isValidInstallationId(value: string | undefined): boolean {
   return /^\d+$/.test(value);
 }
 
-function isValidCode(value: string | undefined): boolean {
-  if (!value) return false;
-  if (value.length > 100) return false;
-  return /^[a-zA-Z0-9_-]+$/.test(value);
+function hasCode(value: string | undefined): boolean {
+  return !!value && value.length > 0;
 }
 
 export default async function handler(
@@ -31,7 +29,7 @@ export default async function handler(
     const params = new URLSearchParams();
     params.set("installation_id", installation_id!);
 
-    if (isValidCode(code)) {
+    if (hasCode(code)) {
       params.set("code", code!);
     }
 
