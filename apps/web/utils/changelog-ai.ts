@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { GitHubCommit, GitHubFile, GitHubPRDetails } from "./github";
+import { getPRCommits, getPRDetails, getPRFiles } from "./github";
 import { runWorkflow } from "./manageprompt";
 
 export interface ChangelogInput {
-  pr: GitHubPRDetails;
-  commits: GitHubCommit[];
-  files: GitHubFile[];
+  pr: Awaited<ReturnType<typeof getPRDetails>>;
+  commits: Awaited<ReturnType<typeof getPRCommits>>;
+  files: Awaited<ReturnType<typeof getPRFiles>>;
   userInstructions: string;
   previousDraft?: {
     title: string;

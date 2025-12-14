@@ -1,41 +1,6 @@
 import * as crypto from "crypto";
 import { App } from "@octokit/app";
 
-export interface GitHubPRDetails {
-  title: string;
-  body: string | null;
-  number: number;
-  html_url: string;
-  user: {
-    login: string;
-  } | null;
-  head: {
-    ref: string;
-  };
-  base: {
-    ref: string;
-  };
-  merged: boolean;
-  additions: number;
-  deletions: number;
-  changed_files: number;
-}
-
-export interface GitHubCommit {
-  sha: string;
-  commit: {
-    message: string;
-  };
-}
-
-export interface GitHubFile {
-  filename: string;
-  status: string;
-  additions: number;
-  deletions: number;
-  patch?: string;
-}
-
 let app: App | null = null;
 
 function getApp(): App {
@@ -64,7 +29,7 @@ export function verifyGitHubWebhookSignature(
   signature: string | undefined,
   secret: string
 ): boolean {
-  if (!signature) return false;
+  if (!signature || !signature.startsWith("sha256=")) return false;
 
   try {
     const expectedSignature =
@@ -89,14 +54,17 @@ export async function getPRDetails(
   repo: string,
   prNumber: number,
   installationId: number
-): Promise<GitHubPRDetails> {
+) {
   const octokit = await getOctokit(installationId);
-  const { data } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", {
-    owner,
-    repo,
-    pull_number: prNumber,
-  });
-  return data as GitHubPRDetails;
+  const { data } = await octokit.request(
+    "GET /repos/{owner}/{repo}/pulls/{pull_number}",
+    {
+      owner,
+      repo,
+      pull_number: prNumber,
+    }
+  );
+  return data;
 }
 
 export async function getPRCommits(
@@ -104,14 +72,17 @@ export async function getPRCommits(
   repo: string,
   prNumber: number,
   installationId: number
-): Promise<GitHubCommit[]> {
+) {
   const octokit = await getOctokit(installationId);
-  const { data } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", {
-    owner,
-    repo,
-    pull_number: prNumber,
-  });
-  return data as GitHubCommit[];
+  const { data } = await octokit.request(
+    "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits",
+    {
+      owner,
+      repo,
+      pull_number: prNumber,
+    }
+  );
+  return data;
 }
 
 export async function getPRFiles(
@@ -119,14 +90,17 @@ export async function getPRFiles(
   repo: string,
   prNumber: number,
   installationId: number
-): Promise<GitHubFile[]> {
+) {
   const octokit = await getOctokit(installationId);
-  const { data } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}/files", {
-    owner,
-    repo,
-    pull_number: prNumber,
-  });
-  return data as GitHubFile[];
+  const { data } = await octokit.request(
+    "GET /repos/{owner}/{repo}/pulls/{pull_number}/files",
+    {
+      owner,
+      repo,
+      pull_number: prNumber,
+    }
+  );
+  return data;
 }
 
 export async function createPRComment(
@@ -137,12 +111,15 @@ export async function createPRComment(
   installationId: number
 ): Promise<number> {
   const octokit = await getOctokit(installationId);
-  const { data } = await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", {
-    owner,
-    repo,
-    issue_number: issueNumber,
-    body,
-  });
+  const { data } = await octokit.request(
+    "POST /repos/{owner}/{repo}/issues/{issue_number}/comments",
+    {
+      owner,
+      repo,
+      issue_number: issueNumber,
+      body,
+    }
+  );
   return data.id;
 }
 
@@ -162,10 +139,13 @@ export async function addReactionToComment(
   installationId: number
 ): Promise<void> {
   const octokit = await getOctokit(installationId);
-  await octokit.request("POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", {
-    owner,
-    repo,
-    comment_id: commentId,
-    content: reaction,
-  });
+  await octokit.request(
+    "POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+    {
+      owner,
+      repo,
+      comment_id: commentId,
+      content: reaction,
+    }
+  );
 }
