@@ -11,16 +11,14 @@ import {
 import inngestClient from "../../utils/inngest";
 import { createPost } from "../../utils/useDatabase";
 
-const MAX_RETRIES = 3;
-
 export const processGitHubChangelog = inngestClient.createFunction(
   {
     id: "github-process-changelog",
     name: "GitHub: Process changelog from PR",
-    retries: MAX_RETRIES,
+    retries: 3,
   },
   { event: "github/changelog.process" },
-  async ({ event, attempt }) => {
+  async ({ event }) => {
     const {
       installationId,
       owner,
@@ -70,7 +68,9 @@ export const processGitHubChangelog = inngestClient.createFunction(
         .eq("pr_number", prNumber)
         .single();
 
-      let previousDraft: { title: string; content: string; tags: string[] } | undefined;
+      let previousDraft:
+        | { title: string; content: string; tags: string[] }
+        | undefined;
 
       if (existingRef) {
         const { data: existingPost } = await supabaseAdmin
@@ -98,7 +98,7 @@ export const processGitHubChangelog = inngestClient.createFunction(
         installation.ai_instructions,
         userInstructions,
       ]
-        .filter(Boolean)
+        .filter((s) => s?.trim())
         .join("\n\n");
 
       const changelog = await generateChangelog({
@@ -112,31 +112,35 @@ export const processGitHubChangelog = inngestClient.createFunction(
       let postId: string;
       let dashboardUrl: string;
 
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://changes.page";
+      const baseUrl =
+        process.env.NEXT_PUBLIC_SITE_URL || "https://changes.page";
 
       if (existingRef) {
         postId = existingRef.post_id;
         dashboardUrl = `${baseUrl}/page/${page.url_slug}/posts/${postId}`;
 
-        await supabaseAdmin
-          .from("posts")
-          .update({
-            title: changelog.title,
-            content: changelog.content,
-            tags: changelog.tags,
-          })
-          .eq("id", postId);
+        const { data: newGenerationCount, error: updateError } =
+          await supabaseAdmin.rpc("update_github_changelog_draft", {
+            p_post_id: postId,
+            p_title: changelog.title,
+            p_content: changelog.content,
+            p_tags: changelog.tags,
+          });
 
-        await supabaseAdmin
-          .from("github_post_references")
-          .update({ generation_count: existingRef.generation_count + 1 })
-          .eq("post_id", postId);
+        if (updateError) {
+          console.error("Failed to update changelog draft:", {
+            error: updateError,
+            postId,
+            context: { owner, repo, prNumber },
+          });
+          throw new Error(`Failed to update changelog draft: ${updateError.message}`);
+        }
 
         await createPRComment(
           owner,
           repo,
           issueNumber,
-          `📝 **Changelog draft updated!** (v${existingRef.generation_count + 1})\n\nI've updated the draft based on your feedback.\n\n**[View and edit your draft →](${dashboardUrl})**\n\nOnce you're happy with it, you can publish it from the dashboard.`,
+          `📝 **Changelog draft updated!** (v${newGenerationCount})\n\nI've updated the draft based on your feedback.\n\n**[View and edit your draft →](${dashboardUrl})**\n\nOnce you're happy with it, you can publish it from the dashboard.`,
           installationId
         );
       } else {
@@ -159,17 +163,34 @@ export const processGitHubChangelog = inngestClient.createFunction(
 
         const commentBody = `📝 **Changelog draft created!**\n\nI've created a draft changelog post based on this PR.\n\n**[View and edit your draft →](${dashboardUrl})**\n\nOnce you're happy with it, you can publish it from the dashboard.`;
 
-        const commentId = await createPRComment(owner, repo, issueNumber, commentBody, installationId);
+        const commentId = await createPRComment(
+          owner,
+          repo,
+          issueNumber,
+          commentBody,
+          installationId
+        );
 
-        await supabaseAdmin.from("github_post_references").insert({
-          post_id: postId,
-          installation_id: installationId,
-          repository_owner: owner,
-          repository_name: repo,
-          pr_number: prNumber,
-          pr_url: pr.html_url,
-          comment_id: commentId,
-        });
+        const { error: insertError } = await supabaseAdmin
+          .from("github_post_references")
+          .insert({
+            post_id: postId,
+            installation_id: installationId,
+            repository_owner: owner,
+            repository_name: repo,
+            pr_number: prNumber,
+            pr_url: pr.html_url,
+            comment_id: commentId,
+          });
+
+        if (insertError) {
+          console.error("Failed to create GitHub post reference:", {
+            error: insertError,
+            postId,
+            context: { owner, repo, prNumber },
+          });
+          throw new Error(`Failed to create GitHub post reference: ${insertError.message}`);
+        }
       }
 
       return {
@@ -179,26 +200,12 @@ export const processGitHubChangelog = inngestClient.createFunction(
         updated: !!existingRef,
       };
     } catch (error) {
-      console.error("Error processing changelog:", error);
-
-      const isFinalAttempt = attempt >= MAX_RETRIES - 1;
-
-      if (isFinalAttempt) {
-        try {
-          await createPRComment(
-            owner,
-            repo,
-            issueNumber,
-            `❌ **Failed to create changelog**\n\nSorry, I encountered an error while processing this PR. Please try again or create the changelog manually.\n\nError: ${
-              error instanceof Error ? error.message : "Unknown error"
-            }`,
-            installationId
-          );
-        } catch (commentError) {
-          console.error("Failed to post error comment:", commentError);
-        }
-      }
-
+      console.error("Error processing changelog:", {
+        error,
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+        context: { installationId, owner, repo, prNumber, issueNumber },
+      });
       throw error;
     }
   }

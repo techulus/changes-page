@@ -1,25 +1,15 @@
+import { IGitHubInstallations } from "@changes-page/supabase/types/github";
 import { Spinner } from "@changes-page/ui";
 import { ExternalLinkIcon, TrashIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
 import { notifyError, notifySuccess } from "../core/toast.component";
 import WarningDialog from "../dialogs/warning-dialog.component";
 
-interface GitHubInstallation {
-  id: string;
-  page_id: string;
-  installation_id: number;
-  repository_owner: string;
-  repository_name: string;
-  enabled: boolean;
-  ai_instructions: string | null;
-  created_at: string;
-}
-
 export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
-  const [installations, setInstallations] = useState<GitHubInstallation[]>([]);
+  const [installations, setInstallations] = useState<IGitHubInstallations[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<GitHubInstallation | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<IGitHubInstallations | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -43,7 +33,7 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
   }
 
   async function updateInstallation(
-    installation: GitHubInstallation,
+    installation: IGitHubInstallations,
     updates: { enabled?: boolean; ai_instructions?: string | null }
   ) {
     setSaving(installation.id);

@@ -1,32 +1,21 @@
 import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { IGitHubInstallations } from "@changes-page/supabase/types/github";
 import { withAuth } from "../../../../utils/withAuth";
 
-interface GitHubInstallation {
-  id: string;
-  page_id: string;
-  installation_id: number;
-  repository_owner: string;
-  repository_name: string;
-  connected_by: string | null;
-  enabled: boolean;
-  ai_instructions: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
 type ResponseData =
-  | GitHubInstallation
-  | GitHubInstallation[]
+  | IGitHubInstallations
+  | IGitHubInstallations[]
   | { deleted: boolean };
 
 const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
   if (req.method === "GET") {
-    const { page_id } = req.query;
+    const page_id = String(req.query.page_id || "");
 
     if (!page_id) {
-      return res.status(400).json({
+      res.status(400).json({
         error: { statusCode: 400, message: "page_id is required" },
       });
+      return;
     }
 
     const { data: page } = await supabase
@@ -37,9 +26,10 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       .single();
 
     if (!page) {
-      return res.status(403).json({
+      res.status(403).json({
         error: { statusCode: 403, message: "Access denied" },
       });
+      return;
     }
 
     const { data, error } = await supabaseAdmin
@@ -48,12 +38,14 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       .eq("page_id", page_id);
 
     if (error) {
-      return res.status(500).json({
+      res.status(500).json({
         error: { statusCode: 500, message: error.message },
       });
+      return;
     }
 
-    return res.status(200).json(data as GitHubInstallation[]);
+    res.status(200).json(data as IGitHubInstallations[]);
+    return;
   }
 
   if (req.method === "POST") {
@@ -61,9 +53,10 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       req.body;
 
     if (!page_id || !installation_id || !repository_owner || !repository_name) {
-      return res.status(400).json({
+      res.status(400).json({
         error: { statusCode: 400, message: "Missing required fields" },
       });
+      return;
     }
 
     const { data: page } = await supabase
@@ -74,9 +67,10 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       .single();
 
     if (!page) {
-      return res.status(403).json({
+      res.status(403).json({
         error: { statusCode: 403, message: "Access denied" },
       });
+      return;
     }
 
     const { data, error } = await supabaseAdmin
@@ -97,21 +91,24 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       .single();
 
     if (error) {
-      return res.status(500).json({
+      res.status(500).json({
         error: { statusCode: 500, message: error.message },
       });
+      return;
     }
 
-    return res.status(200).json(data as GitHubInstallation);
+    res.status(200).json(data as IGitHubInstallations);
+    return;
   }
 
   if (req.method === "PATCH") {
     const { id, page_id, enabled, ai_instructions } = req.body;
 
     if (!id || !page_id) {
-      return res.status(400).json({
+      res.status(400).json({
         error: { statusCode: 400, message: "id and page_id are required" },
       });
+      return;
     }
 
     const { data: page } = await supabase
@@ -122,12 +119,15 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       .single();
 
     if (!page) {
-      return res.status(403).json({
+      res.status(403).json({
         error: { statusCode: 403, message: "Access denied" },
       });
+      return;
     }
 
-    const updates: { enabled?: boolean; ai_instructions?: string | null } = {};
+    const updates: { enabled?: boolean; ai_instructions?: string | null } = {
+      enabled: true,
+    };
     if (typeof enabled === "boolean") updates.enabled = enabled;
     if (typeof ai_instructions === "string" || ai_instructions === null) {
       updates.ai_instructions = ai_instructions;
@@ -142,21 +142,25 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       .single();
 
     if (error) {
-      return res.status(500).json({
+      res.status(500).json({
         error: { statusCode: 500, message: error.message },
       });
+      return;
     }
 
-    return res.status(200).json(data as GitHubInstallation);
+    res.status(200).json(data as IGitHubInstallations);
+    return;
   }
 
   if (req.method === "DELETE") {
-    const { id, page_id } = req.query;
+    const id = String(req.query.id || "");
+    const page_id = String(req.query.page_id || "");
 
     if (!id || !page_id) {
-      return res.status(400).json({
+      res.status(400).json({
         error: { statusCode: 400, message: "id and page_id are required" },
       });
+      return;
     }
 
     const { data: page } = await supabase
@@ -167,9 +171,10 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       .single();
 
     if (!page) {
-      return res.status(403).json({
+      res.status(403).json({
         error: { statusCode: 403, message: "Access denied" },
       });
+      return;
     }
 
     const { error } = await supabaseAdmin
@@ -179,16 +184,18 @@ const handler = withAuth<ResponseData>(async (req, res, { supabase, user }) => {
       .eq("page_id", page_id);
 
     if (error) {
-      return res.status(500).json({
+      res.status(500).json({
         error: { statusCode: 500, message: error.message },
       });
+      return;
     }
 
-    return res.status(200).json({ deleted: true });
+    res.status(200).json({ deleted: true });
+    return;
   }
 
   res.setHeader("Allow", "GET, POST, PATCH, DELETE");
-  return res.status(405).end("Method Not Allowed");
+  res.status(405).end("Method Not Allowed");
 });
 
 export default handler;

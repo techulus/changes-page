@@ -984,6 +984,15 @@ export type Database = {
           thumbs_up_count: number
         }[]
       }
+      update_github_changelog_draft: {
+        Args: {
+          p_content: string
+          p_post_id: string
+          p_tags: string[]
+          p_title: string
+        }
+        Returns: number
+      }
     }
     Enums: {
       page_color_scheme: "auto" | "dark" | "light"

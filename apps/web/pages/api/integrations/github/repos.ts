@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { getOctokit } from "../../../../utils/github";
 import { withAuth } from "../../../../utils/withAuth";
 
@@ -19,15 +18,17 @@ interface ReposResponse {
 const handler = withAuth<ReposResponse>(async (req, res) => {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
-    return res.status(405).end("Method Not Allowed");
+    res.status(405).end("Method Not Allowed");
+    return;
   }
 
-  const { installation_id } = req.query;
+  const installation_id = String(req.query.installation_id || "");
 
   if (!installation_id) {
-    return res.status(400).json({
+    res.status(400).json({
       error: { statusCode: 400, message: "installation_id is required" },
     });
+    return;
   }
 
   try {
@@ -36,7 +37,7 @@ const handler = withAuth<ReposResponse>(async (req, res) => {
       per_page: 100,
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       repositories: data.repositories.map((repo) => ({
         id: repo.id,
         name: repo.name,
@@ -47,10 +48,11 @@ const handler = withAuth<ReposResponse>(async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching repos:", error);
-    return res.status(500).json({
+    res.status(500).json({
       error: {
         statusCode: 500,
-        message: error instanceof Error ? error.message : "Failed to fetch repos",
+        message:
+          error instanceof Error ? error.message : "Failed to fetch repos",
       },
     });
   }

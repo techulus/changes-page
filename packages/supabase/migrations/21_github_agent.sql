@@ -44,3 +44,36 @@ CREATE TRIGGER set_timestamp_github_post_references
 BEFORE UPDATE ON github_post_references
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE OR REPLACE FUNCTION update_github_changelog_draft(
+  p_post_id uuid,
+  p_title text,
+  p_content text,
+  p_tags text[]
+)
+RETURNS integer
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  v_new_generation_count integer;
+BEGIN
+  UPDATE posts
+  SET title = p_title, content = p_content, tags = p_tags
+  WHERE id = p_post_id;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Post not found: %', p_post_id;
+  END IF;
+
+  UPDATE github_post_references
+  SET generation_count = generation_count + 1
+  WHERE post_id = p_post_id
+  RETURNING generation_count INTO v_new_generation_count;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'GitHub post reference not found for post: %', p_post_id;
+  END IF;
+
+  RETURN v_new_generation_count;
+END;
+$$;
