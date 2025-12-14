@@ -14,6 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
+      github_installations: {
+        Row: {
+          ai_instructions: string | null
+          connected_by: string | null
+          created_at: string
+          enabled: boolean
+          id: string
+          installation_id: number
+          page_id: string
+          repository_name: string
+          repository_owner: string
+          updated_at: string
+        }
+        Insert: {
+          ai_instructions?: string | null
+          connected_by?: string | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          installation_id: number
+          page_id: string
+          repository_name: string
+          repository_owner: string
+          updated_at?: string
+        }
+        Update: {
+          ai_instructions?: string | null
+          connected_by?: string | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          installation_id?: number
+          page_id?: string
+          repository_name?: string
+          repository_owner?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "github_installations_connected_by_fkey"
+            columns: ["connected_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "github_installations_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      github_post_references: {
+        Row: {
+          comment_id: number | null
+          created_at: string
+          generation_count: number
+          installation_id: number
+          post_id: string
+          pr_number: number
+          pr_url: string
+          repository_name: string
+          repository_owner: string
+          updated_at: string
+        }
+        Insert: {
+          comment_id?: number | null
+          created_at?: string
+          generation_count?: number
+          installation_id: number
+          post_id: string
+          pr_number: number
+          pr_url: string
+          repository_name: string
+          repository_owner: string
+          updated_at?: string
+        }
+        Update: {
+          comment_id?: number | null
+          created_at?: string
+          generation_count?: number
+          installation_id?: number
+          post_id?: string
+          pr_number?: number
+          pr_url?: string
+          repository_name?: string
+          repository_owner?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "github_post_references_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: true
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_audit_logs: {
         Row: {
           action: string
@@ -829,7 +930,7 @@ export type Database = {
     }
     Functions: {
       get_pages_with_inactive_subscriptions: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           page_created_at: string
           page_id: string
@@ -846,14 +947,8 @@ export type Database = {
         Args: { board_id: string }
         Returns: undefined
       }
-      is_subscription_active: {
-        Args: { user_id: string }
-        Returns: boolean
-      }
-      is_team_member: {
-        Args: { tid: string; uid: string }
-        Returns: boolean
-      }
+      is_subscription_active: { Args: { user_id: string }; Returns: boolean }
+      is_team_member: { Args: { tid: string; uid: string }; Returns: boolean }
       page_view_browsers: {
         Args: { date: string; pageid: string }
         Returns: {
