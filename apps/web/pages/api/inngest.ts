@@ -11,14 +11,17 @@ import { processGitHubChangelog } from "../../inngest/jobs/process-github-change
 import { sendPostNotification } from "./../../inngest/email/send-post-notification";
 
 export default serve("changes-page", [
+  // Billing
   reportUsageForStripeInvoice,
   handleSubscriptionChange,
+  // Emails
   sendConfirmEmailNotification,
   sendPostNotification,
   sendRoadmapTriageNotification,
   sendWelcomeEmail,
   sendTeamInviteEmail,
   sendVisitorMagicLink,
+  // Background Jobs
   deleteImagesJob,
   processGitHubChangelog,
 ]);
