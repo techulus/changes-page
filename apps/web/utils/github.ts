@@ -66,14 +66,22 @@ export function verifyGitHubWebhookSignature(
 ): boolean {
   if (!signature) return false;
 
-  const expectedSignature =
-    "sha256=" +
-    crypto.createHmac("sha256", secret).update(payload).digest("hex");
+  try {
+    const expectedSignature =
+      "sha256=" +
+      crypto.createHmac("sha256", secret).update(payload).digest("hex");
 
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expectedSignature)
-  );
+    const sigBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expectedSignature);
+
+    if (sigBuffer.length !== expectedBuffer.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(sigBuffer, expectedBuffer);
+  } catch {
+    return false;
+  }
 }
 
 export async function getPRDetails(
