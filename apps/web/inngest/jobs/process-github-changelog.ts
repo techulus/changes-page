@@ -50,7 +50,7 @@ export const processGitHubChangelog = inngestClient.createFunction(
 
     const { data: page, error: pageError } = await supabaseAdmin
       .from("pages")
-      .select("id, user_id, url_slug, title")
+      .select("id, user_id, title")
       .eq("id", installation.page_id)
       .single();
 
@@ -117,7 +117,7 @@ export const processGitHubChangelog = inngestClient.createFunction(
 
       if (existingRef) {
         postId = existingRef.post_id;
-        dashboardUrl = `${baseUrl}/page/${page.url_slug}/posts/${postId}`;
+        dashboardUrl = `${baseUrl}/pages/${page.id}/${postId}`;
 
         const { data: newGenerationCount, error: updateError } =
           await supabaseAdmin.rpc("update_github_changelog_draft", {
@@ -133,7 +133,9 @@ export const processGitHubChangelog = inngestClient.createFunction(
             postId,
             context: { owner, repo, prNumber },
           });
-          throw new Error(`Failed to update changelog draft: ${updateError.message}`);
+          throw new Error(
+            `Failed to update changelog draft: ${updateError.message}`
+          );
         }
 
         await createPRComment(
@@ -159,7 +161,7 @@ export const processGitHubChangelog = inngestClient.createFunction(
         });
 
         postId = post.id;
-        dashboardUrl = `${baseUrl}/page/${page.url_slug}/posts/${postId}`;
+        dashboardUrl = `${baseUrl}/pages/${page.id}/${postId}`;
 
         const commentBody = `📝 **Changelog draft created!**\n\n${changelog.summary}\n\n**[View and edit your draft →](${dashboardUrl})**\n\nOnce you're happy with it, you can publish it from the dashboard.`;
 
@@ -189,7 +191,9 @@ export const processGitHubChangelog = inngestClient.createFunction(
             postId,
             context: { owner, repo, prNumber },
           });
-          throw new Error(`Failed to create GitHub post reference: ${insertError.message}`);
+          throw new Error(
+            `Failed to create GitHub post reference: ${insertError.message}`
+          );
         }
       }
 
