@@ -1,8 +1,8 @@
 import { generateObject } from "ai";
 import { z } from "zod";
-import { PostType } from "@repo/supabase";
 import { openRouter } from "./ai-gateway";
 import { getPRCommits, getPRDetails, getPRFiles } from "./github";
+import { PostType } from "@changes-page/supabase/types/page";
 
 export interface ChangelogInput {
   pr: Awaited<ReturnType<typeof getPRDetails>>;
@@ -36,7 +36,7 @@ const MAX_COMMITS = 50;
 const MAX_FILES = 100;
 
 export async function generateChangelog(
-  input: ChangelogInput,
+  input: ChangelogInput
 ): Promise<ChangelogOutput> {
   const truncatedCommits = input.commits.slice(0, MAX_COMMITS);
   const truncatedFiles = [...input.files]
@@ -61,7 +61,11 @@ Generate:
 
 <summary-rules>
 The summary will be posted as a GitHub comment to inform the developer what was done.
-${input.previousDraft ? "This is a REVISION of an existing draft based on user feedback." : "This is a NEW changelog draft."}
+${
+  input.previousDraft
+    ? "This is a REVISION of an existing draft based on user feedback."
+    : "This is a NEW changelog draft."
+}
 
 ${
   input.previousDraft
@@ -75,9 +79,13 @@ Keep it to 1-2 sentences. Be specific about the main features/changes covered.
 </summary-rules>
 </instructions>
 
-${input.userInstructions ? `<user-instructions>
+${
+  input.userInstructions
+    ? `<user-instructions>
 """${input.userInstructions}"""
-</user-instructions>` : ""}`,
+</user-instructions>`
+    : ""
+}`,
     prompt: `<input>
 <pr-title>
 """${input.pr.title}"""
@@ -92,7 +100,9 @@ ${truncatedCommits.map((c) => c.commit.message).join("\n")}
 """
 </commits>
 
-<files-changed additions="${input.pr.additions}" deletions="${input.pr.deletions}">
+<files-changed additions="${input.pr.additions}" deletions="${
+      input.pr.deletions
+    }">
 """
 ${truncatedFiles.map((f) => `${f.status}: ${f.filename}`).join("\n")}
 """
