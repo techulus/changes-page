@@ -1,9 +1,9 @@
 import { SpinnerWithSpacing } from "@changes-page/ui";
 import { LightningBoltIcon, RefreshIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
-import { InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
+import { Streamdown } from "streamdown";
 import {
   createToastWrapper,
   notifyError,
@@ -12,13 +12,12 @@ import {
 import FooterComponent from "../../components/layout/footer.component";
 import MarketingHeaderComponent from "../../components/marketing/marketing-header.component";
 import usePrefersColorScheme from "../../utils/hooks/usePrefersColorScheme";
-import { createSignedStreamingUrl } from "../../utils/manageprompt";
 
-export default function AIChangelogGenerator({
-  title,
-  description,
-  modelStreamUrl,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+const title = "ChangeCraftAI: Free Changelog Generator";
+const description =
+  "Say goodbye to the tedious task of writing changelog and release notes. Our revolutionary tool powered by AI automatically generates them for you, and it's completely free!";
+
+export default function AIChangelogGenerator() {
   const theme = usePrefersColorScheme();
 
   const [content, setContent] = useState("");
@@ -35,8 +34,9 @@ export default function AIChangelogGenerator({
     }
 
     setLoading(true);
+    setResult(null);
 
-    const response = await fetch(modelStreamUrl, {
+    const response = await fetch("/api/ai/free-changelog-generator", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,12 +51,14 @@ export default function AIChangelogGenerator({
     });
 
     if (!response.ok) {
+      setLoading(false);
       notifyError("Too many requests");
+      return;
     }
 
-    // This data is a ReadableStream
     const data = response.body;
     if (!data) {
+      setLoading(false);
       return;
     }
 
@@ -72,7 +74,7 @@ export default function AIChangelogGenerator({
       const chunkValue = decoder.decode(value);
       setResult((prev) => (prev ?? "") + chunkValue);
     }
-  }, [content, addIntroOutro, soundCasual, modelStreamUrl]);
+  }, [content, addIntroOutro, soundCasual]);
 
   return (
     <div className="bg-gray-800 min-h-screen">
@@ -203,13 +205,10 @@ export default function AIChangelogGenerator({
                     >
                       Here is a draft:
                     </label>
-                    <div className="mt-2.5">
-                      <textarea
-                        rows={16}
-                        className="block w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                        value={result}
-                        onChange={() => {}}
-                      />
+                    <div className="mt-2.5 rounded-md bg-white/5 px-3.5 py-2 ring-1 ring-inset ring-white/10 max-h-96 overflow-y-auto">
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        <Streamdown>{result}</Streamdown>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -292,18 +291,3 @@ export default function AIChangelogGenerator({
   );
 }
 
-export async function getServerSideProps() {
-  const modelStreamUrl = await createSignedStreamingUrl(
-    process.env.MANAGEPROMPT_CHANGEGPT_WORKFLOW_ID,
-    300
-  );
-
-  return {
-    props: {
-      title: "ChangeCraftAI: Free Changelog Generator",
-      description:
-        "Say goodbye to the tedious task of writing changelog and release notes. Our revolutionary tool powered by GPT-3 automatically generates them for you, and it's completely free!",
-      modelStreamUrl,
-    },
-  };
-}

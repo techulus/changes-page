@@ -33,7 +33,7 @@ Please note the following limitations when self-hosting:
 
 - **Billing**: Currently only supported through Stripe integration
 - **Custom Domains**: Only supported when deployed on Vercel
-- **AI Features**: All AI functionality is channeled through ManagePrompt and requires their service
+- **AI Features**: All AI functionality is channeled through OpenRouter
 
 ## Environment Configuration
 
@@ -42,8 +42,6 @@ Make sure to configure the following in your environment files:
 - Database connection details (Supabase)
 - Authentication keys
 - Stripe keys (if using billing features)
-- ManagePrompt API keys (if using AI features)
 - Any other third-party service credentials
 
 For detailed environment variable setup, refer to the `.env.example` files in the respective app directories.
-
