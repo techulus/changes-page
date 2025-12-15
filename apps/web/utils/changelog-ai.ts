@@ -28,11 +28,11 @@ const MAX_COMMITS = 50;
 const MAX_FILES = 100;
 
 export async function generateChangelog(
-  input: ChangelogInput
+  input: ChangelogInput,
 ): Promise<ChangelogOutput> {
   const truncatedCommits = input.commits.slice(0, MAX_COMMITS);
   const truncatedFiles = [...input.files]
-    .sort((a, b) => (b.additions + b.deletions) - (a.additions + a.deletions))
+    .sort((a, b) => b.additions + b.deletions - (a.additions + a.deletions))
     .slice(0, MAX_FILES);
 
   const { object } = await generateObject({
@@ -45,11 +45,26 @@ export async function generateChangelog(
     system: `<instructions>
 You are a changelog writer. Generate a changelog entry based on pull request information.
 
-Generate a concise, user-friendly changelog entry with:
-- A clear, descriptive title
-- Well-formatted markdown content explaining the changes
-- Relevant tags (e.g., feature, bugfix, improvement, breaking-change)
-- A 1-2 sentence summary of what you did for use in a GitHub comment (e.g., "Created a changelog highlighting the new OAuth2 authentication feature" or "Updated the draft to add more details about rate limiting as requested")
+Generate:
+- title: A clear, descriptive title for the changelog
+- content: Well-formatted markdown content explaining the changes
+- tags: Relevant tags (e.g., feature, bugfix, improvement, breaking-change)
+- summary: A brief summary for the GitHub comment (see rules below)
+
+<summary-rules>
+The summary will be posted as a GitHub comment to inform the developer what was done.
+${input.previousDraft ? "This is a REVISION of an existing draft based on user feedback." : "This is a NEW changelog draft."}
+
+${
+  input.previousDraft
+    ? `Write the summary describing what you changed in this revision. Focus on what was updated or improved.
+Example: "Updated the draft to emphasize the performance improvements and added details about the new caching mechanism as requested."`
+    : `Write the summary describing what the changelog covers.
+Example: "Created a changelog highlighting the new user authentication system with OAuth2 support and session management."`
+}
+
+Keep it to 1-2 sentences. Be specific about the main features/changes covered.
+</summary-rules>
 </instructions>
 
 ${input.userInstructions ? `<user-instructions>${input.userInstructions}</user-instructions>` : ""}`,
@@ -65,11 +80,15 @@ ${truncatedCommits.map((c) => c.commit.message).join("\n")}
 ${truncatedFiles.map((f) => `${f.status}: ${f.filename}`).join("\n")}
 </files-changed>
 
-${input.previousDraft ? `<previous-draft>
+${
+  input.previousDraft
+    ? `<previous-draft>
 <title>${input.previousDraft.title}</title>
 <content>${input.previousDraft.content}</content>
 <tags>${input.previousDraft.tags.join(", ")}</tags>
-</previous-draft>` : ""}
+</previous-draft>`
+    : ""
+}
 </input>`,
   });
 
