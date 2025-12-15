@@ -1,9 +1,9 @@
+import { useCompletion } from "@ai-sdk/react";
 import { SpinnerWithSpacing } from "@changes-page/ui";
-import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { LightningBoltIcon } from "@heroicons/react/solid";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { getStreamingUrl } from "../../utils/useAiAssistant";
+import { Fragment, useEffect, useRef } from "react";
+import { Streamdown } from "streamdown";
 import { PrimaryButton } from "../core/buttons.component";
 import { notifyError } from "../core/toast.component";
 
@@ -13,61 +13,21 @@ export default function AiExpandConceptPromptDialogComponent({
   content,
   insertContentCallback,
 }) {
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
   const cancelButtonRef = useRef(null);
 
-  const expandConcept = useCallback(async (text) => {
-    setLoading(true);
-
-    const { url } = await getStreamingUrl(
-      "wf_0075a2a911339f610bcfc404051cce3e"
-    );
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: text,
-      }),
-    });
-
-    if (!response.ok) {
-      notifyError("Too many requests");
-    }
-
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    setLoading(false);
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setResult((prev) => (prev ?? "") + chunkValue);
-    }
-  }, []);
+  const { completion, complete, isLoading, setCompletion } = useCompletion({
+    api: "/api/ai/expand-concept",
+    streamProtocol: "text",
+    onError: () => {
+      setOpen(false);
+      notifyError("Failed to process request, please contact support.");
+    },
+  });
 
   useEffect(() => {
     if (open && content) {
-      setLoading(true);
-      setResult(null);
-
-      expandConcept(convertMarkdownToPlainText(content)).catch(() => {
-        setLoading(false);
-        setOpen(false);
-        notifyError("Failed to process request, please contact support.");
-      });
+      setCompletion("");
+      complete(content);
     }
   }, [open, content]);
 
@@ -124,18 +84,22 @@ export default function AiExpandConceptPromptDialogComponent({
                         aria-hidden="true"
                       />
 
-                      {loading ? "Loading..." : `Check out this draft`}
+                      {isLoading && !completion
+                        ? "Loading..."
+                        : isLoading
+                          ? "Expanding..."
+                          : "Check out this draft"}
                     </Dialog.Title>
 
                     <div className="mt-5 w-full">
                       <div className="mt-1 space-y-1">
                         <dd className="mt-1 text-sm text-gray-900">
                           <div className="rounded-md border border-gray-200 dark:border-gray-600 dark:divide-gray-600 p-4">
-                            {loading && <SpinnerWithSpacing />}
+                            {isLoading && !completion && <SpinnerWithSpacing />}
 
-                            <p className="text-black dark:text-white whitespace-pre-wrap">
-                              {result}
-                            </p>
+                            <div className="text-black dark:text-white prose dark:prose-invert prose-sm max-w-none">
+                              <Streamdown>{completion}</Streamdown>
+                            </div>
                           </div>
                         </dd>
                       </div>
@@ -155,10 +119,10 @@ export default function AiExpandConceptPromptDialogComponent({
                 </button>
 
                 <PrimaryButton
-                  disabled={loading || !result}
+                  disabled={isLoading || !completion}
                   className="mr-1 disabled:cursor-not-allowed disabled:bg-gray-400"
                   label="Copy to post"
-                  onClick={() => insertContentCallback(result)}
+                  onClick={() => insertContentCallback(completion)}
                 />
               </div>
             </div>

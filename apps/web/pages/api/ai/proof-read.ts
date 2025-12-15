@@ -1,34 +1,33 @@
-import { generateObject } from "ai";
-import { z } from "zod";
+import { streamText } from "ai";
 import { openRouter } from "../../../utils/ai-gateway";
 import { withAuth } from "../../../utils/withAuth";
 
-const suggestTitle = withAuth<string[]>(async (req, res) => {
+const proofRead = withAuth(async (req, res) => {
   if (req.method === "POST") {
-    const { content } = req.body;
+    const { prompt: content } = req.body;
 
     try {
-      const { object } = await generateObject({
+      if (!content?.trim()) {
+        throw "Content is missing";
+      }
+
+      const result = streamText({
         model: openRouter("openai/gpt-5-mini"),
         headers: {
           "HTTP-Referer": "https://changes.page",
           "X-Title": "Changes.Page",
         },
-        schema: z.object({
-          titles: z.array(z.string()).length(5),
-        }),
-        prompt: `Based on the following changelog content, suggest 5 concise and engaging titles that capture the essence of the update. Return only the titles.
+        prompt: `Proofread and improve the following changelog content. Fix any grammar, spelling, or clarity issues while maintaining the original meaning and tone. Return only the improved text without any explanations.
 
 Content:
 ${content}`,
       });
 
-      return res.status(200).json(object.titles);
+      result.pipeTextStreamToResponse(res);
     } catch (err) {
-      console.error("suggestTitle error:", {
+      console.error("proofRead error:", {
         message: err?.message,
         cause: err?.cause,
-        response: err?.response?.data,
         stack: err?.stack,
       });
       res
@@ -41,4 +40,4 @@ ${content}`,
   }
 });
 
-export default suggestTitle;
+export default proofRead;

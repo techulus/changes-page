@@ -141,6 +141,7 @@ export default function PageSettings({
             <IntegrationsSettings
               settings={settings}
               updatePageSettings={updatePageSettings}
+              pageId={String(page_id)}
             />
           )}
         </>
