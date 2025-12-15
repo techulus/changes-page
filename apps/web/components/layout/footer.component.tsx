@@ -8,14 +8,19 @@ const version = require("../../package.json").version;
 
 const navigation = {
   solutions: [
-    { name: "Zapier", href: ROUTES.ZAPIER },
     { name: "APIs", href: "https://docs.changes.page" },
     {
-      name: "GitHub",
+      name: "GitHub agent",
+      href: "/github-changelog-agent",
+    },
+    { name: "Zapier", href: ROUTES.ZAPIER },
+    {
+      name: "GitHub actions",
       href: "https://github.com/marketplace/actions/create-changelog",
     },
   ],
   support: [
+    { name: "Blog", href: ROUTES.BLOG },
     { name: "Documentation", href: "https://docs.changes.page/docs" },
     { name: "Contact Us", href: ROUTES.SUPPORT },
     { name: "Status", href: "https://status.changes.page" },
@@ -41,7 +46,6 @@ const navigation = {
       name: "Release Calendar",
       href: "/free-tools/release-calendar",
     },
-    { name: "Blog", href: ROUTES.BLOG },
   ],
   legal: [
     { name: "Privacy", href: ROUTES.PRIVACY },
@@ -158,6 +162,17 @@ export default function FooterComponent() {
                         </a>
                       </li>
                     ))}
+                    <li>
+                      <button
+                        onClick={() => {
+                          // @ts-ignore
+                          window?.ChangesPage?.openWidget();
+                        }}
+                        className="text-sm leading-6 text-gray-300 hover:text-white changes-page-btn"
+                      >
+                        What&apos;s New
+                      </button>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -177,17 +192,6 @@ export default function FooterComponent() {
                         </Link>
                       </li>
                     ))}
-                    <li>
-                      <button
-                        onClick={() => {
-                          // @ts-ignore
-                          window?.ChangesPage?.openWidget();
-                        }}
-                        className="text-sm leading-6 text-gray-300 hover:text-white changes-page-btn"
-                      >
-                        What&apos;s New
-                      </button>
-                    </li>
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">

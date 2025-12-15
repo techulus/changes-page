@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 const font = fetch(
   new URL(
-    "../../../public/fonts/Geist/Geist-SemiBold.otf",
+    "../../../public/fonts/Geist-SemiBold.otf",
     import.meta.url
   ).toString()
 ).then((res) => res.arrayBuffer());

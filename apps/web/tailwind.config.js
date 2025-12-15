@@ -25,7 +25,16 @@ module.exports = {
         yellow: amber,
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)"],
+        sans: [
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
+        ],
       },
     },
   },

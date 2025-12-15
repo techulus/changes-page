@@ -16,9 +16,6 @@ div#__next {
   background-color: whitesmoke;
 }
 
-body {
-  font-family: var(--geist-font);
-}
 
 ::selection {
   color: #d0d6e0;
