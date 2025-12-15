@@ -1,8 +1,9 @@
+import { useCompletion } from "@ai-sdk/react";
 import { SpinnerWithSpacing } from "@changes-page/ui";
 import { LightningBoltIcon, RefreshIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Streamdown } from "streamdown";
 import {
   createToastWrapper,
@@ -24,57 +25,29 @@ export default function AIChangelogGenerator() {
   const [addIntroOutro, setAddIntroOutro] = useState(true);
   const [soundCasual, setSoundCasual] = useState(true);
 
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+  const { completion, complete, isLoading, setCompletion } = useCompletion({
+    api: "/api/ai/free-changelog-generator",
+    streamProtocol: "text",
+    onError: () => {
+      notifyError("Failed to generate changelog. Please try again.");
+    },
+  });
 
-  const generateChangelog = useCallback(async () => {
+  const generateChangelog = async () => {
     if (!content.trim()) {
       notifyError("Please enter your commit messages or PR titles");
       return;
     }
 
-    setLoading(true);
-    setResult(null);
-
-    const response = await fetch("/api/ai/free-changelog-generator", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content,
+    await complete(content, {
+      body: {
         intro: addIntroOutro
           ? "Add a short intro and outro, make sure its generic and polite."
           : "Do not add any introduction or additional content at the beginnning or end.",
         tone: soundCasual ? "casual" : "formal",
-      }),
+      },
     });
-
-    if (!response.ok) {
-      setLoading(false);
-      notifyError("Too many requests");
-      return;
-    }
-
-    const data = response.body;
-    if (!data) {
-      setLoading(false);
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    setLoading(false);
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setResult((prev) => (prev ?? "") + chunkValue);
-    }
-  }, [content, addIntroOutro, soundCasual]);
+  };
 
   return (
     <div className="bg-gray-800 min-h-screen">
@@ -188,53 +161,53 @@ export default function AIChangelogGenerator() {
             </div>
           </div>
 
-          {loading ? (
+          {isLoading || completion ? (
             <div className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
               <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
-                <SpinnerWithSpacing />
-              </div>
-            </div>
-          ) : result ? (
-            <div className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
-              <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
-                <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                  <div className="sm:col-span-2">
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-semibold leading-6 text-white"
-                    >
-                      Here is a draft:
-                    </label>
-                    <div className="mt-2.5 rounded-md bg-white/5 px-3.5 py-2 ring-1 ring-inset ring-white/10 max-h-96 overflow-y-auto">
-                      <div className="prose prose-invert prose-sm max-w-none">
-                        <Streamdown>{result}</Streamdown>
+                {isLoading && !completion && <SpinnerWithSpacing />}
+                {completion && (
+                  <>
+                    <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                      <div className="sm:col-span-2">
+                        <label
+                          htmlFor="message"
+                          className="block text-sm font-semibold leading-6 text-white"
+                        >
+                          {isLoading ? "Generating..." : "Here is a draft:"}
+                        </label>
+                        <div className="mt-2.5 rounded-md bg-white/5 px-3.5 py-2 ring-1 ring-inset ring-white/10 max-h-96 overflow-y-auto">
+                          <div className="prose prose-invert prose-sm max-w-none">
+                            <Streamdown>{completion}</Streamdown>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="mt-8 flex justify-end">
-                  <Link
-                    href="/free-tools/ai-changelog-generator"
-                    className={classNames(
-                      "rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500",
-                      "disabled:bg-gray-500"
-                    )}
-                    onClick={() => setResult(null)}
-                  >
-                    <RefreshIcon className="inline h-4 w-4 mr-2" /> Start over
-                  </Link>
-                  <button
-                    onClick={() => {
-                      navigator?.clipboard?.writeText(result);
-                      notifySuccess("Text has been copied to clipboard");
-                    }}
-                    className={classNames(
-                      "ml-2 rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                    )}
-                  >
-                    Copy
-                  </button>
-                </div>
+                    <div className="mt-8 flex justify-end">
+                      <Link
+                        href="/free-tools/ai-changelog-generator"
+                        className={classNames(
+                          "rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500",
+                          "disabled:bg-gray-500",
+                        )}
+                        onClick={() => setCompletion("")}
+                      >
+                        <RefreshIcon className="inline h-4 w-4 mr-2" /> Start
+                        over
+                      </Link>
+                      <button
+                        onClick={() => {
+                          navigator?.clipboard?.writeText(completion);
+                          notifySuccess("Text has been copied to clipboard");
+                        }}
+                        className={classNames(
+                          "ml-2 rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500",
+                        )}
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ) : (
@@ -273,9 +246,9 @@ export default function AIChangelogGenerator() {
                     type="submit"
                     className={classNames(
                       "rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500",
-                      "disabled:bg-gray-500"
+                      "disabled:bg-gray-500",
                     )}
-                    disabled={loading}
+                    disabled={isLoading}
                   >
                     <LightningBoltIcon className="inline h-4 w-4 mr-2" />{" "}
                     Generate
@@ -290,4 +263,3 @@ export default function AIChangelogGenerator() {
     </div>
   );
 }
-

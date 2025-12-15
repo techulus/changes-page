@@ -4,9 +4,13 @@ import { withAuth } from "../../../utils/withAuth";
 
 const expandConcept = withAuth(async (req, res) => {
   if (req.method === "POST") {
-    const { content } = req.body;
+    const { prompt: content } = req.body;
 
     try {
+      if (!content?.trim()) {
+        throw "Content is missing";
+      }
+
       const result = streamText({
         model: openRouter("openai/gpt-5-mini"),
         headers: {

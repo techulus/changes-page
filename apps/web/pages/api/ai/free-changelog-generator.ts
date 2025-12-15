@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { content, intro, tone } = req.body;
+    const { prompt: content, intro, tone } = req.body;
 
     if (!content?.trim()) {
       return res.status(400).json({ error: "Content is required" });

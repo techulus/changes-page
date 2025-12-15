@@ -67,25 +67,41 @@ Keep it to 1-2 sentences. Be specific about the main features/changes covered.
 </summary-rules>
 </instructions>
 
-${input.userInstructions ? `<user-instructions>${input.userInstructions}</user-instructions>` : ""}`,
+${input.userInstructions ? `<user-instructions>
+"""${input.userInstructions}"""
+</user-instructions>` : ""}`,
     prompt: `<input>
-<pr-title>${input.pr.title}</pr-title>
-<pr-description>${input.pr.body || "No description provided"}</pr-description>
+<pr-title>
+"""${input.pr.title}"""
+</pr-title>
+<pr-description>
+"""${input.pr.body || "No description provided"}"""
+</pr-description>
 
 <commits>
+"""
 ${truncatedCommits.map((c) => c.commit.message).join("\n")}
+"""
 </commits>
 
 <files-changed additions="${input.pr.additions}" deletions="${input.pr.deletions}">
+"""
 ${truncatedFiles.map((f) => `${f.status}: ${f.filename}`).join("\n")}
+"""
 </files-changed>
 
 ${
   input.previousDraft
     ? `<previous-draft>
-<title>${input.previousDraft.title}</title>
-<content>${input.previousDraft.content}</content>
-<tags>${input.previousDraft.tags.join(", ")}</tags>
+<title>
+"""${input.previousDraft.title}"""
+</title>
+<content>
+"""${input.previousDraft.content}"""
+</content>
+<tags>
+"""${input.previousDraft.tags.join(", ")}"""
+</tags>
 </previous-draft>`
     : ""
 }

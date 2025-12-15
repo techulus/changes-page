@@ -1,63 +1,27 @@
+import { useCompletion } from "@ai-sdk/react";
 import { SpinnerWithSpacing } from "@changes-page/ui";
-import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { LightningBoltIcon } from "@heroicons/react/solid";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { Streamdown } from "streamdown";
 import { notifyError } from "../core/toast.component";
 
 export default function AiProofReadDialogComponent({ open, setOpen, content }) {
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
   const cancelButtonRef = useRef(null);
 
-  const proofRead = useCallback(async (text) => {
-    setLoading(true);
-
-    const response = await fetch("/api/ai/proof-read", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: text,
-      }),
-    });
-
-    if (!response.ok) {
-      notifyError("Too many requests");
-      return;
-    }
-
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    setLoading(false);
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setResult((prev) => (prev ?? "") + chunkValue);
-    }
-  }, []);
+  const { completion, complete, isLoading, setCompletion } = useCompletion({
+    api: "/api/ai/proof-read",
+    streamProtocol: "text",
+    onError: () => {
+      setOpen(false);
+      notifyError("Failed to process request, please contact support.");
+    },
+  });
 
   useEffect(() => {
     if (open && content) {
-      setLoading(true);
-      setResult(null);
-
-      proofRead(convertMarkdownToPlainText(content)).catch(() => {
-        setLoading(false);
-        setOpen(false);
-        notifyError("Failed to process request, please contact support.");
-      });
+      setCompletion("");
+      complete(content);
     }
   }, [open, content]);
 
@@ -114,17 +78,21 @@ export default function AiProofReadDialogComponent({ open, setOpen, content }) {
                         aria-hidden="true"
                       />
 
-                      {loading ? "Loading..." : "Here is the proofread result!"}
+                      {isLoading && !completion
+                        ? "Loading..."
+                        : isLoading
+                          ? "Proofreading..."
+                          : "Here is the proofread result!"}
                     </Dialog.Title>
 
                     <div className="mt-5 w-full">
                       <div className="mt-1 space-y-1">
                         <dd className="mt-1 text-sm text-gray-900">
                           <div className="rounded-md border border-gray-200 dark:border-gray-600 dark:divide-gray-600 p-4">
-                            {loading && <SpinnerWithSpacing />}
+                            {isLoading && !completion && <SpinnerWithSpacing />}
 
                             <div className="text-black dark:text-white prose dark:prose-invert prose-sm max-w-none">
-                              <Streamdown>{result ?? ""}</Streamdown>
+                              <Streamdown>{completion}</Streamdown>
                             </div>
                           </div>
                         </dd>
