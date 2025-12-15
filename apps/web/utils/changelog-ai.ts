@@ -1,5 +1,6 @@
 import { generateObject } from "ai";
 import { z } from "zod";
+import { PostType } from "@repo/supabase";
 import { openRouter } from "./ai-gateway";
 import { getPRCommits, getPRDetails, getPRFiles } from "./github";
 
@@ -15,12 +16,19 @@ export interface ChangelogInput {
   };
 }
 
-const ChangelogOutputSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  content: z.string().min(1, "Content is required"),
-  tags: z.array(z.string()).min(1, "At least one tag is required"),
-  summary: z.string().min(1, "Summary is required"),
-});
+const VALID_TAGS_SET = new Set<string>(Object.values(PostType));
+
+const ChangelogOutputSchema = z
+  .object({
+    title: z.string().min(1, "Title is required"),
+    content: z.string().min(1, "Content is required"),
+    tags: z.array(z.string()).min(1, "At least one tag is required"),
+    summary: z.string().min(1, "Summary is required"),
+  })
+  .transform((data) => {
+    const validTags = data.tags.filter((tag) => VALID_TAGS_SET.has(tag));
+    return { ...data, tags: validTags.length > 0 ? validTags : [PostType.new] };
+  });
 
 export type ChangelogOutput = z.infer<typeof ChangelogOutputSchema>;
 
@@ -48,7 +56,7 @@ You are a changelog writer. Generate a changelog entry based on pull request inf
 Generate:
 - title: A clear, descriptive title for the changelog
 - content: Well-formatted markdown content explaining the changes
-- tags: Relevant tags (e.g., feature, bugfix, improvement, breaking-change)
+- tags: One or more relevant tags from: fix, new, improvement, announcement, alert
 - summary: A brief summary for the GitHub comment (see rules below)
 
 <summary-rules>
