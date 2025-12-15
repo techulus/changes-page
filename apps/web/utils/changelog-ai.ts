@@ -19,6 +19,7 @@ const ChangelogOutputSchema = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "Content is required"),
   tags: z.array(z.string()).min(1, "At least one tag is required"),
+  summary: z.string().min(1, "Summary is required"),
 });
 
 export type ChangelogOutput = z.infer<typeof ChangelogOutputSchema>;
@@ -48,6 +49,7 @@ Generate a concise, user-friendly changelog entry with:
 - A clear, descriptive title
 - Well-formatted markdown content explaining the changes
 - Relevant tags (e.g., feature, bugfix, improvement, breaking-change)
+- A 1-2 sentence summary of what you did for use in a GitHub comment (e.g., "Created a changelog highlighting the new OAuth2 authentication feature" or "Updated the draft to add more details about rate limiting as requested")
 </instructions>
 
 ${input.userInstructions ? `<user-instructions>${input.userInstructions}</user-instructions>` : ""}`,

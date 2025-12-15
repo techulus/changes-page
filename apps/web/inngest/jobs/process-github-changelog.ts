@@ -140,7 +140,7 @@ export const processGitHubChangelog = inngestClient.createFunction(
           owner,
           repo,
           issueNumber,
-          `📝 **Changelog draft updated!** (v${newGenerationCount})\n\nI've updated the draft based on your feedback.\n\n**[View and edit your draft →](${dashboardUrl})**\n\nOnce you're happy with it, you can publish it from the dashboard.`,
+          `📝 **Changelog draft updated!** (v${newGenerationCount})\n\n${changelog.summary}\n\n**[View and edit your draft →](${dashboardUrl})**\n\nOnce you're happy with it, you can publish it from the dashboard.`,
           installationId
         );
       } else {
@@ -161,7 +161,7 @@ export const processGitHubChangelog = inngestClient.createFunction(
         postId = post.id;
         dashboardUrl = `${baseUrl}/page/${page.url_slug}/posts/${postId}`;
 
-        const commentBody = `📝 **Changelog draft created!**\n\nI've created a draft changelog post based on this PR.\n\n**[View and edit your draft →](${dashboardUrl})**\n\nOnce you're happy with it, you can publish it from the dashboard.`;
+        const commentBody = `📝 **Changelog draft created!**\n\n${changelog.summary}\n\n**[View and edit your draft →](${dashboardUrl})**\n\nOnce you're happy with it, you can publish it from the dashboard.`;
 
         const commentId = await createPRComment(
           owner,
