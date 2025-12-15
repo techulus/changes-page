@@ -19,7 +19,7 @@ async function getRawBody(req: NextApiRequest): Promise<string> {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-const BOT_MENTION = `@${process.env.GITHUB_APP_SLUG || "changespage"}`;
+const BOT_MENTIONS = ["@changepage", "@changes-page"];
 
 export default async function handler(
   req: NextApiRequest,
@@ -67,7 +67,12 @@ async function handleIssueComment(payload: any, res: NextApiResponse) {
     return res.status(200).json({ message: "Not a PR comment, skipping" });
   }
 
-  if (!comment.toLowerCase().includes(BOT_MENTION.toLowerCase())) {
+  const commentLower = comment.toLowerCase();
+  const foundMention = BOT_MENTIONS.find((mention) =>
+    commentLower.includes(mention.toLowerCase())
+  );
+
+  if (!foundMention) {
     return res.status(200).json({ message: "No mention found, skipping" });
   }
 
@@ -84,9 +89,9 @@ async function handleIssueComment(payload: any, res: NextApiResponse) {
   const commentId = payload.comment.id;
   const commentAuthor = payload.comment.user.login;
 
-  const mentionIndex = comment.toLowerCase().indexOf(BOT_MENTION.toLowerCase());
+  const mentionIndex = commentLower.indexOf(foundMention.toLowerCase());
   const userInstructions = comment
-    .substring(mentionIndex + BOT_MENTION.length)
+    .substring(mentionIndex + foundMention.length)
     .trim();
 
   console.log("Processing changelog request:", {
