@@ -2,6 +2,7 @@ import { generateObject } from "ai";
 import { z } from "zod";
 import { openRouter } from "./ai-gateway";
 import { getPRCommits, getPRDetails, getPRFiles } from "./github";
+import { PostType } from "@changes-page/supabase/types/page";
 
 export interface ChangelogInput {
   pr: Awaited<ReturnType<typeof getPRDetails>>;
@@ -15,12 +16,19 @@ export interface ChangelogInput {
   };
 }
 
-const ChangelogOutputSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  content: z.string().min(1, "Content is required"),
-  tags: z.array(z.string()).min(1, "At least one tag is required"),
-  summary: z.string().min(1, "Summary is required"),
-});
+const VALID_TAGS_SET = new Set<string>(Object.values(PostType));
+
+const ChangelogOutputSchema = z
+  .object({
+    title: z.string().min(1, "Title is required"),
+    content: z.string().min(1, "Content is required"),
+    tags: z.array(z.string()).min(1, "At least one tag is required"),
+    summary: z.string().min(1, "Summary is required"),
+  })
+  .transform((data) => {
+    const validTags = data.tags.filter((tag) => VALID_TAGS_SET.has(tag));
+    return { ...data, tags: validTags.length > 0 ? validTags : [PostType.new] };
+  });
 
 export type ChangelogOutput = z.infer<typeof ChangelogOutputSchema>;
 
@@ -28,7 +36,7 @@ const MAX_COMMITS = 50;
 const MAX_FILES = 100;
 
 export async function generateChangelog(
-  input: ChangelogInput,
+  input: ChangelogInput
 ): Promise<ChangelogOutput> {
   const truncatedCommits = input.commits.slice(0, MAX_COMMITS);
   const truncatedFiles = [...input.files]
@@ -48,12 +56,16 @@ You are a changelog writer. Generate a changelog entry based on pull request inf
 Generate:
 - title: A clear, descriptive title for the changelog
 - content: Well-formatted markdown content explaining the changes
-- tags: Relevant tags (e.g., feature, bugfix, improvement, breaking-change)
+- tags: One or more relevant tags from: fix, new, improvement, announcement, alert
 - summary: A brief summary for the GitHub comment (see rules below)
 
 <summary-rules>
 The summary will be posted as a GitHub comment to inform the developer what was done.
-${input.previousDraft ? "This is a REVISION of an existing draft based on user feedback." : "This is a NEW changelog draft."}
+${
+  input.previousDraft
+    ? "This is a REVISION of an existing draft based on user feedback."
+    : "This is a NEW changelog draft."
+}
 
 ${
   input.previousDraft
@@ -67,9 +79,13 @@ Keep it to 1-2 sentences. Be specific about the main features/changes covered.
 </summary-rules>
 </instructions>
 
-${input.userInstructions ? `<user-instructions>
+${
+  input.userInstructions
+    ? `<user-instructions>
 """${input.userInstructions}"""
-</user-instructions>` : ""}`,
+</user-instructions>`
+    : ""
+}`,
     prompt: `<input>
 <pr-title>
 """${input.pr.title}"""
@@ -84,7 +100,9 @@ ${truncatedCommits.map((c) => c.commit.message).join("\n")}
 """
 </commits>
 
-<files-changed additions="${input.pr.additions}" deletions="${input.pr.deletions}">
+<files-changed additions="${input.pr.additions}" deletions="${
+      input.pr.deletions
+    }">
 """
 ${truncatedFiles.map((f) => `${f.status}: ${f.filename}`).join("\n")}
 """

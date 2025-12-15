@@ -96,7 +96,7 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
 
   const githubAppUrl =
     process.env.NEXT_PUBLIC_GITHUB_APP_URL ||
-    "https://github.com/apps/changespage";
+    "https://github.com/apps/changes-page";
 
   return (
     <>
