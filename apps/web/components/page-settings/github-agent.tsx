@@ -6,10 +6,14 @@ import { notifyError, notifySuccess } from "../core/toast.component";
 import WarningDialog from "../dialogs/warning-dialog.component";
 
 export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
-  const [installations, setInstallations] = useState<IGitHubInstallations[]>([]);
+  const [installations, setInstallations] = useState<IGitHubInstallations[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<IGitHubInstallations | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<IGitHubInstallations | null>(
+    null,
+  );
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -18,7 +22,9 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
 
   async function fetchInstallations() {
     try {
-      const res = await fetch(`/api/integrations/github/installations?page_id=${pageId}`);
+      const res = await fetch(
+        `/api/integrations/github/installations?page_id=${pageId}`,
+      );
       const data = await res.json();
       if (data.error) {
         notifyError(data.error.message);
@@ -34,7 +40,7 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
 
   async function updateInstallation(
     installation: IGitHubInstallations,
-    updates: { enabled?: boolean; ai_instructions?: string | null }
+    updates: { enabled?: boolean; ai_instructions?: string | null },
   ) {
     setSaving(installation.id);
     try {
@@ -52,7 +58,7 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
         notifyError(data.error.message);
       } else {
         setInstallations((prev) =>
-          prev.map((i) => (i.id === installation.id ? data : i))
+          prev.map((i) => (i.id === installation.id ? data : i)),
         );
         notifySuccess("Settings saved");
       }
@@ -69,13 +75,15 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
     try {
       const res = await fetch(
         `/api/integrations/github/installations?id=${deleteTarget.id}&page_id=${pageId}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
       const data = await res.json();
       if (data.error) {
         notifyError(data.error.message);
       } else {
-        setInstallations((prev) => prev.filter((i) => i.id !== deleteTarget.id));
+        setInstallations((prev) =>
+          prev.filter((i) => i.id !== deleteTarget.id),
+        );
         notifySuccess("Repository disconnected");
       }
     } catch (err) {
@@ -86,7 +94,9 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
     }
   }
 
-  const githubAppUrl = process.env.NEXT_PUBLIC_GITHUB_APP_URL || "https://github.com/apps/changespage";
+  const githubAppUrl =
+    process.env.NEXT_PUBLIC_GITHUB_APP_URL ||
+    "https://github.com/apps/changespage";
 
   return (
     <>
@@ -107,7 +117,8 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
                 GitHub Changelog Agent
               </h3>
               <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Automatically generate changelog drafts from your PRs by mentioning @changespage.
+                Automatically generate changelog drafts from your PRs by
+                mentioning @changespage.
               </p>
             </div>
           </div>
@@ -137,7 +148,8 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
                       No repositories connected
                     </h3>
                     <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                      Connect a GitHub repository to start generating changelogs from PRs.
+                      Connect a GitHub repository to start generating changelogs
+                      from PRs.
                     </p>
                     <div className="mt-6">
                       <a
@@ -168,11 +180,15 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
                               <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                             </svg>
                             <div>
-                              <p className="font-medium text-gray-900 dark:text-gray-100">
-                                {installation.repository_owner}/{installation.repository_name}
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                {installation.repository_owner}/
+                                {installation.repository_name}
                               </p>
                               <p className="text-xs text-gray-500 dark:text-gray-400">
-                                Connected {new Date(installation.created_at).toLocaleDateString()}
+                                Connected{" "}
+                                {new Date(
+                                  installation.created_at,
+                                ).toLocaleDateString()}
                               </p>
                             </div>
                           </div>
@@ -202,7 +218,9 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
                                 />
                                 <div
                                   className={`absolute w-4 h-4 bg-white rounded-full shadow top-1 transition-transform ${
-                                    installation.enabled ? "translate-x-5" : "translate-x-1"
+                                    installation.enabled
+                                      ? "translate-x-5"
+                                      : "translate-x-1"
                                   }`}
                                 />
                               </div>
@@ -236,7 +254,8 @@ export default function GitHubAgentSettings({ pageId }: { pageId: string }) {
                             }}
                           />
                           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            These instructions will be included with every changelog generation request.
+                            These instructions will be included with every
+                            changelog generation request.
                           </p>
                         </div>
                       </div>
