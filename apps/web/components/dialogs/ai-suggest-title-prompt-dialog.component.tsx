@@ -3,7 +3,6 @@ import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { LightningBoltIcon } from "@heroicons/react/solid";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { promptSuggestTitle } from "../../utils/useAiAssistant";
 import { notifyError } from "../core/toast.component";
 
 export default function AiSuggestTitlePromptDialogComponent({
@@ -23,7 +22,12 @@ export default function AiSuggestTitlePromptDialogComponent({
 
       const text = convertMarkdownToPlainText(content);
 
-      promptSuggestTitle(text)
+      fetch("/api/ai/suggest-title", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: text }),
+      })
+        .then((res) => res.json())
         .then((suggestions) => {
           setSuggestions(suggestions);
           setLoading(false);

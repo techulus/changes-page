@@ -1,34 +1,29 @@
-import { generateObject } from "ai";
-import { z } from "zod";
+import { streamText } from "ai";
 import { openRouter } from "../../../utils/ai-gateway";
 import { withAuth } from "../../../utils/withAuth";
 
-const suggestTitle = withAuth<string[]>(async (req, res) => {
+const expandConcept = withAuth(async (req, res) => {
   if (req.method === "POST") {
     const { content } = req.body;
 
     try {
-      const { object } = await generateObject({
+      const result = streamText({
         model: openRouter("openai/gpt-5-mini"),
         headers: {
           "HTTP-Referer": "https://changes.page",
           "X-Title": "Changes.Page",
         },
-        schema: z.object({
-          titles: z.array(z.string()).length(5),
-        }),
-        prompt: `Based on the following changelog content, suggest 5 concise and engaging titles that capture the essence of the update. Return only the titles.
+        prompt: `You are a changelog writer. Take the following concept or brief description and expand it into a well-written changelog entry. Keep it concise but informative. Use markdown formatting where appropriate. Return only the expanded content without any explanations.
 
-Content:
+Concept:
 ${content}`,
       });
 
-      return res.status(200).json(object.titles);
+      result.pipeTextStreamToResponse(res);
     } catch (err) {
-      console.error("suggestTitle error:", {
+      console.error("expandConcept error:", {
         message: err?.message,
         cause: err?.cause,
-        response: err?.response?.data,
         stack: err?.stack,
       });
       res
@@ -41,4 +36,4 @@ ${content}`,
   }
 });
 
-export default suggestTitle;
+export default expandConcept;

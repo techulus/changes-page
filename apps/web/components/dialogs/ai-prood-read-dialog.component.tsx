@@ -3,7 +3,7 @@ import { convertMarkdownToPlainText } from "@changes-page/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { LightningBoltIcon } from "@heroicons/react/solid";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { getStreamingUrl } from "../../utils/useAiAssistant";
+import { Streamdown } from "streamdown";
 import { notifyError } from "../core/toast.component";
 
 export default function AiProofReadDialogComponent({ open, setOpen, content }) {
@@ -14,11 +14,7 @@ export default function AiProofReadDialogComponent({ open, setOpen, content }) {
   const proofRead = useCallback(async (text) => {
     setLoading(true);
 
-    const { url } = await getStreamingUrl(
-      "wf_5a7eaceda859ee21c07771aaaecc9826"
-    );
-
-    const response = await fetch(url, {
+    const response = await fetch("/api/ai/proof-read", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,6 +26,7 @@ export default function AiProofReadDialogComponent({ open, setOpen, content }) {
 
     if (!response.ok) {
       notifyError("Too many requests");
+      return;
     }
 
     const data = response.body;
@@ -126,9 +123,9 @@ export default function AiProofReadDialogComponent({ open, setOpen, content }) {
                           <div className="rounded-md border border-gray-200 dark:border-gray-600 dark:divide-gray-600 p-4">
                             {loading && <SpinnerWithSpacing />}
 
-                            <p className="text-black dark:text-white whitespace-pre-wrap">
-                              {result}
-                            </p>
+                            <div className="text-black dark:text-white prose dark:prose-invert prose-sm max-w-none">
+                              <Streamdown>{result ?? ""}</Streamdown>
+                            </div>
                           </div>
                         </dd>
                       </div>
