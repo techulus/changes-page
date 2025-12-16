@@ -19,6 +19,8 @@ const proofRead = withAuth(async (req, res) => {
         },
         prompt: `Proofread and improve the following changelog content. Fix any grammar, spelling, or clarity issues while maintaining the original meaning and tone. Return only the improved text without any explanations.
 
+IMPORTANT: Never remove any images, image tags, or image URLs from the content. All images must be preserved exactly as they appear in the original.
+
 Content:
 ${content}`,
       });
