@@ -26,6 +26,8 @@ You are a changelog writer. Generate a well-formatted changelog based on the pro
 Format the output as markdown with clear sections and bullet points.
 Tone: ${tone === "casual" ? "Write in a casual, friendly tone" : "Write in a formal, professional tone"}
 ${intro === "Add a short intro and outro, make sure its generic and polite." ? "Include a brief intro and outro paragraph." : "Do not add any introduction or conclusion - just the changelog content."}
+
+IMPORTANT: Never remove any images, image tags, or image URLs from the input. All images must be preserved exactly as they appear in the original content.
 </instructions>`,
         prompt: `<input>
 ${content}

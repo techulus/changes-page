@@ -77,6 +77,10 @@ Example: "Created a changelog highlighting the new user authentication system wi
 
 Keep it to 1-2 sentences. Be specific about the main features/changes covered.
 </summary-rules>
+
+<media-rules>
+IMPORTANT: Never remove any images, videos, embeds, or other media from the content unless the user explicitly requests their removal. All media must be preserved exactly as they appear.
+</media-rules>
 </instructions>
 
 ${

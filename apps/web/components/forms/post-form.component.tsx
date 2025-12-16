@@ -702,6 +702,9 @@ export default function PostFormComponent({
         setOpen={(open: boolean) => {
           setPromptProofRead(open);
         }}
+        onReplace={(content: string) => {
+          formik.setFieldValue("content", content);
+        }}
       />
     </div>
   );
