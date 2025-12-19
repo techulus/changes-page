@@ -55,7 +55,7 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
                 </div>
                 <ul
                   role="list"
-                  className="mt-8 grid grid-cols-1 gap-4 text-sm leading-6 text-gray-200 sm:grid-cols-2 sm:gap-6"
+                  className="mt-6 grid grid-cols-1 gap-2 text-sm leading-6 text-gray-200 sm:grid-cols-2 sm:gap-3"
                 >
                   {features.map((feature) => (
                     <li key={feature} className="flex gap-x-3">
@@ -67,6 +67,14 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
                     </li>
                   ))}
                 </ul>
+                <p className="mt-6 text-sm text-gray-400">
+                  <span className="font-bold text-indigo-400">
+                    Fair usage applies to storage and bandwidth per page.
+                  </span>{" "}
+                  We don&apos;t impose hard limits, but we may reach out if your
+                  usage significantly exceeds typical patterns. We&apos;re here
+                  to support growing teams, not restrict them.
+                </p>
               </div>
               <div className="-mt-2 p-2 lg:mt-0 lg:w-full lg:max-w-md lg:flex-shrink-0">
                 <div className="rounded-2xl bg-gray-950 py-6 text-center ring-1 ring-inset ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-16">
