@@ -1,2 +1,6 @@
 export { usePosts } from "./usePosts";
-export type { UsePostsOptions, UsePostsResult } from "./usePosts";
+export type {
+  UsePostsInitialData,
+  UsePostsOptions,
+  UsePostsResult,
+} from "./usePosts";

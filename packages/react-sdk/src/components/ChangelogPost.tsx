@@ -1,7 +1,7 @@
 import type { ChangelogPostProps, ChangelogPostRenderProps } from "../types";
 import { formatDate, parseDate } from "../utils";
 
-export function ChangelogPost({ post, children }: ChangelogPostProps) {
+export function ChangelogPost({ post, locale, children }: ChangelogPostProps) {
   const renderProps: ChangelogPostRenderProps = {
     id: post.id,
     title: post.title,
@@ -9,7 +9,7 @@ export function ChangelogPost({ post, children }: ChangelogPostProps) {
     plainText: post.plain_text_content,
     tags: post.tags,
     date: parseDate(post.publication_date),
-    formattedDate: formatDate(post.publication_date),
+    formattedDate: formatDate(post.publication_date, locale),
     url: post.url,
   };
 

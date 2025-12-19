@@ -12,11 +12,14 @@ export function getTagLabel(tag: PostTag): string {
   return tagLabels[tag] ?? tag;
 }
 
-export function formatDate(dateString: string | null): string {
+export function formatDate(
+  dateString: string | null,
+  locale: string = "en-US"
+): string {
   if (!dateString) return "";
 
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",

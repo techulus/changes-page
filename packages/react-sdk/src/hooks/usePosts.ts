@@ -20,6 +20,7 @@ export interface UsePostsResult {
   loading: boolean;
   error: Error | null;
   loadMore: () => Promise<void>;
+  refetch: () => Promise<void>;
 }
 
 export function usePosts({
@@ -84,11 +85,27 @@ export function usePosts({
     }
   }, [client, posts.length, limit, loading, hasMore]);
 
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await client.getPosts({ limit, offset: 0 });
+      setPosts(result.posts);
+      setHasMore(result.hasMore);
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error(String(e)));
+    } finally {
+      setLoading(false);
+    }
+  }, [client, limit]);
+
   return {
     posts,
     hasMore,
     loading,
     error,
     loadMore,
+    refetch,
   };
 }
