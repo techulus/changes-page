@@ -1,4 +1,4 @@
-import { PostStatus } from "@changes-page/supabase/types/page";
+import { PostStatus } from "@changespage/supabase/types/page";
 import { NewPostSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
 import { createPost } from "../../../utils/useDatabase";

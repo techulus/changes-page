@@ -1,4 +1,4 @@
-import { ITeam } from "@changes-page/supabase/types/page";
+import { ITeam } from "@changespage/supabase/types/page";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/outline";
 import { useFormik } from "formik";

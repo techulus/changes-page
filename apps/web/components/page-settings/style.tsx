@@ -1,6 +1,6 @@
-import { Database } from "@changes-page/supabase/types";
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
-import { Spinner } from "@changes-page/ui";
+import { Database } from "@changespage/supabase/types";
+import { IPage, IPageSettings } from "@changespage/supabase/types/page";
+import { Spinner } from "@changespage/ui";
 import fileExtension from "file-extension";
 import dynamic from "next/dynamic";
 import Image from "next/image";

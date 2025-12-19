@@ -1,7 +1,7 @@
 import {
   convertMarkdownToHtml,
   convertMarkdownToPlainText,
-} from "@changes-page/utils";
+} from "@changespage/utils";
 import { Feed } from "feed";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {

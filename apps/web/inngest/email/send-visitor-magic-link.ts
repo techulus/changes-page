@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import inngestClient from "../../utils/inngest";
 import postmarkClient from "../../utils/postmark";
 
@@ -17,7 +17,6 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
       event.data;
 
     console.log("Sending magic link email", {
-      email,
       page_url,
       page_id,
     });

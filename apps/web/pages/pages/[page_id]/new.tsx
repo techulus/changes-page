@@ -1,4 +1,4 @@
-import { PostStatus } from "@changes-page/supabase/types/page";
+import { PostStatus } from "@changespage/supabase/types/page";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState, type JSX } from "react";

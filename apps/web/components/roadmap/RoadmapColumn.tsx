@@ -1,4 +1,4 @@
-import { IRoadmapColumn } from "@changes-page/supabase/types/page";
+import { IRoadmapColumn } from "@changespage/supabase/types/page";
 import { PlusIcon } from "@heroicons/react/solid";
 import RoadmapItem from "./RoadmapItem";
 import { DragOverPosition, RoadmapItemWithRelations } from "./types";

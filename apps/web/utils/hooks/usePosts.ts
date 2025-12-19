@@ -1,4 +1,4 @@
-import { IPost, PostStatus } from "@changes-page/supabase/types/page";
+import { IPost, PostStatus } from "@changespage/supabase/types/page";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";

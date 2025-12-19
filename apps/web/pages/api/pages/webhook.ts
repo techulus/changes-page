@@ -1,4 +1,4 @@
-import { IPage } from "@changes-page/supabase/types/page";
+import { IPage } from "@changespage/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
 import { DELETE_IMAGES_JOB_EVENT } from "../../../inngest/jobs/delete-images";

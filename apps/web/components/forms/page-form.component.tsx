@@ -2,8 +2,8 @@ import {
   IPage,
   PageType,
   PageTypeToLabel
-} from "@changes-page/supabase/types/page";
-import { Spinner, SpinnerWithSpacing } from "@changes-page/ui";
+} from "@changespage/supabase/types/page";
+import { Spinner, SpinnerWithSpacing } from "@changespage/ui";
 import classNames from "classnames";
 import { FormikProps, useFormik } from "formik";
 import { useRouter } from "next/router";

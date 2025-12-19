@@ -4,8 +4,8 @@ import {
   IPost,
   PostType,
   PostTypeToLabel,
-} from "@changes-page/supabase/types/page";
-import { DateTime } from "@changes-page/utils";
+} from "@changespage/supabase/types/page";
+import { DateTime } from "@changespage/utils";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

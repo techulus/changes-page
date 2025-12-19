@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import { withAuth } from "../../../../utils/withAuth";
 
 const getEmailSubscribers = withAuth<{ count: number }>(

@@ -1,5 +1,5 @@
-import { IGitHubInstallations } from "@changes-page/supabase/types/github";
-import { Spinner } from "@changes-page/ui";
+import { IGitHubInstallations } from "@changespage/supabase/types/github";
+import { Spinner } from "@changespage/ui";
 import { ExternalLinkIcon, TrashIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
 import { notifyError, notifySuccess } from "../core/toast.component";

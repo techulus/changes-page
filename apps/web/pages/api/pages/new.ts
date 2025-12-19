@@ -1,4 +1,4 @@
-import { IPage } from "@changes-page/supabase/types/page";
+import { IPage } from "@changespage/supabase/types/page";
 import { NewPageSchema } from "../../../data/schema";
 import { apiRateLimiter } from "../../../utils/rate-limit";
 import {

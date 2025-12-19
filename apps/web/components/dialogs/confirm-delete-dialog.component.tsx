@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Spinner } from "@changes-page/ui";
+import { Spinner } from "@changespage/ui";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import classNames from "classnames";

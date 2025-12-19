@@ -1,5 +1,5 @@
-import { IPageSettings } from "@changes-page/supabase/types/page";
-import { Spinner } from "@changes-page/ui";
+import { IPageSettings } from "@changespage/supabase/types/page";
+import { Spinner } from "@changespage/ui";
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import { useFormik } from "formik";
 import { useCallback, useEffect, useState } from "react";

@@ -1,5 +1,5 @@
-import { Timeline } from "@changes-page/ui";
-import { convertMarkdownToPlainText } from "@changes-page/utils";
+import { Timeline } from "@changespage/ui";
+import { convertMarkdownToPlainText } from "@changespage/utils";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
 import { InferGetServerSidePropsType } from "next";
 import Link from "next/link";

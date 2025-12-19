@@ -1,4 +1,4 @@
-import { Database } from "@changes-page/supabase/types";
+import { Database } from "@changespage/supabase/types";
 import { Stripe } from "stripe";
 
 export type IUser = Database["public"]["Tables"]["users"]["Row"] & {

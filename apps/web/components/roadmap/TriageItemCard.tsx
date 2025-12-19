@@ -1,4 +1,4 @@
-import { IRoadmapTriageItem } from "@changes-page/supabase/types/page";
+import { IRoadmapTriageItem } from "@changespage/supabase/types/page";
 import { TrashIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 

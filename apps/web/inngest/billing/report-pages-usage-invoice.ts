@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import Stripe from "stripe";
 import { v4 } from "uuid";
 import inngestClient from "../../utils/inngest";

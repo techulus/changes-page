@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
-import { IPageEmailSubscriber } from "@changes-page/supabase/types/page";
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { IPageEmailSubscriber } from "@changespage/supabase/types/page";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 
 async function subscribeViaEmail(
   pageId: string,

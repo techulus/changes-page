@@ -1,5 +1,5 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { SpinnerWithSpacing } from "@changes-page/ui";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { SpinnerWithSpacing } from "@changespage/ui";
 import { ROUTES } from "../../data/routes.data";
 import { withSupabase } from "../../utils/supabase/withSupabase";
 

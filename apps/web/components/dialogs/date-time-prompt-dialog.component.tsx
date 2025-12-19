@@ -1,4 +1,4 @@
-import { DateTime } from "@changes-page/utils";
+import { DateTime } from "@changespage/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import { ClockIcon } from "@heroicons/react/solid";

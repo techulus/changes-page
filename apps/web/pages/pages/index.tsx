@@ -1,4 +1,4 @@
-import { PageType, PageTypeToLabel } from "@changes-page/supabase/types/page";
+import { PageType, PageTypeToLabel } from "@changespage/supabase/types/page";
 import { PlusIcon, UserGroupIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import type { InferGetServerSidePropsType } from "next";

@@ -4,9 +4,9 @@ import {
   PostStatus,
   PostType,
   PostTypeToLabel,
-} from "@changes-page/supabase/types/page";
-import { PostTypeBadge, Spinner, SpinnerWithSpacing } from "@changes-page/ui";
-import { DateTime } from "@changes-page/utils";
+} from "@changespage/supabase/types/page";
+import { PostTypeBadge, Spinner, SpinnerWithSpacing } from "@changespage/ui";
+import { DateTime } from "@changespage/utils";
 import { Listbox, Menu, Transition } from "@headlessui/react";
 import {
   CalendarIcon,

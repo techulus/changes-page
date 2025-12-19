@@ -1,5 +1,5 @@
-import { PostType } from "@changes-page/supabase/types/page";
-import { PostTypeBadge } from "@changes-page/ui";
+import { PostType } from "@changespage/supabase/types/page";
+import { PostTypeBadge } from "@changespage/ui";
 import classNames from "classnames";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -14,7 +14,7 @@ import { IPostPublicData } from "../lib/data";
 import Reactions from "./reactions";
 
 const PostDateTime = dynamic(
-  () => import("@changes-page/ui").then((mod) => mod.PostDateTime),
+  () => import("@changespage/ui").then((mod) => mod.PostDateTime),
   {
     ssr: false,
   }

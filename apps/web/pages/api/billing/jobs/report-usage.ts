@@ -1,5 +1,5 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { IErrorResponse } from "@changes-page/supabase/types/api";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { IErrorResponse } from "@changespage/supabase/types/api";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Stripe } from "stripe";
 import { v4 } from "uuid";

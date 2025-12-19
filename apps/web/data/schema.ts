@@ -1,4 +1,4 @@
-import { PostStatus, PostType, URL_SLUG_REGEX } from "@changes-page/supabase/types/page";
+import { PostStatus, PostType, URL_SLUG_REGEX } from "@changespage/supabase/types/page";
 import { array, boolean, mixed, object, string } from "yup";
 
 export const NewPageSchema = object().shape({

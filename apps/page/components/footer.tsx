@@ -1,4 +1,4 @@
-import { IPageSettings } from "@changes-page/supabase/types/page";
+import { IPageSettings } from "@changespage/supabase/types/page";
 import Image from "next/image";
 import { useEffect } from "react";
 import { PageRoadmap } from "../lib/data";

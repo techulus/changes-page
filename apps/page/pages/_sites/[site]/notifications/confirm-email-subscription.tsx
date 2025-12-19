@@ -1,4 +1,4 @@
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
+import { IPage, IPageSettings } from "@changespage/supabase/types/page";
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import type { GetServerSideProps } from "next";
 import { usePageTheme } from "../../../../hooks/usePageTheme";

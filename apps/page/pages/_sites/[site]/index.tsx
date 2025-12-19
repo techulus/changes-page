@@ -1,5 +1,5 @@
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
-import { Timeline } from "@changes-page/ui";
+import { IPage, IPageSettings, IPost } from "@changespage/supabase/types/page";
+import { Timeline } from "@changespage/ui";
 import classNames from "classnames";
 import { useCallback, useMemo, useState } from "react";
 import Footer from "../../../components/footer";

@@ -1,4 +1,4 @@
-import { IRoadmapTriageItem } from "@changes-page/supabase/types/page";
+import { IRoadmapTriageItem } from "@changespage/supabase/types/page";
 import { useState } from "react";
 import { httpPost } from "../../utils/http";
 import TriageItemCard from "./TriageItemCard";
