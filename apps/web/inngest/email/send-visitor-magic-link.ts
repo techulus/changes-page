@@ -17,7 +17,6 @@ export const sendVisitorMagicLink = inngestClient.createFunction(
       event.data;
 
     console.log("Sending magic link email", {
-      email,
       page_url,
       page_id,
     });

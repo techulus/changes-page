@@ -12,7 +12,7 @@ import { Spinner } from "@changespage/ui";
 const POSTS_PER_PAGE = 10;
 
 const client = createChangesPageClient({
-  baseUrl: process.env.VERCEL
+  baseUrl: process.env.VERCEL_ENV
     ? "https://hey.changes.page"
     : "http://localhost:3001",
 });
