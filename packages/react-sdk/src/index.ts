@@ -12,4 +12,8 @@ export type {
   Post,
   PostTag,
 } from "./types";
-export type { UsePostsOptions, UsePostsResult } from "./hooks";
+export type {
+  UsePostsInitialData,
+  UsePostsOptions,
+  UsePostsResult,
+} from "./hooks";

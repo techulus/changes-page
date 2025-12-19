@@ -42,6 +42,7 @@ export interface ChangelogPostRenderProps {
 
 export interface ChangelogPostProps {
   post: Post;
+  locale?: string;
   children: (props: ChangelogPostRenderProps) => ReactNode;
 }
 

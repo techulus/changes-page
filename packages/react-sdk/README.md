@@ -74,13 +74,46 @@ Render prop component exposing:
 ```tsx
 import { usePosts } from '@changespage/react';
 
-// Client-only (fetches on mount)
-const { posts, hasMore, loading, loadMore } = usePosts({ client, limit: 10 });
+function ChangelogList() {
+  const { posts, hasMore, loading, error, loadMore, refetch } = usePosts({
+    client,
+    limit: 10,
+  });
 
-// With SSR initial data (skips initial fetch)
-const { posts, hasMore, loading, loadMore } = usePosts({
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error.message}</p>
+        <button onClick={refetch}>Try again</button>
+      </div>
+    );
+  }
+
+  if (loading && posts.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      {posts.map(post => (
+        <article key={post.id}>{post.title}</article>
+      ))}
+      {hasMore && (
+        <button onClick={loadMore} disabled={loading}>
+          {loading ? 'Loading...' : 'Load more'}
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+For SSR, pass initial data to skip the client-side fetch:
+
+```tsx
+const { posts, hasMore, loading, error, loadMore, refetch } = usePosts({
   client,
-  initialData: { posts: initialPosts, hasMore: initialHasMore },
+  initialData: { posts: serverPosts, hasMore: serverHasMore },
   limit: 10,
 });
 ```
