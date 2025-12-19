@@ -19,7 +19,7 @@ async function getRawBody(req: NextApiRequest): Promise<string> {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-const BOT_MENTIONS = ["@changepage", "@changespage"];
+const BOT_MENTIONS = ["@changes-page", "@changespage"];
 
 export default async function handler(
   req: NextApiRequest,
