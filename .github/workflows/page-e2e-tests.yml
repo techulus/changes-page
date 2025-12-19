@@ -30,10 +30,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
-        run: pnpm --filter @changes-page/page exec playwright install --with-deps chromium
+        run: pnpm --filter @changespage/page exec playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: pnpm --filter @changes-page/page test
+        run: pnpm --filter @changespage/page test
 
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
