@@ -89,12 +89,12 @@ export default function Changelog({
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { posts, hasMore } = await client.getPosts({ limit: POSTS_PER_PAGE });
+  // const { posts, hasMore } = await client.getPosts({ limit: POSTS_PER_PAGE });
 
   return {
     props: {
-      initialPosts: posts,
-      initialHasMore: hasMore,
+      initialPosts: [],
+      initialHasMore: false,
     },
     revalidate: 86400,
   };
