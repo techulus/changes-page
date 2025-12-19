@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import { ROUTES } from "../../../../data/routes.data";
 import { getAppBaseURL } from "../../../../utils/helpers";
 import inngestClient from "../../../../utils/inngest";

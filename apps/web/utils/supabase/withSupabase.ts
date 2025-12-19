@@ -1,4 +1,4 @@
-import { Database } from "@changes-page/supabase/types";
+import { Database } from "@changespage/supabase/types";
 import { SupabaseClient, User } from "@supabase/supabase-js";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { createServerClientSSR } from "./server";

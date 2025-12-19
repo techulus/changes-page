@@ -1,4 +1,4 @@
-import { IPost } from "@changes-page/supabase/types/page";
+import { IPost } from "@changespage/supabase/types/page";
 import { Transition } from "@headlessui/react";
 import { SpeakerphoneIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";

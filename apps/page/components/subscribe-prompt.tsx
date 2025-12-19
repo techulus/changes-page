@@ -1,5 +1,5 @@
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
-import { Spinner } from "@changes-page/ui";
+import { IPage, IPageSettings } from "@changespage/supabase/types/page";
+import { Spinner } from "@changespage/ui";
 import {
   BellIcon,
   CheckCircleIcon,

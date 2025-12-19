@@ -1,5 +1,5 @@
-import { IPageSettings } from "@changes-page/supabase/types/page";
-import { Spinner } from "@changes-page/ui";
+import { IPageSettings } from "@changespage/supabase/types/page";
+import { Spinner } from "@changespage/ui";
 import { useState } from "react";
 import { v4 } from "uuid";
 import { notifyInfo } from "../core/toast.component";

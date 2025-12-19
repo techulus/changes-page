@@ -1,4 +1,4 @@
-import { IReactions } from "@changes-page/supabase/types/page";
+import { IReactions } from "@changespage/supabase/types/page";
 import { Transition } from "@headlessui/react";
 import classNames from "classnames";
 import { useCallback, useEffect, useState } from "react";

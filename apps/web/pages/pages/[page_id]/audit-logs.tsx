@@ -1,6 +1,6 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { Timeline } from "@changes-page/ui";
-import { DateTime } from "@changes-page/utils";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { Timeline } from "@changespage/ui";
+import { DateTime } from "@changespage/utils";
 import {
   ClockIcon,
   PencilIcon,

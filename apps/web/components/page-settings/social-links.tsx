@@ -1,8 +1,8 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
-import { IPageSettings } from "@changes-page/supabase/types/page";
-import { Spinner } from "@changes-page/ui";
+import { IPageSettings } from "@changespage/supabase/types/page";
+import { Spinner } from "@changespage/ui";
 import { InlineErrorMessage } from "../forms/notification.component";
 
 const SOCIAL_KEY_TO_LABEL = {

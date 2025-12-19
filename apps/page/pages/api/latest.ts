@@ -1,5 +1,5 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { IPost } from "@changes-page/supabase/types/page";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { IPost } from "@changespage/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { allowCors } from "../../lib/cors";
 import { fetchRenderData, translateHostToPageIdentifier } from "../../lib/data";

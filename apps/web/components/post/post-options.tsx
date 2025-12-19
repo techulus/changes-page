@@ -1,4 +1,4 @@
-import { PostStatus } from "@changes-page/supabase/types/page";
+import { PostStatus } from "@changespage/supabase/types/page";
 import { Menu, Transition } from "@headlessui/react";
 import { LocationMarkerIcon as RemovePinIcon } from "@heroicons/react/outline";
 import {

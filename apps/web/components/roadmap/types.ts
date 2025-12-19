@@ -2,7 +2,7 @@ import {
   IRoadmapCategory,
   IRoadmapItem,
   IRoadmapVote,
-} from "@changes-page/supabase/types/page";
+} from "@changespage/supabase/types/page";
 
 export interface RoadmapItemWithRelations extends IRoadmapItem {
   roadmap_categories?: Pick<IRoadmapCategory, "id" | "name" | "color">;

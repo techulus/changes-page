@@ -6,7 +6,7 @@ import {
   ItemsByColumn,
   RoadmapItemWithRelations,
 } from "../types";
-import { IRoadmapBoard } from "@changes-page/supabase/types/page";
+import { IRoadmapBoard } from "@changespage/supabase/types/page";
 
 export function useRoadmapDragDrop({
   itemsByColumn,

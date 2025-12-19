@@ -1,5 +1,5 @@
 {
-  "name": "@changes-page/supabase",
+  "name": "@changespage/supabase",
   "version": "1.0.0",
   "exports": {
     "./types": "./dist/types/index.js",

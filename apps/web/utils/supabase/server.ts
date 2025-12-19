@@ -1,4 +1,4 @@
-import { Database } from "@changes-page/supabase/types";
+import { Database } from "@changespage/supabase/types";
 import { createServerClient, serializeCookieHeader } from "@supabase/ssr";
 import {
   GetServerSidePropsContext,

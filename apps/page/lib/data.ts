@@ -1,5 +1,5 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { Database } from "@changes-page/supabase/types";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { Database } from "@changespage/supabase/types";
 import {
   IPage,
   IPageSettings,
@@ -7,7 +7,7 @@ import {
   IRoadmapBoard,
   IRoadmapColumn,
   IRoadmapItem,
-} from "@changes-page/supabase/types/page";
+} from "@changespage/supabase/types/page";
 import { sanitizeCss } from "./css";
 
 const PAGINATION_LIMIT = 50;
@@ -441,9 +441,37 @@ async function getRoadmapBySlug(
   return { board, columns, items };
 }
 
+async function fetchPostsWithPagination(
+  pageId: string,
+  { limit, offset }: { limit?: number; offset?: number }
+): Promise<{ posts: IPost[]; postsCount: number }> {
+  const effectiveLimit = Math.min(limit ?? PAGINATION_LIMIT, PAGINATION_LIMIT);
+  const effectiveOffset = offset ?? 0;
+
+  const {
+    data: posts,
+    count: postsCount,
+    error: postsError,
+  } = await supabaseAdmin
+    .from("posts")
+    .select(postSelectParams, { count: "exact" })
+    .eq("page_id", String(pageId))
+    .eq("status", "published")
+    .range(effectiveOffset, effectiveOffset + effectiveLimit - 1)
+    .order("publication_date", { ascending: false });
+
+  if (postsError) {
+    console.error("Fetch post error", postsError);
+    throw new Error("Failed to fetch posts");
+  }
+
+  return { posts: (posts ?? []) as Array<IPost>, postsCount: postsCount ?? 0 };
+}
+
 export {
   fetchPostById,
   fetchPosts,
+  fetchPostsWithPagination,
   fetchRenderData,
   getRoadmapBySlug,
   PAGINATION_LIMIT,

@@ -1,5 +1,5 @@
-import { IPost, PostStatus } from "@changes-page/supabase/types/page";
-import { Timeline } from "@changes-page/ui";
+import { IPost, PostStatus } from "@changespage/supabase/types/page";
+import { Timeline } from "@changespage/ui";
 import {
   ChartBarIcon,
   CodeIcon,

@@ -1,4 +1,4 @@
-import { DateTime } from "@changes-page/utils";
+import { DateTime } from "@changespage/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   fetchPosts,

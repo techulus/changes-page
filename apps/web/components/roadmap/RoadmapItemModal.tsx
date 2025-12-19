@@ -1,7 +1,7 @@
 import {
   IRoadmapBoard,
   IRoadmapCategory,
-} from "@changes-page/supabase/types/page";
+} from "@changespage/supabase/types/page";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
 import { Fragment, useCallback } from "react";

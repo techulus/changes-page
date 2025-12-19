@@ -1,4 +1,4 @@
-import { IPageSettings } from "@changes-page/supabase/types/page";
+import { IPageSettings } from "@changespage/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {

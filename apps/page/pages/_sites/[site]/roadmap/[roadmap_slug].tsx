@@ -3,8 +3,8 @@ import {
   IPageSettings,
   IRoadmapBoard,
   IRoadmapColumn,
-} from "@changes-page/supabase/types/page";
-import { getCategoryColorClasses } from "@changes-page/utils";
+} from "@changespage/supabase/types/page";
+import { getCategoryColorClasses } from "@changespage/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon, XIcon } from "@heroicons/react/outline";
 import { Fragment, useEffect, useMemo, useState } from "react";

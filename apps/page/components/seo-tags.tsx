@@ -2,7 +2,7 @@ import {
   IPage,
   IPageSettings,
   PageTypeToLabel,
-} from "@changes-page/supabase/types/page";
+} from "@changespage/supabase/types/page";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
 import { useMemo } from "react";

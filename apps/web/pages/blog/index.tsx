@@ -1,4 +1,4 @@
-import { DateTime } from "@changes-page/utils";
+import { DateTime } from "@changespage/utils";
 import { BookOpenIcon } from "@heroicons/react/solid";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import classNames from "classnames";

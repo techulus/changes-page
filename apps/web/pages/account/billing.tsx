@@ -1,5 +1,5 @@
-import { SpinnerWithSpacing } from "@changes-page/ui";
-import { DateTime } from "@changes-page/utils";
+import { SpinnerWithSpacing } from "@changespage/ui";
+import { DateTime } from "@changespage/utils";
 import { CurrencyDollarIcon } from "@heroicons/react/outline";
 import { CalendarIcon } from "@heroicons/react/solid";
 import classNames from "classnames";

@@ -1,4 +1,4 @@
-import { IPageVisitor } from "@changes-page/supabase/types/page";
+import { IPageVisitor } from "@changespage/supabase/types/page";
 import { SignJWT, jwtVerify } from "jose";
 import type { NextApiRequest } from "next";
 import { randomBytes, randomUUID } from "node:crypto";

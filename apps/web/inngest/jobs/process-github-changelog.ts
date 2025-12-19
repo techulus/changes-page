@@ -1,5 +1,5 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { PostStatus } from "@changes-page/supabase/types/page";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { PostStatus } from "@changespage/supabase/types/page";
 import { v4 } from "uuid";
 import { generateChangelog } from "../../utils/changelog-ai";
 import {

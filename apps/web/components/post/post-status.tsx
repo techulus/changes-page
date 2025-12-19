@@ -1,4 +1,4 @@
-import { PostStatus } from "@changes-page/supabase/types/page";
+import { PostStatus } from "@changespage/supabase/types/page";
 import { CheckIcon, ClockIcon, PencilIcon } from "@heroicons/react/solid";
 
 export const PostStatusToIcon = {

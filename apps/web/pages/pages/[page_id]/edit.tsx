@@ -1,4 +1,4 @@
-import { IPage } from "@changes-page/supabase/types/page";
+import { IPage } from "@changespage/supabase/types/page";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";

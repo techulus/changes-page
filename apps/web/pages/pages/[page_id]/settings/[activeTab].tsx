@@ -1,4 +1,4 @@
-import { SpinnerWithSpacing } from "@changes-page/ui";
+import { SpinnerWithSpacing } from "@changespage/ui";
 import { InferGetServerSidePropsType } from "next";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
