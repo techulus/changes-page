@@ -1,4 +1,4 @@
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
+import { IPage, IPageSettings, IPost } from "@changespage/supabase/types/page";
 import { useCallback, useMemo } from "react";
 import slugify from "slugify";
 

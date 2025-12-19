@@ -1,5 +1,5 @@
 import { useCompletion } from "@ai-sdk/react";
-import { SpinnerWithSpacing } from "@changes-page/ui";
+import { SpinnerWithSpacing } from "@changespage/ui";
 import { Dialog, Transition } from "@headlessui/react";
 import { LightningBoltIcon } from "@heroicons/react/solid";
 import { Fragment, useEffect, useRef } from "react";

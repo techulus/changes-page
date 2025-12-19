@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import inngestClient from "../../utils/inngest";
 import postmarkClient from "../../utils/postmark";
 

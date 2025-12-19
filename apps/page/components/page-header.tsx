@@ -1,4 +1,4 @@
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
+import { IPage, IPageSettings } from "@changespage/supabase/types/page";
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import classNames from "classnames";

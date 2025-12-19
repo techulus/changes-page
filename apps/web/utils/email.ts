@@ -1,9 +1,9 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { IPage, IPageSettings, IPost } from "@changes-page/supabase/types/page";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { IPage, IPageSettings, IPost } from "@changespage/supabase/types/page";
 import {
   convertMarkdownToHtml,
   convertMarkdownToPlainText,
-} from "@changes-page/utils";
+} from "@changespage/utils";
 import { getPageUrl, getPostUrl } from "./hooks/usePageUrl";
 import inngestClient from "./inngest";
 import { getUserById } from "./useDatabase";

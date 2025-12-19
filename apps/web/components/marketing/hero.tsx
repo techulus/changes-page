@@ -74,9 +74,8 @@ export default function Hero({ stars = null }: { stars?: string | null }) {
             />
 
             <div className="mt-24 sm:mt-32 lg:mt-16">
-              <a
-                href="https://hey.changes.page"
-                target="_blank"
+              <Link
+                href="/changelog"
                 rel="noopener noreferrer"
                 className="inline-flex space-x-6"
               >
@@ -90,7 +89,7 @@ export default function Hero({ stars = null }: { stars?: string | null }) {
                     aria-hidden="true"
                   />
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
           <p className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl hero">

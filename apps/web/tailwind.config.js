@@ -4,7 +4,7 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@changes-page/ui/components/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@changespage/ui/components/**/*.{js,ts,jsx,tsx}",
     "./node_modules/streamdown/dist/*.js",
   ],
   safelist: [

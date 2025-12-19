@@ -1,4 +1,4 @@
-import { getCategoryColorClasses } from "@changes-page/utils";
+import { getCategoryColorClasses } from "@changespage/utils";
 import { PencilIcon, TrashIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import type React from "react";

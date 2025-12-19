@@ -1,5 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "@changes-page/supabase/types";
+import { Database } from "@changespage/supabase/types";
 
 export async function getPage(supabase: SupabaseClient<Database>, id: string) {
   const { data: page } = await supabase

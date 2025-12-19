@@ -6,9 +6,9 @@ import {
   PostStatus,
   PostStatusToLabel,
   PostType,
-} from "@changes-page/supabase/types/page";
-import { PostDateTime, PostTypeBadge } from "@changes-page/ui";
-import { DateTime } from "@changes-page/utils";
+} from "@changespage/supabase/types/page";
+import { PostDateTime, PostTypeBadge } from "@changespage/ui";
+import { DateTime } from "@changespage/utils";
 import { Menu } from "@headlessui/react";
 import { DotsVerticalIcon } from "@heroicons/react/solid";
 import classNames from "classnames";

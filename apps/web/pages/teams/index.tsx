@@ -1,5 +1,5 @@
-import { IPage } from "@changes-page/supabase/types/page";
-import { SpinnerWithSpacing } from "@changes-page/ui";
+import { IPage } from "@changespage/supabase/types/page";
+import { SpinnerWithSpacing } from "@changespage/ui";
 import {
   CheckCircleIcon,
   OfficeBuildingIcon,

@@ -1,4 +1,4 @@
-import { IPageSettings } from "@changes-page/supabase/types/page";
+import { IPageSettings } from "@changespage/supabase/types/page";
 import { useEffect, useState } from "react";
 import {
   notifyError,

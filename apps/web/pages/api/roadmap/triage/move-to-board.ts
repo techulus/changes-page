@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import { v4 } from "uuid";
 import { createAuditLog } from "../../../../utils/auditLog";
 import { withAuth } from "../../../../utils/withAuth";

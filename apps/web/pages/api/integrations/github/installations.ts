@@ -1,5 +1,5 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { IGitHubInstallations } from "@changes-page/supabase/types/github";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { IGitHubInstallations } from "@changespage/supabase/types/github";
 import { withAuth } from "../../../../utils/withAuth";
 
 type ResponseData =

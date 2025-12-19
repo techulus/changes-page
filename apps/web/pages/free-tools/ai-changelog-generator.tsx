@@ -1,5 +1,5 @@
 import { useCompletion } from "@ai-sdk/react";
-import { SpinnerWithSpacing } from "@changes-page/ui";
+import { SpinnerWithSpacing } from "@changespage/ui";
 import { LightningBoltIcon, RefreshIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Link from "next/link";

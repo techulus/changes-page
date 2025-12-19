@@ -1,7 +1,7 @@
 import {
   IRoadmapBoard,
   IRoadmapCategory,
-} from "@changes-page/supabase/types/page";
+} from "@changespage/supabase/types/page";
 import { useState } from "react";
 import { createAuditLog } from "../../../utils/auditLog";
 import { useUserData } from "../../../utils/useUser";

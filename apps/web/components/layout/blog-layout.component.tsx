@@ -1,4 +1,4 @@
-import { DateTime } from "@changes-page/utils";
+import { DateTime } from "@changespage/utils";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Head from "next/head";

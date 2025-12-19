@@ -1,6 +1,6 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { IErrorResponse } from "@changes-page/supabase/types/api";
-import { IPost, PostStatus } from "@changes-page/supabase/types/page";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { IErrorResponse } from "@changespage/supabase/types/api";
+import { IPost, PostStatus } from "@changespage/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getPageUrl, getPostUrl } from "../../../../utils/hooks/usePageUrl";
 import {

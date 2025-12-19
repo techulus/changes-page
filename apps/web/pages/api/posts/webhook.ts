@@ -1,5 +1,5 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { IPost, PostStatus } from "@changes-page/supabase/types/page";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { IPost, PostStatus } from "@changespage/supabase/types/page";
 import { NextApiRequest, NextApiResponse } from "next";
 import { DELETE_IMAGES_JOB_EVENT } from "../../../inngest/jobs/delete-images";
 import { sendPostEmailToSubscribers } from "../../../utils/email";

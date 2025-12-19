@@ -2,7 +2,7 @@ import {
   getCategoryColorClasses,
   getCategoryColorOptions,
   ROADMAP_COLORS,
-} from "@changes-page/utils";
+} from "@changespage/utils";
 import { GlobeIcon, LockClosedIcon, MenuIcon } from "@heroicons/react/outline";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
 import { InferGetServerSidePropsType } from "next";

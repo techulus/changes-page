@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import { Parser } from "@json2csv/plainjs";
 import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { withAuth } from "../../../../utils/withAuth";

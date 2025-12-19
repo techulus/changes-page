@@ -1,4 +1,4 @@
-import { IPageSettings } from "@changes-page/supabase/types/page";
+import { IPageSettings } from "@changespage/supabase/types/page";
 import { createOrRetrievePageSettings } from "../../../../utils/useDatabase";
 import { withAuth } from "../../../../utils/withAuth";
 

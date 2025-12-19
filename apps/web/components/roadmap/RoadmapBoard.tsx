@@ -3,7 +3,7 @@ import {
   IRoadmapCategory,
   IRoadmapColumn,
   IRoadmapTriageItem,
-} from "@changes-page/supabase/types/page";
+} from "@changespage/supabase/types/page";
 import { useMemo, useState } from "react";
 import RoadmapColumn from "./RoadmapColumn";
 import RoadmapItemModal from "./RoadmapItemModal";

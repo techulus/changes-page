@@ -1,5 +1,5 @@
-import { IErrorResponse } from "@changes-page/supabase/types/api";
-import { URL_SLUG_REGEX } from "@changes-page/supabase/types/page";
+import { IErrorResponse } from "@changespage/supabase/types/api";
+import { URL_SLUG_REGEX } from "@changespage/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { apiRateLimiter } from "../../../utils/rate-limit";
 import { validatePageByUrl } from "../../../utils/useDatabase";

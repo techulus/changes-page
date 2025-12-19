@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import UAParser from "ua-parser-js";
 import { v4 } from "uuid";

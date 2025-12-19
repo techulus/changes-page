@@ -1,5 +1,5 @@
-import { Database } from "@changes-page/supabase/types";
-import { IErrorResponse } from "@changes-page/supabase/types/api";
+import { Database } from "@changespage/supabase/types";
+import { IErrorResponse } from "@changespage/supabase/types/api";
 import { SupabaseClient, User } from "@supabase/supabase-js";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createServerClientForAPI } from "./supabase/server";

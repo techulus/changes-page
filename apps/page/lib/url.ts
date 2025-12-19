@@ -1,4 +1,4 @@
-import { IPage, IPageSettings } from "@changes-page/supabase/types/page";
+import { IPage, IPageSettings } from "@changespage/supabase/types/page";
 import slugify from "slugify";
 import { IPostPublicData } from "./data";
 

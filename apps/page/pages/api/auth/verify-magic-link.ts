@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@changes-page/supabase/admin";
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createVisitorJWT, isTokenExpired } from "../../../lib/visitor-auth";
 

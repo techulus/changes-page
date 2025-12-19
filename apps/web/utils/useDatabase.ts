@@ -1,9 +1,9 @@
-import { Json } from "@changes-page/supabase/types";
+import { Json } from "@changespage/supabase/types";
 import { Stripe } from "stripe";
 
-import { supabaseAdmin } from "@changes-page/supabase/admin";
-import { IAnalyticsData } from "@changes-page/supabase/types/api";
-import { IPage } from "@changes-page/supabase/types/page";
+import { supabaseAdmin } from "@changespage/supabase/admin";
+import { IAnalyticsData } from "@changespage/supabase/types/api";
+import { IPage } from "@changespage/supabase/types/page";
 import { IUser } from "../data/user.interface";
 import { VALID_STRIPE_PRICE_IDS } from "../pages/api/billing/jobs/report-usage";
 

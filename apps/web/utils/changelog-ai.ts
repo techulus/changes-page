@@ -2,7 +2,7 @@ import { generateObject } from "ai";
 import { z } from "zod";
 import { openRouter } from "./ai-gateway";
 import { getPRCommits, getPRDetails, getPRFiles } from "./github";
-import { PostType } from "@changes-page/supabase/types/page";
+import { PostType } from "@changespage/supabase/types/page";
 
 export interface ChangelogInput {
   pr: Awaited<ReturnType<typeof getPRDetails>>;
