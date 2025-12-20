@@ -1,8 +1,10 @@
+import { supabaseAdmin } from "@changespage/supabase/admin";
 import { SpinnerWithSpacing } from "@changespage/ui";
 import { DateTime } from "@changespage/utils";
-import { CurrencyDollarIcon } from "@heroicons/react/outline";
+import { CurrencyDollarIcon, DatabaseIcon } from "@heroicons/react/outline";
 import { CalendarIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
+import { InferGetServerSidePropsType } from "next";
 import { useEffect } from "react";
 import { SecondaryButton } from "../../components/core/buttons.component";
 import { notifyError, notifyInfo } from "../../components/core/toast.component";
@@ -10,9 +12,72 @@ import AuthLayout from "../../components/layout/auth-layout.component";
 import Page from "../../components/layout/page.component";
 import { ROUTES } from "../../data/routes.data";
 import { httpPost } from "../../utils/http";
+import { withSupabase } from "../../utils/supabase/withSupabase";
 import { useUserData } from "../../utils/useUser";
 
-export default function Billing() {
+interface PageStorageUsage {
+  page_id: string;
+  page_title: string;
+  total_bytes: number;
+  total_pretty: string;
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+}
+
+export const getServerSideProps = withSupabase(async (_, { user }) => {
+  const { data: pages } = await supabaseAdmin
+    .from("pages")
+    .select("id, title")
+    .eq("user_id", user.id);
+
+  if (!pages || pages.length === 0) {
+    return {
+      props: {
+        storageUsage: [],
+      },
+    };
+  }
+
+  const storageUsage: PageStorageUsage[] = await Promise.all(
+    pages.map(async (page) => {
+      const { data: objects } = await supabaseAdmin
+        // @ts-expect-error - storage schema not in Database types
+        .schema("storage")
+        .from("objects")
+        .select("metadata")
+        .eq("bucket_id", "images")
+        .like("name", `${user.id}/${page.id}/%`);
+
+      const totalBytes = (objects || []).reduce((sum, obj) => {
+        const size = (obj.metadata as { size?: number })?.size || 0;
+        return sum + size;
+      }, 0);
+
+      return {
+        page_id: page.id,
+        page_title: page.title,
+        total_bytes: totalBytes,
+        total_pretty: formatBytes(totalBytes),
+      };
+    })
+  );
+
+  return {
+    props: {
+      storageUsage,
+    },
+  };
+});
+
+export default function Billing({
+  storageUsage,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { billingDetails, fetchBilling } = useUserData();
 
   async function openBillingPortal() {
@@ -175,6 +240,52 @@ export default function Billing() {
                     label={"Update payment method"}
                     onClick={openBillingPortal}
                   />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="md:grid md:grid-cols-3 md:gap-6 mt-10">
+          <div className="md:col-span-1">
+            <div className="px-4 sm:px-0">
+              <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">
+                Storage Usage
+              </h3>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                Storage used by each page for images and uploads.
+              </p>
+            </div>
+          </div>
+          <div className="mt-5 md:mt-0 md:col-span-2">
+            {storageUsage.length === 0 ? (
+              <div className="shadow overflow-hidden sm:rounded-md">
+                <div className="px-4 py-3 bg-white dark:bg-black sm:p-3">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    No pages found.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="shadow overflow-hidden sm:rounded-md">
+                <div className="bg-white dark:bg-black">
+                  <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+                    {storageUsage.map((page) => (
+                      <li key={page.page_id} className="px-4 py-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <DatabaseIcon className="h-5 w-5 text-gray-400 mr-3" />
+                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {page.page_title}
+                            </p>
+                          </div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            {page.total_pretty}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             )}
