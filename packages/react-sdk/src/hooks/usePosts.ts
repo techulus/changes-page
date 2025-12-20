@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import type { ChangesPageClient, Post } from "../types";
+import type { ChangesPageClient, Post } from "@changespage/core";
 
 export interface UsePostsInitialData {
   posts: Post[];

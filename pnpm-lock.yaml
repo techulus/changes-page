@@ -229,8 +229,8 @@ importers:
         specifier: 1.0.0-alpha.20
         version: 1.0.0-alpha.20(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.10.0))(next@14.2.35(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@changespage/react':
-        specifier: workspace:*
-        version: link:../../packages/react-sdk
+        specifier: 0.2.0
+        version: 0.2.0(react@18.3.1)
       '@changespage/supabase':
         specifier: workspace:*
         version: link:../../packages/supabase
@@ -455,7 +455,20 @@ importers:
         specifier: ^5
         version: 5.8.3
 
+  packages/core-sdk:
+    devDependencies:
+      rimraf:
+        specifier: ^6.1.0
+        version: 6.1.2
+      typescript:
+        specifier: ^5.3.3
+        version: 5.8.3
+
   packages/react-sdk:
+    dependencies:
+      '@changespage/core':
+        specifier: workspace:*
+        version: link:../core-sdk
     devDependencies:
       '@types/react':
         specifier: ^18.3.18
@@ -634,6 +647,11 @@ packages:
 
   '@bufbuild/protobuf@1.10.0':
     resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
+
+  '@changespage/react@0.2.0':
+    resolution: {integrity: sha512-o6EvLxarnw6Xegwm7F3rI6/R3RoNUDhJgJKHaq7iTQVuhF2qiCixo2+gL09va+rLA3WZHhRPKrWjwbWU+nFcfw==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
 
   '@chevrotain/cst-dts-gen@11.0.3':
     resolution: {integrity: sha512-BvIKpRLeS/8UbfxXxgC33xOumsacaeCKAjAeLyOn7Pcp95HiRbrpl14S+9vaZLolnbssPIUuiUd8IvgkRyt6NQ==}
@@ -6420,6 +6438,11 @@ snapshots:
   '@braintree/sanitize-url@7.1.1': {}
 
   '@bufbuild/protobuf@1.10.0': {}
+
+  '@changespage/react@0.2.0(react@18.3.1)':
+    dependencies:
+      '@changespage/core': link:packages/core-sdk
+      react: 18.3.1
 
   '@chevrotain/cst-dts-gen@11.0.3':
     dependencies:

@@ -47,11 +47,17 @@ export default function Changelog({
         <div className="space-y-12">
           {posts.map((post, index) => (
             <ChangelogPost key={post.id} post={post}>
-              {({ title, content, tags, formattedDate }) => (
+              {({ title, content, tags, publicationDate }) => (
                 <article className="md:border-l-2 md:border-gray-200 md:dark:border-gray-700 md:pl-6">
-                  <time className="text-sm text-gray-500 dark:text-gray-400">
-                    {formattedDate}
-                  </time>
+                  {publicationDate && (
+                    <time className="text-sm text-gray-500 dark:text-gray-400">
+                      {new Date(publicationDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </time>
+                  )}
                   <h2 className={`text-2xl font-semibold text-gray-900 dark:text-white mt-1 mb-3 underline ${UNDERLINE_COLORS[index % UNDERLINE_COLORS.length]}`}>
                     {title}
                   </h2>
