@@ -10,6 +10,13 @@ import HeaderComponent from "../components/layout/header.component";
 import { Spinner } from "@changespage/ui";
 
 const POSTS_PER_PAGE = 10;
+const UNDERLINE_COLORS = [
+  "decoration-blue-500",
+  "decoration-yellow-500",
+  "decoration-red-500",
+  "decoration-indigo-500",
+  "decoration-green-500",
+];
 
 const client = createChangesPageClient({
   baseUrl: "https://hey.changes.page",
@@ -38,14 +45,14 @@ export default function Changelog({
         </p>
 
         <div className="space-y-12">
-          {posts.map((post) => (
+          {posts.map((post, index) => (
             <ChangelogPost key={post.id} post={post}>
               {({ title, content, tags, formattedDate }) => (
-                <article className="border-l-2 border-gray-200 dark:border-gray-700 pl-6">
+                <article className="md:border-l-2 md:border-gray-200 md:dark:border-gray-700 md:pl-6">
                   <time className="text-sm text-gray-500 dark:text-gray-400">
                     {formattedDate}
                   </time>
-                  <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mt-1 mb-3">
+                  <h2 className={`text-2xl font-semibold text-gray-900 dark:text-white mt-1 mb-3 underline ${UNDERLINE_COLORS[index % UNDERLINE_COLORS.length]}`}>
                     {title}
                   </h2>
                   <div className="flex gap-2 mb-4">
