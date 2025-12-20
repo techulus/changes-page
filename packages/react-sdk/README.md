@@ -25,10 +25,10 @@ export default async function ChangelogPage() {
     <div>
       {posts.map(post => (
         <ChangelogPost key={post.id} post={post}>
-          {({ title, content, tags, formattedDate, url }) => (
+          {({ title, content, tags, publicationDate, url }) => (
             <article>
               <h2>{title}</h2>
-              <time>{formattedDate}</time>
+              {publicationDate && <time>{new Date(publicationDate).toLocaleDateString()}</time>}
               <div>{tags.map(t => <span key={t}>{t}</span>)}</div>
               <ReactMarkdown>{content}</ReactMarkdown>
             </article>
@@ -65,7 +65,7 @@ Returns the most recent post or `null`.
 
 Render prop component exposing:
 
-- `id`, `title`, `content` (markdown), `plainText`, `tags`, `date`, `formattedDate`, `url`
+- `id`, `title`, `content` (markdown), `plainText`, `tags`, `publicationDate`, `url`
 
 ## Hook
 

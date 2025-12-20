@@ -1,5 +1,5 @@
 export { createChangesPageClient } from "./client";
-export { formatDate, getTagLabel, parseDate } from "./utils";
+export { getTagLabel } from "./utils";
 export type {
   ChangesPageClient,
   ClientConfig,

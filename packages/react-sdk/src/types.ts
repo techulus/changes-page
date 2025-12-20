@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { PostTag } from "@changespage/core";
+import type { Post, PostTag } from "@changespage/core";
 
 export type {
   ChangesPageClient,
@@ -16,13 +16,11 @@ export interface ChangelogPostRenderProps {
   content: string;
   plainText: string;
   tags: PostTag[];
-  date: Date | null;
-  formattedDate: string;
+  publicationDate: string | null;
   url: string;
 }
 
 export interface ChangelogPostProps {
-  post: import("@changespage/core").Post;
-  locale?: string;
+  post: Post;
   children: (props: ChangelogPostRenderProps) => ReactNode;
 }

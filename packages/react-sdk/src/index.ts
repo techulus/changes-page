@@ -1,9 +1,4 @@
-export {
-  createChangesPageClient,
-  formatDate,
-  getTagLabel,
-  parseDate,
-} from "@changespage/core";
+export { createChangesPageClient, getTagLabel } from "@changespage/core";
 export type {
   ChangesPageClient,
   ClientConfig,
