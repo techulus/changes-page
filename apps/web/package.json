@@ -12,7 +12,7 @@
   "dependencies": {
     "@ai-sdk/react": "^2.0.115",
     "@arcjet/next": "1.0.0-alpha.20",
-    "@changespage/react": "0.2.0",
+    "@changespage/react": "0.3.0",
     "@changespage/supabase": "workspace:*",
     "@changespage/ui": "workspace:*",
     "@changespage/utils": "workspace:*",
