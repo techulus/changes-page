@@ -1,6 +1,6 @@
 {
   "name": "@changespage/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,12 +14,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "tsup",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {},
   "devDependencies": {
-    "rimraf": "^6.1.0",
+    "tsup": "^8.3.5",
     "typescript": "^5.3.3"
   },
   "author": "Arjun Komath <arjunkomath@gmail.com>",
