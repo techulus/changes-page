@@ -1,17 +1,16 @@
-export { createChangesPageClient } from "./client";
-export { ChangelogPost } from "./components";
-export { usePosts } from "./hooks";
-export { formatDate, getTagLabel, parseDate } from "./utils";
+export { createChangesPageClient, getTagLabel } from "@changespage/core";
 export type {
   ChangesPageClient,
-  ChangelogPostProps,
-  ChangelogPostRenderProps,
   ClientConfig,
   GetPostsOptions,
   GetPostsResult,
   Post,
   PostTag,
-} from "./types";
+} from "@changespage/core";
+
+export { ChangelogPost } from "./components";
+export { usePosts } from "./hooks";
+export type { ChangelogPostProps, ChangelogPostRenderProps } from "./types";
 export type {
   UsePostsInitialData,
   UsePostsOptions,

@@ -455,7 +455,20 @@ importers:
         specifier: ^5
         version: 5.8.3
 
+  packages/core-sdk:
+    devDependencies:
+      rimraf:
+        specifier: ^6.1.0
+        version: 6.1.2
+      typescript:
+        specifier: ^5.3.3
+        version: 5.8.3
+
   packages/react-sdk:
+    dependencies:
+      '@changespage/core':
+        specifier: workspace:*
+        version: link:../core-sdk
     devDependencies:
       '@types/react':
         specifier: ^18.3.18
