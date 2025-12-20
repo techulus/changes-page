@@ -16,9 +16,11 @@ export function formatDate(
   dateString: string | null,
   locale: string = "en-US"
 ): string {
-  if (!dateString) return "";
+  if (!dateString || !dateString.trim()) return "";
 
   const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "";
+
   return date.toLocaleDateString(locale, {
     year: "numeric",
     month: "long",
@@ -28,5 +30,7 @@ export function formatDate(
 
 export function parseDate(dateString: string | null): Date | null {
   if (!dateString) return null;
-  return new Date(dateString);
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return null;
+  return date;
 }

@@ -52,8 +52,30 @@ export function createChangesPageClient(config: ClientConfig): ChangesPageClient
     return result.posts[0] ?? null;
   }
 
+  async function getPinnedPost(): Promise<Post | null> {
+    const response = await fetch(`${baseUrl}/api/pinned`, {
+      headers: {
+        "X-API-Version": API_VERSION,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      }
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage =
+        (errorData as { error?: string }).error || response.statusText;
+      throw new Error(errorMessage);
+    }
+
+    const data: Post | null = await response.json();
+    return data;
+  }
+
   return {
     getPosts,
     getLatestPost,
+    getPinnedPost,
   };
 }

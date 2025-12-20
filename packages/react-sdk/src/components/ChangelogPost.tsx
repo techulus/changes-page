@@ -1,5 +1,5 @@
+import { formatDate, parseDate } from "@changespage/core";
 import type { ChangelogPostProps, ChangelogPostRenderProps } from "../types";
-import { formatDate, parseDate } from "../utils";
 
 export function ChangelogPost({ post, locale, children }: ChangelogPostProps) {
   const renderProps: ChangelogPostRenderProps = {
