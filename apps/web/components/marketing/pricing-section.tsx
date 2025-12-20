@@ -4,18 +4,34 @@ import Link from "next/link";
 import { ROUTES } from "../../data/routes.data";
 import background from "../../public/images/hero/pricing.jpg";
 
-export default function PricingSection({ unit_amount = 500, addons = [] }) {
+interface Addon {
+  price: number;
+  name: string;
+}
+
+interface PricingSectionProps {
+  unit_amount?: number;
+  addons?: Addon[];
+}
+
+export default function PricingSection({
+  unit_amount = 200,
+  addons = [],
+}: PricingSectionProps) {
+  const priceInDollars = unit_amount / 100;
   const features = [
-    "Custom domain + SSL",
     "Email notifications (add-on)",
-    "Post Scheduling",
-    "Audience Analytics",
-    "SEO Friendly",
-    "Embeddable Widget",
-    "Zapier Integration",
-    "White labeling",
-    "AI Assistant",
-    "Email & Slack Support",
+    "Public roadmap with community voting",
+    "Post scheduling, reactions & pinned posts",
+    "Team collaboration & member invites",
+    "Custom domain + SSL",
+    "GitHub Changelog Agent",
+    "Markdown editor with image uploads",
+    "Audience analytics",
+    "JSON API & RSS feed",
+    "React SDK & embeddable widget",
+    "Zapier & GitHub integration",
+    "SEO friendly",
   ];
 
   return (
@@ -36,7 +52,7 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
               Simple Pricing
             </h2>
             <p className="mt-2 text-4xl font-bold tracking-tight text-white hero">
-              Everything you need for just ${Number(unit_amount) / 100 || "5"}{" "}
+              Everything you need for just ${priceInDollars}
             </p>
           </div>
         </div>
@@ -77,11 +93,11 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
                 </p>
               </div>
               <div className="-mt-2 p-2 lg:mt-0 lg:w-full lg:max-w-md lg:flex-shrink-0">
-                <div className="rounded-2xl bg-gray-950 py-6 text-center ring-1 ring-inset ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-16">
+                <div className="rounded-2xl bg-gray-950 py-6 text-center ring-1 ring-inset ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-20">
                   <div className="mx-auto max-w-xs px-8">
                     <div className="mt-6 flex items-baseline justify-center gap-x-2">
                       <p className="hero mt-4 flex items-baseline text-5xl font-bold tracking-tight text-gray-100">
-                        ${Number(unit_amount / 100)}
+                        ${priceInDollars}
                         <span className="text-lg font-semibold leading-8 tracking-normal text-gray-400">
                           /page /mo
                         </span>
@@ -116,6 +132,9 @@ export default function PricingSection({ unit_amount = 500, addons = [] }) {
                     >
                       Start free trial
                     </Link>
+                    <p className="text-xs mt-2 text-gray-400">
+                      14-days free trial
+                    </p>
                   </div>
                 </div>
               </div>
