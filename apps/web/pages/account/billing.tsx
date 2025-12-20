@@ -1,7 +1,11 @@
 import { supabaseAdmin } from "@changespage/supabase/admin";
 import { SpinnerWithSpacing } from "@changespage/ui";
 import { DateTime } from "@changespage/utils";
-import { CurrencyDollarIcon, DatabaseIcon } from "@heroicons/react/outline";
+import {
+  CurrencyDollarIcon,
+  DatabaseIcon,
+  EyeIcon,
+} from "@heroicons/react/outline";
 import { CalendarIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import { InferGetServerSidePropsType } from "next";
@@ -15,11 +19,12 @@ import { httpPost } from "../../utils/http";
 import { withSupabase } from "../../utils/supabase/withSupabase";
 import { useUserData } from "../../utils/useUser";
 
-interface PageStorageUsage {
+interface PageUsageStats {
   page_id: string;
   page_title: string;
   total_bytes: number;
   total_pretty: string;
+  page_views_30d: number;
 }
 
 function formatBytes(bytes: number): string {
@@ -39,22 +44,31 @@ export const getServerSideProps = withSupabase(async (_, { user }) => {
   if (!pages || pages.length === 0) {
     return {
       props: {
-        storageUsage: [],
+        usageStats: [],
       },
     };
   }
 
-  const storageUsage: PageStorageUsage[] = await Promise.all(
-    pages.map(async (page) => {
-      const { data: objects } = await supabaseAdmin
-        // @ts-expect-error - storage schema not in Database types
-        .schema("storage")
-        .from("objects")
-        .select("metadata")
-        .eq("bucket_id", "images")
-        .like("name", `${user.id}/${page.id}/%`);
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-      const totalBytes = (objects || []).reduce((sum, obj) => {
+  const usageStats: PageUsageStats[] = await Promise.all(
+    pages.map(async (page) => {
+      const [storageResult, viewsResult] = await Promise.all([
+        supabaseAdmin
+          // @ts-expect-error - storage schema not in Database types
+          .schema("storage")
+          .from("objects")
+          .select("metadata")
+          .eq("bucket_id", "images")
+          .like("name", `${user.id}/${page.id}/%`),
+        supabaseAdmin
+          .from("page_views")
+          .select("id", { count: "exact", head: true })
+          .eq("page_id", page.id)
+          .gte("created_at", thirtyDaysAgo.toISOString()),
+      ]);
+
+      const totalBytes = (storageResult.data || []).reduce((sum, obj) => {
         const size = (obj.metadata as { size?: number })?.size || 0;
         return sum + size;
       }, 0);
@@ -64,19 +78,20 @@ export const getServerSideProps = withSupabase(async (_, { user }) => {
         page_title: page.title,
         total_bytes: totalBytes,
         total_pretty: formatBytes(totalBytes),
+        page_views_30d: viewsResult.count || 0,
       };
     })
   );
 
   return {
     props: {
-      storageUsage,
+      usageStats,
     },
   };
 });
 
 export default function Billing({
-  storageUsage,
+  usageStats,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { billingDetails, fetchBilling } = useUserData();
 
@@ -250,15 +265,15 @@ export default function Billing({
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
               <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-50">
-                Storage Usage
+                Usage
               </h3>
               <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Storage used by each page for images and uploads.
+                Storage and page views (last 30 days) for each page.
               </p>
             </div>
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
-            {storageUsage.length === 0 ? (
+            {usageStats.length === 0 ? (
               <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="px-4 py-3 bg-white dark:bg-black sm:p-3">
                   <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -270,18 +285,20 @@ export default function Billing({
               <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="bg-white dark:bg-black">
                   <ul className="divide-y divide-gray-200 dark:divide-gray-800">
-                    {storageUsage.map((page) => (
+                    {usageStats.map((page) => (
                       <li key={page.page_id} className="px-4 py-4">
-                        <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+                          {page.page_title}
+                        </p>
+                        <div className="flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
                           <div className="flex items-center">
-                            <DatabaseIcon className="h-5 w-5 text-gray-400 mr-3" />
-                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                              {page.page_title}
-                            </p>
-                          </div>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <DatabaseIcon className="h-4 w-4 mr-1.5" />
                             {page.total_pretty}
-                          </p>
+                          </div>
+                          <div className="flex items-center">
+                            <EyeIcon className="h-4 w-4 mr-1.5" />
+                            {page.page_views_30d.toLocaleString()} views
+                          </div>
                         </div>
                       </li>
                     ))}
