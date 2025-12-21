@@ -7,7 +7,7 @@ import { GlobeIcon, LockClosedIcon, MenuIcon } from "@heroicons/react/outline";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState, type JSX } from "react";
+import { useMemo, useState, type JSX } from "react";
 import ConfirmDeleteDialog from "../../../../../components/dialogs/confirm-delete-dialog.component";
 import SwitchComponent from "../../../../../components/forms/switch.component";
 import AuthLayout from "../../../../../components/layout/auth-layout.component";
@@ -115,16 +115,7 @@ export default function BoardSettings({
     [serverSettings, clientSettings]
   );
 
-  // Active tab state
-  const [activeTab, setActiveTab] = useState(initialTab || "board");
-
-  // Update activeTab when URL changes
-  useEffect(() => {
-    const { tab } = router.query;
-    if (tab && typeof tab === "string") {
-      setActiveTab(tab);
-    }
-  }, [router.query]);
+  const activeTab = (router.query.tab as string) || initialTab || "board";
 
   // Board form state
   const [boardForm, setBoardForm] = useState({
