@@ -4,9 +4,16 @@ import Link from "next/link";
 import { ROUTES } from "../../data/routes.data";
 import capture from "../../public/images/hero/capture.png";
 import appLogo from "../../public/images/logo.png";
+import { Post } from "@changespage/react";
 const version = require("../../package.json").version;
 
-export default function Hero({ stars = null }: { stars?: string | null }) {
+export default function Hero({
+  stars = null,
+  latestPost = null,
+}: {
+  stars?: string | null;
+  latestPost: Post | null;
+}) {
   return (
     <div className="relative isolate overflow-hidden bg-gray-900">
       <svg
@@ -83,7 +90,11 @@ export default function Hero({ stars = null }: { stars?: string | null }) {
                   What&apos;s new
                 </span>
                 <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-300">
-                  <span>Just shipped v{version}</span>
+                  {latestPost ? (
+                    <span>{latestPost.title}</span>
+                  ) : (
+                    <span>Just shipped v{version}</span>
+                  )}
                   <ChevronRightIcon
                     className="h-5 w-5 text-gray-500"
                     aria-hidden="true"
