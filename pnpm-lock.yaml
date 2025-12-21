@@ -467,8 +467,8 @@ importers:
   packages/react-sdk:
     dependencies:
       '@changespage/core':
-        specifier: workspace:*
-        version: link:../core-sdk
+        specifier: 0.2.0
+        version: 0.2.0
     devDependencies:
       '@types/react':
         specifier: ^18.3.18
@@ -647,6 +647,9 @@ packages:
 
   '@bufbuild/protobuf@1.10.0':
     resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
+
+  '@changespage/core@0.2.0':
+    resolution: {integrity: sha512-Uwp0iECx5qMpZL5DDBxBvwEvNo0RJ+qjfbGTN7N28DoB3ir9MiZGT1U4/r1WFL+8Sb4wRKmw7nv3rFfAKw9nVA==}
 
   '@changespage/react@0.3.0':
     resolution: {integrity: sha512-wdGFb/om5/lJg2F2XBBJIrvBWfnnxgvGy9mFDn61dJNjSj6NHK6o8IRLWem+8GshY7Rwpj2LFpFbzgTVGQspLw==}
@@ -6769,6 +6772,8 @@ snapshots:
   '@braintree/sanitize-url@7.1.1': {}
 
   '@bufbuild/protobuf@1.10.0': {}
+
+  '@changespage/core@0.2.0': {}
 
   '@changespage/react@0.3.0(react@18.3.1)':
     dependencies:
