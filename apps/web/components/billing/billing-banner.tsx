@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { getAppBaseURL } from "../../utils/helpers";
 import { useUserData } from "../../utils/useUser";
 import { notifyInfo, notifySuccess } from "../core/toast.component";
@@ -7,11 +7,13 @@ import { notifyInfo, notifySuccess } from "../core/toast.component";
 export default function BillingBanner() {
   const router = useRouter();
   const { billingDetails } = useUserData();
+  const hasShownPaymentSuccess = useRef(false);
 
   const { payment_success } = router.query;
 
   useEffect(() => {
-    if (payment_success === "true") {
+    if (payment_success === "true" && !hasShownPaymentSuccess.current) {
+      hasShownPaymentSuccess.current = true;
       notifySuccess("Upgrade completed!");
     }
   }, [payment_success]);

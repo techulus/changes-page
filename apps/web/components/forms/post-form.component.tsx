@@ -131,16 +131,19 @@ export default function PostFormComponent({
     [formik]
   );
 
-  // show a toast when form validation fails
-  useEffect(() => {
-    if (formik.errors.title && formik.touched.title) {
-      notifyError(formik.errors.title);
-    }
-
-    if (formik.errors.content && formik.touched.content) {
-      notifyError(formik.errors.content);
-    }
-  }, [formik.errors, formik.touched]);
+  const handleFormSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      const errors = await formik.validateForm();
+      if (Object.keys(errors).length > 0) {
+        if (errors.title) notifyError(errors.title as string);
+        if (errors.content) notifyError(errors.content as string);
+        return;
+      }
+      formik.handleSubmit();
+    },
+    [formik]
+  );
 
   const suggestTitle = useCallback(() => {
     if (formik.values.content) {
@@ -172,7 +175,7 @@ export default function PostFormComponent({
 
   return (
     <div className="relative mb-8">
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <div className="space-y-9 relative">
           <div className="overflow-hidden md:rounded-md md:border border-gray-300 dark:border-gray-700 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
             <Listbox
