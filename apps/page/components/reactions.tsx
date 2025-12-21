@@ -140,17 +140,16 @@ const ReactionsCounter = ({
   aggregate: IReactions;
   user: IReactions;
   floating: boolean;
-  optimisticUpdate?: (reaction: string, status: boolean) => void;
+  optimisticUpdate?: (reaction: keyof IReactions, status: boolean) => void;
   setShowPicker?: (v: boolean) => void;
 }) => {
   const doReact = useCallback(
-    (reaction: string) => {
+    (reaction: keyof IReactions) => {
       if (setShowPicker) {
         setShowPicker(false);
       }
 
       if (optimisticUpdate) {
-        // @ts-ignore
         optimisticUpdate(reaction, !user[reaction]);
       }
 
@@ -162,7 +161,7 @@ const ReactionsCounter = ({
         },
       });
     },
-    [postId, setShowPicker, user, optimisticUpdate]
+    [postId, setShowPicker, user, optimisticUpdate],
   );
 
   const sortedReactions = useMemo(() => {
@@ -180,7 +179,7 @@ const ReactionsCounter = ({
         "flex items-center space-x-1 p-1",
         floating
           ? "shadow-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg"
-          : "ml-2"
+          : "ml-2",
       )}
     >
       {sortedReactions.map((reactionType) => {
@@ -196,7 +195,7 @@ const ReactionsCounter = ({
               config.color,
               isActive
                 ? "bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700"
-                : ""
+                : "",
             )}
             onClick={() => doReact(reactionType)}
           >
@@ -216,23 +215,20 @@ export default function Reactions(props: any) {
   const [userReaction, setUserReaction] = useState<IReactions>({});
 
   const optimisticUpdate = useCallback(
-    (reaction: string, status: boolean) => {
+    (reaction: keyof IReactions, status: boolean) => {
       setReactions((prev) => {
         const newReactions: IReactions = { ...prev };
-        // @ts-ignore
         newReactions[reaction] =
-          // @ts-ignore
           (newReactions[reaction] ?? 0) + (status ? 1 : -1);
         return newReactions;
       });
       setUserReaction((prev) => {
         const newUserReaction: IReactions = { ...prev };
-        // @ts-ignore
         newUserReaction[reaction] = status ? 1 : 0;
         return newUserReaction;
       });
     },
-    [setReactions, setUserReaction]
+    [setReactions, setUserReaction],
   );
 
   const updateReactions = useCallback(() => {
