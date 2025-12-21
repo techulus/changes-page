@@ -19,14 +19,11 @@ export default function usePagePosts(
 
   const [posts, setPosts] = useState<IPost[]>([]);
   const [postsCount, setPostsCount] = useState<number>(0);
-  const [allowLoadMore, setAllowLoadMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [search_value] = useDebounce(search, 500);
   const [pinnedPost, setPinnedPost] = useState<IPost>(null);
 
   function fetchPosts(offset = 0) {
-    setAllowLoadMore(false);
-
     if (!offset) {
       setLoading(true);
     } else {
@@ -68,9 +65,7 @@ export default function usePagePosts(
     });
   }
 
-  useEffect(() => {
-    setAllowLoadMore(posts.length !== postsCount);
-  }, [posts, postsCount]);
+  const allowLoadMore = posts.length !== postsCount;
 
   useEffect(() => {
     if (!pageId) return;
