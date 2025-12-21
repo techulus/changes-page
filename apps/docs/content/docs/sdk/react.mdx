@@ -1,0 +1,85 @@
+---
+title: React SDK
+description: React components and hooks for embedding changelogs.
+---
+
+## Installation
+
+```bash
+npm install @changespage/react react-markdown
+```
+
+## Usage
+
+```tsx
+"use client";
+
+import { createChangesPageClient, usePosts, ChangelogPost } from "@changespage/react";
+import Markdown from "react-markdown";
+
+const client = createChangesPageClient({
+  baseUrl: "https://your-page.changes.page",
+});
+
+function Changelog() {
+  const { posts, hasMore, loading, loadMore } = usePosts({ client });
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <ChangelogPost key={post.id} post={post}>
+          {({ title, plainText, tags, publicationDate }) => (
+            <article>
+              <h2>{title}</h2>
+              <time>{publicationDate?.toLocaleDateString()}</time>
+              <Markdown>{plainText}</Markdown>
+            </article>
+          )}
+        </ChangelogPost>
+      ))}
+      {hasMore && <button type="button" onClick={loadMore}>Load More</button>}
+    </div>
+  );
+}
+```
+
+## API
+
+### `usePosts(options)`
+
+Hook for fetching and managing posts.
+
+| Option        | Type                  | Description                    |
+| ------------- | --------------------- | ------------------------------ |
+| `client`      | `ChangesPageClient`   | Client instance                |
+| `initialData` | `UsePostsInitialData` | SSR initial data (optional)    |
+| `limit`       | `number`              | Posts per page (default: 10)   |
+
+Returns:
+
+| Property   | Type         | Description              |
+| ---------- | ------------ | ------------------------ |
+| `posts`    | `Post[]`     | Fetched posts            |
+| `hasMore`  | `boolean`    | More posts available     |
+| `loading`  | `boolean`    | Loading state            |
+| `error`    | `Error`      | Error if any             |
+| `loadMore` | `() => void` | Load next page           |
+| `refetch`  | `() => void` | Refresh posts            |
+
+### `<ChangelogPost>`
+
+Render prop component for displaying posts.
+
+```tsx
+<ChangelogPost post={post}>
+  {({ id, title, content, plainText, tags, publicationDate, url }) => (
+    // Your custom UI
+  )}
+</ChangelogPost>
+```
+
+### Re-exports
+
+The React SDK re-exports everything from `@changespage/core` including `createChangesPageClient`, `getTagLabel`, and all types.

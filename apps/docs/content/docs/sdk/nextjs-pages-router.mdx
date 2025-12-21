@@ -1,0 +1,211 @@
+---
+title: Next.js Pages Router
+description: Using the React SDK with Next.js Pages Router.
+---
+
+## Installation
+
+```bash
+npm install @changespage/react react-markdown
+```
+
+## With SSR (getServerSideProps)
+
+```tsx title="pages/changelog.tsx"
+import type { InferGetServerSidePropsType } from "next";
+import { createChangesPageClient, usePosts, getTagLabel } from "@changespage/react";
+import Markdown from "react-markdown";
+
+const client = createChangesPageClient({
+  baseUrl: "https://your-page.changes.page",
+});
+
+export async function getServerSideProps() {
+  const initialData = await client.getPosts({ limit: 10 });
+  return { props: { initialData } };
+}
+
+export default function ChangelogPage({
+  initialData,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { posts, hasMore, loading, loadMore } = usePosts({
+    client,
+    initialData,
+  });
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <article key={post.id}>
+          <div>
+            {post.tags.map((tag) => (
+              <span key={tag}>{getTagLabel(tag)}</span>
+            ))}
+          </div>
+          <h2>{post.title}</h2>
+          <Markdown>{post.plain_text_content}</Markdown>
+        </article>
+      ))}
+      {hasMore && (
+        <button type="button" onClick={loadMore} disabled={loading}>
+          {loading ? "Loading..." : "Load More"}
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+## With SSG (getStaticProps)
+
+```tsx title="pages/changelog.tsx"
+import type { InferGetStaticPropsType } from "next";
+import { createChangesPageClient, usePosts, getTagLabel } from "@changespage/react";
+import Markdown from "react-markdown";
+
+const client = createChangesPageClient({
+  baseUrl: "https://your-page.changes.page",
+});
+
+export async function getStaticProps() {
+  const initialData = await client.getPosts({ limit: 10 });
+  return {
+    props: { initialData },
+    revalidate: 60,
+  };
+}
+
+export default function ChangelogPage({
+  initialData,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const { posts, hasMore, loading, loadMore } = usePosts({
+    client,
+    initialData,
+  });
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <article key={post.id}>
+          <div>
+            {post.tags.map((tag) => (
+              <span key={tag}>{getTagLabel(tag)}</span>
+            ))}
+          </div>
+          <h2>{post.title}</h2>
+          <Markdown>{post.plain_text_content}</Markdown>
+        </article>
+      ))}
+      {hasMore && (
+        <button type="button" onClick={loadMore} disabled={loading}>
+          {loading ? "Loading..." : "Load More"}
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+## Client-Only
+
+```tsx title="pages/changelog.tsx"
+import { createChangesPageClient, usePosts, getTagLabel } from "@changespage/react";
+import Markdown from "react-markdown";
+
+const client = createChangesPageClient({
+  baseUrl: "https://your-page.changes.page",
+});
+
+export default function ChangelogPage() {
+  const { posts, hasMore, loading, loadMore } = usePosts({ client });
+
+  if (loading && posts.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <article key={post.id}>
+          <div>
+            {post.tags.map((tag) => (
+              <span key={tag}>{getTagLabel(tag)}</span>
+            ))}
+          </div>
+          <h2>{post.title}</h2>
+          <Markdown>{post.plain_text_content}</Markdown>
+        </article>
+      ))}
+      {hasMore && (
+        <button type="button" onClick={loadMore} disabled={loading}>
+          {loading ? "Loading..." : "Load More"}
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+## With Tailwind CSS
+
+```tsx title="pages/changelog.tsx"
+import { createChangesPageClient, usePosts, getTagLabel, type PostTag } from "@changespage/react";
+import Markdown from "react-markdown";
+
+const client = createChangesPageClient({
+  baseUrl: "https://your-page.changes.page",
+});
+
+const tagColors: Record<PostTag, string> = {
+  new: "bg-green-100 text-green-800",
+  fix: "bg-red-100 text-red-800",
+  improvement: "bg-blue-100 text-blue-800",
+  announcement: "bg-purple-100 text-purple-800",
+  alert: "bg-yellow-100 text-yellow-800",
+};
+
+export default function ChangelogPage() {
+  const { posts, hasMore, loading, loadMore } = usePosts({ client });
+
+  if (loading && posts.length === 0) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-gray-800" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-2xl space-y-8 px-4 py-8">
+      {posts.map((post) => (
+        <article key={post.id} className="rounded-lg border border-gray-200 p-6">
+          <div className="mb-3 flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${tagColors[tag]}`}
+              >
+                {getTagLabel(tag)}
+              </span>
+            ))}
+          </div>
+          <h2 className="mb-2 text-xl font-semibold text-gray-900">{post.title}</h2>
+          <div className="prose prose-sm text-gray-600">
+            <Markdown>{post.plain_text_content}</Markdown>
+          </div>
+        </article>
+      ))}
+      {hasMore && (
+        <button
+          type="button"
+          onClick={loadMore}
+          disabled={loading}
+          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+        >
+          {loading ? "Loading..." : "Load More"}
+        </button>
+      )}
+    </div>
+  );
+}
+```
