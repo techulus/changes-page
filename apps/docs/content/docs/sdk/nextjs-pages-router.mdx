@@ -13,7 +13,11 @@ npm install @changespage/react react-markdown
 
 ```tsx title="pages/changelog.tsx"
 import type { InferGetServerSidePropsType } from "next";
-import { createChangesPageClient, usePosts, getTagLabel } from "@changespage/react";
+import {
+  createChangesPageClient,
+  usePosts,
+  getTagLabel,
+} from "@changespage/react";
 import Markdown from "react-markdown";
 
 const client = createChangesPageClient({
@@ -60,7 +64,11 @@ export default function ChangelogPage({
 
 ```tsx title="pages/changelog.tsx"
 import type { InferGetStaticPropsType } from "next";
-import { createChangesPageClient, usePosts, getTagLabel } from "@changespage/react";
+import {
+  createChangesPageClient,
+  usePosts,
+  getTagLabel,
+} from "@changespage/react";
 import Markdown from "react-markdown";
 
 const client = createChangesPageClient({
@@ -71,7 +79,7 @@ export async function getStaticProps() {
   const initialData = await client.getPosts({ limit: 10 });
   return {
     props: { initialData },
-    revalidate: 60,
+    revalidate: 86400,
   };
 }
 
@@ -109,7 +117,11 @@ export default function ChangelogPage({
 ## Client-Only
 
 ```tsx title="pages/changelog.tsx"
-import { createChangesPageClient, usePosts, getTagLabel } from "@changespage/react";
+import {
+  createChangesPageClient,
+  usePosts,
+  getTagLabel,
+} from "@changespage/react";
 import Markdown from "react-markdown";
 
 const client = createChangesPageClient({
@@ -149,7 +161,12 @@ export default function ChangelogPage() {
 ## With Tailwind CSS
 
 ```tsx title="pages/changelog.tsx"
-import { createChangesPageClient, usePosts, getTagLabel, type PostTag } from "@changespage/react";
+import {
+  createChangesPageClient,
+  usePosts,
+  getTagLabel,
+  type PostTag,
+} from "@changespage/react";
 import Markdown from "react-markdown";
 
 const client = createChangesPageClient({
@@ -178,7 +195,10 @@ export default function ChangelogPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-8 px-4 py-8">
       {posts.map((post) => (
-        <article key={post.id} className="rounded-lg border border-gray-200 p-6">
+        <article
+          key={post.id}
+          className="rounded-lg border border-gray-200 p-6"
+        >
           <div className="mb-3 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
               <span
@@ -189,7 +209,9 @@ export default function ChangelogPage() {
               </span>
             ))}
           </div>
-          <h2 className="mb-2 text-xl font-semibold text-gray-900">{post.title}</h2>
+          <h2 className="mb-2 text-xl font-semibold text-gray-900">
+            {post.title}
+          </h2>
           <div className="prose prose-sm text-gray-600">
             <Markdown>{post.plain_text_content}</Markdown>
           </div>
