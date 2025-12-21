@@ -1,6 +1,6 @@
 {
   "name": "@changespage/react",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,7 +18,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@changespage/core": "workspace:*"
+    "@changespage/core": "0.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",

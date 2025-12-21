@@ -1,0 +1,61 @@
+---
+title: Core SDK
+description: Framework-agnostic JavaScript SDK for fetching changelog data.
+---
+
+## Installation
+
+```bash
+npm install @changespage/core
+```
+
+## Usage
+
+```typescript
+import { createChangesPageClient } from "@changespage/core";
+
+const client = createChangesPageClient({
+  baseUrl: "https://your-page.changes.page",
+});
+
+const { posts, totalCount, hasMore } = await client.getPosts({ limit: 10 });
+
+const latestPost = await client.getLatestPost();
+
+const pinnedPost = await client.getPinnedPost();
+```
+
+## API
+
+### `createChangesPageClient(config)`
+
+Creates a client instance.
+
+| Option    | Type     | Description              |
+| --------- | -------- | ------------------------ |
+| `baseUrl` | `string` | Your changes.page URL    |
+
+### Client Methods
+
+#### `getPosts(options?)`
+
+Fetches paginated posts.
+
+| Option   | Type     | Default | Description                |
+| -------- | -------- | ------- | -------------------------- |
+| `limit`  | `number` | 10      | Number of posts (max: 50)  |
+| `offset` | `number` | 0       | Pagination offset          |
+
+Returns `{ posts, totalCount, hasMore }`.
+
+#### `getLatestPost()`
+
+Returns the most recent post or `null`.
+
+#### `getPinnedPost()`
+
+Returns the pinned post or `null`.
+
+### `getTagLabel(tag)`
+
+Converts a tag to display label (e.g., `"fix"` → `"Fix"`).
