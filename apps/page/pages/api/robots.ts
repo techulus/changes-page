@@ -18,6 +18,7 @@ async function handler(
   const hostname = String(req?.headers?.host);
 
   const { domain, page: url_slug } = translateHostToPageIdentifier(hostname);
+  const pageUrl = domain ?? `${url_slug}.changes.page`;
 
   res.setHeader("Content-Type", "text/plain; charset=UTF-8");
 
@@ -29,7 +30,9 @@ async function handler(
     if (!page) throw new Error("Page not found");
     if (!settings) throw new Error("Settings not found");
 
-    res.status(200).send(settings?.hide_search_engine ? DISALLOW : getAllowRobots(hostname));
+    res
+      .status(200)
+      .send(settings?.hide_search_engine ? DISALLOW : getAllowRobots(pageUrl));
   } catch (e: unknown) {
     console.log("robots.txt [Error]", e);
     res.status(200).send(DISALLOW);
