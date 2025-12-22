@@ -2,14 +2,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { fetchRenderData, translateHostToPageIdentifier } from "../../lib/data";
 
 const ALLOW = `User-agent: *
-Allow: /`;
+Allow: /
+Disallow: /api/
+Disallow: /_next/`;
 
 const DISALLOW = `User-agent: *
 Disallow: /`;
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<string | null>
+  res: NextApiResponse<string | null>,
 ) {
   const hostname = String(req?.headers?.host);
 
@@ -19,7 +21,7 @@ async function handler(
 
   try {
     const { page, settings } = await fetchRenderData(
-      String(domain || url_slug)
+      String(domain || url_slug),
     );
 
     if (!page) throw new Error("Page not found");
