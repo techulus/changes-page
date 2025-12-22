@@ -8,7 +8,7 @@ import { InlineErrorMessage } from "../forms/notification.component";
 const SOCIAL_KEY_TO_LABEL = {
   product_url: "Link for Page Title/Logo",
   facebook_url: "Facebook URL",
-  twitter_url: "Twitter URL",
+  twitter_url: "X URL",
   github_url: "GitHub URL",
   instagram_url: "Instagram URL",
   youtube_url: "YouTube URL",
