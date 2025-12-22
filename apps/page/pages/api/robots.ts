@@ -1,10 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { fetchRenderData, translateHostToPageIdentifier } from "../../lib/data";
 
-const ALLOW = `User-agent: *
+const getAllowRobots = (hostname: string) => `User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /_next/`;
+Disallow: /_next/
+
+Sitemap: https://${hostname}/sitemap.xml`;
 
 const DISALLOW = `User-agent: *
 Disallow: /`;
@@ -27,7 +29,7 @@ async function handler(
     if (!page) throw new Error("Page not found");
     if (!settings) throw new Error("Settings not found");
 
-    res.status(200).send(settings?.hide_search_engine ? DISALLOW : ALLOW);
+    res.status(200).send(settings?.hide_search_engine ? DISALLOW : getAllowRobots(hostname));
   } catch (e: unknown) {
     console.log("robots.txt [Error]", e);
     res.status(200).send(DISALLOW);
