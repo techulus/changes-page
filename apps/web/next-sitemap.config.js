@@ -4,4 +4,21 @@ module.exports = {
   generateRobotsTxt: true, // (optional)
   // ...other options
   exclude: ["/pages", "/pages/*", "/account/*"],
+  robotsTxtOptions: {
+    policies: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/pages",
+          "/pages/*",
+          "/account",
+          "/account/*",
+          "/api/*",
+          "/login",
+          "/_next/*",
+        ],
+      },
+    ],
+  },
 };
