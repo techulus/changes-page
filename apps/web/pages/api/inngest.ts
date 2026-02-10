@@ -4,7 +4,6 @@ import { reportUsageForStripeInvoice } from "../../inngest/billing/report-pages-
 import { sendConfirmEmailNotification } from "../../inngest/email/send-confirm-email-notification";
 import { sendRoadmapTriageNotification } from "../../inngest/email/send-roadmap-triage-notification";
 import { sendTeamInviteEmail } from "../../inngest/email/send-team-invite";
-import { sendWelcomeEmail } from "../../inngest/email/send-welcome-email";
 import { sendVisitorMagicLink } from "../../inngest/email/send-visitor-magic-link";
 import { deleteImagesJob } from "../../inngest/jobs/delete-images";
 import { processGitHubChangelog } from "../../inngest/jobs/process-github-changelog";
@@ -18,7 +17,6 @@ export default serve("changes-page", [
   sendConfirmEmailNotification,
   sendPostNotification,
   sendRoadmapTriageNotification,
-  sendWelcomeEmail,
   sendTeamInviteEmail,
   sendVisitorMagicLink,
   // Background Jobs
