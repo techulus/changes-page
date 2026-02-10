@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import inngestClient from "../../../utils/inngest";
 
 const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
@@ -11,35 +10,8 @@ const databaseWebhook = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       const { type, record, old_record } = req.body;
-      const user: {
-        id: string;
-        email?: string;
-        raw_user_meta_data?: {
-          name?: string;
-          full_name?: string;
-        };
-      } = record || old_record;
-
-      const { id, email } = user;
-      console.log("Trigger databaseWebhook [Users]: Record:", type, id);
-
-      if (type === "INSERT") {
-        await inngestClient.send({
-          name: "email/user.welcome",
-          data: {
-            email,
-            payload: {
-              first_name:
-                user.raw_user_meta_data?.full_name ??
-                user.raw_user_meta_data?.name ??
-                "there",
-            },
-          },
-          user: {
-            id,
-          },
-        });
-      }
+      const user = record || old_record;
+      console.log("Trigger databaseWebhook [Users]: Record:", type, user.id);
 
       return res.status(200).json({ ok: true });
     } catch (err) {
