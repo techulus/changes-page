@@ -1,9 +1,6 @@
-import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { withAuth } from "../../../../utils/withAuth";
 
 const addDomain = withAuth(async (req, res, { user }) => {
-  await apiRateLimiter(req, res);
-
   const { domain } = req.body;
 
   if (domain.endsWith("changes.page")) {

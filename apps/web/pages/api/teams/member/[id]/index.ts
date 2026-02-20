@@ -1,5 +1,4 @@
 import { supabaseAdmin } from "@changespage/supabase/admin";
-import { apiRateLimiter } from "../../../../../utils/rate-limit";
 import { getUserById } from "../../../../../utils/useDatabase";
 import { withAuth } from "../../../../../utils/withAuth";
 
@@ -13,8 +12,6 @@ const getTeamMemberDetails = withAuth(async (req, res, { user }) => {
     }
 
     try {
-      await apiRateLimiter(req, res);
-
       const { has_active_subscription } = await getUserById(user.id);
       if (!has_active_subscription) {
         return res.status(403).json({

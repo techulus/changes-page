@@ -27,7 +27,6 @@ If you want to learn more about this project or have any questions, send us an e
 - [Supabase](https://supabase.com)
 - [inngest](https://www.inngest.com)
 - [Postmark](https://postmarkapp.com)
-- [Arcjet](https://arcjet.com)
 
 ## Deployment
 
