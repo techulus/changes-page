@@ -1,4 +1,3 @@
-import arcjet, { protectSignup } from "@arcjet/next";
 import { supabaseAdmin } from "@changespage/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import validator from "validator";
@@ -49,39 +48,6 @@ export default async function requestMagicLink(
       success: false,
       message: "Invalid email format",
     });
-  }
-
-  if (process.env.ARCJET_KEY) {
-    const aj = arcjet({
-      key: process.env.ARCJET_KEY,
-      rules: [
-        protectSignup({
-          email: {
-            mode: "LIVE",
-            block: ["DISPOSABLE", "INVALID", "NO_MX_RECORDS"],
-          },
-          bots: {
-            mode: "LIVE",
-            block: ["AUTOMATED"],
-          },
-          rateLimit: {
-            mode: "LIVE",
-            interval: "1m",
-            max: 3,
-          },
-        }),
-      ],
-    });
-
-    const decision = await aj.protect(req, { email });
-
-    if (decision.isDenied()) {
-      console.log("auth/request-magic-link: [Arcjet Block]", decision.reason);
-      return res.status(400).json({
-        success: false,
-        message: "Please provide a valid email address",
-      });
-    }
   }
 
   try {

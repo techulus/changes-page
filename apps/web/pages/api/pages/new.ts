@@ -1,6 +1,5 @@
 import { IPage } from "@changespage/supabase/types/page";
 import { NewPageSchema } from "../../../data/schema";
-import { apiRateLimiter } from "../../../utils/rate-limit";
 import {
   createPage,
   getUserById,
@@ -10,8 +9,6 @@ import { withAuth } from "../../../utils/withAuth";
 
 const createNewPage = withAuth<IPage>(async (req, res, { user }) => {
   if (req.method === "POST") {
-    await apiRateLimiter(req, res);
-
     const { url_slug, title, description, type } = req.body;
 
     try {

@@ -1,9 +1,6 @@
-import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { withAuth } from "../../../../utils/withAuth";
 
 const checkDomain = withAuth<{ valid: boolean }>(async (req, res, { user }) => {
-  await apiRateLimiter(req, res);
-
   const { domain } = req.query;
 
   console.log("checkDomain", user?.id, `domain: ${domain}`);

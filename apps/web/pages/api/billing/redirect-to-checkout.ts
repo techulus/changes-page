@@ -1,5 +1,4 @@
 import { getAppBaseURL } from "../../../utils/helpers";
-import { apiRateLimiter } from "../../../utils/rate-limit";
 import {
   createOrRetrieveCustomer,
   getUserById,
@@ -10,7 +9,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const redirectToCheckout = withAuth(async (req, res, { user }) => {
   if (req.method === "GET") {
-    await apiRateLimiter(req, res);
     const { return_url } = req.query;
 
     try {

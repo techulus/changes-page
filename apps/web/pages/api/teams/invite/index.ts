@@ -2,7 +2,6 @@ import { supabaseAdmin } from "@changespage/supabase/admin";
 import { ROUTES } from "../../../../data/routes.data";
 import { getAppBaseURL } from "../../../../utils/helpers";
 import inngestClient from "../../../../utils/inngest";
-import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { getUserById } from "../../../../utils/useDatabase";
 import { withAuth } from "../../../../utils/withAuth";
 
@@ -17,8 +16,6 @@ const inviteUser = withAuth<{ ok: boolean }>(
       }
 
       try {
-        await apiRateLimiter(req, res);
-
         const { has_active_subscription } = await getUserById(user.id);
         if (!has_active_subscription) {
           return res.status(403).json({

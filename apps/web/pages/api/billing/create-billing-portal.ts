@@ -1,4 +1,3 @@
-import { apiRateLimiter } from "../../../utils/rate-limit";
 import { createOrRetrieveCustomer } from "../../../utils/useDatabase";
 import { withAuth } from "../../../utils/withAuth";
 import { getAppBaseURL } from "./../../../utils/helpers";
@@ -7,7 +6,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const createBillingSession = withAuth<{ url: string }>(
   async (req, res, { user }) => {
     if (req.method === "POST") {
-      await apiRateLimiter(req, res);
       const { return_url } = req.body;
 
       try {
