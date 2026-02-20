@@ -346,12 +346,6 @@ export default function DevelopersCareAboutChangelog() {
               >
                 Create Your First Changelog
               </Link>
-              <Link
-                href="/blog"
-                className="inline-flex items-center px-8 py-4 rounded-lg border-2 border-white text-white font-semibold hover:bg-white hover:text-indigo-600 transition-colors duration-200"
-              >
-                Read Best Practices
-              </Link>
             </div>
           </div>
         </section>
