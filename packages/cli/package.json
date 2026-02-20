@@ -1,0 +1,32 @@
+{
+  "name": "@changespage/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "chp": "./dist/index.js"
+  },
+  "module": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.3.3"
+  },
+  "author": "Arjun Komath <arjunkomath@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/techulus/changes-page.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
