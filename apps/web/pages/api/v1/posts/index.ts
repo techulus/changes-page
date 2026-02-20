@@ -1,12 +1,11 @@
 import { supabaseAdmin } from "@changespage/supabase/admin";
 import { PostStatus } from "@changespage/supabase/types/page";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
 import { NewPostSchema } from "../../../../data/schema";
 import { withSecretKey } from "../../../../utils/withSecretKey";
-import { POST_SELECT_FIELDS } from "./shared";
+import { IPublicPost, POST_SELECT_FIELDS } from "./shared";
 
-export default withSecretKey(async (req, res, { page }) => {
+export default withSecretKey<IPublicPost | IPublicPost[]>(async (req, res, { page }) => {
   if (req.method === "GET") {
     const { status, limit = "20", offset = "0" } = req.query;
 
@@ -18,7 +17,12 @@ export default withSecretKey(async (req, res, { page }) => {
       .range(Number(offset), Number(offset) + Number(limit) - 1);
 
     if (status && typeof status === "string") {
-      query = query.eq("status", status);
+      if (!Object.values(PostStatus).includes(status as PostStatus)) {
+        return res
+          .status(400)
+          .json({ error: { statusCode: 400, message: "Invalid status" } });
+      }
+      query = query.eq("status", status as PostStatus);
     }
 
     const { data, error } = await query;

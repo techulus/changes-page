@@ -6,13 +6,13 @@ import { getPageByIntegrationSecret } from "./useDatabase";
 type SecretKeyHandler<T = unknown> = (
   req: NextApiRequest,
   res: NextApiResponse<T | IErrorResponse>,
-  { page }: { page: IPage }
-) => Promise<void> | void;
+  { page }: { page: IPage },
+) => Promise<unknown> | void;
 
 export function withSecretKey<T = unknown>(handler: SecretKeyHandler<T>) {
   return async (
     req: NextApiRequest,
-    res: NextApiResponse<T | IErrorResponse>
+    res: NextApiResponse<T | IErrorResponse>,
   ) => {
     try {
       const secretKey = req.headers["page-secret-key"];

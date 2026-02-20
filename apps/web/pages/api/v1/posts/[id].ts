@@ -1,11 +1,10 @@
 import { supabaseAdmin } from "@changespage/supabase/admin";
 import { PostStatus } from "@changespage/supabase/types/page";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { NewPostSchema } from "../../../../data/schema";
 import { withSecretKey } from "../../../../utils/withSecretKey";
-import { POST_SELECT_FIELDS } from "./shared";
+import { IPublicPost, POST_SELECT_FIELDS } from "./shared";
 
-export default withSecretKey(async (req, res, { page }) => {
+export default withSecretKey<IPublicPost>(async (req, res, { page }) => {
   const { id } = req.query;
 
   if (!id || typeof id !== "string") {
