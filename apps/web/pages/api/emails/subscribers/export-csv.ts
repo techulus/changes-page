@@ -1,13 +1,10 @@
 import { supabaseAdmin } from "@changespage/supabase/admin";
 import { Parser } from "@json2csv/plainjs";
-import { apiRateLimiter } from "../../../../utils/rate-limit";
 import { withAuth } from "../../../../utils/withAuth";
 
 const getSubscribersExportCsv = withAuth(async (req, res, { user }) => {
   if (req.method === "GET") {
     try {
-      await apiRateLimiter(req, res);
-
       const page_id = String(req.query.page_id);
 
       await supabaseAdmin

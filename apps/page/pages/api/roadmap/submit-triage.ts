@@ -1,29 +1,9 @@
-import arcjet, { detectBot, tokenBucket } from "@arcjet/next";
 import { supabaseAdmin } from "@changespage/supabase/admin";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { v4 } from "uuid";
 import { escape } from "validator";
 import { getAuthenticatedVisitor } from "../../../lib/visitor-auth";
 import inngestClient from "../../../utils/inngest";
-
-const aj = process.env.ARCJET_KEY
-  ? arcjet({
-      key: process.env.ARCJET_KEY,
-      rules: [
-        tokenBucket({
-          mode: "LIVE",
-          characteristics: ["userId"],
-          refillRate: 5,
-          interval: "1h",
-          capacity: 10,
-        }),
-        detectBot({
-          mode: "LIVE",
-          block: ["AUTOMATED"],
-        }),
-      ],
-    })
-  : undefined;
 
 export default async function submitTriageItem(
   req: NextApiRequest,
@@ -74,26 +54,6 @@ export default async function submitTriageItem(
     return res
       .status(401)
       .json({ success: false, error: "Authentication required" });
-  }
-
-  if (aj) {
-    const decision = await aj.protect(req, {
-      userId: visitor.id,
-      requested: 1,
-    });
-
-    if (decision.isDenied()) {
-      console.log(
-        "roadmap/submit-triage: [Arcjet Block]",
-        visitor.id,
-        decision.reason
-      );
-
-      return res.status(403).json({
-        success: false,
-        error: "Request blocked.",
-      });
-    }
   }
 
   try {

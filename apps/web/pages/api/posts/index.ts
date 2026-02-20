@@ -1,6 +1,5 @@
 import { PostStatus } from "@changespage/supabase/types/page";
 import { NewPostSchema } from "../../../data/schema";
-import { apiRateLimiter } from "../../../utils/rate-limit";
 import { createPost } from "../../../utils/useDatabase";
 import { withAuth } from "../../../utils/withAuth";
 import { createAuditLog } from "../../../utils/auditLog";
@@ -22,8 +21,6 @@ const createNewPost = withAuth(async (req, res, { user, supabase }) => {
     } = req.body;
 
     try {
-      await apiRateLimiter(req, res);
-
       const isValid = await NewPostSchema.isValid({
         page_id,
         title: title.trim(),

@@ -1,5 +1,4 @@
 import { supabaseAdmin } from "@changespage/supabase/admin";
-import { apiRateLimiter } from "../../../../../utils/rate-limit";
 import { withAuth } from "../../../../../utils/withAuth";
 
 const acceptInvite = withAuth(async (req, res, { user, supabase }) => {
@@ -12,8 +11,6 @@ const acceptInvite = withAuth(async (req, res, { user, supabase }) => {
     }
 
     try {
-      await apiRateLimiter(req, res);
-
       const { data: invite } = await supabase
         .from("team_invitations")
         .select("*")

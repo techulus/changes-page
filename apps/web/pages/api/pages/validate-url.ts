@@ -1,7 +1,6 @@
 import { IErrorResponse } from "@changespage/supabase/types/api";
 import { URL_SLUG_REGEX } from "@changespage/supabase/types/page";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { apiRateLimiter } from "../../../utils/rate-limit";
 import { validatePageByUrl } from "../../../utils/useDatabase";
 
 const BLACKLIST = [
@@ -75,8 +74,6 @@ const validatePageUrl = async (
   res: NextApiResponse<{ status: boolean } | IErrorResponse>
 ) => {
   if (req.method === "POST") {
-    await apiRateLimiter(req, res);
-
     const { url_slug, page_id } = req.body;
 
     console.log("validatePageUrl", { url_slug, page_id });
