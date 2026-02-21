@@ -80,7 +80,8 @@ export function registerPostsCommand(program: Command) {
     .requiredOption("--tags <tags>", "Comma-separated tags (new,fix,improvement,announcement,alert)")
     .option("--status <status>", "Post status", "draft")
     .option("--publish-at <date>", "ISO date for scheduled publish")
-    .option("--allow-reactions", "Enable reactions")
+    .option("--allow-reactions", "Enable reactions (default: false)")
+    .option("--no-allow-reactions", "Disable reactions")
     .option("--notes <notes>", "Internal notes")
     .action(async function (this: Command) {
       const client = getClient(this);
@@ -98,7 +99,7 @@ export function registerPostsCommand(program: Command) {
         content,
         status: opts.status,
         publish_at: opts.publishAt ?? null,
-        allow_reactions: opts.allowReactions ?? false,
+        allow_reactions: opts.allowReactions,
         notes: opts.notes ?? null,
       });
       output(data, this);
@@ -112,6 +113,7 @@ export function registerPostsCommand(program: Command) {
     .option("--status <status>", "Post status")
     .option("--publish-at <date>", "ISO date for scheduled publish")
     .option("--allow-reactions", "Enable reactions")
+    .option("--no-allow-reactions", "Disable reactions")
     .option("--notes <notes>", "Internal notes")
     .action(async function (this: Command, id: string) {
       const client = getClient(this);

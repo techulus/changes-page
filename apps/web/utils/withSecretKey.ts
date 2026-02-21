@@ -34,8 +34,8 @@ export function withSecretKey<T = unknown>(handler: SecretKeyHandler<T>) {
       return handler(req, res, { page });
     } catch (error) {
       console.error("Secret key auth error:", error);
-      return res.status(401).json({
-        error: { statusCode: 401, message: "Invalid secret key" },
+      return res.status(500).json({
+        error: { statusCode: 500, message: "Internal server error" },
       });
     }
   };

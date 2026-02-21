@@ -30,10 +30,19 @@ export class ApiClient {
       return null as T;
     }
 
-    const body = await res.json();
+    let body: Record<string, unknown>;
+    try {
+      body = await res.json();
+    } catch {
+      if (!res.ok) {
+        console.error(`Error: Request failed with status ${res.status}`);
+        process.exit(1);
+      }
+      return null as T;
+    }
 
     if (!res.ok) {
-      const message = body?.error?.message ?? `Request failed with status ${res.status}`;
+      const message = (body?.error as Record<string, unknown>)?.message ?? `Request failed with status ${res.status}`;
       console.error(`Error: ${message}`);
       process.exit(1);
     }

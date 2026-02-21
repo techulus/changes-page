@@ -7,14 +7,17 @@ import { IPublicPost, POST_SELECT_FIELDS } from "./shared";
 
 export default withSecretKey<IPublicPost | IPublicPost[]>(async (req, res, { page }) => {
   if (req.method === "GET") {
-    const { status, limit = "20", offset = "0" } = req.query;
+    const { status, limit: rawLimit = "20", offset: rawOffset = "0" } = req.query;
+
+    const limit = Math.max(1, Number(rawLimit) || 20);
+    const offset = Math.max(0, Number(rawOffset) || 0);
 
     let query = supabaseAdmin
       .from("posts")
       .select(POST_SELECT_FIELDS)
       .eq("page_id", page.id)
       .order("created_at", { ascending: false })
-      .range(Number(offset), Number(offset) + Number(limit) - 1);
+      .range(offset, offset + limit - 1);
 
     if (status && typeof status === "string") {
       if (!Object.values(PostStatus).includes(status as PostStatus)) {

@@ -22,9 +22,14 @@ export default withSecretKey<IPublicPost>(async (req, res, { page }) => {
       .single();
 
     if (error) {
+      if (error.code === "PGRST116") {
+        return res
+          .status(404)
+          .json({ error: { statusCode: 404, message: "Post not found" } });
+      }
       return res
-        .status(404)
-        .json({ error: { statusCode: 404, message: "Post not found" } });
+        .status(500)
+        .json({ error: { statusCode: 500, message: error.message } });
     }
 
     return res.status(200).json(data);
@@ -72,15 +77,14 @@ export default withSecretKey<IPublicPost>(async (req, res, { page }) => {
       .single();
 
     if (error) {
+      if (error.code === "PGRST116") {
+        return res
+          .status(404)
+          .json({ error: { statusCode: 404, message: "Post not found" } });
+      }
       return res
         .status(500)
         .json({ error: { statusCode: 500, message: error.message } });
-    }
-
-    if (!data) {
-      return res
-        .status(404)
-        .json({ error: { statusCode: 404, message: "Post not found" } });
     }
 
     return res.status(200).json(data);

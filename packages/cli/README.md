@@ -72,6 +72,14 @@ chp posts delete <id>
 | `--secret-key <key>` | Page secret key |
 | `--pretty` | Pretty-print JSON output |
 
+### List options
+
+| Flag | Description |
+|---|---|
+| `--status <status>` | Filter by status: `draft`, `published`, `archived` |
+| `--limit <n>` | Max number of posts (default: `20`) |
+| `--offset <n>` | Offset for pagination (default: `0`) |
+
 ### Create / Update options
 
 | Flag | Description |
@@ -80,7 +88,7 @@ chp posts delete <id>
 | `--tags <tags>` | Comma-separated tags: `new`, `fix`, `improvement`, `announcement`, `alert` |
 | `--status <status>` | `draft`, `published`, `archived` (default: `draft`) |
 | `--publish-at <date>` | ISO date for scheduled publish |
-| `--allow-reactions` | Enable reactions |
+| `--allow-reactions` / `--no-allow-reactions` | Enable or disable reactions |
 | `--notes <notes>` | Internal notes |
 
 ## License
