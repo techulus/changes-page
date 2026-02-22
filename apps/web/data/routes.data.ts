@@ -19,8 +19,6 @@ export const ROUTES = {
   // account
   BILLING: "/account/billing",
 
-  // legal
-  BLOG: "/blog",
   PRIVACY: "/privacy",
   SUPPORT: "https://techulus.atlassian.net/servicedesk/customer/portal/1",
   TERMS: "/terms",

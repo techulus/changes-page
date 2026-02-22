@@ -20,7 +20,6 @@ const navigation = {
     },
   ],
   support: [
-    { name: "Blog", href: ROUTES.BLOG },
     { name: "Documentation", href: "https://docs.changes.page/docs" },
     { name: "Contact Us", href: ROUTES.SUPPORT },
     { name: "Status", href: "https://status.changes.page" },

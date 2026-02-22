@@ -64,7 +64,6 @@ const nextConfig = {
       "pdwvetqkhfagwmkvduod.supabase.co",
       "eainhsncogzypzcrwpsp.supabase.co",
       "t3.gstatic.com",
-      "cdn.sanity.io",
     ],
   },
 };
