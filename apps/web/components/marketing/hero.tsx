@@ -24,7 +24,7 @@ function AppScreenshot() {
 
 function TerminalMockup() {
   return (
-    <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-950 overflow-hidden shadow-2xl max-h-[450px] flex flex-col">
+    <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-950 overflow-hidden shadow-2xl max-h-[600px] flex flex-col">
       <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-900/60 border-b border-white/5">
         <div className="flex gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-gray-700" />
