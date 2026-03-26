@@ -54,7 +54,7 @@ export default function FAQs() {
   return (
     <div className="bg-gray-50 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:py-16 lg:px-8">
-        <div className="mx-auto max-w-4xl divide-y divide-gray-200 dark:divide-white/10">
+        <div className="divide-y divide-gray-200 dark:divide-white/10">
           <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white hero">
             Frequently asked questions
           </h2>
