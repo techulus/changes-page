@@ -9,7 +9,7 @@ const version = require("../../package.json").version;
 
 function AppScreenshot() {
   return (
-    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-2xl">
+    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-2xl max-h-[600px]">
       <Image
         src={capture}
         alt="Changes.page changelog with timeline posts, reactions, and email subscriptions"
@@ -24,7 +24,7 @@ function AppScreenshot() {
 
 function TerminalMockup() {
   return (
-    <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-950 overflow-hidden shadow-2xl h-full flex flex-col">
+    <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-950 overflow-hidden shadow-2xl max-h-[450px] flex flex-col">
       <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-900/60 border-b border-white/5">
         <div className="flex gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-gray-700" />
@@ -192,7 +192,7 @@ export default function Hero({
         <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <div>
             <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-3">
-              Web Editor
+              Changelog
             </p>
             <AppScreenshot />
           </div>
