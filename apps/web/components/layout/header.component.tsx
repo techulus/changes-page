@@ -115,14 +115,14 @@ export default function HeaderComponent() {
         }}
       />
 
-      <Disclosure as="nav" className="bg-gray-900">
+      <Disclosure as="nav" className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-transparent">
         {({ open }) => (
           <>
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
               <div className="relative flex items-center justify-between h-16">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                   {/* Mobile menu button*/}
-                  <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -141,7 +141,7 @@ export default function HeaderComponent() {
                         src={logoImage}
                         alt="changes.page"
                       />
-                      <p className="text-gray-50 text-md mx-2 hero">
+                      <p className="text-gray-900 dark:text-gray-50 text-md mx-2 font-sans">
                         changes<strong>.page</strong>
                       </p>
                     </div>
@@ -162,8 +162,8 @@ export default function HeaderComponent() {
                             href={item.href}
                             className={classNames(
                               item.href == router.pathname
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                                ? "bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white"
+                                : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white",
                               "px-3 py-2 rounded-md text-sm font-medium"
                             )}
                             aria-current={
@@ -273,7 +273,7 @@ export default function HeaderComponent() {
                       <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                         <Link
                           href={ROUTES.LOGIN}
-                          className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                          className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors"
                         >
                           Sign in
                         </Link>
@@ -292,7 +292,7 @@ export default function HeaderComponent() {
                     as={Link}
                     href={item.href}
                     className={classNames(
-                      "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white",
                       "block px-3 py-2 rounded-md text-base font-medium"
                     )}
                   >
@@ -307,7 +307,7 @@ export default function HeaderComponent() {
                   <Link
                     href={ROUTES.LOGIN}
                     className={classNames(
-                      "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white",
                       "block px-3 py-2 rounded-md text-base font-medium"
                     )}
                   >

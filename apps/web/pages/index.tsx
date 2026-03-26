@@ -5,6 +5,7 @@ import HeaderComponent from "../components/layout/header.component";
 import Features from "../components/marketing/features";
 import GetStartedHero from "../components/marketing/get-started-hero";
 import Hero from "../components/marketing/hero";
+import OpenSourceBanner from "../components/marketing/open-source-banner";
 import PricingSection from "../components/marketing/pricing-section";
 import { createChangesPageClient } from "@changespage/react";
 import { InferGetStaticPropsType } from "next";
@@ -73,16 +74,15 @@ export default function Index({
   latestPost,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <div className="h-full dark:bg-gray-800">
+    <div className="h-full bg-white dark:bg-gray-900">
       <Head>
         <title>
-          Changes.page - Changelog & Roadmap Platform for Product Teams
+          Changes.page — The Changelog Platform for Humans and Agents
         </title>
         <meta
           name="description"
-          content="Create beautiful changelogs and interactive roadmaps. Share what you've built and what's coming next. Notify users, gather feedback with voting, and track engagement with analytics."
+          content="Create changelogs and roadmaps through a beautiful web editor or automate them via CLI and API. Open-source, designed for product teams and CI/CD pipelines."
         />
-        {/* FAQ Schema for SEO */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -124,14 +124,6 @@ export default function Index({
                 },
                 {
                   "@type": "Question",
-                  name: "Is changes.page SEO friendly?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes, our pages are server side rendered, making them fast and search engine friendly.",
-                  },
-                },
-                {
-                  "@type": "Question",
                   name: "Can users receive notifications about updates?",
                   acceptedAnswer: {
                     "@type": "Answer",
@@ -140,42 +132,18 @@ export default function Index({
                 },
                 {
                   "@type": "Question",
-                  name: "Is changes.page reliable?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes, we have an industry-leading 99.9%+ uptime and our systems are highly scalable and redundant.",
-                  },
-                },
-                {
-                  "@type": "Question",
                   name: "Can I automate my changelog page?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Yes, you can automate your page with the help of Zapier integration.",
+                    text: "Yes, you can automate your page using the CLI, API, GitHub Actions, or Zapier integration.",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "Can I see audience analytics for my page?",
+                  name: "Can AI agents create changelog posts?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Yes, you can see detailed insights into your page's visitors with metrics such as top referrers, operating systems, and browser information.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Do you support markdown?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes, we use a markdown editor for writing posts in your page.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Do you support roadmaps?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes, you can create interactive roadmap boards with voting functionality to engage your community and prioritize features together.",
+                    text: "Yes. The CLI is designed for automation. AI agents can pipe content via stdin and use the --tags and --status flags to create fully formatted posts programmatically.",
                   },
                 },
               ],
@@ -186,10 +154,9 @@ export default function Index({
       <HeaderComponent />
 
       <main>
-        <section>
-          <Hero stars={stars} latestPost={latestPost} />
-        </section>
+        <Hero latestPost={latestPost} />
         <Features />
+        <OpenSourceBanner stars={stars} />
         <PricingSection addons={addons} unit_amount={unit_amount} />
         <GetStartedHero />
         <FAQs />

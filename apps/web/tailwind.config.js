@@ -11,7 +11,7 @@ module.exports = {
     {
       // emit base + dark variants for the used families and shades (incl. preview 500)
       pattern:
-        /(bg|text|border)-(blue|indigo|purple|pink|red|orange|yellow|green|emerald|cyan)-(100|200|500|800|900)/,
+        /(bg|text|border)-(blue|indigo|purple|violet|pink|red|orange|yellow|green|emerald|teal|cyan)-(100|200|400|500|600|800|900)/,
       variants: ["dark"],
     },
     // Gray backgrounds/borders used globally
@@ -34,6 +34,11 @@ module.exports = {
           "Helvetica Neue",
           "Arial",
           "sans-serif",
+        ],
+        display: [
+          "'Instrument Serif'",
+          "Georgia",
+          "serif",
         ],
       },
     },

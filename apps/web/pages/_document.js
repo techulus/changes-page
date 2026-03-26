@@ -5,7 +5,8 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <meta name="theme-color" content="#262626" />
+          <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+          <meta name="theme-color" content="#171717" media="(prefers-color-scheme: dark)" />
           <meta name="author" content="Techulus" />
 
           <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -60,6 +61,16 @@ export default class MyDocument extends Document {
             href="splashscreens/ipadpro2_splash.png"
             media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
             rel="apple-touch-startup-image"
+          />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="anonymous"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
+            rel="stylesheet"
           />
           <link
             rel="stylesheet"

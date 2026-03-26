@@ -9,7 +9,7 @@ program
   .description("CLI for changes.page")
   .version("0.1.0")
   .option("--secret-key <key>", "Page secret key")
-  .option("--pretty", "Pretty-print JSON output");
+  .option("--json", "Output raw JSON");
 
 registerConfigureCommand(program);
 registerPostsCommand(program);

@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import { ApiClient } from "../client.js";
 import { getSecretKey } from "../config.js";
+import { output } from "../formatter.js";
 
 function readStdin(): Promise<string | null> {
   if (process.stdin.isTTY) {
@@ -31,15 +32,6 @@ function getClient(cmd: Command): ApiClient {
   });
 }
 
-function output(data: unknown, cmd: Command) {
-  const opts = cmd.optsWithGlobals();
-  if (opts.pretty) {
-    console.log(JSON.stringify(data, null, 2));
-  } else {
-    console.log(JSON.stringify(data));
-  }
-}
-
 function parseTags(tags: string): string[] {
   return tags.split(",").map((t) => t.trim());
 }
@@ -51,7 +43,7 @@ export function registerPostsCommand(program: Command) {
     .command("list")
     .description("List posts")
     .option("--status <status>", "Filter by status (draft|published|archived)")
-    .option("--limit <n>", "Max number of posts", "20")
+    .option("--limit <n>", "Max number of posts", "5")
     .option("--offset <n>", "Offset for pagination", "0")
     .action(async function (this: Command) {
       const client = getClient(this);
@@ -145,6 +137,6 @@ export function registerPostsCommand(program: Command) {
     .action(async function (this: Command, id: string) {
       const client = getClient(this);
       await client.deletePost(id);
-      console.log(JSON.stringify({ deleted: true, id }));
+      output({ deleted: true, id }, this);
     });
 }
