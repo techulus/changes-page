@@ -13,13 +13,17 @@ div#__next > div {
 html,
 body,
 div#__next {
-  background-color: whitesmoke;
+  background-color: #fafafa;
 }
 
 
 ::selection {
-  color: #d0d6e0;
-  background: #4f52b4;
+  color: #fff;
+  background: #4f46e5;
+}
+
+.hero {
+  font-family: 'Instrument Serif', Georgia, serif;
 }
 
 .editor-preview-full,

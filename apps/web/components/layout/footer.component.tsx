@@ -86,7 +86,7 @@ export default function FooterComponent() {
       />
 
       <footer
-        className="bg-gray-900 border-t border-white/10 dark:border-black"
+        className="bg-gray-900 border-t border-gray-200 dark:border-white/10"
         aria-labelledby="footer-heading"
       >
         <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">

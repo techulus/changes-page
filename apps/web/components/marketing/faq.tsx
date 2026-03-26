@@ -7,73 +7,58 @@ export default function FAQs() {
     () => [
       {
         id: "trial",
-        question: "Do you offer free trial?",
-        answer: "Yes, we offer a 14 days free trial.",
-      },
-      {
-        id: "card",
-        question: "Do I need to enter a credit card to create a page?",
-        answer: "No, you don't need to enter a credit card to create a page.",
+        question: "Do you offer a free trial?",
+        answer:
+          "Yes, 14 days free with no credit card required.",
       },
       {
         id: "can-i-customize-my-page",
         question: "Can I customize my page?",
         answer:
-          "Yes, you can use your custom domain and branding to customize your page.",
-      },
-      {
-        id: "domain",
-        question: "Do you support custom domains?",
-        answer:
-          "Yes, we also provision SSL certificates for your custom domain.",
-      },
-      {
-        id: "is-changes-page-seo-friendly",
-        question: "Is changes.page SEO friendly?",
-        answer:
-          "Yes, our pages are server side rendered, making them fast and search engine friendly.",
+          "Yes. Custom domains with auto-provisioned SSL, plus full branding control over colors, logo, and cover image.",
       },
       {
         id: "can-i-receive-notifications",
         question: "Can users receive notifications about updates?",
         answer:
-          "Yes, users can receive instant email and RSS notifications about updates.",
-      },
-      {
-        id: "is-changes-page-reliable",
-        question: "Is changes.page reliable?",
-        answer:
-          "Yes, we have an industry-leading 99.9%+ uptime and our systems are highly scalable and redundant.",
+          "Yes, via email digests and RSS feeds.",
       },
       {
         id: "can-i-automate-my-page",
-        question: "Can I automate my changelog page?",
+        question: "Can I automate my changelog?",
         answer:
-          "Yes, you can automate your page with the help of Zapier integration.",
+          "Yes. Use the CLI, JSON API, GitHub Actions, or Zapier to publish updates from your pipeline.",
       },
       {
-        id: "can-i-see-audience-analytics",
-        question: "Can I see audience analytics for my page?",
+        id: "ai-agents",
+        question: "Can AI agents create changelog posts?",
         answer:
-          "Yes, you can see detailed insights into your page's visitors with metrics such as top referrers, operating systems, and browser information.",
+          "Yes. The CLI accepts piped content via stdin with --tags and --status flags, so AI agents can create fully formatted posts programmatically.",
       },
       {
-        id: "md",
-        question: "Do you support markdown?",
-        answer: "Yes, we use a markdown editor for writing posts in your page.",
+        id: "cli-required",
+        question: "Do I need the CLI to use Changes.page?",
+        answer:
+          "No. The web interface provides full functionality. The CLI and API are additional interfaces for teams that want automation.",
+      },
+      {
+        id: "is-changes-page-reliable",
+        question: "Is Changes.page reliable?",
+        answer:
+          "Yes, 99.9%+ uptime with highly scalable and redundant infrastructure.",
       },
     ],
     []
   );
 
   return (
-    <div className="bg-gray-900">
+    <div className="bg-gray-50 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:py-16 lg:px-8">
-        <div className="mx-auto max-w-4xl divide-y divide-white/10">
-          <h2 className="text-2xl font-bold leading-10 tracking-tight text-white hero">
+        <div className="mx-auto max-w-4xl divide-y divide-gray-200 dark:divide-white/10">
+          <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white hero">
             Frequently asked questions
           </h2>
-          <dl className="mt-10 space-y-6 divide-y divide-white/10">
+          <dl className="mt-10 space-y-6 divide-y divide-gray-200 dark:divide-white/10">
             {faqs.map((faq) => (
               <Disclosure as="div" key={faq.id} className="pt-6">
                 {({ open }) => (
@@ -81,7 +66,7 @@ export default function FAQs() {
                     <dt>
                       <Disclosure.Button
                         id={faq.id}
-                        className="flex w-full items-start justify-between text-left text-white"
+                        className="flex w-full items-start justify-between text-left text-gray-900 dark:text-white"
                       >
                         <span className="text-base font-semibold leading-7">
                           {faq.question}
@@ -95,8 +80,8 @@ export default function FAQs() {
                         </span>
                       </Disclosure.Button>
                     </dt>
-                    <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                      <p className="text-base leading-7 text-gray-300">
+                    <Disclosure.Panel as="dd" className="mt-2 pr-4 sm:pr-12">
+                      <p className="text-base leading-7 text-gray-600 dark:text-gray-300">
                         {faq.answer}
                       </p>
                     </Disclosure.Panel>

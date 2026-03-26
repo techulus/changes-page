@@ -12,14 +12,14 @@ export default function Pricing({ unit_amount, addons }) {
 
       <PricingSection unit_amount={unit_amount} addons={addons} />
 
-      <div className="bg-gray-900 py-8 text-center">
-        <p className="text-sm text-gray-400">
+      <div className="bg-white dark:bg-gray-900 py-8 text-center">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Questions about pricing?{" "}
           <a
             href="https://techulus.atlassian.net/servicedesk/customer/portal/1/group/1/create/2"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-indigo-400 hover:text-indigo-300"
+            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300"
           >
             Contact support
           </a>
