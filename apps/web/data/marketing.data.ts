@@ -1,6 +1,7 @@
-export const TAGLINE = "Changelogs made smarter, faster, and user-focused.";
+export const TAGLINE = "The changelog platform for humans and agents.";
 export const SUBTITLE =
-  "The ultimate solution for keeping your customers and stakeholders informed about the latest updates and news from your business.";
+  "Create changelogs and roadmaps through a beautiful web editor or automate them via CLI and API.";
 
-export const DEFAULT_TITLE = "changes.page | Changelog simplified.";
+export const DEFAULT_TITLE =
+  "changes.page | Changelog Platform for Humans and Agents";
 export const MARKETING_TITLE = "changes.page blog";
