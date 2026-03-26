@@ -40,7 +40,7 @@ jobs:
           bun build --compile --target=${{ matrix.target }} --define "__CLI_VERSION__=\"${VERSION}\"" ./src/index.ts --outfile ${{ matrix.artifact }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.artifact }}
           path: packages/cli/${{ matrix.artifact }}
@@ -61,7 +61,7 @@ jobs:
         run: echo "version=$(jq -r .version packages/cli/package.json)" >> "$GITHUB_OUTPUT"
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           path: artifacts
 
