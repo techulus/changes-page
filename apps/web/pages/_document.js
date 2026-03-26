@@ -6,7 +6,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
-          <meta name="theme-color" content="#262626" media="(prefers-color-scheme: dark)" />
+          <meta name="theme-color" content="#171717" media="(prefers-color-scheme: dark)" />
           <meta name="author" content="Techulus" />
 
           <meta name="apple-mobile-web-app-capable" content="yes" />

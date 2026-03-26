@@ -86,7 +86,7 @@ export default function FooterComponent() {
       />
 
       <footer
-        className="bg-gray-900 border-t border-gray-200 dark:border-white/10"
+        className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-white/10"
         aria-labelledby="footer-heading"
       >
         <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
@@ -115,7 +115,7 @@ export default function FooterComponent() {
                   <a
                     key={item.name}
                     href={item.href}
-                    className="text-gray-500 hover:text-gray-400"
+                    className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
                   >
                     <span className="sr-only">{item.name}</span>
                     <item.icon className="h-6 w-6" aria-hidden="true" />
@@ -126,7 +126,7 @@ export default function FooterComponent() {
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm font-semibold leading-6 text-white">
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                     Integrations
                   </h3>
                   <ul role="list" className="mt-6 space-y-2">
@@ -134,7 +134,7 @@ export default function FooterComponent() {
                       <li key={item.name}>
                         <Link
                           href={item.href}
-                          className="text-sm leading-6 text-gray-300 hover:text-white"
+                          className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                           target="_blank"
                           rel="noreferrer noopener"
                         >
@@ -145,7 +145,7 @@ export default function FooterComponent() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-white">
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                     Support
                   </h3>
                   <ul role="list" className="mt-6 space-y-2">
@@ -153,7 +153,7 @@ export default function FooterComponent() {
                       <li key={item.name}>
                         <a
                           href={item.href}
-                          className="text-sm leading-6 text-gray-300 hover:text-white"
+                          className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -167,7 +167,7 @@ export default function FooterComponent() {
                           // @ts-ignore
                           window?.ChangesPage?.openWidget();
                         }}
-                        className="text-sm leading-6 text-gray-300 hover:text-white changes-page-btn"
+                        className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white changes-page-btn"
                       >
                         What&apos;s New
                       </button>
@@ -177,7 +177,7 @@ export default function FooterComponent() {
               </div>
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm font-semibold leading-6 text-white">
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                     Resources
                   </h3>
                   <ul role="list" className="mt-6 space-y-2">
@@ -185,7 +185,7 @@ export default function FooterComponent() {
                       <li key={item.name}>
                         <Link
                           href={item.href}
-                          className="text-sm leading-6 text-gray-300 hover:text-white"
+                          className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                         >
                           {item.name}
                         </Link>
@@ -194,7 +194,7 @@ export default function FooterComponent() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-white">
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                     Legal
                   </h3>
                   <ul role="list" className="mt-6 space-y-2">
@@ -202,7 +202,7 @@ export default function FooterComponent() {
                       <li key={item.name}>
                         <Link
                           href={item.href}
-                          className="text-sm leading-6 text-gray-300 hover:text-white"
+                          className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                         >
                           {item.name}
                         </Link>
@@ -213,8 +213,8 @@ export default function FooterComponent() {
               </div>
             </div>
           </div>
-          <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
-            <p className="text-xs leading-5 text-gray-400">
+          <div className="mt-16 border-t border-gray-200 dark:border-white/10 pt-8 sm:mt-20 lg:mt-24">
+            <p className="text-xs leading-5 text-gray-500 dark:text-gray-400">
               {version && `v${version} | `} &copy; {new Date().getFullYear()}{" "}
               changes.page, All rights reserved.
             </p>
