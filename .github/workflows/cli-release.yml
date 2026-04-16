@@ -1,0 +1,80 @@
+name: CLI Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        include:
+          - target: bun-darwin-arm64
+            os: macos-latest
+            artifact: chp-darwin-arm64
+          - target: bun-darwin-x64
+            os: macos-latest
+            artifact: chp-darwin-x64
+          - target: bun-linux-x64
+            os: ubuntu-latest
+            artifact: chp-linux-x64
+          - target: bun-linux-arm64
+            os: ubuntu-latest
+            artifact: chp-linux-arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: cd packages/cli && bun install
+
+      - name: Build binary
+        run: |
+          cd packages/cli
+          VERSION=$(jq -r .version package.json)
+          bun build --compile --target=${{ matrix.target }} --define "__CLI_VERSION__=\"${VERSION}\"" ./src/index.ts --outfile ${{ matrix.artifact }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.artifact }}
+          path: packages/cli/${{ matrix.artifact }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Read version
+        id: version
+        run: echo "version=$(jq -r .version packages/cli/package.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v6
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: cli-v${{ steps.version.outputs.version }}
+          name: CLI v${{ steps.version.outputs.version }}
+          generate_release_notes: true
+          files: |
+            artifacts/chp-darwin-arm64/chp-darwin-arm64
+            artifacts/chp-darwin-x64/chp-darwin-x64
+            artifacts/chp-linux-x64/chp-linux-x64
+            artifacts/chp-linux-arm64/chp-linux-arm64
