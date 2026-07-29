@@ -7,9 +7,11 @@ const callback: NextApiHandler = async (req, res) => {
   const redirectedFrom = req.query.redirectedFrom;
 
   if (typeof code !== "string") {
-    return res.redirect(
-      `/login?error=${encodeURIComponent("Missing or invalid code")}`
-    );
+    const error =
+      typeof req.query.error_description === "string"
+        ? req.query.error_description
+        : "Missing or invalid code";
+    return res.redirect(`/login?error=${encodeURIComponent(error)}`);
   }
 
   const supabase = createServerClientForAPI({ req, res });
@@ -25,13 +27,13 @@ const callback: NextApiHandler = async (req, res) => {
     if (!data.session) {
       console.error("Auth callback: No session created");
       return res.redirect(
-        `/login?error=${encodeURIComponent("No session created")}`
+        `/login?error=${encodeURIComponent("No session created")}`,
       );
     }
   } catch (err) {
     console.error("Auth callback exception:", err);
     return res.redirect(
-      `/login?error=${encodeURIComponent("Authentication failed")}`
+      `/login?error=${encodeURIComponent("Authentication failed")}`,
     );
   }
 

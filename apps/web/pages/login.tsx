@@ -20,7 +20,7 @@ import { useUserData } from "../utils/useUser";
 
 export default function Login() {
   const router = useRouter();
-  const { redirectedFrom } = router.query;
+  const { error, redirectedFrom } = router.query;
 
   const { supabase } = useUserData();
   const prefersColorScheme = usePrefersColorScheme();
@@ -47,7 +47,7 @@ export default function Login() {
       const msg = error.message.toLowerCase();
       if (msg.includes("signups not allowed") || msg.includes("not found")) {
         notifyError(
-          "No account found for this email. Sign up with Google or GitHub."
+          "No account found for this email. New registrations are closed.",
         );
       } else {
         notifyError(error.message);
@@ -108,8 +108,12 @@ export default function Login() {
             </Link>
 
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-              Get Started
+              Sign in
             </h2>
+
+            <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+              Sign-ins are limited to existing accounts.
+            </p>
 
             <p className="mt-6 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
               By using changes.page you agree to our{" "}
@@ -123,6 +127,14 @@ export default function Login() {
               .
             </p>
           </div>
+
+          {typeof error === "string" && (
+            <p className="rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
+              {error.toLowerCase().includes("signup")
+                ? "New registrations are closed. Existing users can still sign in."
+                : error}
+            </p>
+          )}
 
           <Auth
             supabaseClient={supabase}
@@ -158,7 +170,10 @@ export default function Login() {
           />
 
           <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true">
+            <div
+              className="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
               <div className="w-full border-t border-gray-300 dark:border-gray-700" />
             </div>
             <div className="relative flex justify-center text-sm">
