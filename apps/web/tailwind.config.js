@@ -40,6 +40,7 @@ module.exports = {
           "Georgia",
           "serif",
         ],
+        mono: ["monospace"],
       },
     },
   },

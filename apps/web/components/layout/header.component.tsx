@@ -189,7 +189,7 @@ export default function HeaderComponent() {
                       {({ open }) => (
                         <>
                           <div>
-                            <Menu.Button className="bg-gray-800 flex text-sm focus:outline-none">
+                            <Menu.Button className="flex text-sm rounded-full focus:outline-none">
                               <span className="sr-only">Open user menu</span>
                               {user?.user_metadata?.avatar_url ? (
                                 <img
