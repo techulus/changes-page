@@ -3,5 +3,12 @@ packages:
   - packages/**
   - '!**/test/**'
 
+allowBuilds:
+  '@sentry/cli': false
+  '@tailwindcss/oxide': false
+  esbuild: false
+  sharp: false
+  unrs-resolver: false
+
 onlyBuiltDependencies:
   - esbuild
