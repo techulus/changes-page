@@ -28,6 +28,20 @@ export default function RoadmapBoard({
   triageItems?: TriageItemForAdmin[];
 }) {
   const [boardItems, setBoardItems] = useState(items);
+  const [secondaryColumnId, setSecondaryColumnId] = useState<string | null>(
+    columns[1]?.id ?? null
+  );
+
+  // The first column stays open; the second slot belongs to whichever column
+  // was clicked last, falling back to the next column in order.
+  const openColumnIds = useMemo(() => {
+    const primaryId = columns[0]?.id;
+    const secondaryId = columns.some((column) => column.id === secondaryColumnId)
+      ? secondaryColumnId
+      : columns[1]?.id;
+
+    return new Set([primaryId, secondaryId].filter(Boolean) as string[]);
+  }, [columns, secondaryColumnId]);
 
   const itemsByColumn: ItemsByColumn = useMemo(() => {
     const organized: ItemsByColumn = {};
@@ -90,35 +104,36 @@ export default function RoadmapBoard({
         />
       )}
 
-      <div className="overflow-x-auto snap-x snap-mandatory md:overflow-x-auto h-full">
-        <div className="flex md:justify-center h-full">
-          <div
-            className="flex space-x-4 md:space-x-6 pb-6 px-4 md:px-0 h-full"
-            style={{ minHeight: "calc(100vh - 300px)" }}
-          >
-            {columns.map((column) => (
-              <RoadmapColumn
-                key={column.id}
-                column={column}
-                items={itemsByColumn[column.id] || []}
-                onAddItem={itemHandlers.handleAddItem}
-                onEditItem={itemHandlers.handleEditItem}
-                onDeleteItem={(itemId) =>
-                  itemHandlers.handleDeleteItem(itemId, setBoardItems)
-                }
-                onDragStart={dragDropHandlers.handleDragStart}
-                onDragEnd={dragDropHandlers.handleDragEnd}
-                onDragOver={dragDropHandlers.handleDragOver}
-                onDragEnter={dragDropHandlers.handleDragEnter}
-                onDragLeave={dragDropHandlers.handleDragLeave}
-                onDrop={dragDropHandlers.handleDrop}
-                onItemDragOver={dragDropHandlers.handleItemDragOver}
-                draggedItem={dragDropHandlers.draggedItem}
-                dragOverColumn={dragDropHandlers.dragOverColumn}
-                dragOverPosition={dragDropHandlers.dragOverPosition}
-              />
-            ))}
-          </div>
+      <div className="overflow-x-auto snap-x snap-mandatory md:snap-none h-full">
+        <div
+          className="flex items-stretch md:justify-center space-x-4 md:space-x-6 pb-6 px-4 md:px-0 h-full"
+          style={{ minHeight: "calc(100vh - 300px)" }}
+        >
+          {columns.map((column, index) => (
+            <RoadmapColumn
+              key={column.id}
+              column={column}
+              index={index}
+              collapsed={!openColumnIds.has(column.id)}
+              onExpand={setSecondaryColumnId}
+              items={itemsByColumn[column.id] || []}
+              onAddItem={itemHandlers.handleAddItem}
+              onEditItem={itemHandlers.handleEditItem}
+              onDeleteItem={(itemId) =>
+                itemHandlers.handleDeleteItem(itemId, setBoardItems)
+              }
+              onDragStart={dragDropHandlers.handleDragStart}
+              onDragEnd={dragDropHandlers.handleDragEnd}
+              onDragOver={dragDropHandlers.handleDragOver}
+              onDragEnter={dragDropHandlers.handleDragEnter}
+              onDragLeave={dragDropHandlers.handleDragLeave}
+              onDrop={dragDropHandlers.handleDrop}
+              onItemDragOver={dragDropHandlers.handleItemDragOver}
+              draggedItem={dragDropHandlers.draggedItem}
+              dragOverColumn={dragDropHandlers.dragOverColumn}
+              dragOverPosition={dragDropHandlers.dragOverPosition}
+            />
+          ))}
         </div>
       </div>
 
