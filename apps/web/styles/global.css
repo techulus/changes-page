@@ -24,10 +24,6 @@ div#__next {
   background: #4f46e5;
 }
 
-.hero {
-  font-family: 'Instrument Serif', Georgia, serif;
-}
-
 .editor-preview-full,
 .editor-preview-side {
   @apply prose;
