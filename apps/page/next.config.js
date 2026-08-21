@@ -1,6 +1,6 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
-const cspReportUri = "https://hey.changes.page/api/debug/csp-report";
+const cspReportUri = "/api/debug/csp-report";
 
 const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: *;
@@ -29,17 +29,8 @@ const securityHeaders = [
     value: ContentSecurityPolicy.replace(/\s{2,}/g, " ").trim(),
   },
   {
-    key: "report-to",
-    value: JSON.stringify({
-      group: "default",
-      max_age: 10886400,
-      endpoints: [
-        {
-          url: cspReportUri,
-        },
-      ],
-      include_subdomains: true,
-    }),
+    key: "Reporting-Endpoints",
+    value: `default="${cspReportUri}"`,
   },
 ];
 
