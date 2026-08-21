@@ -1,4 +1,5 @@
 const { neutral, amber } = require("tailwindcss/colors");
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   content: [
@@ -35,7 +36,7 @@ module.exports = {
           "Arial",
           "sans-serif",
         ],
-        mono: ["monospace"],
+        mono: ["monospace", ...defaultTheme.fontFamily.mono],
       },
     },
   },
