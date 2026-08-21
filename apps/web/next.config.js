@@ -1,16 +1,17 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
+const cspReportUri = "/api/debug/csp-report";
+
 const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' *;
-  style-src 'self' data: 'unsafe-inline' maxcdn.bootstrapcdn.com cdn.jsdelivr.net cdn.zapier.com fonts.googleapis.com;
+  style-src 'self' data: 'unsafe-inline' cdn.zapier.com fonts.googleapis.com;
   img-src 'self' * data: blob:;
-  font-src 'self' data: maxcdn.bootstrapcdn.com cdn.jsdelivr.net fonts.gstatic.com;
+  font-src 'self' data: fonts.gstatic.com;
   connect-src 'self' wss: *.supabase.co *.changes.page zapier.com *.zapier.com www.google.com;
   worker-src 'self' blob:;
-  report-to default
+  report-to default;
+  report-uri ${cspReportUri}
 `;
-
-const cspReportUri = "https://changes.page/api/debug/csp-report";
 
 const securityHeaders = [
   { key: "Referrer-Policy", value: "origin-when-cross-origin" },
@@ -30,21 +31,8 @@ const securityHeaders = [
     value: ContentSecurityPolicy.replace(/\s{2,}/g, " ").trim(),
   },
   {
-    key: "report-uri",
-    value: cspReportUri,
-  },
-  {
-    key: "report-to",
-    value: JSON.stringify({
-      group: "default",
-      max_age: 10886400,
-      endpoints: [
-        {
-          url: cspReportUri,
-        },
-      ],
-      include_subdomains: true,
-    }),
+    key: "Reporting-Endpoints",
+    value: `default="${cspReportUri}"`,
   },
 ];
 

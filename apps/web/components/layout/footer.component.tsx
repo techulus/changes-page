@@ -92,17 +92,9 @@ export default function FooterComponent() {
         <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
           <div className="xl:grid xl:grid-cols-3 xl:gap-8">
             <div className="space-y-4">
-              <Image
-                width={24}
-                height={24}
-                className={"w-6 h-6"}
-                src={logoImage}
-                alt="changes.page"
-              />
-
               <p className="-ml-1">
                 <iframe
-                  src="https://status.changes.page/badge?theme=dark"
+                  src="https://status.changes.page/badge"
                   width="250"
                   height="30"
                   frameBorder="0"

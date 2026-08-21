@@ -35,11 +35,6 @@ module.exports = {
           "Arial",
           "sans-serif",
         ],
-        display: [
-          "'Instrument Serif'",
-          "Georgia",
-          "serif",
-        ],
         mono: ["monospace"],
       },
     },
