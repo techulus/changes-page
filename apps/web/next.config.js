@@ -1,5 +1,7 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
+const cspReportUri = "https://changes.page/api/debug/csp-report";
+
 const ContentSecurityPolicy = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' *;
   style-src 'self' data: 'unsafe-inline' cdn.zapier.com;
@@ -7,10 +9,9 @@ const ContentSecurityPolicy = `
   font-src 'self' data:;
   connect-src 'self' wss: *.supabase.co *.changes.page zapier.com *.zapier.com www.google.com;
   worker-src 'self' blob:;
-  report-to default
+  report-to default;
+  report-uri ${cspReportUri}
 `;
-
-const cspReportUri = "https://changes.page/api/debug/csp-report";
 
 const securityHeaders = [
   { key: "Referrer-Policy", value: "origin-when-cross-origin" },
@@ -28,10 +29,6 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: ContentSecurityPolicy.replace(/\s{2,}/g, " ").trim(),
-  },
-  {
-    key: "report-uri",
-    value: cspReportUri,
   },
   {
     key: "report-to",
